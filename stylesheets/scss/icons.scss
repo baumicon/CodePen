@@ -1,0 +1,8 @@
+.icon:before {
+	font-family: 'Pictos Custom';
+	content: attr(data-icon);
+}
+
+.icon-replace {
+	font-family: 'Pictos Custom';
+}

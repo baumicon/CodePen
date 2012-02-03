@@ -1,0 +1,8 @@
+.button, button {
+	display: inline-block;
+	padding: 5px 10px;
+	@include border-radius(5px);
+	border: 0;
+	@include gradient(#efefef, #dfdfdf);
+	border: 1px solid #ccc;
+}

@@ -1,0 +1,145 @@
+@import "functions";
+
+@mixin font-stack {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	@include box-sizing();
+}
+
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
+
+html {
+	background: #f3f3f3;
+}
+
+@import "typography";
+@import "icons";
+@import "toolbox";
+@import "buttons";
+
+header {
+	display: block;
+	position: relative;
+	padding: 10px 5px;
+	overflow: hidden;
+	form {
+		float: left;
+	}
+}
+
+#slug {
+	border: 0;
+	@include font-stack();
+	font-size: 17px;
+	padding: 2px;
+	position: relative;
+	top: -5px;
+	margin: 0 10px 0 0;
+	&:focus {
+		outline: 0;
+	}
+}
+
+.actions {
+	float: right;
+}
+
+.wrap {
+	width: 80%;
+}
+
+.boxes {
+}
+
+[class^="box-"] {
+	width: 33%;
+	margin: 0 0.5% 0.5% 0;
+	float: left;
+	height: 350px;
+	position: relative;
+	border: 5px solid #eee;
+	textarea {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+		resize: none;
+		border: 1px solid #ccc;
+		padding: 5px;
+		font: 11px Monaco, Courier, MonoSpace;
+		@include transition(all 0.2s ease);
+		&:focus {
+			outline: 0;
+			@include drop-shadow(0, 0, 5px, 0, 0.4);
+		}
+	}
+}
+
+.settings-panel {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	overflow: hidden;
+	width: 100%;
+}
+
+.settings {
+	height: 0;
+	position: relative;
+	background: #dfdfdf;
+	padding: 20px;
+	width: 100%;
+}
+
+.settings-nub {
+	@include gradient(#efefef, #dfdfdf);
+	text-align: center;
+	display: inline-block;
+	margin: 0 0 1px 10px;
+	@include border-radiuses(8px, 0, 0, 8px);
+	span {
+		display: inline-block;
+		padding: 8px 8px 2px 8px;
+		@include transition((all 0.2s ease));
+	}
+	&.open span {
+		@include rotate(180);
+		padding: 6px 8px 6px 8px;
+	}
+}
+
+.result {
+	margin: 20px 0 0;
+	clear: both;
+	border: 5px solid #eee;
+	position: relative;
+}
+
+iframe {
+	border: 0;
+	background: white;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #ccc;
+}
+
+footer {
+	padding: 0 5px;
+	font-size: 14px;
+	display: block;
+	position: relative;
+}
+.footer-actions {
+	position: absolute;
+	right: 0;
+	top: 0;
+}

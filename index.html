@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+
+	<title>Tinkerbox</title>
+
+	<link href="//get.pictos.cc/fonts/555/2" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="/stylesheets/css/main.css">
+
+</head>
+
+<body>
+
+	<div class="wrap">
+
+		<header>
+			<form>
+				<div>
+					<h1>Tinkerbox.com/</h1>
+					<input type="text" id="slug" name="slug">
+
+					<button id="fork">Fork</button>
+					<button id="update">Update</button>
+					<button id="save">Save as Gist</button>
+					<button id="new">Brand New Box</button>				
+				</div>
+			</form>
+
+			<div class="actions">
+				<button id="settings">App Settings</button> 
+				<button id="login">Log in</button>
+			</div>
+		</header>
+
+		<div class="boxes">
+
+			<div class="box-html">
+
+				<h2>1 HTML</h2>
+				
+				<textarea id="html" class="code-box"></textarea>
+
+				<div class="settings-panel">
+
+					<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
+
+					<div class="settings">
+
+						<form>
+							<div>
+								<label>Jade</label>
+								<input type="radio" id="jade" checked name="jade">
+							</div>
+							<div>
+								<label>HAML</label>
+								<input type="radio" id="jade" name="jade">
+							</div>
+						</form>
+
+					</div>
+
+				</div><!-- END div.settings-panel -->
+				
+			</div><!-- END div.box-html -->
+
+			<div class="box-css">
+
+				<h2>2 CSS</h2>
+				
+				<textarea id="css" class="code-box"></textarea>
+
+				<div class="settings-panel">
+
+					<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
+
+					<div class="settings">
+						<form>
+							<div>
+								<input type="radio" id="none" checked name="css-preprocessor" value="none">
+								<label>None</label>
+								
+							</div>
+							<div>
+								<input type="radio" id="sass" name="css-preprocessor" value="sass">
+								<label>SASS</label>
+								
+							</div>
+							<div>
+								<input type="radio" id="scss" name="css-preprocessor" value="scss">
+								<label>SCSS</label>
+								
+							</div>
+							<div>
+								<input type="radio" id="less" name="css-preprocessor" value="less">
+								<label>LESS</label>
+								
+							</div>
+							<div>
+								<input type="radio" id="stylus" name="css-preprocessor" value="stylus">
+								<label>Stylus</label>
+								
+							</div>
+						</form>
+
+						<br>
+
+						<form>
+							<input type="checkbox" id="prefix-free" name="prefix-free">
+							<label>Prefix free</label>
+
+						</form>
+					</div>
+
+				</div><!-- END div.settings-panel -->
+				
+			</div><!-- END div.box-css -->
+
+			<div class="box-js last">
+
+				<h2>3 JS</h2>
+				
+				<textarea id="js" class="code-box"></textarea>
+
+				<div class="settings-panel">
+
+					<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
+
+					<div class="settings">
+						<form>
+							<div>
+								<label>None</label>
+								<input type="radio" id="none" checked name="js-preprocessor" value="none">
+							</div>
+							<div>
+								<label>CoffeScript</label>
+								<input type="radio" id="less" name="js-preprocessor" value="coffeescript">
+							</div>
+						</form>
+					</div>
+
+				</div><!-- END div.settings-panel -->
+				
+			</div><!-- END div.box-css -->
+
+			<div class="result">
+
+				<h2>4 Result</h2>
+				
+				<iframe src="" id="result"></iframe>
+
+			</div>
+
+		</div><!--END div.boxes -->
+
+		<footer>
+			&copy;2012 Tinkerbox &middot; Code demos copyright their creators
+
+			<div class="footer-actions">
+				<button id="keyboard">Keyboard Shortcuts</button>
+			</div>
+		</footer>
+
+	</div><!-- END div.wrap -->
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="/js/main.js"></script>
+
+</body>
+
+</html>
