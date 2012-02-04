@@ -42,7 +42,7 @@ var CodeRenderer = (function() {
 
 	    },
 	    
-	    codeChanged: function(editor, changes) {
+	    codeChanged: function() {
 	    	var content = CodeRenderer.getResultContent();
 	    	CodeRenderer.writeContentToIFrame(content);
 	    	CodeRenderer.executeIFrameJS();
