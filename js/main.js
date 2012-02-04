@@ -35,7 +35,7 @@
 var CodeRenderer = (function() {
 
 	// CodeRenderer Module
-	
+
 	var CodeRenderer = {
 
 	    init: function() {
@@ -62,7 +62,7 @@ var CodeRenderer = (function() {
 
 	    getResultContent: function() {
 	    	var values = {
-  				title : "Tinkerbox",
+  				TITLE : "Tinkerbox",
   				CSS   : CSSeditor.getValue(),
   				HTML  : HTMLeditor.getValue(),
   				JS    : JSeditor.getValue()
