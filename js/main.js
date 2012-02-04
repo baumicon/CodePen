@@ -1,14 +1,14 @@
 (function($) {
 
-	$(".settings").hide().css({
-		"height": "auto"
-	});
+	// $(".settings").hide().css({
+	// 	"height": "auto"
+	// });
 	
 	$(".settings-nub").on("click", function(e) {
 
 		e.preventDefault();
 		
-		$(this).toggleClass("open").next().slideToggle();
+		$(this).toggleClass("open").next().toggleClass("open");
 
 	});
 
