@@ -184,8 +184,21 @@ var thing = "thing";
 
 	</div><!-- END div.wrap -->
 
+	<script type="text/javascript">
+	
+	<?php
+
+		$templates = array(
+			'result' => file_get_contents('template.html')
+			);
+		
+		echo '__templates = ' . json_encode($templates) . ';';
+	?>
+	</script>
+
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="/js/codemirror.js"></script>
+	<script src="/js/mustache.js"></script>
 	<script src="/mode/javascript/javascript.js"></script>
 	<script src="/mode/css/css.js"></script>
 	<script src="/js/main.js"></script>

@@ -45,7 +45,30 @@ var CodeRenderer = (function() {
 	    },
 	    
 	    codeChanged: function(editor, changes) {
-	    	console.log(changes);
+	    	var content = CodeRenderer.getResultContent();
+	    	console.log(content);
+			CodeRenderer.getResultIFrameBody().html(content);
+
+			$('#result')[0].contentWindow.__run();
+	    },
+
+	    getResultIFrameBody: function() {
+	    	return $('#result').contents().find('body');
+	    },
+
+	    getResultContent: function() {
+	    	var values = {
+  				title : "Tinkerbox",
+  				CSS   : CSSeditor.getValue(),
+  				HTML  : HTMLeditor.getValue(),
+  				JS    : JSeditor.getValue()
+			};
+
+			return Mustache.render(this.getTPL('result'), values);
+	    },
+
+	    getTPL: function(name) {
+	    	return __templates[name];
 	    }
     };
     // This ends the CodeRenderer module

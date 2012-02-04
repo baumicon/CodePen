@@ -1,0 +1,21 @@
+AddHandler application/x-httpd-php .php .html
+DirectoryIndex index.html index.php index.xml wp-login.php
+
+php_flag magic_quotes_gpc off
+
+AddOutputFilterByType DEFLATE text/html text/css text/javascript text/xml
+ 
+<FilesMatch "\.(gif|png|jpg|js|css|ttf|otf|eot|svg|woff)$">
+	ExpiresActive On
+	ExpiresDefault "access plus 10 years"
+	Header add "Cache-Control" "private"
+</FilesMatch>
+
+<FilesMatch "\.(htm|html|php)$" >
+  Header set X-UA-Compatible "IE=Edge,chrome=1"
+</FilesMatch>
+
+Header unset X-Powered-By
+Header unset "Vary"
+Header unset ETag
+FileETag none
