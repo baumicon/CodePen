@@ -23,6 +23,7 @@ html {
 @import "icons";
 @import "toolbox";
 @import "buttons";
+@import "codemirror";
 
 header {
 	display: block;
@@ -75,8 +76,9 @@ header {
 	height: 350px;
 	position: relative;
 	border: 5px solid #eee;
-	textarea {
+	> pre {
 		position: absolute;
+		background: white;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -86,11 +88,6 @@ header {
 		border: 1px solid #ccc;
 		padding: 5px;
 		font: 11px Monaco, Courier, MonoSpace;
-		@include transition(all 0.2s ease);
-		&:focus {
-			outline: 0;
-			@include drop-shadow(0, 0, 5px, 0, 0.4);
-		}
 	}
 }
 

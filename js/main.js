@@ -33,3 +33,16 @@
     }).trigger("resize");
 
 })(jQuery);
+
+
+var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
+    lineNumbers: true
+});
+
+var CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
+    lineNumbers: true
+});
+
+var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
+    lineNumbers: true
+});

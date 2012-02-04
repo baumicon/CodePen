@@ -44,7 +44,11 @@
 
 				<h2>1 HTML</h2>
 				
-				<textarea id="html" class="code-box"></textarea>
+				<textarea id="html" class="code-box">
+<nav>
+   stuff
+</nav>
+				</textarea>
 
 				<div class="settings-panel">
 
@@ -75,7 +79,11 @@
 
 				<h2>2 CSS</h2>
 				
-				<textarea id="css" class="code-box"></textarea>
+				<textarea id="css" class="code-box">
+body {
+	background: red;
+}
+				</textarea>
 
 				<div class="settings-panel">
 
@@ -129,7 +137,9 @@
 
 				<h2>3 JS</h2>
 				
-				<textarea id="js" class="code-box"></textarea>
+				<textarea id="js" class="code-box">
+var thing = "thing";
+				</textarea>
 
 				<div class="settings-panel">
 
@@ -175,6 +185,8 @@
 	</div><!-- END div.wrap -->
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="/js/codemirror.js"></script>
+	<script src="/mode/javascript/javascript.js"></script>
 	<script src="/js/main.js"></script>
 
 </body>
