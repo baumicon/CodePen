@@ -46,14 +46,20 @@ var CodeRenderer = (function() {
 	    
 	    codeChanged: function(editor, changes) {
 	    	var content = CodeRenderer.getResultContent();
-	    	console.log(content);
-			CodeRenderer.getResultIFrameBody().html(content);
-
-			$('#result')[0].contentWindow.__run();
+	    	CodeRenderer.writeContentToIFrame(content);
+	    	CodeRenderer.executeIFrameJS();
 	    },
 
-	    getResultIFrameBody: function() {
-	    	return $('#result').contents().find('body');
+	    writeContentToIFrame: function(content) {
+	    	var doc = $('#result').contents()[0];
+			doc.open();
+			doc.write(content);
+			doc.close();
+	    },
+
+	    executeIFrameJS: function() {
+	    	// todo, look at the security implications of this
+	    	$('#result')[0].contentWindow.__run();
 	    },
 
 	    getResultContent: function() {
