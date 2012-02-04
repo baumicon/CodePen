@@ -43,6 +43,7 @@ header {
 	display: inline-block;
 	margin-top: -3px;
 }
+
 #slug {
 	border: 0;
 	@include font-stack();
@@ -55,9 +56,28 @@ header {
 		outline: 0;
 	}
 }
+#fork:before {
+	top: 1px;
+}
+#save:before {
+	top: 2px;
+}
+#new:before {
+	top: 3px;
+}
 .app-actions {
 	float: right;
 	padding-right: 4px;
+}
+#settings:before {
+	top: 2px;
+}
+#login {
+	
+	&:before {
+		top: 3px;
+		left: -2px;
+	}
 }
 
 
@@ -103,9 +123,12 @@ header {
 	position: relative;
 	background: #dfdfdf;
 	width: 100%;
+	@include opacity(0);
 	@include transition(all 0.3s ease-in-out);
 	&.open {
 		max-height: 200px;
+		display: block;
+		@include opacity(1);
 	}
 	form {
 		padding: 10px;
@@ -154,6 +177,7 @@ header {
 		background: #dfdfdf;
 	}
 }
+
 .result {
 	margin: 20px 0 0;
 	clear: both;

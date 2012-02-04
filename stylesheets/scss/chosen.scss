@@ -16,6 +16,10 @@
   z-index: 999;
 }
 
+.chzn-container, .chzn-drop, .chzn-search input {
+  width: 100% !important;
+}
+
 .chzn-container-single .chzn-single {
   @include gradient(#fff, #eee);
   @include border-radius(5px);

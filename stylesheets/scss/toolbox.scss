@@ -1,3 +1,9 @@
 .last {
 	margin-right: 0 !important;
 }
+
+textarea:focus, textarea:active {
+	outline: 0;
+}
+
+// Clearfix? 
