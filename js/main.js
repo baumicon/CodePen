@@ -1,8 +1,4 @@
 (function($) {
-
-	// $(".settings").hide().css({
-	// 	"height": "auto"
-	// });
 	
 	$(".settings-nub").on("click", function(e) {
 
@@ -32,12 +28,14 @@
 
     }).trigger("resize");
 
-
+    $("#js-select").chosen(); 
 
 })(jQuery);
 
 var CodeRenderer = (function() {
+
 	// CodeRenderer Module
+	
 	var CodeRenderer = {
 
 	    init: function() {

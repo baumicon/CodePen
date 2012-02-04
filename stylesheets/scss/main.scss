@@ -24,6 +24,7 @@ html {
 @import "toolbox";
 @import "buttons";
 @import "codemirror";
+@import "chosen";
 
 //-------------------------------------HEADER
 header {
@@ -95,7 +96,6 @@ header {
 	position: absolute;
 	left: 0;
 	bottom: 0;
-	overflow: hidden;
 	width: 100%;
 }
 .settings {
