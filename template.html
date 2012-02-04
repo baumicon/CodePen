@@ -1,9 +1,9 @@
 <!doctype html>
-<html {{ IF USER CLASS}}>
+<html>
 
 <head>
 	<meta charset="UTF-8">
-	<title> {{ TITLE }} </title>
+	<title>{{ TITLE }}</title>
 
 	<style type="text/css">
 	{{ CSS }}
@@ -14,10 +14,14 @@
 
 	{{{ HTML }}}
 
-	<script type="text/javascript">
+	<script src="{{{ JSLIB }}}"></script>
+	<script src="{{{ PREFIX }}}"></script>
+	<script>
 		function __run() {
 			{{{ JS }}}
 		}
 	</script>
+
 </body>
+
 </html>

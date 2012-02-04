@@ -4,9 +4,11 @@
 	margin: 0 3px 0 0;
 	@include border-radius(5px);
 	border: 0;
-	@include gradient(#efefef, #dfdfdf);
+	@include gradient(#fff, #eee);
 	border: 1px solid #ccc;
 	@include drop-shadow(1px, 1px, 0, 0, 0.4);
+	font-family: "pt-sans-narrow", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-size: 15px;
 	&:hover, &:focus {
 		background: #efefef;
 	}

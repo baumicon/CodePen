@@ -6,7 +6,7 @@ body {
 h1 {
 	display: inline-block;
 	color: #333;
-	font-weight: 300;
+	font-weight: 400;
 	text-transform: uppercase;
 	font-size: 18px;
 	letter-spacing: 2px;
@@ -18,10 +18,13 @@ h2 {
 	right: 12px;
 	font-size: 8px;
 	z-index: 10;
-	font-weight: 600;
 	color: #999;
 	letter-spacing: 1px;
 	text-transform: uppercase;
+	background: rgba(255,255,255,0.9);
+	padding: 2px;
+	font: 11px Courier, MonoSpace;
+	@include border-radius(5px);
 }
 
 a {

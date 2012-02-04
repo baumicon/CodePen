@@ -1,4 +1,7 @@
 (function($) {
+
+	// "GLOBALS"
+	var PrefixFreeCheckbox = $("#prefix-free");
 	
 	$(".settings-nub").on("click", function(e) {
 
@@ -30,12 +33,10 @@
 
     $("#js-select").chosen(); 
 
-})(jQuery);
-
-var CodeRenderer = (function() {
+    var CodeRenderer = (function() {
 
 	// CodeRenderer Module
-	
+
 	var CodeRenderer = {
 
 	    init: function() {
@@ -61,11 +62,21 @@ var CodeRenderer = (function() {
 	    },
 
 	    getResultContent: function() {
+
+	    	var PrefixURL = "";
+
+	    	if (PrefixFreeCheckbox.is(":checked")) {
+	    		// TODO: Make URL Dynamic or Settable
+	    		PrefixURL = "/box-libs/prefixfree.min.js";
+	    	}
+
 	    	var values = {
-  				title : "Tinkerbox",
+  				TITLE : "Tinkerbox",
   				CSS   : CSSeditor.getValue(),
   				HTML  : HTMLeditor.getValue(),
-  				JS    : JSeditor.getValue()
+  				JS    : JSeditor.getValue(),
+  				JSLIB : $("#js-select option:selected").val(),
+  				PREFIX: PrefixURL
 			};
 
 			return Mustache.render(this.getTPL('result'), values);
@@ -78,32 +89,39 @@ var CodeRenderer = (function() {
     // This ends the CodeRenderer module
     
     return CodeRenderer;
-})();
 
-// 
-// INITIALIZE EDITORS
-//
+	})();
 
-var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
-    lineNumbers  : false,
-    value        : "<div>Howdy, folks!</div>",  // TODO: Load HTML Template Here
-    mode         : "html",
-    tabSize      : 2,
-    onChange: CodeRenderer.codeChanged
-});
 
-var CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
-    lineNumbers  : false,
-    value        : "body { background: #BADA55; }",  // TODO: Load CSS Template Here
-    mode         : "css",
-    tabSize      : 2,
-    onChange: CodeRenderer.codeChanged
-});
+	// 
+	// INITIALIZE EDITORS
+	//
 
-var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
-    lineNumbers  : false,
-    value        : "var myString = 'Badda bing!';",  // TODO: Load Template Here
-    mode         : "javascript",
-    tabSize      : 2,
-    onChange: CodeRenderer.codeChanged
-});
+	var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
+	    lineNumbers  : false,
+	    value        : "<div>Howdy, folks!</div>",  // TODO: Load HTML Template Here
+	    mode         : "html",
+	    tabSize      : 2,
+	    onChange: CodeRenderer.codeChanged
+	});
+
+	var CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
+	    lineNumbers  : false,
+	    value        : "body { background: #BADA55; }",  // TODO: Load CSS Template Here
+	    mode         : "css",
+	    tabSize      : 2,
+	    onChange: CodeRenderer.codeChanged
+	});
+
+	var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
+	    lineNumbers  : false,
+	    value        : "var myString = 'Badda bing!';",  // TODO: Load Template Here
+	    mode         : "javascript",
+	    tabSize      : 2,
+	    onChange: CodeRenderer.codeChanged
+	});
+
+	// KICK IT OFF MOTHER
+	CodeRenderer.codeChanged();
+
+})(jQuery);

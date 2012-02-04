@@ -108,7 +108,7 @@ header {
 		max-height: 200px;
 	}
 	form {
-		padding: 8px;
+		padding: 10px;
 		div {
 			display: inline-block;
 			margin: 0 1% 2% 0;
@@ -135,7 +135,7 @@ header {
 	@include gradient(#efefef, #dfdfdf);
 	text-align: center;
 	display: inline-block;
-	margin: 0 0 0 8px;
+	margin: 0 0 0 10px;
 	@include border-radiuses(8px, 0, 0, 8px);
 	color: black;
 	span {
