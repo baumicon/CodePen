@@ -34,15 +34,27 @@
 
 })(jQuery);
 
+// 
+// INITIALIZE EDITORS
+//
 
 var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
-    lineNumbers: true
+    lineNumbers  : false,
+    value        : "<div>Howdy, folks!</div>",  // TODO: Load HTML Template Here
+    mode         : "html",
+    tabSize      : 2
 });
 
 var CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
-    lineNumbers: true
+    lineNumbers  : false,
+    value        : "body { background: #BADA55; }",  // TODO: Load CSS Template Here
+    mode         : "css",
+    tabSize      : 2
 });
 
 var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
-    lineNumbers: true
+    lineNumbers  : false,
+    value        : "var myString = 'Badda bing!';",  // TODO: Load Template Here
+    mode         : "javascript",
+    tabSize      : 2
 });
