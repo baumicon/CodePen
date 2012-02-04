@@ -65,7 +65,8 @@ var CodeRenderer = (function() {
   				TITLE : "Tinkerbox",
   				CSS   : CSSeditor.getValue(),
   				HTML  : HTMLeditor.getValue(),
-  				JS    : JSeditor.getValue()
+  				JS    : JSeditor.getValue(),
+  				JSLIB : $("#js-select option:selected").val()
 			};
 
 			return Mustache.render(this.getTPL('result'), values);
