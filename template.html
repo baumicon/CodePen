@@ -1,0 +1,28 @@
+<!doctype html>
+<html {{ IF USER CLASS}}>
+
+<head>
+	<meta charset="UTF-8">
+	<title> {{ Settable? }} </title>
+
+	{{ USER CSS? }}
+
+	{{ Load Prefix Free? }}
+	{{ if yes }}
+		<script src="/prefix-free.js"></script>
+
+	{{ USER CSS (After Preprocessed) }}
+</head>
+
+<body>
+
+	{ USER HTML }
+
+</body>
+
+{{ USER JS LIBRARY? }}
+{{ IF DOM READY }}
+
+{{ USER JS (After Preprocessed) }}
+
+</html>
