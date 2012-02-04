@@ -78,7 +78,9 @@ var CodeRenderer = (function() {
     // This ends the CodeRenderer module
     
     return CodeRenderer;
+
 })();
+
 
 // 
 // INITIALIZE EDITORS
@@ -107,3 +109,7 @@ var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
     tabSize      : 2,
     onChange: CodeRenderer.codeChanged
 });
+
+// KICK IT OFF MOTHER
+CodeRenderer.codeChanged();
+
