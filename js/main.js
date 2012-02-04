@@ -72,7 +72,7 @@
 
 	    	var values = {
   				TITLE : "Tinkerbox",
-  				CSS   : CSSeditor.getValue(),
+  				CSS   : this.getCSS(),
   				HTML  : HTMLeditor.getValue(),
   				JS    : JSeditor.getValue(),
   				JSLIB : $("#js-select option:selected").val(),
@@ -80,6 +80,22 @@
 			};
 
 			return Mustache.render(this.getTPL('result'), values);
+	    },
+
+	    getCSS: function() {
+	    	css = CSSeditor.getValue();
+	    	
+	    	$.ajax({
+  				url: '/backend.php',
+  				type: 'POST',
+  				async: false,
+  				data: 'less=' + css,
+  				success: function( result ) {
+    				css = result;
+  				}
+			});
+			
+			return css;
 	    },
 
 	    getTPL: function(name) {
