@@ -7,7 +7,9 @@
 
 	<title>Tinkerbox</title>
 
-	<link href="//get.pictos.cc/fonts/555/2" rel="stylesheet" type="text/css">
+	<link href="//get.pictos.cc/fonts/555/2" rel="stylesheet">
+	<script src="http://use.typekit.com/nnp0iyi.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
 
 	<link rel="stylesheet" href="/stylesheets/css/main.css">
 
@@ -58,12 +60,16 @@
 
 						<form>
 							<div>
-								<label>Jade</label>
-								<input type="radio" id="jade" checked name="jade">
+								<input type="radio" id="html-none" checked name="html-preprocessor" value="none">
+								<label class="button" for="html-none">None</label>
 							</div>
 							<div>
-								<label>HAML</label>
-								<input type="radio" id="jade" name="jade">
+								<input type="radio" id="jade" name="html-preprocessor" value="jade">
+								<label class="button" for="jade">Jade</label>
+							</div>
+							<div>
+								<input type="radio" id="haml" name="html-preprocessor" value="haml">
+								<label class="button" for="haml">HAML</label>
 							</div>
 						</form>
 
@@ -91,39 +97,31 @@ body {
 
 					<div class="settings">
 						<form>
-							<div>
-								<input type="radio" id="none" checked name="css-preprocessor" value="none">
-								<label>None</label>
-								
-							</div>
-							<div>
-								<input type="radio" id="sass" name="css-preprocessor" value="sass">
-								<label>SASS</label>
-								
-							</div>
-							<div>
-								<input type="radio" id="scss" name="css-preprocessor" value="scss">
-								<label>SCSS</label>
-								
+							<div>	
+								<input type="radio" id="css-none" checked name="css-preprocessor" value="none">
+								<label class="button" for="css-none">None</label>
 							</div>
 							<div>
 								<input type="radio" id="less" name="css-preprocessor" value="less">
-								<label>LESS</label>
-								
+								<label class="button" for="less">LESS</label>
 							</div>
 							<div>
 								<input type="radio" id="stylus" name="css-preprocessor" value="stylus">
-								<label>Stylus</label>
-								
+								<label class="button" for="stylus">Stylus</label>
+							</div>
+							<div>
+								<input type="radio" id="scss" name="css-preprocessor" value="scss">
+								<label class="button" for="scss">SCSS</label>
+							</div>
+							<div>
+								<input type="radio" id="sass" name="css-preprocessor" value="sass">
+								<label class="button" for="sass">SASS with Compass</label>
 							</div>
 						</form>
 
-						<br>
-
 						<form>
 							<input type="checkbox" id="prefix-free" name="prefix-free">
-							<label>Prefix free</label>
-
+							<label for="prefix-free">Prefix free</label>
 						</form>
 					</div>
 
@@ -148,14 +146,23 @@ var thing = "thing";
 					<div class="settings">
 						<form>
 							<div>
-								<label>None</label>
-								<input type="radio" id="none" checked name="js-preprocessor" value="none">
+								<input type="radio" id="js-none" checked name="js-preprocessor" value="none">
+								<label class="button" for="js-none">None</label>
 							</div>
 							<div>
-								<label>CoffeScript</label>
-								<input type="radio" id="less" name="js-preprocessor" value="coffeescript">
+								<input type="radio" id="coffeescript" name="js-preprocessor" value="coffeescript">
+								<label class="button" for="coffeescript">CoffeScript</label>
 							</div>
 						</form>
+
+						<form>
+							 <select data-placeholder="Choose a Country..." id="js-select">
+						        <option value=""></option> 
+						        <option value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">jQuery 1.7.1</option> 
+						        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option> 
+						        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option> 
+          					</select>
+          				</form>
 					</div>
 
 				</div><!-- END div.settings-panel -->
@@ -201,6 +208,7 @@ var thing = "thing";
 	<script src="/js/mustache.js"></script>
 	<script src="/mode/javascript/javascript.js"></script>
 	<script src="/mode/css/css.js"></script>
+	<script src="/js/chosen.jquery.min.js"></script>
 	<script src="/js/main.js"></script>
 
 </body>
