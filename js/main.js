@@ -32,17 +32,39 @@
 
     }).trigger("resize");
 
+
+
 })(jQuery);
+
+var CodeRenderer = (function() {
+	// CodeRenderer Module
+	var CodeRenderer = {
+
+	    init: function() {
+
+	    },
+	    
+	    codeChanged: function(editor, changes) {
+	    	console.log(changes);
+	    }
+    };
+    // This ends the CodeRenderer module
+    
+    return CodeRenderer;
+})();
 
 
 var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
-    lineNumbers: true
+    lineNumbers: true,
+    onChange: CodeRenderer.codeChanged
 });
 
 var CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
-    lineNumbers: true
+    lineNumbers: true,
+    onChange: CodeRenderer.codeChanged
 });
 
 var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
-    lineNumbers: true
+    lineNumbers: true,
+    onChange: CodeRenderer.codeChanged
 });
