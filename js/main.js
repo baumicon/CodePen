@@ -24,7 +24,7 @@
 
     win.resize(function() {
     	
-		var space = body.height() - 100;
+		var space = body.height() - 100; // 100 is ghetto
 
 		topBoxes.height(space / 2);
 

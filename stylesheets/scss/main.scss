@@ -27,28 +27,37 @@ html {
 header {
 	display: block;
 	position: relative;
-	padding: 10px 5px;
+	padding: 10px 5px 4px 5px;
 	overflow: hidden;
 	form {
 		float: left;
 	}
+	* {
+		vertical-align: middle;
+	}
+}
+
+.box-actions {
+	display: inline-block;
+	margin-top: -3px;
 }
 
 #slug {
 	border: 0;
 	@include font-stack();
-	font-size: 17px;
+	font-size: 13px;
+	top: -1px;
 	padding: 2px;
 	position: relative;
-	top: -5px;
 	margin: 0 10px 0 0;
 	&:focus {
 		outline: 0;
 	}
 }
 
-.actions {
+.app-actions {
 	float: right;
+	padding-right: 4px;
 }
 
 .wrap {
@@ -56,9 +65,10 @@ header {
 }
 
 .boxes {
+	position: relative;
 }
 
-[class^="box-"] {
+.boxes [class^="box-"] {
 	width: 33%;
 	margin: 0 0.5% 0.5% 0;
 	float: left;
@@ -132,6 +142,36 @@ iframe {
 	border: 1px solid #ccc;
 }
 
+
+// ------------------- HANDLES
+.handle {
+	position: absolute;
+	z-index: 20;
+}
+.handle-vert {
+	background: url(/images/handle-vert.png);
+	width: 7px;
+	height: 25px;
+	top: 21%;	
+	cursor: col-resize;
+}
+.handle-horz {
+	background: url(/images/handle-horz.png);
+	width: 25px;
+	height: 7px;
+}
+.handle-1 {
+	left: 32.81%;
+}
+.handle-2 {
+	left: 66.3%;
+}
+.handle-3 {
+	top: 49.6%;
+	left: 50%;
+}
+
+
 footer {
 	padding: 0 5px;
 	font-size: 14px;
@@ -140,6 +180,6 @@ footer {
 }
 .footer-actions {
 	position: absolute;
-	right: 0;
+	right: 6px;
 	top: 0;
 }

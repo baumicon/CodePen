@@ -2,6 +2,7 @@
 <html>
 
 <head>
+
 	<meta charset="UTF-8">
 
 	<title>Tinkerbox</title>
@@ -22,14 +23,16 @@
 					<h1>Tinkerbox.com/</h1>
 					<input type="text" id="slug" name="slug">
 
-					<button id="fork">Fork</button>
-					<button id="update">Update</button>
-					<button id="save">Save as Gist</button>
-					<button id="new">Brand New Box</button>				
+					<div class="box-actions">
+						<button id="fork">Fork</button>
+						<button id="update">Update</button>
+						<button id="save">Save as Gist</button>
+						<button id="new">Brand New Box</button>	
+					</div>			
 				</div>
 			</form>
 
-			<div class="actions">
+			<div class="app-actions">
 				<button id="settings">App Settings</button> 
 				<button id="login">Log in</button>
 			</div>
@@ -65,6 +68,8 @@
 				</div><!-- END div.settings-panel -->
 				
 			</div><!-- END div.box-html -->
+
+			<div class="handle handle-vert handle-1"></div>
 
 			<div class="box-css">
 
@@ -118,6 +123,8 @@
 				
 			</div><!-- END div.box-css -->
 
+			<div class="handle handle-vert handle-2"></div>
+
 			<div class="box-js last">
 
 				<h2>3 JS</h2>
@@ -145,6 +152,8 @@
 				
 			</div><!-- END div.box-css -->
 
+			<div class="handle handle-horz handle-3"></div>
+
 			<div class="result">
 
 				<h2>4 Result</h2>
@@ -156,7 +165,7 @@
 		</div><!--END div.boxes -->
 
 		<footer>
-			&copy;2012 Tinkerbox &middot; Code demos copyright their creators
+			&copy;2012 Tinkerbox &middot; Code demos copyright their creators &middot; <a href="https://github.com/chriscoyier/Tinkerbox">GitHub</a>
 
 			<div class="footer-actions">
 				<button id="keyboard">Keyboard Shortcuts</button>
@@ -165,7 +174,7 @@
 
 	</div><!-- END div.wrap -->
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script src="/js/main.js"></script>
 
 </body>
