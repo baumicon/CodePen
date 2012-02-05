@@ -192,10 +192,10 @@ first[0].classList.add('heavy');</textarea>
 
 	</div><!-- END div.wrap -->
 
-	<script type="text/javascript">
-		__templates = {"result":"<!doctype html>\n<html>\n\n<head>\n\t<meta charset=\"UTF-8\">\n\t<title>{{ TITLE }}<\/title>\n\n\t<style type=\"text\/css\">\n\t{{ CSS }}\n\t<\/style>\n<\/head>\n\n<body>\n\n\t{{{ HTML }}}\n\n\t<script src=\"{{{ JSLIB }}}\"><\/script>\n\t<script src=\"{{{ PREFIX }}}\"><\/script>\n\t<script>\n\t\tfunction __run() {\n\t\t\t{{{ JS }}}\n\t\t}\n\t<\/script>\n\n<\/body>\n\n<\/html>"};
-		//__templates = <%= @tpl %>;
-        __templates = <%= get_templates  %>;
+	<script>
+		//<![CDATA[
+        __templates = <%= get_templates %>;
+        //]]>
 	</script>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
