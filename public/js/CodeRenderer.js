@@ -31,7 +31,7 @@ var CodeRenderer = (function() {
   				HTML  : this.getHTML(),
   				JS    : this.getJS(),
   				JSLIB : $("#js-select option:selected").val(),
-  				PREFIX: TBDB.getPrefixFree()
+  				PREFIX: TBDB.getOption('css', 'prefixFree')
 			};
 
 			return Mustache.render(this.getTPL('result'), values);
@@ -43,8 +43,6 @@ var CodeRenderer = (function() {
 
 	    getCSS: function() {
 	    	return TBDB.css;
-
-	    	return css;
 
 	    	$.ajax({
   				url: '/backend.php',

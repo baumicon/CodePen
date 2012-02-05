@@ -38,7 +38,7 @@ def get_tbdb()
 				"stylus"     => "",
 				"scss"       => "",
 				"sass"       => "",
-				"prefixTree" => ""
+				"prefixTree" => "/box-libs/prefixfree.min.js"
 			},
 		"jsOptions"   => {
 			"coffeeScript" => "",

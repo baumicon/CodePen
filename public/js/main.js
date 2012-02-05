@@ -30,10 +30,14 @@
     // Initialize the data backing object
 	TBDB.init();
 
-	// Update text boxes to reflect data served from backend
+	// Sync UI with data values
+
+	$('#slug').val(TBDB.name);
 	$('#html').html(TBDB.html);
 	$('#css').html(TBDB.css);
 	$('#js').html(TBDB.js);
+
+	if(TBDB.getOption('css', 'prefixFree') != '') $('#prefix-free').prop('checked', true);
 
 	codeChanged = function(editor, changes) {
 		TBDB.setEditorValue(editor.getOption('mode'), editor.getValue());
@@ -69,5 +73,28 @@
 	 
 	// Initialize the CodeRenderer
     CodeRenderer.init();
+
+    // Bind events
+
+    // HTML related
+    $('input[name="html-preprocessor"]').on('click', function() {
+    	TBDB.setHTMLOption('preprocessor', this.value);
+    });
+
+    // CSS related
+    $('input[name="css-preprocessor"]').on('click', function() {
+    	TBDB.setCSSOption('preprocessor', this.value);
+    });
+
+    // prefix free checkbox
+    $('#prefix-free').on('click', function() {
+    	TBDB.setCSSOption('prefixFree', $(this).is(":checked"));
+    });
+
+    // JS related
+    $('input[name="js-preprocessor"]').on('click', function() {
+    	TBDB.setCSSOption('preprocessor', this.value);
+    });
+
 
 })(jQuery);
