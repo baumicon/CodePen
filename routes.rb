@@ -1,6 +1,13 @@
 require 'sinatra'
+require 'json'
+require 'erb'
 
-get '/do' do
-    "Hello World"
+helpers do
+    def get_templates
+        {'results' => [(erb :template)]}.to_json
+    end
+end
+
+get '/' do
     erb :index
 end
