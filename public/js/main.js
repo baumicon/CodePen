@@ -78,7 +78,7 @@
 
 		    getCSS: function() {
 		    	css = CSSeditor.getValue();
-		    	
+		    	return css;
 		    	$.ajax({
 	  				url: '/backend.php',
 	  				type: 'POST',
@@ -96,7 +96,7 @@
 		    	return __templates[name];
 		    }
 	    };
-    };
+    
     // This ends the CodeRenderer module
     
     return CodeRenderer;
