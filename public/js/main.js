@@ -110,7 +110,7 @@
 	var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
 	    lineNumbers  : false,
 	    value        : "<div>Howdy, folks!</div>",  // TODO: Load HTML Template Here
-	    mode         : "html", // TODO: make actually work
+	    mode         : "xml",
 	    tabSize      : 2,
 	    onChange     : CodeRenderer.codeChanged
 	});
