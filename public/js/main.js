@@ -1,9 +1,9 @@
 (function($) {
 
 	// "GLOBALS"
-	var PrefixFreeCheckbox = $("#prefix-free"),
+	var PrefixFreeCheckbox = $("#prefix-free");
 
-	    win          = $(window),
+	var win          = $(window),
 		body         = $("body"),
 
         boxHTML      = $(".box-html"),
@@ -102,6 +102,7 @@
     return CodeRenderer;
 
 	})();
+
 
 	// 
 	// INITIALIZE EDITORS
