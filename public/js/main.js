@@ -1,9 +1,9 @@
 (function($) {
 
 	// "GLOBALS"
-	var PrefixFreeCheckbox = $("#prefix-free");
+	var PrefixFreeCheckbox = $("#prefix-free"),
 
-	var win          = $(window),
+	    win          = $(window),
 		body         = $("body"),
 
         boxHTML      = $(".box-html"),
@@ -103,7 +103,6 @@
 
 	})();
 
-
 	// 
 	// INITIALIZE EDITORS
 	//
@@ -112,7 +111,7 @@
 	    value        : "<div>Howdy, folks!</div>",  // TODO: Load HTML Template Here
 	    mode         : "html",
 	    tabSize      : 2,
-	    onChange: CodeRenderer.codeChanged
+	    onChange     : CodeRenderer.codeChanged
 	});
 
 	var CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
@@ -120,7 +119,7 @@
 	    value        : "body { background: #BADA55; }",  // TODO: Load CSS Template Here
 	    mode         : "css",
 	    tabSize      : 2,
-	    onChange: CodeRenderer.codeChanged
+	    onChange     : CodeRenderer.codeChanged
 	});
 
 	var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
@@ -128,7 +127,7 @@
 	    value        : "var myString = 'Badda bing!';",  // TODO: Load Template Here
 	    mode         : "javascript",
 	    tabSize      : 2,
-	    onChange: CodeRenderer.codeChanged
+	    onChange     : CodeRenderer.codeChanged
 	});
 
 	// When page loads, have result there
