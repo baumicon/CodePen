@@ -2,14 +2,6 @@
 
 	// "GLOBALS"
 	var PrefixFreeCheckbox = $("#prefix-free");
-	
-	$(".settings-nub").on("click", function(e) {
-
-		e.preventDefault();
-		
-		$(this).toggleClass("open").next().toggleClass("open");
-
-	});
 
 	var win          = $(window),
 		body         = $("body"),
@@ -21,70 +13,89 @@
 
         topBoxes     = $(".box-html, .box-css, .box-js");
 
+    // Opening and closing settings panels
+    $(".settings-nub").on("click", function(e) {
+		e.preventDefault();
+		$(this).toggleClass("open").next().toggleClass("open");
+	});
+
+	// Resize all boxes when window resized
     win.resize(function() {
-    	
-		var space = body.height() - 100; // 100 is ghetto
-
+		var space = body.height() - 100; // TODO: Make less ghetto (problems with floats)
 		topBoxes.height(space / 2);
-
 		boxResult.height(space / 2);
-
     }).trigger("resize");
 
+    // Better select box for chosing JS library
     $("#js-select").chosen(); 
 
     var CodeRenderer = (function() {
 
-	// CodeRenderer Module
+		var CodeRenderer = {
 
-	var CodeRenderer = {
+		    init: function() {
 
-	    init: function() {
+		    },
+		    
+		   	codeChanged: function() {
+		    	var content = CodeRenderer.getResultContent();
+		    	CodeRenderer.writeContentToIFrame(content);
+		    	CodeRenderer.executeIFrameJS();
+		    },
 
-	    },
-	    
-	    codeChanged: function(editor, changes) {
-	    	var content = CodeRenderer.getResultContent();
-	    	CodeRenderer.writeContentToIFrame(content);
-	    	CodeRenderer.executeIFrameJS();
-	    },
+		    writeContentToIFrame: function(content) {
+		    	var doc = $('#result').contents()[0];
+				doc.open();
+				doc.write(content);
+				doc.close();
+		    },
 
-	    writeContentToIFrame: function(content) {
-	    	var doc = $('#result').contents()[0];
-			doc.open();
-			doc.write(content);
-			doc.close();
-	    },
+		    executeIFrameJS: function() {
+		    	// todo, look at the security implications of this
+		    	$('#result')[0].contentWindow.__run();
+		    },
 
-	    executeIFrameJS: function() {
-	    	// todo, look at the security implications of this
-	    	$('#result')[0].contentWindow.__run();
-	    },
+		    getResultContent: function() {
 
-	    getResultContent: function() {
+		    	var PrefixURL = "";
 
-	    	var PrefixURL = "";
+		    	if (PrefixFreeCheckbox.is(":checked")) {
+		    		// TODO: Make URL Dynamic or Settable
+		    		PrefixURL = "/box-libs/prefixfree.min.js";
+		    	}
 
-	    	if (PrefixFreeCheckbox.is(":checked")) {
-	    		// TODO: Make URL Dynamic or Settable
-	    		PrefixURL = "/box-libs/prefixfree.min.js";
-	    	}
+		    	var values = {
+	  				TITLE : "Tinkerbox",
+	  				CSS   : this.getCSS(),
+	  				HTML  : HTMLeditor.getValue(),
+	  				JS    : JSeditor.getValue(),
+	  				JSLIB : $("#js-select option:selected").val(),
+	  				PREFIX: PrefixURL
+				};
 
-	    	var values = {
-  				TITLE : "Tinkerbox",
-  				CSS   : CSSeditor.getValue(),
-  				HTML  : HTMLeditor.getValue(),
-  				JS    : JSeditor.getValue(),
-  				JSLIB : $("#js-select option:selected").val(),
-  				PREFIX: PrefixURL
-			};
+				return Mustache.render(this.getTPL('result'), values);
+		    },
 
-			return Mustache.render(this.getTPL('result'), values);
-	    },
+		    getCSS: function() {
+		    	css = CSSeditor.getValue();
+		    	
+		    	$.ajax({
+	  				url: '/backend.php',
+	  				type: 'POST',
+	  				async: false,
+	  				data: 'less=' + css,
+	  				success: function( result ) {
+	    				css = result;
+	  				}
+				});
+				
+				return css;
+		    },
 
-	    getTPL: function(name) {
-	    	return __templates[name];
-	    }
+		    getTPL: function(name) {
+		    	return __templates[name];
+		    }
+	    };
     };
     // This ends the CodeRenderer module
     
@@ -96,7 +107,6 @@
 	// 
 	// INITIALIZE EDITORS
 	//
-
 	var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
 	    lineNumbers  : false,
 	    value        : "<div>Howdy, folks!</div>",  // TODO: Load HTML Template Here
@@ -121,7 +131,7 @@
 	    onChange: CodeRenderer.codeChanged
 	});
 
-	// KICK IT OFF MOTHER
+	// When page loads, have result there
 	CodeRenderer.codeChanged();
 
 })(jQuery);

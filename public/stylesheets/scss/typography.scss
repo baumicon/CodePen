@@ -25,6 +25,7 @@ h2 {
 	padding: 2px;
 	font: 11px Courier, MonoSpace;
 	@include border-radius(5px);
+	pointer-events: none;
 }
 
 a {

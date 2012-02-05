@@ -1,8 +1,14 @@
 .icon:before {
 	font-family: 'Pictos Custom';
 	content: attr(data-icon);
+	font-weight: 400;
+	position: relative;
+	margin-right: 4px;
+	font-size: 32px;
+	vertical-align: middle;
 }
 
 .icon-replace {
 	font-family: 'Pictos Custom';
+	font-weight: 400;
 }

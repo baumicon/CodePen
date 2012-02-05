@@ -7,7 +7,7 @@
 
 	<title>Tinkerbox</title>
 
-	<link href="//get.pictos.cc/fonts/555/2" rel="stylesheet">
+	<link href="//get.pictos.cc/fonts/555/1" rel="stylesheet">
 	<script src="http://use.typekit.com/nnp0iyi.js"></script>
 	<script>try{Typekit.load();}catch(e){}</script>
 
@@ -26,17 +26,17 @@
 					<input type="text" id="slug" name="slug">
 
 					<div class="box-actions">
-						<button id="fork">Fork</button>
-						<button id="update">Update</button>
-						<button id="save">Save as Gist</button>
-						<button id="new">Brand New Box</button>	
+						<button id="fork" data-icon="f" class="icon">Fork</button>
+						<button id="update" data-icon="u" class="icon">Update</button>
+						<button id="save" data-icon="c" class="icon">Save as Gist</button>
+						<button id="new" data-icon="b" class="icon">Brand New Box</button>	
 					</div>			
 				</div>
 			</form>
 
 			<div class="app-actions">
-				<button id="settings">App Settings</button> 
-				<button id="login">Log in</button>
+				<button id="settings" data-icon="s" class="icon">App Settings</button> 
+				<button id="login" data-icon="a" class="icon">GitHub Auth</button>
 			</div>
 		</header>
 
@@ -54,7 +54,7 @@
 
 				<div class="settings-panel">
 
-					<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
+					<a href="#" class="settings-nub icon-replace" data-icon="d" title="Open Settings"><span aria-hidden="true">d</span></a>
 
 					<div class="settings">
 
@@ -194,15 +194,6 @@ first[0].classList.add('heavy');</textarea>
 
 	<script type="text/javascript">
 	
-	<%#<?php%>
-
-		<%#$templates = array(%>
-			<%#'result' => file_get_contents('template.html')%>
-			<%#);%>
-		
-		<%#echo '__templates = ' . json_encode($templates) . ';';%>
-	<%#?>%>
-
 	</script>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
