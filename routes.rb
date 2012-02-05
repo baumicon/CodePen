@@ -7,6 +7,9 @@ get '/' do
 end
 
 helpers do
+    def close embedded_json
+        embedded_json.gsub('</', '<\/')
+    end
     def get_templates
         {'result' => (erb :template)}.to_json.gsub('/', '\/')
     end
