@@ -46,7 +46,7 @@
 	var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
 	    lineNumbers  : false,
 	    value        : TBDB.html,
-	    mode         : "html",
+	    mode         : "xml",
 	    tabSize      : 2,
 	    onChange     : this.codeChanged
 	});

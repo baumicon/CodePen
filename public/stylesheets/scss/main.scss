@@ -108,6 +108,12 @@ header {
 		padding: 5px;
 		font: 11px Monaco, Courier, MonoSpace;
 	}
+	h2 {
+		@include transition(opacity 0.2s ease);
+	}
+	&:hover h2 {
+		@include opacity(0);
+	}
 }
 
 
@@ -189,6 +195,12 @@ header {
 		width: 100%;
 		height: 100%;
 		border: 1px solid #ccc;
+	}
+	h2 {
+		@include transition(opacity 0.2 ease);
+	}
+	&:hover h2 {
+		@include opacity(0);
 	}
 }
 
