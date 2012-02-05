@@ -4,7 +4,7 @@ require 'erb'
 
 helpers do
     def get_templates
-        {'results' => [(erb :template)]}.to_json
+        {'results' => (erb :template)}.to_json
     end
 end
 
