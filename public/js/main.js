@@ -1,8 +1,6 @@
 (function($) {
 
 	// "GLOBALS"
-	var PrefixFreeCheckbox = $("#prefix-free");
-
 	var win          = $(window),
 		body         = $("body"),
 
@@ -27,111 +25,49 @@
     }).trigger("resize");
 
     // Better select box for chosing JS library
-    $("#js-select").chosen(); 
+    $("#js-select").chosen();
 
-    var CodeRenderer = (function() {
+    // Initialize the data backing object
+	TBDB.init();
 
-		var CodeRenderer = {
+	// Update text boxes to reflect data served from backend
+	$('#html').html(TBDB.html);
+	$('#css').html(TBDB.css);
+	$('#js').html(TBDB.js);
 
-		    init: function() {
-
-		    },
-		    
-		   	codeChanged: function() {
-		    	var content = CodeRenderer.getResultContent();
-		    	CodeRenderer.writeContentToIFrame(content);
-		    	CodeRenderer.executeIFrameJS();
-		    },
-
-		    writeContentToIFrame: function(content) {
-		    	var doc = $('#result').contents()[0];
-				doc.open();
-				doc.write(content);
-				doc.close();
-		    },
-
-		    executeIFrameJS: function() {
-		    	// todo, look at the security implications of this
-		    	$('#result')[0].contentWindow.__run();
-		    },
-
-		    getResultContent: function() {
-
-		    	var PrefixURL = "";
-
-		    	if (PrefixFreeCheckbox.is(":checked")) {
-		    		// TODO: Make URL Dynamic or Settable
-		    		PrefixURL = "/box-libs/prefixfree.min.js";
-		    	}
-
-		    	var values = {
-	  				TITLE : "Tinkerbox",
-	  				CSS   : this.getCSS(),
-	  				HTML  : HTMLeditor.getValue(),
-	  				JS    : JSeditor.getValue(),
-	  				JSLIB : $("#js-select option:selected").val(),
-	  				PREFIX: PrefixURL
-				};
-
-				return Mustache.render(this.getTPL('result'), values);
-		    },
-
-		    getCSS: function() {
-		    	css = CSSeditor.getValue();
-		    	return css;
-		    	$.ajax({
-	  				url: '/backend.php',
-	  				type: 'POST',
-	  				async: false,
-	  				data: 'less=' + css,
-	  				success: function( result ) {
-	    				css = result;
-	  				}
-				});
-				
-				return css;
-		    },
-
-		    getTPL: function(name) {
-		    	return __templates[name];
-		    }
-	    };
-    
-    // This ends the CodeRenderer module
-    
-    return CodeRenderer;
-
-	})();
-
+	codeChanged = function(editor, changes) {
+		TBDB.setEditorValue(editor.getOption('mode'), editor.getValue());
+		CodeRenderer.codeChanged();
+	}
 
 	// 
 	// INITIALIZE EDITORS
 	//
 	var HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
 	    lineNumbers  : false,
-	    value        : "<div>Howdy, folks!</div>",  // TODO: Load HTML Template Here
+	    value        : TBDB.html,
 	    mode         : "html",
 	    tabSize      : 2,
-	    onChange     : CodeRenderer.codeChanged
+	    onChange     : this.codeChanged
 	});
 
 	var CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
 	    lineNumbers  : false,
-	    value        : "body { background: #BADA55; }",  // TODO: Load CSS Template Here
+	    value        : TBDB.css,
 	    mode         : "css",
 	    tabSize      : 2,
-	    onChange     : CodeRenderer.codeChanged
+	    onChange     : this.codeChanged
 	});
 
 	var JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
 	    lineNumbers  : false,
-	    value        : "var myString = 'Badda bing!';",  // TODO: Load Template Here
+	    value        : TBDB.js,
 	    mode         : "javascript",
 	    tabSize      : 2,
-	    onChange     : CodeRenderer.codeChanged
+	    onChange     : this.codeChanged
 	});
-
-	// When page loads, have result there
-	CodeRenderer.codeChanged();
+	 
+	// Initialize the CodeRenderer
+    CodeRenderer.init();
 
 })(jQuery);
