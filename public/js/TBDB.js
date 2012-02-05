@@ -19,21 +19,52 @@ var TBDB = (function() {
 		jsOptions    : { },
 		dateUpdated  : '',
 
+		// Store localStorage as own hash
+		// This way browsers that don't support 
+		// localstorage simply save to this hash
+		ls : { },
+
 	    init: function() {
 	    	this.loadStoredData();
 	    },
 
 	    loadStoredData: function() {
-	    	if(this.useLocalStorage()) {
-	    		this.syncObjects(localStorage, this);
-	    	}
-	    	else {
-	    		this.syncObjects(localStorage, this);
+	    	// Ensure localstorage exist, even for browsers
+	    	// that don't support it
+	    	if(typeof(localStorage) != 'undefined') {
+	    		this.ls = localStorage;
 	    	}
 
-	    	// alextodo, consider just saving data as string dunno
-	    	//console.log(JSON.stringify(this));
-	    	// alextodo, need to figure out why the 
+	    	var dataObj = (this.useLocalStorage()) ? this.ls : __tbdb;
+	    	this.syncWithLocalStorage(dataObj);
+	    },
+
+	    syncWithLocalStorage: function() {
+			var ls = this.localStorage;
+
+			this.name = this.ls.name;
+			this.html = this.ls.html;
+			this.css  = this.ls.css;
+			this.js   = this.ls.js;
+			this.version = this.ls.version;
+
+			this.htmlOptions = {
+				'jade' : this.ls.htmlOptions.jade,
+				'haml' : this.ls.htmlOptions.haml,
+			};
+
+			this.cssOptions = {
+				'less'       : this.ls.cssOptions.less,
+				'stylus'     : this.ls.cssOptions.stylus,
+				'scss'       : this.ls.cssOptions.scss,
+				'sass'       : this.ls.cssOptions.sass,
+				'prefixFree' : this.ls.cssOptions.prefixFree
+			};
+
+			this.jsOptions = {
+				'coffeeScript' : this.ls.jsOptions.coffeeScript,
+				'libraries'    : '',
+			}
 	    },
 
 	    // Looks for data stored locally on the client
@@ -44,7 +75,7 @@ var TBDB = (function() {
 	    // todo. for now if data exist locally use that
 	    // implement the date comparison in future
 	    useLocalStorage: function() {
-	    	if(typeof(localStorage) != 'undefined' && localStorage['dateUpdated']) {
+	    	if(this.ls['dateUpdated']) {
 	    		return true;
 	    	}
 	    	else {
@@ -54,7 +85,8 @@ var TBDB = (function() {
 
 	    setHTMLOption: function(name, value) {
 	    	this.htmlOptions[name] = value;
-	    	this.save();
+	    	this.ls[htmlOptions][name] = value;
+	    	this.updateTimeStamp();
 	    },
 
 	    setCSSOption: function(name, value) {
@@ -64,12 +96,14 @@ var TBDB = (function() {
 	    	}
 
 	    	this.cssOptions[name] = value;
-	    	this.save();
+	    	this.ls[cssOptions][name] = value;
+	    	this.updateTimeStamp();
 	    },
 
 	    setJSOption: function(name, value) {
 	    	this.htmlOptions[name] = value;	
-	    	this.save();
+	    	this.ls[htmlOptions][name] = value;
+	    	this.updateTimeStamp();
 	    },
 
 	    getOption: function(mode, name) {
@@ -85,44 +119,24 @@ var TBDB = (function() {
 	    },
 
 	    setEditorValue: function(mode, value) {
-	    	if(mode == 'html') {
+	    	if(mode == 'xml') {
+	    		mode = 'html';
 	    		this.html = value;
 	    	}
 	    	else if(mode == 'css') {
 	    		this.css = value;
 	    	}
 	    	else {
+	    		mode = 'js';
 	    		this.js = value;
 	    	}
 
-	    	this.save();
-	    },
-
-	    save: function() {
-	    	// update time stamp
+	    	this.ls[mode] = value;
 	    	this.updateTimeStamp();
-
-	    	// save this to local storage
-	    	if(localStorage) {
-	    		this.syncObjects(this, localStorage);
-	    	}
 	    },
 
-	    syncObjects: function(from, to) {
-	    	for(var attribute in from) {
-	    		if(typeof(from[attribute]) == 'object') {
-	    			for(var opt in from[attribute]) {
-	    				// console.log('opt: ' + opt);
-	    				to[attribute][opt] = from[attribute][opt];
-	    			}
-	    		}
-	    		else if(typeof(from[attribute]) != 'function') {
-	    			// console.log(attribute);
-	    			to[attribute] = from[attribute];
-	    		}
-	    	}
-	    },
-
+	    // Update the time stamp, save in the format
+	    // yyyy-mm-dd hh:mm:ss
 	    updateTimeStamp: function() {
 	    	var now = new Date()
 
@@ -134,10 +148,10 @@ var TBDB = (function() {
 	    	var date = yyyy + '-' + mm + '-' + dd;
 
 	    	var regex = /\d\d:\d\d:\d\d/g;
-			var match = regex.exec(now.toString());
-			var time = match[0];
+			var timeMatch = regex.exec(now.toString());
 
-	    	this.dateUpdated = date + ' ' + time;
+	    	this.dateUpdated = date + ' ' + timeMatch[0];
+	    	this.ls['dateUpdated'] = this.dateUpdated;
 	    }
     };
 
