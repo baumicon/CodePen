@@ -3,8 +3,11 @@ require 'json'
 require 'erb'
 
 helpers do
+    def close embedded_json
+        embedded_json.gsub('</', '<\/')
+    end
     def get_templates
-        {'results' => (erb :template)}.to_json
+        {'result' => (erb :template)}.to_json
     end
 end
 
