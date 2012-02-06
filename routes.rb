@@ -15,6 +15,9 @@ helpers do
     def get_templates
         {'result' => (erb :template)}.to_json.gsub('/', '\/')
     end
+    def partial template
+	  erb template, :layout => false
+	end
 end
 
 def encode(obj)

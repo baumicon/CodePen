@@ -30,18 +30,14 @@ html {
 header {
 	display: block;
 	position: relative;
-	padding: 10px 5px 4px 5px;
+	padding: 12px 5px;
 	overflow: hidden;
 	form {
 		float: left;
 	}
-	* {
-		vertical-align: middle;
-	}
 }
 .box-actions {
 	display: inline-block;
-	margin-top: -3px;
 }
 
 #slug {
@@ -59,11 +55,14 @@ header {
 #fork:before {
 	top: 1px;
 }
+#update:before {
+	top: 1px;
+}
 #save:before {
 	top: 2px;
 }
 #new:before {
-	top: 3px;
+	top: 2px;
 }
 .app-actions {
 	float: right;
@@ -73,7 +72,6 @@ header {
 	top: 2px;
 }
 #login {
-	
 	&:before {
 		top: 3px;
 		left: -2px;
@@ -88,13 +86,14 @@ header {
 .boxes {
 	position: relative;
 }
+.top-boxes {
+	position: relative;
+}
 .boxes [class^="box-"] {
-	width: 33%;
-	margin: 0 0.5% 0.5% 0;
+	width: 33.33333333%;
 	float: left;
 	height: 350px;
 	position: relative;
-	border: 5px solid #eee;
 	> pre {
 		position: absolute;
 		background: white;
@@ -104,8 +103,7 @@ header {
 		height: 100%;
 		border: 0;
 		resize: none;
-		border: 1px solid #ccc;
-		padding: 5px;
+		padding: 15px;
 		font: 11px Monaco, Courier, MonoSpace;
 	}
 	h2 {
@@ -185,16 +183,13 @@ header {
 }
 
 .result {
-	margin: 20px 0 0;
 	clear: both;
-	border: 5px solid #eee;
 	position: relative;
 	iframe {
 		border: 0;
 		background: white;
 		width: 100%;
 		height: 100%;
-		border: 1px solid #ccc;
 	}
 	h2 {
 		@include transition(opacity 0.2 ease);
@@ -212,26 +207,29 @@ header {
 	z-index: 20;
 }
 .handle-vert {
-	background: url(/images/handle-vert.png);
-	width: 7px;
-	height: 25px;
-	top: 21%;	
+	background: #F3F3F3 url(/images/handle-vert.png) center center no-repeat;
+	width: 9px;
+	height: 100%;
+	top: 0;	
 	cursor: col-resize;
 }
 .handle-horz {
-	background: url(/images/handle-horz.png);
-	width: 25px;
-	height: 7px;
+	background: #F3F3F3 url(/images/handle-horz.png) center center no-repeat;
+	width: 100%;
+	left: 0;
+	height: 9px;
+	cursor: row-resize;
 }
 .handle-1 {
-	left: 32.81%;
+	left: 33.333333%;
+	margin-left: -9px;
 }
 .handle-2 {
-	left: 66.3%;
+	left: 66.6666666%;
+	margin-left: -9px;
 }
 .handle-3 {
-	top: 49.6%;
-	left: 50%;
+	top: 50%;
 }
 
 // --------------------------- FOOTER
