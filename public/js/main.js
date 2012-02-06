@@ -19,7 +19,7 @@
 
 	// Resize all boxes when window resized
     win.resize(function() {
-		var space = body.height() - 100; // TODO: Make less ghetto (problems with floats)
+		var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
 		topBoxes.height(space / 2);
 		boxResult.height(space / 2);
     }).trigger("resize");
@@ -31,7 +31,6 @@
 	TBDB.init();
 
 	// Sync UI with data values
-
 	$('#slug').val(TBDB.name);
 	$('#html').html(TBDB.html);
 	$('#css').html(TBDB.css);
@@ -95,6 +94,5 @@
     $('input[name="js-preprocessor"]').on('click', function() {
     	TBDB.setCSSOption('preprocessor', this.value);
     });
-
 
 })(jQuery);

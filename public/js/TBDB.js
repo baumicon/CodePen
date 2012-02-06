@@ -73,7 +73,7 @@ var TBDB = (function() {
 	    },
 
 	    getOption: function(mode, name) {
-	    	if(mode == 'html') {
+	    	if(mode == 'xml') {
 	    		return this.htmlOptions[name];
 	    	}
 	    	else if(mode == 'css') {
@@ -85,7 +85,7 @@ var TBDB = (function() {
 	    },
 
 	    setEditorValue: function(mode, value) {
-	    	if(mode == 'html') {
+	    	if(mode == 'xml') {
 	    		this.html = value;
 	    	}
 	    	else if(mode == 'css') {
@@ -112,12 +112,10 @@ var TBDB = (function() {
 	    	for(var attribute in from) {
 	    		if(typeof(from[attribute]) == 'object') {
 	    			for(var opt in from[attribute]) {
-	    				// console.log('opt: ' + opt);
 	    				to[attribute][opt] = from[attribute][opt];
 	    			}
 	    		}
 	    		else if(typeof(from[attribute]) != 'function') {
-	    			// console.log(attribute);
 	    			to[attribute] = from[attribute];
 	    		}
 	    	}
