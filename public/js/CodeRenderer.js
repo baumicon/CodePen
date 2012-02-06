@@ -20,7 +20,7 @@ var CodeRenderer = (function() {
 	    },
 
 	    executeIFrameJS: function() {
-	    	// todo, look at the security implications of this
+	    	// TO DO: look at the security implications of this
 	    	$('#result')[0].contentWindow.__run();
 	    },
 
@@ -66,8 +66,6 @@ var CodeRenderer = (function() {
 	    }
     };
 
-// This ends the CodeRenderer module
-
-return CodeRenderer;
+	return CodeRenderer;
 
 })();

@@ -8,7 +8,7 @@ var TBDB = (function() {
 
 	var TBDB = {
 
-		// Tinker box data
+		// Tinkerbox data
 		name         : '',
 		html         : '',
 		css          : '',
@@ -101,13 +101,13 @@ var TBDB = (function() {
 	    },
 
 	    setJSOption: function(name, value) {
-	    	this.htmlOptions[name] = value;	
-	    	this.ls[htmlOptions][name] = value;
+	    	this.jsOptions[name] = value;	
+	    	this.ls[jsOptions][name] = value;
 	    	this.updateTimeStamp();
 	    },
 
 	    getOption: function(mode, name) {
-	    	if(mode == 'html') {
+	    	if(mode == 'xml') {
 	    		return this.htmlOptions[name];
 	    	}
 	    	else if(mode == 'css') {
@@ -119,7 +119,7 @@ var TBDB = (function() {
 	    },
 
 	    setEditorValue: function(mode, value) {
-	    	if(mode == 'xml') {
+	    	if(mode == 'xml' || mode == 'html') {
 	    		mode = 'html';
 	    		this.html = value;
 	    	}
@@ -155,8 +155,8 @@ var TBDB = (function() {
 	    }
     };
 
-// This ends the TBDB module
+	// This ends the TBDB module
 
-return TBDB;
+	return TBDB;
 
 })();
