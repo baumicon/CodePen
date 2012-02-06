@@ -8,7 +8,7 @@ var TBDB = (function() {
 
 	var TBDB = {
 
-		// Tinker box data
+		// Tinkerbox data
 		name         : '',
 		html         : '',
 		css          : '',
@@ -68,7 +68,7 @@ var TBDB = (function() {
 	    },
 
 	    setJSOption: function(name, value) {
-	    	this.htmlOptions[name] = value;	
+	    	this.jsOptions[name] = value;	
 	    	this.save();
 	    },
 
@@ -141,8 +141,8 @@ var TBDB = (function() {
 	    }
     };
 
-// This ends the TBDB module
+	// This ends the TBDB module
 
-return TBDB;
+	return TBDB;
 
 })();
