@@ -9,7 +9,7 @@
 
 	<link href="//get.pictos.cc/fonts/555/1" rel="stylesheet">
 	<script src="http://use.typekit.com/nnp0iyi.js"></script>
-	<script>try{Typekit.load();}catch(e){}</script>
+	<script>try { Typekit.load(); } catch(e) {}</script>
 
 	<link rel="stylesheet" href="stylesheets/css/main.css">
 
@@ -138,7 +138,7 @@
 
 			</div><!-- END div.top-boxes -->
 
-			<div class="handle handle-horz handle-3"></div>
+			<div id="handle-3" class="handle handle-horz handle-3"></div>
 
 			<div class="result">
 				
@@ -148,17 +148,11 @@
 
 		</div><!--END div.boxes -->
 
-		<footer>
-			&copy;2012 Tinkerbox &middot; Code demos copyright their creators &middot; <a href="https://github.com/chriscoyier/Tinkerbox">GitHub</a>
-
-			<div class="footer-actions">
-				<button id="keyboard">Keyboard Shortcuts</button>
-			</div>
-		</footer>
+		<%= partial :footer %>
 
 	</div><!-- END div.wrap -->
 
-	<script type="text/javascript">
+	<script>
 		__tbdb = <%= @tbdb %>
         __templates = <%= close get_templates  %>;
 	</script>

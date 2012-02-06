@@ -4,6 +4,7 @@
 	var win          = $(window),
 		body         = $("body"),
 
+		boxes        = $(".boxes"),
         boxHTML      = $(".box-html"),
         boxCSS       = $(".box-css"),
         boxJS        = $(".box-js"),
@@ -13,7 +14,8 @@
         topBoxes     = $(".box-html, .box-css, .box-js"),
 
         handle1      = $("#handle-1"),
-        handle2      = $("#handle-2");
+        handle2      = $("#handle-2"),
+        handle3		 = $("#handle-3");
 
     // Opening and closing settings panels
     $(".settings-nub").on("click", function(e) {
@@ -22,10 +24,12 @@
 	});
 
 	// Resize all boxes when window resized
+	// TO DO: Debounce? 
     win.resize(function() {
 		var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
 		topBoxes.height(space / 2);
 		boxResult.height(space / 2);
+		handle3.css("top", "50%");
     }).trigger("resize");
 
     // Better select box for chosing JS library
@@ -55,6 +59,15 @@
     		boxCSS.css("width", split + "%");
     		boxHTML.css("width", split + "%");
     		handle1.css("left", split + "%");
+    	}
+    });
+    handle3.draggable({
+    	containment  : 'parent',
+    	axis         : 'y',
+    	drag         : function(e, ui) {
+			var percent =  ui.position.top / boxes.height() * 100;
+			topBoxes.css("height", ui.position.top + "px");
+			boxResult.css("height", (100 - percent) + "%");
     	}
     });
 
