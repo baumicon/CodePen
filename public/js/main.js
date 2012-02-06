@@ -9,7 +9,11 @@
         boxJS        = $(".box-js"),
         boxResult    = $(".result"),
 
-        topBoxes     = $(".box-html, .box-css, .box-js");
+        topBoxesCon  = $(".top-boxes"),
+        topBoxes     = $(".box-html, .box-css, .box-js"),
+
+        handle1      = $("#handle-1"),
+        handle2      = $("#handle-2");
 
     // Opening and closing settings panels
     $(".settings-nub").on("click", function(e) {
@@ -26,6 +30,33 @@
 
     // Better select box for chosing JS library
     $("#js-select").chosen();
+
+    handle1.draggable({
+    	containment  : 'parent',
+    	axis         : 'x',
+    	drag         : function(e, ui) {
+    		var percent = (ui.position.left / topBoxesCon.width() * 100);
+    		boxHTML.css("width", percent + "%");
+    		var leftover = 100 - percent;
+    		var split = leftover / 2;
+    		boxCSS.css("width", split + "%");
+    		boxJS.css("width", split + "%");
+    		handle2.css("left", (percent + split) + "%");
+    	}
+    });
+    handle2.draggable({
+    	containment  : 'parent',
+    	axis         : 'x',
+    	drag         : function(e, ui) {
+			var percent = 100 - (ui.position.left / topBoxesCon.width() * 100);
+    		boxJS.css("width", percent + "%");
+    		var leftover = 100 - percent;
+    		var split = leftover / 2;
+    		boxCSS.css("width", split + "%");
+    		boxHTML.css("width", split + "%");
+    		handle1.css("left", split + "%");
+    	}
+    });
 
     // Initialize the data backing object
 	TBDB.init();
