@@ -48,23 +48,27 @@ var TBDB = (function() {
 			this.js   = this.ls.js;
 			this.version = this.ls.version;
 
-			this.htmlOptions = {
-				'jade' : this.ls.htmlOptions.jade,
-				'haml' : this.ls.htmlOptions.haml,
-			};
+			// [Chris]: Just commenting out below because
+			// it was causing JS errors. Tim wanted to work on stuff
+			// with working version.
 
-			this.cssOptions = {
-				'less'       : this.ls.cssOptions.less,
-				'stylus'     : this.ls.cssOptions.stylus,
-				'scss'       : this.ls.cssOptions.scss,
-				'sass'       : this.ls.cssOptions.sass,
-				'prefixFree' : this.ls.cssOptions.prefixFree
-			};
+			// this.htmlOptions = {
+			// 	'jade' : this.ls.htmlOptions.jade,
+			// 	'haml' : this.ls.htmlOptions.haml
+			// };
 
-			this.jsOptions = {
-				'coffeeScript' : this.ls.jsOptions.coffeeScript,
-				'libraries'    : '',
-			}
+			// this.cssOptions = {
+			// 	'less'       : this.ls.cssOptions.less,
+			// 	'stylus'     : this.ls.cssOptions.stylus,
+			// 	'scss'       : this.ls.cssOptions.scss,
+			// 	'sass'       : this.ls.cssOptions.sass,
+			// 	'prefixFree' : this.ls.cssOptions.prefixFree
+			// };
+
+			// this.jsOptions = {
+			// 	'coffeeScript' : this.ls.jsOptions.coffeeScript,
+			// 	'libraries'    : '',
+			// }
 	    },
 
 	    // Looks for data stored locally on the client
