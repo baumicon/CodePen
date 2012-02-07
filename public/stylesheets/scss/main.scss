@@ -72,9 +72,13 @@ header {
 	top: 2px;
 }
 #login {
+	@include gradient(#33BCEF,#019AD2);
+	border: 0;
+	color: white;
 	&:before {
-		top: 3px;
+		top: 1px;
 		left: -2px;
+		font-weight: normal;
 	}
 }
 
