@@ -15,9 +15,18 @@ To run the server with reload, do this
 
 ##OAuth
 
-We use Github OAuth for our authentication provider.  You must sign up for a github app and then set environment variables with your keys in order for this to work.  For development, create a `startup.sh` in the root of this project.  Then then make it executable, like so:
+We use Github OAuth for our authentication provider.  You must sign up for a github app and then set environment variables with your keys in order for this to work.  For development, create a `startup.sh` in the root of this project. The file should looke like this:
 
-    echo 'GITHUB_KEY=<your_key_here>; GITHUB_SECRET=<your_secret_here>; shotgun routes.rb' > startup.sh
+    export GITHUB_KEY=<your_key>
+    export GITHUB_SECRET=<your_secret>
+    bundle exec shotgun
+
+
+Then then make it executable, like so:
+
     chmod +x startup.sh
+    #! /bin/bash
 
-You'll then have to open that file and change the keys and values to match your Github app.
+Run the app like this:
+
+    ./startup.sh
