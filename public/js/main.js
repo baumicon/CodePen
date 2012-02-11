@@ -77,13 +77,6 @@ var KeyBindings = (function() {
                         stop = true;
                         KeyBindings.giveEditorFocus(KeyBindings.JSeditor);
                     }
-                    else if(event.keyCode == 52) {
-                        // cmd + 4
-                        console.log('give focus to result area');
-                        // alextodo, how does this work? how does it get focus?
-                        stop = true;
-                        $('#result').focus();
-                    }
                     else if(event.keyCode == 67) {
                         // cmd + c
                         // compile and run code
@@ -91,7 +84,7 @@ var KeyBindings = (function() {
                         CodeRenderer.codeChanged();
                     }
                     else if(event.keyCode == 70) {
-                        // command + f (alextodo, shouldn't this be a command something else?)
+                        // command + K
                         // fork this project
                         console.log('fork');
                     }
