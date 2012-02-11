@@ -9,6 +9,13 @@ get '/' do
   erb :index
 end
 
+get '/:slug/' do
+  @tbdb = encode(get_tbdb())
+  @slug = params[:slug]
+  
+  erb :index
+end
+
 helpers do
     def close embedded_json
         embedded_json.gsub('</', '<\/')

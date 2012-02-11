@@ -8,7 +8,9 @@
 						<button id="fork" data-icon="f" class="icon">Fork</button>
 						<button id="update" data-icon="u" class="icon">Update</button>
 						<!-- <button id="save" data-icon="c" class="icon">Save as Gist</button> -->
-						<button id="new" data-icon="b" class="icon">Brand New Box</button>	
+						<% if @slug %>
+						    <button id="new" data-icon="b" class="icon">Brand New Box</button>	
+						<% end %>
 					</div>			
 				</div>
 			</form>
