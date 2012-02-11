@@ -24,6 +24,21 @@ var KeyBindings = (function() {
 	    	this.CSSeditor = CSSeditor;
 	    	this.JSeditor = JSeditor;
 	    },
+	    
+	    giveEditorFocus: function(editor) {
+	        editor.focus();
+            KeyBindings.setCursorToEnd(editor);
+	    },
+	    
+	    setCursorToEnd: function(editor) {
+	        var text = editor.getValue();
+            
+            // set the cursor to the end of the editor
+            // Make sure it's at the end by line num and char num to
+            // same value as the actual number of chars, CodeMirror will
+            // simply move the cursor to the end
+            editor.setCursor(text.length, text.length, true);
+	    },
         
         // todo, implment CMD-SHIFT-C - Copy current URL
         bindKeys: function() {
@@ -49,32 +64,34 @@ var KeyBindings = (function() {
                 if(altKeyPressedPreviously) {
                     if(event.keyCode == 49) {
                         // cmd + 1
-                        KeyBindings.HTMLeditor.focus();
                         stop = true;
+                        KeyBindings.giveEditorFocus(KeyBindings.HTMLeditor);
                     }
                     else if(event.keyCode == 50) {
                         // cmd + 2
-                        KeyBindings.CSSeditor.focus();
                         stop = true;
+                        KeyBindings.giveEditorFocus(KeyBindings.CSSeditor);
                     }
                     else if(event.keyCode == 51) {
                         // cmd + 3
-                        KeyBindings.JSeditor.focus();
                         stop = true;
+                        KeyBindings.giveEditorFocus(KeyBindings.JSeditor);
                     }
                     else if(event.keyCode == 52) {
                         // cmd + 4
                         console.log('give focus to result area');
                         // alextodo, how does this work? how does it get focus?
                         stop = true;
+                        $('#result').focus();
                     }
                     else if(event.keyCode == 67) {
                         // cmd + c
                         // compile and run code
                         console.log('compile');
+                        CodeRenderer.codeChanged();
                     }
                     else if(event.keyCode == 70) {
-                        // command + f
+                        // command + f (alextodo, shouldn't this be a command something else?)
                         // fork this project
                         console.log('fork');
                     }
@@ -86,11 +103,12 @@ var KeyBindings = (function() {
                     else if(event.keyCode == 78) {
                         // command + n
                         // create a new tinker box
-                        console.log('create new tinker box');
+                        console.log('create new tinker box in new tab');
                         stop = true;
                     }
                     else if(event.keyCode == 83) {
                         // command + s
+                        console.log('save');
                         stop = true;
                     }
                 }
@@ -127,7 +145,7 @@ var KeyBindings = (function() {
 
         handle1      = $("#handle-1"),
         handle2      = $("#handle-2"),
-        handle3		 = $("#handle-3");
+        handle3      = $("#handle-3");
 
     // Opening and closing settings panels
     $(".settings-nub").on("click", function(e) {
@@ -196,7 +214,7 @@ var KeyBindings = (function() {
 
 	codeChanged = function(editor, changes) {
 		TBDB.setEditorValue(editor.getOption('mode'), editor.getValue());
-		CodeRenderer.codeChanged();
+		if(TBDB.compileInRealTime) CodeRenderer.codeChanged();
 	}
 
 	// 

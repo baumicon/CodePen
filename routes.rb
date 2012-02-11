@@ -1,11 +1,12 @@
 require 'sinatra'
 require 'json'
 require 'erb'
+require_relative 'minify.rb'
 
 get '/' do
-	@tbdb = encode(get_tbdb())
-
-    erb :index
+  @tbdb = encode(get_tbdb())
+  
+  erb :index
 end
 
 helpers do
@@ -15,13 +16,22 @@ helpers do
     def get_templates
         {'result' => (erb :template)}.to_json.gsub('/', '\/')
     end
+    
     def partial template
-	  erb template, :layout => false
-	end
+      erb template, :layout => false
+    end
+    
+    # alextodo, break out into second class that is configurable
+    # should be able to simply include, but also make it configurable
+    # so that certain libs are grouped into a single file together
+    def js_scripts(scripts)
+      minify = Minify.new()
+      minify.script_tags(scripts)
+    end
 end
 
 def encode(obj)
-	obj.to_json.gsub('/', '\/')
+  obj.to_json.gsub('/', '\/')
 end
 
 def get_tbdb()
