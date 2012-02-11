@@ -12,7 +12,7 @@ class Minify
     @destinationJSDir = '/public/prodjs'
     
     def initialize()
-        @minify = true
+        @minify = false
     end
     
     # Prints the <script tags according to minify and combine level
