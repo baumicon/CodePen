@@ -1,21 +1,37 @@
 		<header>
-			<form>
-				<div>
-					<h1>Tinkerbox.com/</h1>
-					<input type="text" id="slug" name="slug">
 
-					<div class="box-actions">
-						<button id="fork" data-icon="f" class="icon">Fork</button>
+			<form>
+				<h1>Tinkerbox.com/</h1>
+				<input type="text" id="slug" name="slug">
+
+				<div class="box-actions">
+
+					<button id="fork" data-icon="f" class="icon">Fork</button>
+
+					<% if @slug %>
 						<button id="update" data-icon="u" class="icon">Update</button>
-						<% if @slug %>
-						    <button id="new" data-icon="b" class="icon">Brand New Box</button>	
-						<% end %>
-					</div>			
-				</div>
+					<% else %>
+						<button id="save" data-icon="v" class="icon">Save</button>
+					<% end %>
+
+					<% if @slug %>
+					 	<button id="new" data-icon="b" class="icon">Brand New Box</button>	
+					<% end %>
+
+					<button id="login" data-icon="t" class="icon">Twitter Login</button>
+
+				</div>			
 			</form>
 
 			<div class="app-actions">
-				<button id="settings" data-icon="s" class="icon">App Settings</button> 
-				<button id="login" data-icon="t" class="icon">Twitter Login</button>
+				<span class="button" id="settings">
+					<a href="#" data-icon="s" class="icon"></a>
+					<a href="#" data-icon="w" class="icon dropdown"></a>
+				</span> 
+
+				<!-- Only show if preprocessor? Or will subdomain also require? -->
+				<button id="run" data-icon="g" class="icon">Run</button>
+
 			</div>
+
 		</header>
