@@ -3,7 +3,7 @@ require 'jsmin'
 class Minify
     
     # determine if we should minify the JS
-    MINIFY = true
+    MINIFY = false
     
     # relavtive path to public dir
     PUBLIC_DIR = '/public/'
