@@ -21,7 +21,11 @@ var CodeRenderer = (function() {
 
 	    executeIFrameJS: function() {
 	    	// TO DO: look at the security implications of this
-	    	$('#result')[0].contentWindow.__run();
+	    	var contentWindow = $('#result')[0].contentWindow;
+	    	
+	    	if(contentWindow.__run) {
+	    	    contentWindow.__run();
+	    	}
 	    },
 
 	    getResultContent: function() {

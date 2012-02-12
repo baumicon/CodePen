@@ -20,7 +20,6 @@ html {
 }
 
 @import "typography";
-@import "icons";
 @import "toolbox";
 @import "buttons";
 @import "codemirror";
@@ -30,21 +29,23 @@ html {
 header {
 	display: block;
 	position: relative;
-	padding: 12px 5px;
 	overflow: hidden;
+	padding: 10px 0 10px 15px;
 	form {
 		float: left;
+		* {
+			vertical-align: middle;
+		}
 	}
 }
 .box-actions {
 	display: inline-block;
 }
-
 #slug {
 	border: 0;
 	@include font-stack();
-	font-size: 13px;
-	top: -1px;
+	font-size: 12px;
+	top: 1px;
 	padding: 2px;
 	position: relative;
 	margin: 0 10px 0 0;
@@ -52,34 +53,8 @@ header {
 		outline: 0;
 	}
 }
-#fork:before {
-	top: 1px;
-}
-#update:before {
-	top: 1px;
-}
-#save:before {
-	top: 2px;
-}
-#new:before {
-	top: 2px;
-}
 .app-actions {
 	float: right;
-	padding-right: 4px;
-}
-#settings:before {
-	top: 2px;
-}
-#login {
-	@include gradient(#33BCEF,#019AD2);
-	border: 0;
-	color: white;
-	&:before {
-		top: 1px;
-		left: -2px;
-		font-weight: normal;
-	}
 }
 
 

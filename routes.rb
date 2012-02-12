@@ -1,11 +1,24 @@
 require 'sinatra'
 require 'json'
 require 'erb'
+require_relative 'minify.rb'
 
 get '/' do
-	@tbdb = encode(get_tbdb())
+  @tbdb = encode(get_tbdb())
+  @user = get_user()
+  
+  erb :index
+end
 
-    erb :index
+get '/:slug/' do
+  @tbdb = encode(get_tbdb())
+  @slug = params[:slug]
+  
+  erb :index
+end
+
+get '/:slug/fullpage/' do
+  return 'Full page'
 end
 
 helpers do
@@ -15,13 +28,35 @@ helpers do
     def get_templates
         {'result' => (erb :template)}.to_json.gsub('/', '\/')
     end
+    
     def partial template
-	  erb template, :layout => false
-	end
+      erb template, :layout => false
+    end
+    
+    # alextodo, break out into second class that is configurable
+    # should be able to simply include, but also make it configurable
+    # so that certain libs are grouped into a single file together
+    def js_scripts(scripts)
+      minify = Minify.new()
+      minify.script_tags(scripts)
+    end
 end
 
 def encode(obj)
-	obj.to_json.gsub('/', '\/')
+  obj.to_json.gsub('/', '\/')
+end
+
+# todo, flesh out the data held by the user
+# need a list of past tinker boxes, and urls to those
+# it would probably make sense to hang all the data 
+# off the user object
+def get_user()
+  user = {
+    'username' => 'huckle bucker',
+    'loggedin' => false
+  }
+  
+  return user
 end
 
 def get_tbdb()

@@ -9,15 +9,16 @@ var TBDB = (function() {
 	var TBDB = {
 
 		// Tinkerbox data
-		name         : '',
-		html         : '',
-		css          : '',
-		js           : '',
-		version      : 1,
-		htmlOptions  : { },
-		cssOptions   : { },
-		jsOptions    : { },
-		dateUpdated  : '',
+		name              : '',
+		html              : '',
+		css               : '',
+		js                : '',
+		version           : 1,
+		htmlOptions       : { },
+		cssOptions        : { },
+		jsOptions         : { },
+		dateUpdated       : '',
+		compileInRealTime : true,
 
 		// Store localStorage as own hash
 		// This way browsers that don't support 
