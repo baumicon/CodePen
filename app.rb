@@ -1,12 +1,19 @@
 require 'sinatra'
+require 'mongo_mapper'
 require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
+require_relative 'models/user'
+
+Dir.glob("controllers/*.rb").each {|r| require_relative r }
 
 class App < Sinatra::Base
 
-
     use Rack::Session::Cookie
+    enable :sessions
+
+    MongoMapper.database = 'tinkerbox'
+
     use OmniAuth::Builder do
           provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
     end
@@ -62,8 +69,23 @@ class App < Sinatra::Base
 
     get '/auth/:name/callback' do
         auth = request.env['omniauth.auth']
-        require 'pp'
-        pp auth
+        begin
+            query = User.query(:uid => auth["uid"]).all
+            if(query.count == 1)
+                user = query[0]
+            else
+                user = User.new(:uid => auth["uid"],
+                    :nickname => auth["info"]["nickname"],
+                    :name => auth["info"]["name"],
+                    :provider => 'twitter')
+                user.save
+            end
+            session[:user_id] = user._id
+        rescue Exception
+            require 'pp'
+            pp e
+        end
+        redirect '/'
     end
 
     get '/auth/failure' do
