@@ -1,0 +1,4 @@
+#! /bin/bash
+export TWITTER_KEY=GxtnCoqwazowPZVLhnzvKQ
+export TWITTER_SECRET=I4ZuKllONI1K2eVQxF8FAt2pCCVpi9d9QawkInRU
+bundle exec shotgun
