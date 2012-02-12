@@ -11,22 +11,9 @@ To get the server running on your machine, do the following:
 
 To run the server with reload, do this
 
-    shotgun routes.rb
+    shotgun config.ru
 
-##OAuth
+However, shotgun will destroy sessions, so when working with auth, you must run
 
-We use Github OAuth for our authentication provider.  You must sign up for a github app and then set environment variables with your keys in order for this to work.  For development, create a `startup.sh` in the root of this project. The file should looke like this:
+    rackup
 
-    export GITHUB_KEY=<your_key>
-    export GITHUB_SECRET=<your_secret>
-    bundle exec shotgun
-
-
-Then then make it executable, like so:
-
-    chmod +x startup.sh
-    #! /bin/bash
-
-Run the app like this:
-
-    ./startup.sh
