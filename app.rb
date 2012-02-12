@@ -4,6 +4,7 @@ require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
 require_relative 'models/user'
+require_relative 'minify.rb'
 
 Dir.glob("controllers/*.rb").each {|r| require_relative r }
 
@@ -19,8 +20,13 @@ class App < Sinatra::Base
     end
 
     get '/' do
-        @tbdb = encode(get_tbdb())
+        @tbdb = get_tbdb()
+        @user = get_user()
         erb :index
+    end
+
+    get '/:slug/fullpage/' do
+        return 'Full page'
     end
 
     helpers do
@@ -31,8 +37,32 @@ class App < Sinatra::Base
             {'result' => (erb :template)}.to_json.gsub('/', '\/')
         end
         def partial template
-          erb template, :layout => false
+            erb template, :layout => false
         end
+        def logged_in
+            return session[:user_id]
+        end
+
+        # alextodo, break out into second class that is configurable
+        # should be able to simply include, but also make it configurable
+        # so that certain libs are grouped into a single file together
+        def js_scripts(scripts)
+            minify = Minify.new()
+            minify.script_tags(scripts)
+        end
+   end
+
+
+    # todo, flesh out the data held by the user
+    # need a list of past tinker boxes, and urls to those
+    # it would probably make sense to hang all the data 
+    # off the user object
+    def get_user()
+        user = {
+            'username' => 'huckle bucker',
+            'loggedin' => false
+        }
+        return user
     end
 
     def get_tbdb()
@@ -60,7 +90,7 @@ class App < Sinatra::Base
             }
         }
 
-        return data
+        return data.to_json.gsub('/', '\/')
     end
 
     get '/auth/:name/callback' do
