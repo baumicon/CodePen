@@ -60,6 +60,9 @@ var KeyBindings = (function() {
                 
                 stop = false;
                 
+                // todo, will need to create a keydown status for a key
+                // then change on keyup, that way you know if that key 
+                
                 // Process all the altKey pressed events
                 if(altKeyPressedPreviously) {
                     if(event.keyCode == 49) {
@@ -83,10 +86,11 @@ var KeyBindings = (function() {
                         console.log('compile');
                         CodeRenderer.codeChanged();
                     }
-                    else if(event.keyCode == 70) {
+                    else if(event.keyCode == 75) {
                         // command + K
                         // fork this project
                         console.log('fork');
+                        console.log(event);
                     }
                     else if(event.keyCode == 71) {
                         // command + g
@@ -97,6 +101,7 @@ var KeyBindings = (function() {
                         // command + n
                         // create a new tinker box
                         console.log('create new tinker box in new tab');
+                        // warn if changes will be lost
                         stop = true;
                     }
                     else if(event.keyCode == 83) {

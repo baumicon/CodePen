@@ -5,6 +5,7 @@ require_relative 'minify.rb'
 
 get '/' do
   @tbdb = encode(get_tbdb())
+  @user = get_user()
   
   erb :index
 end
@@ -14,6 +15,10 @@ get '/:slug/' do
   @slug = params[:slug]
   
   erb :index
+end
+
+get '/:slug/fullpage/' do
+  return 'Full page'
 end
 
 helpers do
@@ -39,6 +44,19 @@ end
 
 def encode(obj)
   obj.to_json.gsub('/', '\/')
+end
+
+# todo, flesh out the data held by the user
+# need a list of past tinker boxes, and urls to those
+# it would probably make sense to hang all the data 
+# off the user object
+def get_user()
+  user = {
+    'username' => 'huckle bucker',
+    'loggedin' => false
+  }
+  
+  return user
 end
 
 def get_tbdb()

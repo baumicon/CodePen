@@ -2,24 +2,26 @@ require 'jsmin'
 
 class Minify
     
-    # alextodo, make these easy to set
-    attr_accessor :minify
+    # determine if we should minify the JS
+    MINIFY = true
     
-    @serveFromURL = ''
-    @groupedFiles = ''
+    # relavtive path to public dir
+    PUBLIC_DIR = '/public/'
     
-    @originJSDir = '/public/js'
-    @destinationJSDir = '/public/prodjs'
+    # path to dir where JS files live, relative to public dir
+    ORIGIN_DIR = '/js/'
     
-    def initialize()
-        @minify = false
-    end
+    # path to where production js file will live, relative to public dir
+    DEST_DIR = '/prodjs/'
     
-    # Prints the <script tags according to minify and combine level
+    SERVE_FILES_FROM_URL = ''
+    GROUPED_FILES = ''
+    
+    # Prints the <script> tags according to minify and combine level
     def script_tags(scripts)
       script_tags = ''
       
-      if @minify == true
+      if MINIFY == true
         self.compress_js(scripts)
         src = get_src_to_prodjs(scripts)
         script_tags = '<script src="' + src + '"></script>'
@@ -61,9 +63,9 @@ class Minify
     
     def get_src_to_prodjs(scripts)
        path_to_prod = get_path_to_prodjs_file(scripts)
-       js_file = path_to_prod.split("prodjs/").last
+       js_file = path_to_prod.split(DEST_DIR).last
        
-       '/prodjs/' + js_file
+       DEST_DIR + js_file
     end
     
     # Use the last script file passed in as the name of the production file
@@ -71,16 +73,27 @@ class Minify
     # the production file will be named main.[git_hash].js
     def get_path_to_prodjs_file(scripts)
       # Current git commit hash
-      hash = `git rev-parse HEAD`
+      js_file_id = get_unique_filename_id()
       
       js_file_name = scripts[scripts.length - 1]
       js_file_name = js_file_name.split("/").last
-      js_file_name = js_file_name.sub('.js', '.' + hash.strip + '.js')
+      js_file_name = js_file_name.sub('.js', '.' + js_file_id + '.js')
       
-      File.dirname(__FILE__) + '/public/prodjs/' + js_file_name
+      clean_path(File.dirname(__FILE__) + PUBLIC_DIR + DEST_DIR + js_file_name)
+    end
+    
+    # uses some sort of counter to create a unique id for the
+    # production js file name
+    def get_unique_filename_id()
+      hash = `git rev-parse HEAD`
+      hash.strip
     end
     
     def get_path_to_public()
-      File.dirname(__FILE__) + '/public/'
+      clean_path(File.dirname(__FILE__) + PUBLIC_DIR)
+    end
+    
+    def clean_path(path)
+      path.sub('//', '/')
     end
 end
