@@ -35,10 +35,6 @@ class App < Sinatra::Base
         end
     end
 
-    def encode(obj)
-        obj.to_json.gsub('/', '\/')
-    end
-
     def get_tbdb()
         # default instance of a tinker box
         # in the future, it will be loaded from db
