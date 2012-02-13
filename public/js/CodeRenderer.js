@@ -42,6 +42,10 @@ var CodeRenderer = (function() {
 	    },
 
         // alextodo, start saving the state of the buttons
+        // finish creating the backend service for preprocessors
+        // none - done
+        // jade  - done
+        // haml - ruby, a simple gem
 	    getHTML: function() {
 	        // check if any preprocessors are set
 	        var html = TBDB.html;
@@ -62,6 +66,11 @@ var CodeRenderer = (function() {
 	    	return html;
 	    },
 
+        // less, javascript
+        // stylus - npm , npm install stylus
+        // sass - ruby
+        // sass with compass - gem install compass
+        // prefix free, what's up with that?
 	    getCSS: function() {
 	    	return TBDB.css;
 
@@ -78,6 +87,7 @@ var CodeRenderer = (function() {
 			return css;
 	    },
 
+        // coffee script, npm install -g coffee-script
 	    getJS: function() {
 	    	return TBDB.js;
 	    },
