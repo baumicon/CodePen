@@ -1,7 +1,7 @@
 var CodeRenderer = (function() {
 
 	var CodeRenderer = {
-
+        
 	    init: function() {
 	    	this.codeChanged();
 	    },
@@ -41,10 +41,36 @@ var CodeRenderer = (function() {
 			return Mustache.render(this.getTPL('result'), values);
 	    },
 
+        // alextodo, start saving the state of the buttons
+        // finish creating the backend service for preprocessors
+        // none - done
+        // jade  - done
+        // haml - ruby, a simple gem
 	    getHTML: function() {
-	    	return TBDB.html;
+	        // check if any preprocessors are set
+	        var html = TBDB.html;
+	        
+	        if(TBDB.htmlOptions['preprocessor'] == 'jade') {
+	            $.ajax({
+      				url: '/process/html/',
+      				type: 'POST',
+      				async: false,
+      				data: 'type=jade&html=' + html,
+      				success: function( result ) {
+      				    obj = $.parseJSON(result);
+        				html = obj.html;
+      				}
+    			});
+	        }
+	        
+	    	return html;
 	    },
 
+        // less, javascript
+        // stylus - npm , npm install stylus
+        // sass - ruby
+        // sass with compass - gem install compass
+        // prefix free, what's up with that?
 	    getCSS: function() {
 	    	return TBDB.css;
 
@@ -61,6 +87,7 @@ var CodeRenderer = (function() {
 			return css;
 	    },
 
+        // coffee script, npm install -g coffee-script
 	    getJS: function() {
 	    	return TBDB.js;
 	    },
