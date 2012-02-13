@@ -7,9 +7,10 @@
 
 	<title>Tinkerbox</title>
 
+    <!-- 
     <link href="//get.pictos.cc/fonts/555/1" rel="stylesheet">
     <script src="http://use.typekit.com/nnp0iyi.js"></script>
-    <script>try { Typekit.load(); } catch(e) {}</script>
+    <script>try { Typekit.load(); } catch(e) {}</script> -->
     <link rel="stylesheet" href="/stylesheets/css/main.css">
 </head>
 
@@ -151,14 +152,9 @@
 	</div><!-- END div.wrap -->
 
 	<script>
-		__tbdb = <%= @tbdb %>
+		__tbdata = <%= @tbdb %>
         __templates = <%= close get_templates  %>;
 	</script>
-
-	<%= js_scripts([
-	    '/js/jquery.js',
-	    '/js/codemirror.js',
-	    '/js/mustache.js',
 
 	<!-- todo need to dynamcially add the preprocessor and load that
 	    so that it doesn't slow this page down, see require.js
@@ -166,12 +162,13 @@
 	<%= js_scripts([
 	    '/js/jquery.js',
 	    '/js/codemirror.js',
-	    '/js/mustache.js',
+	    '/js/tmpl.js',
 	    '/mode/javascript/javascript.js',
 	    '/mode/css/css.js',
 	    '/mode/xml/xml.js',
 	    '/js/chosen.jquery.min.js',
-	    '/js/tbdb.js',
+	    '/js/tb_data.js',
+	    '/js/key_bindings.js',
 	    '/js/coderenderer.js',
 	    '/js/jquery-ui-1.8.17.custom.min.js',
 	    '/js/main.js'

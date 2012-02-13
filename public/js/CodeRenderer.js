@@ -35,10 +35,10 @@ var CodeRenderer = (function() {
   				HTML  : this.getHTML(),
   				JS    : this.getJS(),
   				JSLIB : $("#js-select option:selected").val(),
-  				PREFIX: TBDB.getOption('css', 'prefixFree')
+  				PREFIX: TBData.getOption('css', 'prefixFree')
 			};
 
-			return Mustache.render(this.getTPL('result'), values);
+			return tmpl(this.getTPL('result'), values);
 	    },
 
         // alextodo, start saving the state of the buttons
@@ -48,9 +48,9 @@ var CodeRenderer = (function() {
         // haml - ruby, a simple gem
 	    getHTML: function() {
 	        // check if any preprocessors are set
-	        var html = TBDB.html;
+	        var html = TBData.html;
 	        
-	        if(TBDB.htmlOptions['preprocessor'] == 'jade') {
+	        if(TBData.htmlPreProcessor == 'jade') {
 	            $.ajax({
       				url: '/process/html/',
       				type: 'POST',
@@ -66,13 +66,13 @@ var CodeRenderer = (function() {
 	    	return html;
 	    },
 
-        // less, javascript
+        // less, npm install less
         // stylus - npm , npm install stylus
         // sass - ruby
         // sass with compass - gem install compass
         // prefix free, what's up with that?
 	    getCSS: function() {
-	    	return TBDB.css;
+	    	return TBData.css;
 
 	    	$.ajax({
   				url: '/backend.php',
@@ -89,7 +89,7 @@ var CodeRenderer = (function() {
 
         // coffee script, npm install -g coffee-script
 	    getJS: function() {
-	    	return TBDB.js;
+	    	return TBData.js;
 	    },
 
 	    getTPL: function(name) {

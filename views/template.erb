@@ -3,22 +3,22 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>{{ TITLE }}</title>
+	<title><%%= TITLE %></title>
 
 	<style>
-	{{ CSS }}
+	<%%= CSS %>
 	</style>
 </head>
 
 <body>
 
-	{{{ HTML }}}
+	<%%= HTML %>
 
-	<script src="{{{ JSLIB }}}"></script>
-	<script src="{{{ PREFIX }}}"></script>
+	<script src="<%%= JSLIB %>"></script>
+	<script src="<%%= PREFIX %>"></script>
 	<script>
 		function __run() {
-			{{{ JS }}}
+			<%%= JS %>
 		}
 	</script>
 

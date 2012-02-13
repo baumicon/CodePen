@@ -1,9 +1,3 @@
-require_relative 'models/user'
-
-class UserService
-
-end
-=======
 require 'sinatra'
 require 'json'
 require 'erb'
@@ -55,10 +49,11 @@ helpers do
     def partial template
       erb template, :layout => false
     end
-
-    # alextodo, break out into second class that is configurable
-    # should be able to simply include, but also make it configurable
-    # so that certain libs are grouped into a single file together
+    
+    def logged_in
+        return session[:user_id]
+    end
+    
     def js_scripts(scripts)
       minify = Minify.new()
       minify.script_tags(scripts)
