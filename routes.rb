@@ -2,12 +2,15 @@ require 'sinatra'
 require 'json'
 require 'erb'
 require 'net/http'
+require 'haml'
+require 'sass'
+require 'compass'
 require_relative 'minify.rb'
 
 get '/' do
   @tbdb = encode(get_tbdb())
   @user = get_user()
-
+  
   erb :index
 end
 
@@ -19,15 +22,51 @@ get '/:slug/' do
 end
 
 post '/process/html/' do
-  response = ''
-
-  if params[:type] == 'jade'
-    uri = URI('http://127.0.0.1:8124/jade/')
-    res = Net::HTTP.post_form(uri, 'html' => params[:html])
-    response = res.body
+  html = params[:html]
+  
+  begin
+    if params[:type] == 'jade'
+      uri = URI('http://127.0.0.1:8124/jade/')
+      res = Net::HTTP.post_form(uri, 'html' => html)
+      html = res.body
+    elsif params[:type] == 'haml'
+      html = Haml::Engine.new(html).render
+    end
+  rescue
+    # pass continue
   end
 
-  response
+  encode({'html' => html})
+end
+
+# // less, npm install less
+# // stylus - npm , npm install stylus
+# // sass - ruby
+# // sass with compass - gem install compass
+post '/process/css/' do
+  css = params[:css]
+  
+  begin
+    if params[:type] == 'less'
+      uri = URI('http://127.0.0.1:8124/less/')
+      res = Net::HTTP.post_form(uri, 'css' => css)
+      css = res.body
+    elsif params[:type] == 'stylus'
+      uri = URI('http://127.0.0.1:8124/stylus/')
+      res = Net::HTTP.post_form(uri, 'css' => css)
+      css = res.body
+    elsif params[:type] == 'scss'
+      # just simple sass
+      css = Sass::Engine.new(css, :syntax => :scss).render
+    elsif params[:type] == 'sass'
+      # compass with sass
+      css = Sass::Engine.new(css).render
+    end
+  rescue
+    # continue, nothing to see
+  end
+
+  encode({'css' => css})
 end
 
 get '/:slug/fullpage/' do

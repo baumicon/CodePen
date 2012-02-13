@@ -11,6 +11,9 @@
 * Node packages required:
 *   npm install jade
 *   npm install express
+*   npm install stylus
+*   npm install less
+*   npm install coffee-script
 */
 
 var jade = require('jade');
@@ -27,18 +30,55 @@ function compileJade(html) {
 
 app.get('/', function(req, res) {
     var html = "h1 This server is running. You better catch it.";
-    
+    console.log('test');
     res.send(compileJade(html));
 });
 
 // url post sends request to /jade/ with post body
 // {html: '[jade goes here]'}
 app.post('/jade/', function(req, res) {
-    var obj = {
-        "html": compileJade(req.body.html)
-    }
+    var html = compileJade(req.body.html);
+    res.send(html);
+});
+
+app.post('/less/', function(req, res) {
+    var less = require('less');
+    var css;
     
-    res.send(JSON.stringify(obj));
+    less.render(req.body.css, function (e, css) {
+        console.log(css);
+        css = css;
+    });
+    
+    res.send(css);
+});
+
+app.post('/stylus/', function(req, res) {
+    var stylus = require('stylus');
+    var css;
+    
+    stylus.render(css, function(err, css) {
+      css = css;
+      console.log(css);
+    });
+    
+    res.send(css);
+});
+
+app.post('/js/', function(req, res) {
+    var coffee = require("coffee-script");
+    var nodes = coffee.nodes(coffee.tokens("a = 2 + 2"));
+
+    console.log( nodes.compile() ); // var a = 2 + 2;
+    
+    var js;
+    
+    stylus.render(css, function(err, css) {
+      css = css;
+      console.log(css);
+    });
+    
+    res.send(js);
 });
 
 app.listen(8124);

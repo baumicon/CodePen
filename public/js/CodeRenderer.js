@@ -6,7 +6,7 @@ var CodeRenderer = (function() {
 	    	this.codeChanged();
 	    },
 	    
-	   	codeChanged: function() {
+	    codeChanged: function() {
 	    	var content = CodeRenderer.getResultContent();
 	    	CodeRenderer.writeContentToIFrame(content);
 	    	CodeRenderer.executeIFrameJS();
@@ -41,21 +41,16 @@ var CodeRenderer = (function() {
 			return tmpl(this.getTPL('result'), values);
 	    },
 
-        // alextodo, start saving the state of the buttons
-        // finish creating the backend service for preprocessors
-        // none - done
-        // jade  - done
-        // haml - ruby, a simple gem
 	    getHTML: function() {
 	        // check if any preprocessors are set
 	        var html = TBData.html;
 	        
-	        if(TBData.htmlPreProcessor == 'jade') {
+	        if(TBData.htmlPreProcessor != 'none') {
 	            $.ajax({
       				url: '/process/html/',
       				type: 'POST',
       				async: false,
-      				data: 'type=jade&html=' + html,
+      				data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURI(html),
       				success: function( result ) {
       				    obj = $.parseJSON(result);
         				html = obj.html;
@@ -66,30 +61,43 @@ var CodeRenderer = (function() {
 	    	return html;
 	    },
 
-        // less, npm install less
-        // stylus - npm , npm install stylus
-        // sass - ruby
-        // sass with compass - gem install compass
-        // prefix free, what's up with that?
-	    getCSS: function() {
-	    	return TBData.css;
-
-	    	$.ajax({
-  				url: '/backend.php',
-  				type: 'POST',
-  				async: false,
-  				data: 'less=' + css,
-  				success: function( result ) {
-    				css = result;
-  				}
-			});
+       getCSS: function() {
+            var css = TBData.css;
+	        
+	        if(TBData.cssPreProcessor != 'none') {
+	            $.ajax({
+      				url: '/process/css/',
+      				type: 'POST',
+      				async: false,
+      				data: 'type=' + TBData.cssPreProcessor + '&css=' + encodeURI(css),
+      				success: function( result ) {
+      				    obj = $.parseJSON(result);
+        				css = obj.css;
+      				}
+    			});
+	        }
 			
 			return css;
 	    },
 
         // coffee script, npm install -g coffee-script
 	    getJS: function() {
-	    	return TBData.js;
+	    	var js = TBData.js;
+	        
+	        if(TBData.jsPreProcessor != 'none') {
+	            $.ajax({
+      				url: '/process/js/',
+      				type: 'POST',
+      				async: false,
+      				data: 'type=' + TBData.jsPreProcessor + '&js=' + encodeURI(js),
+      				success: function( result ) {
+      				    obj = $.parseJSON(result);
+        				js = obj.js;
+      				}
+    			});
+	        }
+			
+			return js;
 	    },
 
 	    getTPL: function(name) {

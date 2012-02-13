@@ -48,11 +48,11 @@
 	    input.checked = (TBData.htmlPreProcessor == input.value) ? true : false;
 	});
 	
-    $('input[name="css-preprocessor"]').on('click', function() {
+    $('input[name="css-preprocessor"]').each(function() {
     	input.checked = (TBData.cssPreProcessor == input.value) ? true : false;
     });
 
-    $('input[name="js-preprocessor"]').on('click', function() {
+    $('input[name="js-preprocessor"]').each(function() {
     	input.checked = (TBData.jsPreProcessor == input.value) ? true : false;
     });
 
@@ -94,15 +94,17 @@
     CodeRenderer.init();
 
     // Bind events
-
+    
     // HTML related
     $('input[name="html-preprocessor"]').on('click', function() {
     	TBData.setHTMLOption('preprocessor', this.value);
+    	codeChanged(HTMLeditor);
     });
 
     // CSS related
     $('input[name="css-preprocessor"]').on('click', function() {
     	TBData.setCSSOption('preprocessor', this.value);
+    	codeChanged(CSSeditor);
     });
 
     // prefix free checkbox
@@ -113,6 +115,7 @@
     // JS related
     $('input[name="js-preprocessor"]').on('click', function() {
     	TBData.setCSSOption('preprocessor', this.value);
+    	codeChanged(JSeditor);
     });
 
     // Bind keys
