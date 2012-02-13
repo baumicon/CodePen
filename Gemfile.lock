@@ -1,8 +1,20 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    daemons (1.1.6)
+    daemons (1.1.7)
     eventmachine (0.12.10)
+    hashie (1.2.0)
+    jsmin (1.0.1)
+    multi_json (1.0.4)
+    oauth (0.4.5)
+    omniauth (1.0.2)
+      hashie (~> 1.2)
+      rack
+    omniauth-oauth (1.0.0)
+      oauth
+      omniauth (~> 1.0)
+    omniauth-twitter (0.0.7)
+      omniauth-oauth (~> 1.0)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -22,6 +34,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  jsmin
+  multi_json
+  omniauth-twitter
   shotgun
   sinatra
   thin

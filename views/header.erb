@@ -2,8 +2,10 @@
 
 			<form>
 				<h1>Tinkerbox.com/</h1>
+				<% if logged_in %>
 				<input type="text" id="slug" name="slug">
-
+                <% end %>
+                
 				<div class="box-actions">
 
 					<button id="fork" data-icon="f" class="icon">Fork</button>
@@ -17,10 +19,11 @@
 					<% if @slug %>
 					 	<button id="new" data-icon="b" class="icon">Brand New Box</button>	
 					<% end %>
-
+                    
+                    <% if not logged_in %>
 					<button id="login" data-icon="t" class="icon">Twitter Login</button>
-
-				</div>			
+                    <% end %>
+				</div>
 			</form>
 
 			<div class="app-actions">
