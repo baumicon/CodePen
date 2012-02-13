@@ -11,4 +11,14 @@ To get the server running on your machine, do the following:
 
 To run the server with reload, do this
 
-    shotgun routes.rb
+    shotgun config.ru
+
+However, shotgun will destroy sessions, so when working with auth, you must run
+
+    rackup
+
+##Installing Mongo
+
+Follow the [homebrew](https://github.com/mxcl/homebrew/wiki/installation) setup instructions, then install mongo via homebrew:
+
+    brew install mongodb

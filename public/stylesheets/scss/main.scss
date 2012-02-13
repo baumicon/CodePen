@@ -186,18 +186,18 @@ header {
 	z-index: 20;
 }
 .handle-vert {
-	background: #F3F3F3 url(/images/handle-vert.png) center center no-repeat;
+	background: #F3F3F3 center center no-repeat;
 	width: 9px;
 	height: 100%;
 	top: 0;	
-	cursor: col-resize;
+	// cursor: col-resize;
 }
 .handle-horz {
-	background: #F3F3F3 url(/images/handle-horz.png) center center no-repeat;
+	background: #F3F3F3 center center no-repeat;
 	width: 100%;
 	left: 0;
 	height: 9px;
-	cursor: row-resize;
+	// cursor: row-resize;
 }
 .handle-1 {
 	left: 33.333333%;

@@ -1,8 +1,39 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    daemons (1.1.6)
+    activemodel (3.2.1)
+      activesupport (= 3.2.1)
+      builder (~> 3.0.0)
+    activesupport (3.2.1)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
+    bson (1.5.2)
+    bson_ext (1.5.2)
+      bson (= 1.5.2)
+    builder (3.0.0)
+    daemons (1.1.7)
     eventmachine (0.12.10)
+    hashie (1.2.0)
+    i18n (0.6.0)
+    jsmin (1.0.1)
+    mongo (1.5.2)
+      bson (= 1.5.2)
+    mongo_mapper (0.11.0)
+      activemodel (~> 3.0)
+      activesupport (~> 3.0)
+      plucky (~> 0.4.0)
+    multi_json (1.0.4)
+    oauth (0.4.5)
+    omniauth (1.0.2)
+      hashie (~> 1.2)
+      rack
+    omniauth-oauth (1.0.0)
+      oauth
+      omniauth (~> 1.0)
+    omniauth-twitter (0.0.7)
+      omniauth-oauth (~> 1.0)
+    plucky (0.4.4)
+      mongo (~> 1.5)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -22,6 +53,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bson_ext
+  jsmin
+  mongo_mapper
+  multi_json
+  omniauth-twitter
   shotgun
   sinatra
   thin
