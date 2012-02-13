@@ -10,7 +10,6 @@
 		background: #efefef;
 	}
 	&:active {
-		@include drop-shadow(0,0,0,0,0);
 		position: relative;
 		top: 1px;
 	}
@@ -19,7 +18,7 @@
 	}
 }
 
-button ~ button,
+button + button,
 button + .button,
 .button + button,
 .button + .button {
