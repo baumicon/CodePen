@@ -5,7 +5,7 @@
 				<% if logged_in %>
 				<input type="text" id="slug" name="slug">
                 <% end %>
-                
+
 				<div class="box-actions">
 
 					<button id="fork" data-icon="f" class="icon">Fork</button>
@@ -17,9 +17,9 @@
 					<% end %>
 
 					<% if @slug %>
-					 	<button id="new" data-icon="b" class="icon">Brand New Box</button>	
+					 	<button id="new" data-icon="b" class="icon">Brand New Box</button>
 					<% end %>
-                    
+
                     <% if not logged_in %>
 					<button id="login" data-icon="t" class="icon">Twitter Login</button>
                     <% end %>
@@ -30,7 +30,7 @@
 				<span class="button" id="settings">
 					<a href="#" data-icon="s" class="icon"></a>
 					<a href="#" data-icon="w" class="icon dropdown"></a>
-				</span> 
+				</span>
 
 				<!-- Only show if preprocessor? Or will subdomain also require? -->
 				<button id="run" data-icon="g" class="icon">Run</button>

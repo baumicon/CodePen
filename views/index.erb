@@ -24,7 +24,7 @@
 			<div class="top-boxes group">
 
 				<div class="box-html">
-					
+
 					<textarea id="html" class="code-box"></textarea>
 
 					<div class="settings-panel">
@@ -51,13 +51,13 @@
 						</div>
 
 					</div><!-- END div.settings-panel -->
-					
+
 				</div><!-- END div.box-html -->
 
 				<div id="handle-1" class="handle handle-vert handle-1"></div>
 
 				<div class="box-css">
-					
+
 					<textarea id="css" class="code-box"></textarea>
 
 					<div class="settings-panel">
@@ -66,7 +66,7 @@
 
 						<div class="settings">
 							<form>
-								<div>	
+								<div>
 									<input type="radio" id="css-none" checked name="css-preprocessor" value="none">
 									<label class="button" for="css-none">None</label>
 								</div>
@@ -95,13 +95,13 @@
 						</div>
 
 					</div><!-- END div.settings-panel -->
-					
+
 				</div><!-- END div.box-css -->
 
 				<div id="handle-2" class="handle handle-vert handle-2"></div>
 
 				<div class="box-js last">
-					
+
 					<textarea id="js" class="code-box"></textarea>
 
 					<div class="settings-panel">
@@ -122,16 +122,16 @@
 
 							<form>
 								 <select style="width: 100%;" data-placeholder="JavaScript Library" id="js-select">
-							        <option value=""></option> 
-							        <option value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">jQuery 1.7.1</option> 
-							        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option> 
-							        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option> 
+							        <option value=""></option>
+							        <option value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">jQuery 1.7.1</option>
+							        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option>
+							        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option>
 	          					</select>
 	          				</form>
 						</div>
 
 					</div><!-- END div.settings-panel -->
-					
+
 				</div><!-- END div.box-css -->
 
 			</div><!-- END div.top-boxes -->
@@ -139,7 +139,7 @@
 			<div id="handle-3" class="handle handle-horz handle-3"></div>
 
 			<div class="result">
-				
+
 				<iframe src="" id="result"></iframe>
 
 			</div>
@@ -154,11 +154,11 @@
 		__tbdb = <%= @tbdb %>
         __templates = <%= close get_templates  %>;
 	</script>
-	
+
 	<%= js_scripts([
-	    '/js/jquery.js', 
-	    '/js/codemirror.js', 
-	    '/js/mustache.js', 
+	    '/js/jquery.js',
+	    '/js/codemirror.js',
+	    '/js/mustache.js',
 	    '/mode/javascript/javascript.js',
 	    '/mode/css/css.js',
 	    '/mode/xml/xml.js',
@@ -167,7 +167,7 @@
 	    '/js/coderenderer.js',
 	    '/js/jquery-ui-1.8.17.custom.min.js',
 	    '/js/main.js'
-	    ]) 
+	    ])
 	%>
 
 </body>
