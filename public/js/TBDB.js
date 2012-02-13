@@ -53,23 +53,23 @@ var TBDB = (function() {
 			// it was causing JS errors. Tim wanted to work on stuff
 			// with working version.
 
-			// this.htmlOptions = {
-			// 	'jade' : this.ls.htmlOptions.jade,
-			// 	'haml' : this.ls.htmlOptions.haml
-			// };
+            this.htmlOptions = {
+                'jade' : this.ls.htmlOptions.jade,
+                'haml' : this.ls.htmlOptions.haml
+            };
 
-			// this.cssOptions = {
-			// 	'less'       : this.ls.cssOptions.less,
-			// 	'stylus'     : this.ls.cssOptions.stylus,
-			// 	'scss'       : this.ls.cssOptions.scss,
-			// 	'sass'       : this.ls.cssOptions.sass,
-			// 	'prefixFree' : this.ls.cssOptions.prefixFree
-			// };
+            this.cssOptions = {
+                'less'       : this.ls.cssOptions.less,
+                'stylus'     : this.ls.cssOptions.stylus,
+                'scss'       : this.ls.cssOptions.scss,
+                'sass'       : this.ls.cssOptions.sass,
+                'prefixFree' : this.ls.cssOptions.prefixFree
+            };
 
-			// this.jsOptions = {
-			// 	'coffeeScript' : this.ls.jsOptions.coffeeScript,
-			// 	'libraries'    : '',
-			// }
+            this.jsOptions = {
+                'coffeeScript' : this.ls.jsOptions.coffeeScript,
+                'libraries'    : '',
+            }
 	    },
 
 	    // Looks for data stored locally on the client
@@ -90,7 +90,7 @@ var TBDB = (function() {
 
 	    setHTMLOption: function(name, value) {
 	    	this.htmlOptions[name] = value;
-	    	this.ls[htmlOptions][name] = value;
+	    	this.ls['htmlOptions'][name] = value;
 	    	this.updateTimeStamp();
 	    },
 
@@ -101,13 +101,13 @@ var TBDB = (function() {
 	    	}
 
 	    	this.cssOptions[name] = value;
-	    	this.ls[cssOptions][name] = value;
+	    	this.ls['cssOptions'][name] = value;
 	    	this.updateTimeStamp();
 	    },
 
 	    setJSOption: function(name, value) {
 	    	this.jsOptions[name] = value;	
-	    	this.ls[jsOptions][name] = value;
+	    	this.ls['jsOptions'][name] = value;
 	    	this.updateTimeStamp();
 	    },
 

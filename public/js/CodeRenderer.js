@@ -1,7 +1,7 @@
 var CodeRenderer = (function() {
 
 	var CodeRenderer = {
-
+        
 	    init: function() {
 	    	this.codeChanged();
 	    },
@@ -41,8 +41,25 @@ var CodeRenderer = (function() {
 			return Mustache.render(this.getTPL('result'), values);
 	    },
 
+        // alextodo, start saving the state of the buttons
 	    getHTML: function() {
-	    	return TBDB.html;
+	        // check if any preprocessors are set
+	        var html = TBDB.html;
+	        
+	        if(TBDB.htmlOptions['preprocessor'] == 'jade') {
+	            $.ajax({
+      				url: '/process/html/',
+      				type: 'POST',
+      				async: false,
+      				data: 'type=jade&html=' + html,
+      				success: function( result ) {
+      				    obj = $.parseJSON(result);
+        				html = obj.html;
+      				}
+    			});
+	        }
+	        
+	    	return html;
 	    },
 
 	    getCSS: function() {

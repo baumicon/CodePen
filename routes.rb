@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'json'
 require 'erb'
+require 'net/http'
 require_relative 'minify.rb'
 
 get '/' do
@@ -14,11 +15,27 @@ get '/:slug/' do
   @tbdb = encode(get_tbdb())
   @slug = params[:slug]
   
-  erb :index
+  erb :fullpage
+end
+
+post '/process/html/' do
+  response = ''
+  
+  if params[:type] == 'jade'
+    uri = URI('http://127.0.0.1:8124/jade/')
+    res = Net::HTTP.post_form(uri, 'html' => params[:html])
+    response = res.body
+  end
+  
+  response
 end
 
 get '/:slug/fullpage/' do
-  return 'Full page'
+  # todo, will need to actually pull
+  # the right data for the url
+  @tbdb = get_tbdb()
+  
+  erb :fullpage
 end
 
 helpers do
@@ -63,7 +80,7 @@ def get_tbdb()
 	# default instance of a tinker box
 	# in the future, it will be loaded from db
 	data = {
-		"name" => "My kickass TB",
+		"slug" => "My kickass TB",
 		"html" => "<div>Howdy, folks!</div>",
 		"css"  => "body { background: #BADA55; }",
 		"js"   => "var myString = 'Badda bing!';",

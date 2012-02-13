@@ -41,6 +41,8 @@ var KeyBindings = (function() {
 	    },
         
         // todo, implment CMD-SHIFT-C - Copy current URL
+        // todo, when the user presses ?, show the overlay screen with shortcuts
+        // ask coyier to mock this up for me
         bindKeys: function() {
             $(window).on('keydown keypress', function(event) {
                 // mac os x uses command key (91) as alt key
