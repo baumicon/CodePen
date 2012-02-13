@@ -17,3 +17,8 @@ However, shotgun will destroy sessions, so when working with auth, you must run
 
     rackup
 
+##Installing Mongo
+
+Follow the [homebrew](https://github.com/mxcl/homebrew/wiki/installation) setup instructions, then install mongo via homebrew:
+
+    brew install mongodb
