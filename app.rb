@@ -88,7 +88,11 @@ class App < Sinatra::Base
 
       encode({'js' => js})
     end
-
+    
+    def encode(obj)	  	
+      obj.to_json.gsub('/', '\/')	  	
+    end
+    
     get '/:slug/fullpage/' do
       # todo, will need to actually pull
       # the right data for the url

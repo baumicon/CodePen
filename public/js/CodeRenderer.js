@@ -29,7 +29,7 @@ var CodeRenderer = (function() {
 	    	var contentWindow = $('#result')[0].contentWindow;
 	    	
 	    	if(contentWindow.__run) {
-	    	    contentWindow.__run();
+	    	    //contentWindow.__run();
 	    	}
 	    },
 
