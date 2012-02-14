@@ -65,6 +65,37 @@ class App < Sinatra::Base
     get '/auth/failure' do
         'Authentication Failed'
     end
+    
+    post '/process/html/' do
+      preprocessor_service = PreProcessorService.new
+      html = preprocessor_service.process_html(params[:type], params[:html])
+
+      encode({'html' => html})
+    end
+
+    # PREPROCESSORS
+    
+    post '/process/css/' do
+      preprocessor_service = PreProcessorService.new
+      css = preprocessor_service.process_css(params[:type], params[:css])
+
+      encode({'css' => css})
+    end
+
+    post '/process/js/' do
+      preprocessor_service = PreProcessorService.new
+      js = preprocessor_service.process_js(params[:type], params[:js])
+
+      encode({'js' => js})
+    end
+
+    get '/:slug/fullpage/' do
+      # todo, will need to actually pull
+      # the right data for the url
+      @tbdb = get_tbdb()
+
+      erb :fullpage
+    end
 
     helpers do
         def close embedded_json
