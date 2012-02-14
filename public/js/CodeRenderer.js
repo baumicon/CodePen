@@ -29,7 +29,7 @@ var CodeRenderer = (function() {
 	    	var contentWindow = $('#result')[0].contentWindow;
 	    	
 	    	if(contentWindow.__run) {
-	    	    //contentWindow.__run();
+	    	    contentWindow.__run();
 	    	}
 	    },
 
@@ -49,7 +49,7 @@ var CodeRenderer = (function() {
 	    getHTML: function() {
 	        // check if any preprocessors are set
 	        if(!this.useCache('html', CodeRenderer.cachedHTML)) {
-    	        if(this.processOnServer(TBData.htmlPreProcessor, 'html')) {
+    	        if(this.processOnServer(TBData.htmlPreProcessor)) {
     	            $.ajax({
           				url: '/process/html/',
           				type: 'POST',
@@ -71,7 +71,7 @@ var CodeRenderer = (function() {
 
        getCSS: function() {
 	        if(!this.useCache('css', CodeRenderer.cachedCSS)) {
-    	        if(this.processOnServer(TBData.cssPreProcessor, 'css')) {
+    	        if(this.processOnServer(TBData.cssPreProcessor)) {
     	            $.ajax({
           				url: '/process/css/',
           				type: 'POST',
@@ -91,10 +91,10 @@ var CodeRenderer = (function() {
 			return CodeRenderer.cachedCSS;
 	    },
 
-	    getJS: function() {	        
+	    getJS: function() {
 	        // check if this editor even changed before making request
 	        if(!this.useCache('js', CodeRenderer.cachedJS)) {
-	            if(this.processOnServer(TBData.jsPreProcessor, 'js')) {
+	            if(this.processOnServer(TBData.jsPreProcessor)) {
     	            $.ajax({
           				url: '/process/js/',
           				type: 'POST',
@@ -116,11 +116,9 @@ var CodeRenderer = (function() {
 	    
 	    useCache: function(type, cached) {
 	        if(TBData.editorChanged != type && cached) {
-	            console.log('return true: ' + type + ' cached: ' + cached);
 	            return true;
 	        }
 	        else {
-	            console.log('returning false ' + type);
 	            return false;
 	        }
 	    },

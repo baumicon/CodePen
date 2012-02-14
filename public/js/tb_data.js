@@ -74,9 +74,7 @@ var TBData = (function() {
 	        
 	    	if(data['dateUpdated']) {
 	    	    this.syncThisWithDataObj(data);
-	    	}
-	    	
-	    	console.log(this);
+	    	}	    	
 	    },
 
 	    syncThisWithDataObj: function(data) {
