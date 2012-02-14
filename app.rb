@@ -89,6 +89,12 @@ class App < Sinatra::Base
       encode({'js' => js})
     end
     
+    get '/none' do
+      # alextodo, figure out where in the code this is being called
+      # has something todo with the js call
+      'bad call'
+    end
+    
     def encode(obj)	  	
       obj.to_json.gsub('/', '\/')	  	
     end
