@@ -16,6 +16,7 @@ var TBData = (function() {
 		version           : 1,
 		dateUpdated       : '',
 		compileInRealTime : true,
+		editorChanged     : '',
 		htmlPreProcessor  : 'none',
 		
 		cssPreProcessor   : 'none',
@@ -54,7 +55,7 @@ var TBData = (function() {
 	    // provided by the data served by the server, the local
 	    // data is used
 	    loadStoredData: function() {
-	        var data;
+	        var data = { };
 	        
 	        if(__tbdata['dateUpdated']) {
 	            // alextodo enable localstorage when i start adding a date
@@ -135,7 +136,8 @@ var TBData = (function() {
 	    		mode = 'html';
 	    	}
 
-	    	this[mode] = value;
+            this[mode] = value;
+            this.editorChanged = mode;
 	    	this.updateTimeStamp();
 	    },
 

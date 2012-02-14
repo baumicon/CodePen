@@ -2,6 +2,11 @@ var CodeRenderer = (function() {
 
 	var CodeRenderer = {
         
+        // cached html results
+        cachedHTML  : '',
+        cachedCSS   : '',
+        cachedJS    : '',
+        
 	    init: function() {
 	    	this.codeChanged();
 	    },
@@ -43,61 +48,90 @@ var CodeRenderer = (function() {
 
 	    getHTML: function() {
 	        // check if any preprocessors are set
-	        var html = TBData.html;
-	        
-	        if(TBData.htmlPreProcessor != 'none') {
-	            $.ajax({
-      				url: '/process/html/',
-      				type: 'POST',
-      				async: false,
-      				data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURI(html),
-      				success: function( result ) {
-      				    obj = $.parseJSON(result);
-        				html = obj.html;
-      				}
-    			});
+	        if(!this.useCache('html', CodeRenderer.cachedHTML)) {
+    	        if(this.processOnServer(TBData.htmlPreProcessor, 'html')) {
+    	            $.ajax({
+          				url: '/process/html/',
+          				type: 'POST',
+          				async: false,
+          				data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURI(TBData.html),
+          				success: function( result ) {
+          				    obj = $.parseJSON(result);
+            				CodeRenderer.cachedHTML = obj.html;
+          				}
+        			});
+    	        }
+    	        else {
+    	            CodeRenderer.cachedHTML = TBData.html;
+    	        }
 	        }
 	        
-	    	return html;
+	    	return CodeRenderer.cachedHTML;
 	    },
 
        getCSS: function() {
-            var css = TBData.css;
-	        
-	        if(TBData.cssPreProcessor != 'none') {
-	            $.ajax({
-      				url: '/process/css/',
-      				type: 'POST',
-      				async: false,
-      				data: 'type=' + TBData.cssPreProcessor + '&css=' + encodeURI(css),
-      				success: function( result ) {
-      				    obj = $.parseJSON(result);
-        				css = obj.css;
-      				}
-    			});
-	        }
+	        if(!this.useCache('css', CodeRenderer.cachedCSS)) {
+    	        if(this.processOnServer(TBData.cssPreProcessor, 'css')) {
+    	            $.ajax({
+          				url: '/process/css/',
+          				type: 'POST',
+          				async: false,
+          				data: 'type=' + TBData.cssPreProcessor + '&css=' + encodeURI(TBData.css),
+          				success: function( result ) {
+          				    obj = $.parseJSON(result);
+            				CodeRenderer.cachedCSS = obj.css;
+          				}
+        			});
+    	        }
+    	        else {
+    	            CodeRenderer.cachedCSS = TBData.css;
+    	        }
+            }
 			
-			return css;
+			return CodeRenderer.cachedCSS;
 	    },
 
-        // coffee script, npm install -g coffee-script
-	    getJS: function() {
-	    	var js = TBData.js;
-	        
-	        if(TBData.jsPreProcessor != 'none') {
-	            $.ajax({
-      				url: '/process/js/',
-      				type: 'POST',
-      				async: false,
-      				data: 'type=' + TBData.jsPreProcessor + '&js=' + encodeURI(js),
-      				success: function( result ) {
-      				    obj = $.parseJSON(result);
-        				js = obj.js;
-      				}
-    			});
+	    getJS: function() {	        
+	        // check if this editor even changed before making request
+	        if(!this.useCache('js', CodeRenderer.cachedJS)) {
+	            if(this.processOnServer(TBData.jsPreProcessor, 'js')) {
+    	            $.ajax({
+          				url: '/process/js/',
+          				type: 'POST',
+          				async: false,
+          				data: 'type=' + TBData.jsPreProcessor + '&js=' + encodeURI(TBData.js),
+          				success: function( result ) {
+          				    obj = $.parseJSON(result);
+            				CodeRenderer.cachedJS = obj.js;
+          				}
+        			});
+    	        }
+    	        else {
+    	            CodeRenderer.cachedJS = TBData.js;
+    	        }
 	        }
-			
-			return js;
+	        
+            return CodeRenderer.cachedJS;
+	    },
+	    
+	    useCache: function(type, cached) {
+	        if(TBData.editorChanged != type && cached) {
+	            console.log('return true: ' + type + ' cached: ' + cached);
+	            return true;
+	        }
+	        else {
+	            console.log('returning false ' + type);
+	            return false;
+	        }
+	    },
+	    
+	    processOnServer: function(preProcessor) {
+	        if(preProcessor && preProcessor != 'none') {
+	            return true;
+	        }
+	        else {
+	            return false;
+	        }
 	    },
 
 	    getTPL: function(name) {

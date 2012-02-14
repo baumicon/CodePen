@@ -7,6 +7,8 @@ require 'sass'
 require 'compass'
 require_relative 'minify.rb'
 
+NODE_URL = 'http://127.0.0.1:8124'
+
 get '/' do
   @tbdb = encode(get_tbdb())
   @user = get_user()
@@ -26,7 +28,7 @@ post '/process/html/' do
   
   begin
     if params[:type] == 'jade'
-      uri = URI('http://127.0.0.1:8124/jade/')
+      uri = URI(NODE_URL + '/jade/')
       res = Net::HTTP.post_form(uri, 'html' => html)
       html = res.body
     elsif params[:type] == 'haml'
@@ -48,11 +50,37 @@ post '/process/css/' do
   
   begin
     if params[:type] == 'less'
-      uri = URI('http://127.0.0.1:8124/less/')
+      uri = URI(NODE_URL + '/less/')
       res = Net::HTTP.post_form(uri, 'css' => css)
       css = res.body
     elsif params[:type] == 'stylus'
-      uri = URI('http://127.0.0.1:8124/stylus/')
+      uri = URI(NODE_URL + '/stylus/')
+      res = Net::HTTP.post_form(uri, 'css' => css)
+      css = res.body
+    elsif params[:type] == 'scss'
+      # just simple sass
+      css = Sass::Engine.new(css, :syntax => :scss).render
+    elsif params[:type] == 'sass'
+      # compass with sass
+      css = Sass::Engine.new(css).render
+    end
+  rescue
+    # continue, nothing to see
+  end
+
+  encode({'css' => css})
+end
+
+post '/process/js/' do
+  css = params[:css]
+  
+  begin
+    if params[:type] == 'less'
+      uri = URI(NODE_URL + '/less/')
+      res = Net::HTTP.post_form(uri, 'css' => css)
+      css = res.body
+    elsif params[:type] == 'stylus'
+      uri = URI(NODE_URL + '/stylus/')
       res = Net::HTTP.post_form(uri, 'css' => css)
       css = res.body
     elsif params[:type] == 'scss'

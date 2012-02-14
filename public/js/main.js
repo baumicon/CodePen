@@ -48,11 +48,11 @@
 	    input.checked = (TBData.htmlPreProcessor == input.value) ? true : false;
 	});
 	
-    $('input[name="css-preprocessor"]').each(function() {
+    $('input[name="css-preprocessor"]').each(function(index, input) {
     	input.checked = (TBData.cssPreProcessor == input.value) ? true : false;
     });
 
-    $('input[name="js-preprocessor"]').each(function() {
+    $('input[name="js-preprocessor"]').each(function(index, input) {
     	input.checked = (TBData.jsPreProcessor == input.value) ? true : false;
     });
 
