@@ -71,9 +71,14 @@ header button, header .button {
 		background: #11b101;
 	}
 }
-#settings {
+#app-settings {
 	padding-right: 4px;
 	margin-right: 10px;
+	position: relative;
+	z-index: 100;
+}
+#app-settings-panel {
+	z-index: 99;
 }
 .dropdown {
 	&:before {

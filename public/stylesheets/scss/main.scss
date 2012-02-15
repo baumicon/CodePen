@@ -29,7 +29,6 @@ html {
 header {
 	display: block;
 	position: relative;
-	overflow: hidden;
 	padding: 10px 0 10px 15px;
 	form {
 		float: left;
@@ -56,11 +55,18 @@ header {
 .app-actions {
 	float: right;
 }
-.app-settings {
-	margin-right: 10px;
-}
 .app-settings-panel {
-	@include screen-reader-text();
+	padding: 10px;
+	position: absolute;
+	width: 200px;
+	@include gradient(#eee, #fff);
+	border: 1px solid #ccc;
+	button {
+		display: block;
+		float: none;
+		text-align: center;
+		margin: 0 0 15px 0;
+	}
 }
 
 //------------------------------- LAYOUT
