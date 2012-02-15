@@ -67,6 +67,9 @@ header button, header .button {
 	&:before {
 		top: 1px;
 	}
+	&:focus, &:hover {
+		background: #11b101;
+	}
 }
 #settings {
 	padding-right: 4px;
@@ -84,5 +87,8 @@ header button, header .button {
 		top: 1px;
 		left: -2px;
 		font-weight: normal;
+	}
+	&:focus, &:hover {
+		background: #019AD2;
 	}
 }
