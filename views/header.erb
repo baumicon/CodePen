@@ -1,39 +1,67 @@
-		<header>
+		<header class="group">
 
 			<form>
-				<h1>Tinkerbox.com/</h1>
+
+				<h1>Tinkerbox</h1>
+
 				<% if logged_in %>
-				<input type="text" id="slug" name="slug">
-                <% end %>
+					/ <input type="text" id="slug" name="slug">
+        <% end %>
                 
 				<div class="box-actions">
 
-					<button id="fork" data-icon="f" class="icon">Fork</button>
+					<button id="fork" data-icon="f" class="icon">
+						Fork
+					</button>
 
 					<% if @slug %>
-						<button id="update" data-icon="u" class="icon">Update</button>
+						<button id="update" data-icon="u" class="icon">
+							Update
+						</button>
 					<% else %>
-						<button id="save" data-icon="v" class="icon">Save</button>
+						<button id="save" data-icon="v" class="icon">
+							Save
+						</button>
 					<% end %>
 
 					<% if @slug %>
-					 	<button id="new" data-icon="b" class="icon">Brand New Box</button>	
+					 	<button id="new" data-icon="b" class="icon">
+					 		Brand New Box
+					 	</button>	
 					<% end %>
                     
-                    <% if not logged_in %>
-					<button id="login" data-icon="t" class="icon">Twitter Login</button>
-                    <% end %>
+          <% if not logged_in %>
+					<a id="login" href="auth/twitter" data-icon="t" class="icon button">
+						Twitter Login
+					</a>
+					<% else %>
+						You're logged in, sucka.
+          <% end %>
+
 				</div>
 			</form>
 
 			<div class="app-actions">
-				<span class="button" id="settings">
-					<a href="#" data-icon="s" class="icon"></a>
-					<a href="#" data-icon="w" class="icon dropdown"></a>
+				
+				<span class="button" id="app-settings" class="app-settings">
+					<a href="#app-settings-panel" data-icon="s" class="icon"></a>
+					<a href="#app-settings-panel" data-icon="w" class="icon dropdown"></a>
 				</span> 
 
 				<!-- Only show if preprocessor? Or will subdomain also require? -->
 				<button id="run" data-icon="g" class="icon">Run</button>
+
+				<section id="app-settings-panel" class="app-settings-panel">
+					
+					<button id="save-template">Save Current As Template</button>
+						
+					<label for="theme">Highlighting</label>
+					<select id="theme">
+						<option value="sublime">sublime</option>
+						<option value="codemirror">CodeMirror</option>
+					</select>
+
+				</section>
 
 			</div>
 

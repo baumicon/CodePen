@@ -2,37 +2,55 @@
 
 	// "GLOBALS"
 	var win          = $(window),
-		body         = $("body"),
+		  body         = $("body"),
 
-		boxes        = $(".boxes"),
-        boxHTML      = $(".box-html"),
-        boxCSS       = $(".box-css"),
-        boxJS        = $(".box-js"),
-        boxResult    = $(".result"),
+		  boxes        = $(".boxes"),
+      boxHTML      = $(".box-html"),
+      boxCSS       = $(".box-css"),
+      boxJS        = $(".box-js"),
+      boxResult    = $(".result"),
 
-        topBoxesCon  = $(".top-boxes"),
-        topBoxes     = $(".box-html, .box-css, .box-js"),
+      topBoxesCon  = $(".top-boxes"),
+      topBoxes     = $(".box-html, .box-css, .box-js"),
 
-        handle1      = $("#handle-1"),
-        handle2      = $("#handle-2"),
-        handle3      = $("#handle-3");
+      handle1      = $("#handle-1"),
+      handle2      = $("#handle-2"),
+      handle3      = $("#handle-3");
 
-    // Opening and closing settings panels
-    $(".settings-nub").on("click", function(e) {
-		e.preventDefault();
-		$(this).toggleClass("open").next().toggleClass("open");
-	});
+  // Opening and closing settings panels
+  $(".settings-nub").on("click", function(e) {
+    e.preventDefault();
+    $(this).toggleClass("open").next().toggleClass("open");
+  });
+
+  $("#app-settings-panel").position({
+      "my": "right top",
+      "at": "right bottom",
+      "of": "#app-settings",
+      "offset": "5px -1px"
+    }).hide();
+
+  // Opening and closing app settings
+  $("#app-settings").on("click", function(e) {
+    e.preventDefault();
+    $("#app-settings-panel").toggle();
+  });
+
+  // Change Theme
+  $("#theme").change(function() { // TO DO: Test change event in other browsers
+    body.attr("data-theme", $(this).find(":selected").val());
+  })
 
 	// Resize all boxes when window resized
 	// TO DO: Debounce? 
-    win.resize(function() {
+  win.resize(function() {
 		var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
 		topBoxes.height(space / 2);
 		boxResult.height(space / 2);
-    }).trigger("resize");
+  }).trigger("resize");
 
-    // Better select box for chosing JS library
-    $("#js-select").chosen();
+  // Better select box for chosing JS library
+  $("#js-select, #theme").chosen();
 
     // Initialize the data backing object
 	TBData.init();
