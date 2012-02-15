@@ -58,9 +58,9 @@
 
 	if(TBData.getOption('css', 'prefixFree') != '') $('#prefix-free').prop('checked', true);
 
-	codeChanged = function(editor, changes) {
+	codeChanged = function(editor, changes, forceCompile) {
 		TBData.setEditorValue(editor.getOption('mode'), editor.getValue());
-		if(TBData.compileInRealTime) CodeRenderer.codeChanged();
+		CodeRenderer.codeChanged(forceCompile);
 	}
 
 	// 
@@ -95,16 +95,20 @@
 
     // Bind events
     
+    $('#run').on('click', function() {
+        CodeRenderer.codeChanged(true);
+    });
+    
     // HTML related
     $('input[name="html-preprocessor"]').on('click', function() {
     	TBData.setHTMLOption('preprocessor', this.value);
-    	codeChanged(HTMLeditor);
+    	codeChanged(HTMLeditor, '', true);
     });
 
     // CSS related
     $('input[name="css-preprocessor"]').on('click', function() {
     	TBData.setCSSOption('preprocessor', this.value);
-    	codeChanged(CSSeditor);
+    	codeChanged(CSSeditor, '', true);
     });
 
     // prefix free checkbox
@@ -114,8 +118,8 @@
 
     // JS related
     $('input[name="js-preprocessor"]').on('click', function() {
-    	TBData.setCSSOption('preprocessor', this.value);
-    	codeChanged(JSeditor);
+    	TBData.setJSOption('preprocessor', this.value);
+    	codeChanged(JSeditor, '', true);
     });
 
     // Bind keys

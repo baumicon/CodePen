@@ -16,8 +16,8 @@ class PreProcessorService
       elsif type == 'haml'
         html = Haml::Engine.new(html).render
       end
-    rescue
-      # pass continue
+    rescue Exception => msg
+      print 'Unable to process HTML: ' + html
     end
 
     html
@@ -40,24 +40,24 @@ class PreProcessorService
         # compass with sass
         css = Sass::Engine.new(css).render
       end
-    rescue
-      # continue, nothing to see
+    rescue Exception => msg
+      print 'Unable to process CSS: ' + css
     end
-
+    
     css
   end
-
+  
   def process_js(type, js)
     begin
       if type == 'coffeescript'
-        uri = URI(NODE_URL + '/less/')
-        res = Net::HTTP.post_form(uri, 'css' => css)
-        css = res.body
+        uri = URI(NODE_URL + '/coffeescript/')
+        res = Net::HTTP.post_form(uri, 'js' => js)
+        js = res.body
       end
-    rescue
-      # continue, nothing to see
+    rescue Exception => msg
+      print 'Unable to process JS: ' + js
     end
-
+    
     js
   end
   

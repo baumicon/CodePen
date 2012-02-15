@@ -15,7 +15,7 @@ var TBData = (function() {
 		js                : '',
 		version           : 1,
 		dateUpdated       : '',
-		compileInRealTime : true,
+		compileInRealTime : false,
 		editorChanged     : '',
 		htmlPreProcessor  : 'none',
 		
@@ -32,6 +32,7 @@ var TBData = (function() {
 	    init: function() {
 	        this.bindSaveToLocalStorage();
 	        this.loadStoredData();
+	        this.updateCompileInRealTime();
 	    },
 	    
 	    bindSaveToLocalStorage: function() {
@@ -93,10 +94,25 @@ var TBData = (function() {
             this.jsPreProcessor = data.jsPreProcessor;
             this.jsOptions.libraries = data.jsOptions.libraries;
 	    },
+	    
+	    // If any preprocessors are chosen (jade, less, coffeescript etc.)
+	    // don't compile in real time
+	    updateCompileInRealTime: function() {
+	        if( this.htmlPreProcessor == 'none' && 
+	            this.cssPreProcessor  == 'none' &&
+	            this.jsPreProcessor   == 'none' ) {
+	            this.compileInRealTime = true;
+	        }
+	        else {
+	            this.compileInRealTime = false;
+	        }
+	    },
 
+        // alextodo, also update the compileInRealTime here
 	    setHTMLOption: function(name, value) {
 	    	this.htmlPreProcessor = value;
 	    	this.updateTimeStamp();
+	    	this.updateCompileInRealTime();
 	    },
 
 	    setCSSOption: function(name, value) {
@@ -110,11 +126,13 @@ var TBData = (function() {
 	    	}
 	    	
 	    	this.updateTimeStamp();
+	    	this.updateCompileInRealTime();
 	    },
 
 	    setJSOption: function(name, value) {
 	    	this.jsPreProcessor = value;
 	    	this.updateTimeStamp();
+	    	this.updateCompileInRealTime();
 	    },
 
 	    getOption: function(mode, name) {
@@ -133,7 +151,10 @@ var TBData = (function() {
 	    	if(mode == 'xml') {
 	    		mode = 'html';
 	    	}
-
+	    	else if(mode == 'javascript') {
+	    	    mode = 'js';
+	    	}
+	    	
             this[mode] = value;
             this.editorChanged = mode;
 	    	this.updateTimeStamp();

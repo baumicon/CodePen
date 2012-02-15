@@ -8,20 +8,32 @@ var CodeRenderer = (function() {
         cachedJS    : '',
         
 	    init: function() {
-	    	this.codeChanged();
+	    	this.codeChanged(true);
 	    },
 	    
-	    codeChanged: function() {
-	    	var content = CodeRenderer.getResultContent();
-	    	CodeRenderer.writeContentToIFrame(content);
-	    	CodeRenderer.executeIFrameJS();
+	    codeChanged: function(forceCompile) {
+	        if(forceCompile || TBData.compileInRealTime) {
+	           	var content = CodeRenderer.getResultContent();
+    	    	CodeRenderer.writeContentToIFrame(content);
+    	    	CodeRenderer.executeIFrameJS();
+	        }
 	    },
 
 	    writeContentToIFrame: function(content) {
 	    	var doc = $('#result').contents()[0];
-			doc.open();
-			doc.write(content);
-			doc.close();
+	    	
+	    	try {
+	    	   	doc.open();
+    			// alextodo, having some sort of tool that checks html, css, and js
+    			// for validdity would really help
+    			// good error reporting would help as well
+    			// otherwise we'll be showing error on the console to the user
+    			doc.write(content);
+    			doc.close();
+	    	}
+	    	catch(err) {
+	    	    console.log(err);
+	    	}
 	    },
 
 	    executeIFrameJS: function() {
@@ -54,7 +66,7 @@ var CodeRenderer = (function() {
           				url: '/process/html/',
           				type: 'POST',
           				async: false,
-          				data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURI(TBData.html),
+          				data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURIComponent(TBData.html),
           				success: function( result ) {
           				    obj = $.parseJSON(result);
             				CodeRenderer.cachedHTML = obj.html;
@@ -76,7 +88,7 @@ var CodeRenderer = (function() {
           				url: '/process/css/',
           				type: 'POST',
           				async: false,
-          				data: 'type=' + TBData.cssPreProcessor + '&css=' + encodeURI(TBData.css),
+          				data: 'type=' + TBData.cssPreProcessor + '&css=' + encodeURIComponent(TBData.css),
           				success: function( result ) {
           				    obj = $.parseJSON(result);
             				CodeRenderer.cachedCSS = obj.css;
@@ -99,7 +111,7 @@ var CodeRenderer = (function() {
           				url: '/process/js/',
           				type: 'POST',
           				async: false,
-          				data: 'type=' + TBData.jsPreProcessor + '&js=' + encodeURI(TBData.js),
+          				data: 'type=' + TBData.jsPreProcessor + '&js=' + encodeURIComponent(TBData.js),
           				success: function( result ) {
           				    obj = $.parseJSON(result);
             				CodeRenderer.cachedJS = obj.js;

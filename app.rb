@@ -66,14 +66,14 @@ class App < Sinatra::Base
         'Authentication Failed'
     end
     
+    # PREPROCESSORS
+    
     post '/process/html/' do
       preprocessor_service = PreProcessorService.new
       html = preprocessor_service.process_html(params[:type], params[:html])
 
       encode({'html' => html})
     end
-
-    # PREPROCESSORS
     
     post '/process/css/' do
       preprocessor_service = PreProcessorService.new
@@ -87,12 +87,6 @@ class App < Sinatra::Base
       js = preprocessor_service.process_js(params[:type], params[:js])
 
       encode({'js' => js})
-    end
-    
-    get '/none' do
-      # alextodo, figure out where in the code this is being called
-      # has something todo with the js call
-      'bad call'
     end
     
     def encode(obj)	  	

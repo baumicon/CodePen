@@ -22,32 +22,39 @@ var express = require('express');
 var app = express.createServer();
 app.use(express.bodyParser());
 
-function compileJade(html) {
-    var tmpl_func = jade.compile(html);
-    // execute the returned function without attributes
-    return tmpl_func({ });
-}
-
 app.get('/', function(req, res) {
     var html = "h1 This server is running. You better catch it.";
-    console.log('test');
+    
     res.send(compileJade(html));
 });
+
+function compileJade(html) {
+    try {
+        var tmpl_func = jade.compile(html);
+
+        return tmpl_func({ });
+    }
+    catch(e) {
+        // Don't had back errors, yet. will need a different pane for that later.
+        // will need to format the error.
+        return html;
+    }
+}
 
 // url post sends request to /jade/ with post body
 // {html: '[jade goes here]'}
 app.post('/jade/', function(req, res) {
     var html = compileJade(req.body.html);
+    
     res.send(html);
 });
 
 app.post('/less/', function(req, res) {
     var less = require('less');
-    var css;
+    var css = req.body.css;
     
-    less.render(req.body.css, function (e, css) {
-        console.log(css);
-        css = css;
+    less.render(css, function (e, renderedCSS) {
+        css = renderedCSS;
     });
     
     res.send(css);
@@ -55,30 +62,23 @@ app.post('/less/', function(req, res) {
 
 app.post('/stylus/', function(req, res) {
     var stylus = require('stylus');
-    var css;
+    var css = req.body.css;
     
-    stylus.render(css, function(err, css) {
-      css = css;
-      console.log(css);
+    stylus.render(css, { }, function(err, renderedCSS) {
+        if(renderedCSS) {
+            css = renderedCSS;
+        }
     });
     
     res.send(css);
 });
 
-app.post('/js/', function(req, res) {
-    var coffee = require("coffee-script");
-    var nodes = coffee.nodes(coffee.tokens("a = 2 + 2"));
-
-    console.log( nodes.compile() ); // var a = 2 + 2;
+app.post('/coffeescript/', function(req, res) {
+    var CoffeeScript = require("coffee-script");
+    var code = req.body.js;
     
-    var js;
-    
-    stylus.render(css, function(err, css) {
-      css = css;
-      console.log(css);
-    });
-    
-    res.send(js);
+    code = CoffeeScript.compile(code, { });
+    res.send(code);
 });
 
 app.listen(8124);
