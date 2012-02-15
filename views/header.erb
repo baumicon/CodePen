@@ -43,15 +43,24 @@
 
 			<div class="app-actions">
 				
-				<% if logged_in %>
-				<span class="button" id="settings">
-					<a href="#" data-icon="s" class="icon"></a>
-					<a href="#" data-icon="w" class="icon dropdown"></a>
+				<span class="button" id="app-settings" class="app-settings">
+					<a href="#app-settings-panel" data-icon="s" class="icon"></a>
+					<a href="#app-settings-panel" data-icon="w" class="icon dropdown"></a>
 				</span> 
-				<% end %>
 
 				<!-- Only show if preprocessor? Or will subdomain also require? -->
 				<button id="run" data-icon="g" class="icon">Run</button>
+
+				<section id="app-settings-panel" class="app-settings-panel">
+					
+					<button id="save-template">Save Current As Template</button>
+
+					<select id="theme">
+						<option value="sublime">sublime</option>
+						<option value="codemirror">CodeMirror</option>
+					</select>
+
+				</section>
 
 			</div>
 

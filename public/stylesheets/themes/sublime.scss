@@ -1,0 +1,23 @@
+[data-theme="sublime"] .CodeMirror                       { background: #141414; }
+[data-theme="sublime"] .CodeMirror pre                   { color: #FFFFFF; } // e.g. { }
+[data-theme="sublime"] .cm-s-default span.cm-keyword     { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-atom        { color: #9a6e35; } // e.g. [#tag]
+[data-theme="sublime"] .cm-s-default span.cm-def         { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-variable    { color: #ddca7e; } // e.g. margin
+[data-theme="sublime"] .cm-s-default span.cm-variable-2  { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-variable-3  { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-property    { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-comment     { color: #666666; } // e.g. /* test */
+[data-theme="sublime"] .cm-s-default span.cm-string      { color: #96b38a; } // e.g. href=["val"]
+[data-theme="sublime"] .cm-s-default span.cm-string-2    { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-meta        { color: #9a6e35; } // e.g. @font-face
+[data-theme="sublime"] .cm-s-default span.cm-error       { color: #ff0000; }
+[data-theme="sublime"] .cm-s-default span.cm-qualifier   { color: #555; }
+[data-theme="sublime"] .cm-s-default span.cm-builtin     { color: #30a; }
+[data-theme="sublime"] .cm-s-default span.cm-bracket     { color: #cc7; }
+[data-theme="sublime"] .cm-s-default span.cm-tag         { color: #9a6e35; } // e.g. body
+[data-theme="sublime"] .cm-s-default span.cm-attribute   { color: #ddca7e; } // e.g. href
+[data-theme="sublime"] .cm-s-default span.cm-header      { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-quote       { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-hr          { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-link        { color: blue; }

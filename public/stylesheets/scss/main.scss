@@ -56,7 +56,12 @@ header {
 .app-actions {
 	float: right;
 }
-
+.app-settings {
+	margin-right: 10px;
+}
+.app-settings-panel {
+	@include screen-reader-text();
+}
 
 //------------------------------- LAYOUT
 .wrap {
