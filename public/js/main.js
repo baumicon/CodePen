@@ -20,15 +20,29 @@
   // Opening and closing settings panels
   $(".settings-nub").on("click", function(e) {
     e.preventDefault();
-    $(this).toggleClass("open").next().toggleClass("open");
+    $(this)
+      .toggleClass("open")
+      .parent()
+      .parent()
+      .find(".settings")
+      .toggleClass("open");
+  });
+
+  $(".expander").on("click", function(e) {
+    e.preventDefault();
+    body.toggleClass("focus");
+    $(this)
+      .parent()
+      .parent()
+      .toggleClass("expanded");
   });
 
   $("#app-settings-panel").position({
-      "my": "right top",
-      "at": "right bottom",
-      "of": "#app-settings",
-      "offset": "5px -1px"
-    }).hide();
+    "my": "right top",
+    "at": "right bottom",
+    "of": "#app-settings",
+    "offset": "5px -1px"
+  }).hide(); // to do, adjust position after window size change
 
   // Opening and closing app settings
   $("#app-settings").on("click", function(e) {
@@ -52,7 +66,7 @@
 	// TO DO: Debounce? 
   win.resize(function() {
 		var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
-		topBoxes.height(space / 2);
+		topBoxesCon.height(space / 2);
 		boxResult.height(space / 2);
   }).trigger("resize");
 
@@ -119,26 +133,27 @@
 	});
 	 
 	// Initialize the CodeRenderer
-    CodeRenderer.init();
+  CodeRenderer.init();
 
-    // Bind events
-    
-    $('#run').on('click', function() {
-        CodeRenderer.codeChanged(true);
-    });
-    
-    // HTML related
-    $('input[name="html-preprocessor"]').on('click', function() {
-    	TBData.setHTMLOption('preprocessor', this.value);
-    	codeChanged(HTMLeditor, '', true);
-    });
+  // Bind events
+  
+  $('#run').on('click', function() {
+      CodeRenderer.codeChanged(true);
+  });
+  
+  // HTML related
+  $('input[name="html-preprocessor"]').on('click', function() {
+  	TBData.setHTMLOption('preprocessor', this.value);
+  	codeChanged(HTMLeditor, '', true);
+  });
 
-    // CSS related
-    $('input[name="css-preprocessor"]').on('click', function() {
-    	TBData.setCSSOption('preprocessor', this.value);
-    	codeChanged(CSSeditor, '', true);
-    });
+  // CSS related
+  $('input[name="css-preprocessor"]').on('click', function() {
+  	TBData.setCSSOption('preprocessor', this.value);
+  	codeChanged(CSSeditor, '', true);
+  });
 
+<<<<<<< HEAD
     // prefix free checkbox
     $('#prefix-free').on('click', function() {
         TBData.setPrefixFree($(this).is(":checked"));
@@ -154,8 +169,20 @@
         TBData.setJSLibrary(this.value);
         // alextodo, need to select the correct drop down onload
     });
+=======
+  // prefix free checkbox
+  $('#prefix-free').on('click', function() {
+  	TBData.setCSSOption('prefixFree', $(this).is(":checked"));
+  });
 
-    // Bind keys
-    KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
+  // JS related
+  $('input[name="js-preprocessor"]').on('click', function() {
+  	TBData.setJSOption('preprocessor', this.value);
+  	codeChanged(JSeditor, '', true);
+  });
+>>>>>>> bb75bc77a6d58cef3aeda0bc46b3fb76b8e33e0b
+
+  // Bind keys
+  KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
 
 })(jQuery);
