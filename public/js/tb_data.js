@@ -13,7 +13,7 @@ var TBData = (function() {
 		html              : '',
 		css               : '',
 		js                : '',
-		// keep version number and increment that
+		theme             : '',
 		version           : 1,
 		compileInRealTime : false,
 		htmlPreProcessor  : 'none',
@@ -77,19 +77,19 @@ var TBData = (function() {
 	    },
 
 	    syncThisWithDataObj: function(data) {
-			this.name = data.name;
-			this.html = data.html;
-			this.css  = data.css;
-			this.js   = data.js;
-			this.version = data.version;
-
+			this.name             = data.name;
+			this.html             = data.html;
+			this.css              = data.css;
+			this.js               = data.js;
+			this.version          = data.version;
+            this.theme            = data.theme;
             this.htmlPreProcessor = data.htmlPreProcessor;
             
-            this.cssPreProcessor = data.cssPreProcessor;
-            this.cssPreFixFree = data.cssPreFixFree;
+            this.cssPreProcessor  = data.cssPreProcessor;
+            this.cssPreFixFree    = data.cssPreFixFree;
             
-            this.jsPreProcessor = data.jsPreProcessor;
-            this.jsLibrary = data.jsLibrary;
+            this.jsPreProcessor   = data.jsPreProcessor;
+            this.jsLibrary        = data.jsLibrary;
 	    },
 	    
 	    // If any preprocessors are chosen (jade, less, coffeescript etc.)
@@ -128,6 +128,10 @@ var TBData = (function() {
 	    
 	    setJSLibrary: function(value) {
 	        this.jsLibrary = value;
+	    },
+	    
+	    setTheme: function(value) {
+	        this.theme = value;
 	    },
 
 	    getOption: function(mode, name) {

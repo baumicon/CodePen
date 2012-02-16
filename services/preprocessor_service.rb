@@ -17,7 +17,7 @@ class PreProcessorService
         html = Haml::Engine.new(html).render
       end
     rescue Exception => msg
-      print 'Unable to process HTML: ' + html
+      puts 'Unable to process HTML: ' + msg
     end
 
     html
@@ -41,7 +41,7 @@ class PreProcessorService
         css = Sass::Engine.new(css).render
       end
     rescue Exception => msg
-      print 'Unable to process CSS: ' + css
+      puts 'Unable to process CSS: ' + msg
     end
     
     css
@@ -55,7 +55,7 @@ class PreProcessorService
         js = res.body
       end
     rescue Exception => msg
-      print 'Unable to process JS: ' + js
+      puts 'Unable to process JS: ' + msg
     end
     
     js

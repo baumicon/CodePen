@@ -82,7 +82,9 @@ class App < Sinatra::Base
       if params[:js] != nil and !params[:js].empty?
         js = pps.process_js(params[:jsPreProcessor], params[:js])
       end
-
+      
+      # todo, need to collect error messages and send along with json
+      # like so, errors => {js: [log of errors], html: errors, css: errors}
       encode({ 'html' => html, 'css' => css, 'js' => js})
     end
     

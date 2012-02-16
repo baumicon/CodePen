@@ -17,6 +17,9 @@
       handle2      = $("#handle-2"),
       handle3      = $("#handle-3");
 
+      // Initialize the data backing object
+  	  TBData.init();
+  	
   // Opening and closing settings panels
   $(".settings-nub").on("click", function(e) {
     e.preventDefault();
@@ -50,10 +53,10 @@
     $("#app-settings-panel").toggle();
   });
 
-  // Change Theme
-  $("#theme").change(function() { // TO DO: Test change event in other browsers
-    body.attr("data-theme", $(this).find(":selected").val());
-  })
+  // select current theme
+  $('#theme').val(TBData.theme);
+  // show a specific theme
+  body.attr("data-theme", TBData.theme);
   
   $("#save-template").on('click', function() {
      // alextodo, save as template to user settings
@@ -69,9 +72,6 @@
 		topBoxesCon.height(space / 2);
 		boxResult.height(space / 2);
   }).trigger("resize");
-
-    // Initialize the data backing object
-	TBData.init();
 
 	// Sync UI with data values
 	$('#slug').val(TBData.name);
@@ -166,7 +166,12 @@
     
   $('#js-select').on('change', function(index, select) {
       TBData.setJSLibrary(this.value);
-      // alextodo, need to select the correct drop down onload
+  });
+  
+  $('#theme').on('change', function(index, select) {
+      TBData.setTheme(this.value);
+      // Update current theme
+      body.attr("data-theme", this.value);
   });
 
   // Bind keys
