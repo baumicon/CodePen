@@ -153,26 +153,9 @@
   	codeChanged(CSSeditor, '', true);
   });
 
-<<<<<<< HEAD
-    // prefix free checkbox
-    $('#prefix-free').on('click', function() {
-        TBData.setPrefixFree($(this).is(":checked"));
-    });
-
-    // JS related
-    $('input[name="js-preprocessor"]').on('click', function() {
-    	TBData.setJSOption('preprocessor', this.value);
-    	codeChanged(JSeditor, '', true);
-    });
-    
-    $('#js-select').on('change', function(index, select) {
-        TBData.setJSLibrary(this.value);
-        // alextodo, need to select the correct drop down onload
-    });
-=======
   // prefix free checkbox
   $('#prefix-free').on('click', function() {
-  	TBData.setCSSOption('prefixFree', $(this).is(":checked"));
+      TBData.setPrefixFree($(this).is(":checked"));
   });
 
   // JS related
@@ -180,7 +163,11 @@
   	TBData.setJSOption('preprocessor', this.value);
   	codeChanged(JSeditor, '', true);
   });
->>>>>>> bb75bc77a6d58cef3aeda0bc46b3fb76b8e33e0b
+    
+  $('#js-select').on('change', function(index, select) {
+      TBData.setJSLibrary(this.value);
+      // alextodo, need to select the correct drop down onload
+  });
 
   // Bind keys
   KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
