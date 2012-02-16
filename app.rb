@@ -23,8 +23,8 @@ class App < Sinatra::Base
     erb :index
   end
 
-  get '/:slug/fullpage/' do
-    'Full page'
+  get '/return/stuff/' do
+    return "awesome"
   end
 
   def get_tbdb()

@@ -1,10 +1,10 @@
 (function($) {
 
 	// "GLOBALS"
-	var win          = $(window),
-		  body         = $("body"),
+	var win        = $(window),
+	  body         = $("body"),
 
-		  boxes        = $(".boxes"),
+	  boxes        = $(".boxes"),
       boxHTML      = $(".box-html"),
       boxCSS       = $(".box-css"),
       boxJS        = $(".box-js"),
@@ -110,13 +110,20 @@
 	 
 	// Initialize the CodeRenderer
     CodeRenderer.init();
+    ContentWrangler.init();
 
     // Bind events
     
     $('#run').on('click', function() {
         CodeRenderer.codeChanged(true);
     });
-    
+
+    $('#save').on('click', function() {
+        //ContentWrangler.saveContent($('#slug').val());
+        alert(JSON.stringify(TBData));
+        return false;
+    });
+
     // HTML related
     $('input[name="html-preprocessor"]').on('click', function() {
     	TBData.setHTMLOption('preprocessor', this.value);

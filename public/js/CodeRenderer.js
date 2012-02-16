@@ -14,8 +14,8 @@ var CodeRenderer = (function() {
 	    codeChanged: function(forceCompile) {
 	        if(forceCompile || TBData.compileInRealTime) {
 	           	var content = CodeRenderer.getResultContent();
-    	CodeRenderer.writeContentToIFrame(content);
-    	CodeRenderer.executeIFrameJS();
+            	CodeRenderer.writeContentToIFrame(content);
+            	CodeRenderer.executeIFrameJS();
 	        }
 	    },
 
@@ -24,16 +24,16 @@ var CodeRenderer = (function() {
 
 	    	try {
 	    	   	doc.open();
-		// alextodo, having some sort of tool that checks html, css, and js
-		// for validdity would really help
-		// good error reporting would help as well
-		// otherwise we'll be showing error on the console to the user
-		doc.write(content);
-		doc.close();
-	    	}
-	    	catch(err) {
-	    	    console.log(err);
-	    	}
+                // alextodo, having some sort of tool that checks html, css, and js
+                // for validdity would really help
+                // good error reporting would help as well
+                // otherwise we'll be showing error on the console to the user
+                doc.write(content);
+                doc.close();
+                }
+            catch(err) {
+                console.log(err);
+            }
 	    },
 
         saveContent: function() {
@@ -41,10 +41,9 @@ var CodeRenderer = (function() {
                 url: '/return/stuff/',
                 type: 'GET',
                 async: false,
-                data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURIComponent(TBData.html),
+                data: 'stuff=rad&things=good',
                 success: function( result ) {
-                    obj = $.parseJSON(result);
-                    CodeRenderer.cachedHTML = obj.html;
+                    alert(result);
                 }
             });
         },
@@ -60,12 +59,12 @@ var CodeRenderer = (function() {
 
 	    getResultContent: function() {
 	    	var values = {
-			TITLE : "Tinkerbox",
-			CSS   : this.getCSS(),
-			HTML  : this.getHTML(),
-			JS    : this.getJS(),
-			JSLIB : $("#js-select option:selected").val(),
-			PREFIX: TBData.getOption('css', 'prefixFree')
+                TITLE : "Tinkerbox",
+                CSS   : this.getCSS(),
+                HTML  : this.getHTML(),
+                JS    : this.getJS(),
+                JSLIB : $("#js-select option:selected").val(),
+                PREFIX: TBData.getOption('css', 'prefixFree')
 			};
 
 			return tmpl(this.getTPL('result'), values);
@@ -74,22 +73,22 @@ var CodeRenderer = (function() {
 	    getHTML: function() {
 	        // check if any preprocessors are set
 	        if(!this.useCache('html', CodeRenderer.cachedHTML)) {
-        if(this.processOnServer(TBData.htmlPreProcessor)) {
-            $.ajax({
-			url: '/process/html/',
-			type: 'POST',
-			async: false,
-			data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURIComponent(TBData.html),
-			success: function( result ) {
-			    obj = $.parseJSON(result);
-			CodeRenderer.cachedHTML = obj.html;
-			}
-		});
-        }
-        else {
-            CodeRenderer.cachedHTML = TBData.html;
-        }
-	        }
+                if(this.processOnServer(TBData.htmlPreProcessor)) {
+                    $.ajax({
+                    url: '/process/html/',
+                    type: 'POST',
+                    async: false,
+                    data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURIComponent(TBData.html),
+                    success: function( result ) {
+                        obj = $.parseJSON(result);
+                    CodeRenderer.cachedHTML = obj.html;
+                    }
+                });
+            }
+            else {
+                CodeRenderer.cachedHTML = TBData.html;
+            }
+            }
 
 	    	return CodeRenderer.cachedHTML;
 	    },
