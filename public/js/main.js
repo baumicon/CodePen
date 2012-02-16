@@ -40,6 +40,13 @@
   $("#theme").change(function() { // TO DO: Test change event in other browsers
     body.attr("data-theme", $(this).find(":selected").val());
   })
+  
+  $("#save-template").on('click', function() {
+     // alextodo, save as template to user settings
+     // will you need anything else beyond that? will u have to give ur template a name?
+     // will it be an overlay, where will the user select an existing template 
+     $("#app-settings-panel").toggle();
+  });
 
 	// Resize all boxes when window resized
 	// TO DO: Debounce? 
@@ -48,9 +55,6 @@
 		topBoxes.height(space / 2);
 		boxResult.height(space / 2);
   }).trigger("resize");
-
-  // Better select box for chosing JS library
-  $("#js-select, #theme").chosen();
 
     // Initialize the data backing object
 	TBData.init();
@@ -73,8 +77,14 @@
     $('input[name="js-preprocessor"]').each(function(index, input) {
     	input.checked = (TBData.jsPreProcessor == input.value) ? true : false;
     });
+    
+    // Sync library with correct data as well
+    $('#js-select').val(TBData.jsLibrary);
+    
+    // Better select box for chosing JS library
+    $("#js-select, #theme").chosen();
 
-	if(TBData.getOption('css', 'prefixFree') != '') $('#prefix-free').prop('checked', true);
+	if(TBData.cssPreFixFree != '') $('#prefix-free').prop('checked', true);
 
 	codeChanged = function(editor, changes, forceCompile) {
 		TBData.setEditorValue(editor.getOption('mode'), editor.getValue());
@@ -131,13 +141,18 @@
 
     // prefix free checkbox
     $('#prefix-free').on('click', function() {
-    	TBData.setCSSOption('prefixFree', $(this).is(":checked"));
+        TBData.setPrefixFree($(this).is(":checked"));
     });
 
     // JS related
     $('input[name="js-preprocessor"]').on('click', function() {
     	TBData.setJSOption('preprocessor', this.value);
     	codeChanged(JSeditor, '', true);
+    });
+    
+    $('#js-select').on('change', function(index, select) {
+        TBData.setJSLibrary(this.value);
+        // alextodo, need to select the correct drop down onload
     });
 
     // Bind keys

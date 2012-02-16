@@ -51,11 +51,29 @@ var CodeRenderer = (function() {
   				CSS   : this.getCSS(),
   				HTML  : this.getHTML(),
   				JS    : this.getJS(),
-  				JSLIB : $("#js-select option:selected").val(),
-  				PREFIX: TBData.getOption('css', 'prefixFree')
+  				JSLIB : this.getJSLibrary(),
+  				PREFIX: this.getPrefixFree()
 			};
 
 			return tmpl(this.getTPL('result'), values);
+	    },
+	    
+	    getJSLibrary: function() {
+	        if(TBData.jsLibrary) {
+	            return '<script src="' + TBData.jsLibrary + '"></script>';
+	        }
+	        else {
+	            return '';
+	        }
+	    },
+	    
+	    getPrefixFree: function() {
+	        if(TBData.jsLibrary) {
+	            return '<script src="' + TBData.jsLibrary + '"></script>';
+	        }
+	        else {
+	            return '';
+	        }
 	    },
 
 	    getHTML: function() {

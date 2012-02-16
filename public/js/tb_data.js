@@ -13,21 +13,17 @@ var TBData = (function() {
 		html              : '',
 		css               : '',
 		js                : '',
+		// keep version number and increment that
 		version           : 1,
-		dateUpdated       : '',
 		compileInRealTime : false,
 		editorChanged     : '',
 		htmlPreProcessor  : 'none',
 		
 		cssPreProcessor   : 'none',
-		cssOptions : {
-		    prefixFree        : '',
-		},
+		cssPreFixFree     : '',
 		
 		jsPreProcessor    : 'none',
-		jsOptions         : {
-            'libraries'    : [ ],
-        },
+		jsLibrary         : '',
 
 	    init: function() {
 	        this.bindSaveToLocalStorage();
@@ -89,10 +85,10 @@ var TBData = (function() {
             this.htmlPreProcessor = data.htmlPreProcessor;
             
             this.cssPreProcessor = data.cssPreProcessor;
-            this.cssOptions.prefixFree = data.cssOptions.prefixFree;
+            this.cssPreFixFree = data.cssPreFixFree;
             
             this.jsPreProcessor = data.jsPreProcessor;
-            this.jsOptions.libraries = data.jsOptions.libraries;
+            this.jsLibrary = data.jsLibrary;
 	    },
 	    
 	    // If any preprocessors are chosen (jade, less, coffeescript etc.)
@@ -116,23 +112,25 @@ var TBData = (function() {
 	    },
 
 	    setCSSOption: function(name, value) {
-	    	if(name == 'prefixFree') {
-	    		// TODO: Make URL Dynamic or Settable
-	    		value = (value) ? "/box-libs/prefixfree.min.js" : '';
-	    		this.cssOptions[name] = value;
-	    	}
-	    	else {
-	    	    this.cssPreProcessor = value;
-	    	}
-	    	
+	    	this.cssPreProcessor = value;
 	    	this.updateTimeStamp();
 	    	this.updateCompileInRealTime();
+	    },
+	    
+	    setPrefixFree: function(value) {
+	        // TODO: Make URL Dynamic or Settable, hmmm, dunno, let's see
+	        // why offer more than one?
+    		this.cssPreFixFree = (value) ? "/box-libs/prefixfree.min.js" : '';
 	    },
 
 	    setJSOption: function(name, value) {
 	    	this.jsPreProcessor = value;
 	    	this.updateTimeStamp();
 	    	this.updateCompileInRealTime();
+	    },
+	    
+	    setJSLibrary: function(value) {
+	        this.jsLibrary = value;
 	    },
 
 	    getOption: function(mode, name) {
@@ -160,6 +158,8 @@ var TBData = (function() {
 	    	this.updateTimeStamp();
 	    },
 
+        // alextodo, need to use version numbers
+        
 	    // Update the time stamp, save in the format
 	    // yyyy-mm-dd hh:mm:ss
 	    updateTimeStamp: function() {
