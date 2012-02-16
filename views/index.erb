@@ -10,14 +10,15 @@
     <link href="//get.pictos.cc/fonts/555/1" rel="stylesheet">
     <script src="http://use.typekit.com/nnp0iyi.js"></script>
     <script>try { Typekit.load(); } catch(e) {}</script>
+
     <link rel="stylesheet" href="/stylesheets/css/main.css">
 </head>
 
 <body data-theme="sublime">
 
-	<div class="wrap">
+	<%= partial :header %>
 
-		<%= partial :header %>
+	<div class="wrap">
 
 		<div class="boxes">
 
@@ -25,120 +26,118 @@
 
 				<div class="box-html">
 
+					<div class="powers">
+						<h2>HTML</h2>
+						<a href="#" class="settings-nub icon-replace" title="Open Settings"><span aria-hidden="true">d</span></a>
+						<a href="#" class="expander icon-replace" title="Expand"><span aria-hidden="true">p</span></a>
+					</div>
+
 					<textarea id="html" class="code-box"></textarea>
 
-					<div class="settings-panel">
+					<div class="settings">
 
-						<a href="#" class="settings-nub icon-replace" data-icon="d" title="Open Settings"><span aria-hidden="true">d</span></a>
+						<form>
+							<div>
+								<input type="radio" id="html-none" checked name="html-preprocessor" value="none">
+								<label class="button" for="html-none">None</label>
+							</div>
+							<div>
+								<input type="radio" id="jade" name="html-preprocessor" value="jade">
+								<label class="button" for="jade">Jade</label>
+							</div>
+							<div>
+								<input type="radio" id="haml" name="html-preprocessor" value="haml">
+								<label class="button" for="haml">HAML</label>
+							</div>
+						</form>
 
-						<div class="settings">
-
-							<form>
-								<div>
-									<input type="radio" id="html-none" checked name="html-preprocessor" value="none">
-									<label class="button" for="html-none">None</label>
-								</div>
-								<div>
-									<input type="radio" id="jade" name="html-preprocessor" value="jade">
-									<label class="button" for="jade">Jade</label>
-								</div>
-								<div>
-									<input type="radio" id="haml" name="html-preprocessor" value="haml">
-									<label class="button" for="haml">HAML</label>
-								</div>
-							</form>
-
-						</div>
-
-					</div><!-- END div.settings-panel -->
+					</div>
 
 				</div><!-- END div.box-html -->
 
-				<div id="handle-1" class="handle handle-vert handle-1"></div>
-
 				<div class="box-css">
+
+					<div class="powers">
+						<h2>CSS</h2>
+						<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
+						<a href="#" class="expander icon-replace" title="Expand"><span aria-hidden="true">p</span></a>
+					</div>
 
 					<textarea id="css" class="code-box"></textarea>
 
-					<div class="settings-panel">
+					<div class="settings">
+						<form>
+							<div>
+								<input type="radio" id="css-none" checked name="css-preprocessor" value="none">
+								<label class="button" for="css-none">None</label>
+							</div>
+							<div>
+								<input type="radio" id="less" name="css-preprocessor" value="less">
+								<label class="button" for="less">LESS</label>
+							</div>
+							<div>
+								<input type="radio" id="stylus" name="css-preprocessor" value="stylus">
+								<label class="button" for="stylus">Stylus</label>
+							</div>
+							<div>
+								<input type="radio" id="scss" name="css-preprocessor" value="scss">
+								<label class="button" for="scss">SCSS</label>
+							</div>
+							<div>
+								<input type="radio" id="sass" name="css-preprocessor" value="sass">
+								<label class="button" for="sass">SASS with Compass</label>
+							</div>
+						</form>
 
-						<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
-
-						<div class="settings">
-							<form>
-								<div>
-									<input type="radio" id="css-none" checked name="css-preprocessor" value="none">
-									<label class="button" for="css-none">None</label>
-								</div>
-								<div>
-									<input type="radio" id="less" name="css-preprocessor" value="less">
-									<label class="button" for="less">LESS</label>
-								</div>
-								<div>
-									<input type="radio" id="stylus" name="css-preprocessor" value="stylus">
-									<label class="button" for="stylus">Stylus</label>
-								</div>
-								<div>
-									<input type="radio" id="scss" name="css-preprocessor" value="scss">
-									<label class="button" for="scss">SCSS</label>
-								</div>
-								<div>
-									<input type="radio" id="sass" name="css-preprocessor" value="sass">
-									<label class="button" for="sass">SASS with Compass</label>
-								</div>
-							</form>
-
-							<form>
-								<input type="checkbox" id="prefix-free" name="prefix-free">
-								<label for="prefix-free">Prefix free</label>
-							</form>
-						</div>
-
-					</div><!-- END div.settings-panel -->
+						<form>
+							<input type="checkbox" id="prefix-free" name="prefix-free">
+							<label for="prefix-free">Prefix free</label>
+						</form>
+					</div>
 
 				</div><!-- END div.box-css -->
 
-				<div id="handle-2" class="handle handle-vert handle-2"></div>
-
 				<div class="box-js last">
+
+					<div class="powers">
+						<h2>JS</h2>
+						<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
+						<a href="#" class="expander icon-replace" title="Expand"><span aria-hidden="true">p</span></a>
+					</div>
 
 					<textarea id="js" class="code-box"></textarea>
 
-					<div class="settings-panel">
+					<div class="settings">
+						<form>
+							<div>
+								<input type="radio" id="js-none" checked name="js-preprocessor" value="none">
+								<label class="button" for="js-none">None</label>
+							</div>
+							<div>
+								<input type="radio" id="coffeescript" name="js-preprocessor" value="coffeescript">
+								<label class="button" for="coffeescript">CoffeScript</label>
+							</div>
+						</form>
 
-						<a href="#" class="settings-nub icon-replace" aria-hidden="true" data-icon="d"><span>d</span></a>
-
-						<div class="settings">
-							<form>
-								<div>
-									<input type="radio" id="js-none" checked name="js-preprocessor" value="none">
-									<label class="button" for="js-none">None</label>
-								</div>
-								<div>
-									<input type="radio" id="coffeescript" name="js-preprocessor" value="coffeescript">
-									<label class="button" for="coffeescript">CoffeScript</label>
-								</div>
-							</form>
-
-							<form>
-								 <select style="width: 100%;" data-placeholder="JavaScript Library" id="js-select">
-							        <option value=""></option>
-							        <option value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">jQuery 1.7.1</option>
-							        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option>
-							        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option>
-	          					</select>
-	          				</form>
-						</div>
-
-					</div><!-- END div.settings-panel -->
+						<form>
+							<select style="width: 100%;" data-placeholder="JavaScript Library" id="js-select">
+					      <option value=""></option>
+				        <option value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">jQuery 1.7.1</option>
+				        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option>
+				        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option>
+      				</select>
+          	</form>
+					</div>					
 
 				</div><!-- END div.box-css -->
 
 			</div><!-- END div.top-boxes -->
 
-			<div id="handle-3" class="handle handle-horz handle-3"></div>
-
 			<div class="result">
+
+				<div class="powers">
+						<h2>Result</h2>
+					</div>
 
 				<iframe src="" id="result"></iframe>
 

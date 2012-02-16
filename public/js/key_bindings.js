@@ -85,14 +85,12 @@ var KeyBindings = (function() {
                     else if(event.keyCode == 67) {
                         // cmd + c
                         // compile and run code
-                        console.log('compile');
-                        CodeRenderer.codeChanged();
+                        CodeRenderer.codeChanged(true);
                     }
                     else if(event.keyCode == 75) {
                         // command + K
                         // fork this project
                         console.log('fork');
-                        console.log(event);
                     }
                     else if(event.keyCode == 71) {
                         // command + g
