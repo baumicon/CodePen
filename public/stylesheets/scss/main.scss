@@ -16,7 +16,7 @@ html, body {
 }
 
 html {
-	background: #f3f3f3;
+	background: #333;
 }
 
 @import "typography";
@@ -29,7 +29,8 @@ html {
 header {
 	display: block;
 	position: relative;
-	padding: 10px 0 10px 15px;
+	padding: 10px 20% 10px 20px;
+	background: black;
 	form {
 		float: left;
 		* {
@@ -54,11 +55,16 @@ header {
 }
 .app-actions {
 	float: right;
+	min-width: 200px;
+	.button, button {
+		float: right;
+	}
 }
 .app-settings-panel {
 	padding: 10px;
 	position: absolute;
 	width: 200px;
+	z-index: 500;
 	@include gradient(#eee, #fff);
 	border: 1px solid #ccc;
 	button {
@@ -72,6 +78,7 @@ header {
 //------------------------------- LAYOUT
 .wrap {
 	width: 80%;
+	padding: 10px 0 0 10px;
 }
 .boxes {
 	position: relative;
@@ -80,10 +87,12 @@ header {
 	position: relative;
 }
 .boxes [class^="box-"] {
-	width: 33.33333333%;
-	float: left;
-	height: 350px;
-	position: relative;
+	overflow: hidden;
+	width: 32.5%;
+	height: 100%;
+	top: 0;
+	position: absolute;
+	@include transition((all 0.4s ease));
 	> pre {
 		position: absolute;
 		background: white;
@@ -96,33 +105,38 @@ header {
 		padding: 15px;
 		font: 11px Monaco, Courier, MonoSpace;
 	}
-	h2 {
-		@include transition(opacity 0.2s ease);
+	&.expanded {
+		left: 0;
+		width: 100%;
+		z-index: 101;
 	}
-	&:hover h2 {
-		@include opacity(0);
-	}
+}
+.box-html {
+	left: 0;
+}
+.box-css {
+	left: 33.7%;
+}
+.box-js {
+	left: 67.4%;
 }
 
 
 // ------------------------------ SETTINGS
-.settings-panel {
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
+.powers {
+	position: relative;
+	height: 25px;
+	line-height: 25px;
+	color: white;
+	background: #666;
+	padding: 0 0 0 10px;
 }
 .settings {
-	max-height: 0;
-	position: relative;
 	background: #dfdfdf;
-	width: 100%;
-	@include opacity(0);
-	@include transition(all 0.3s ease-in-out);
+	display: none;
+	position: relative;
 	&.open {
-		max-height: 200px;
 		display: block;
-		@include opacity(1);
 	}
 	form {
 		padding: 10px;
@@ -148,21 +162,32 @@ header {
 		top: 1px;
 	}
 }
-.settings-nub {
-	@include gradient(#efefef, #dfdfdf);
+.settings-nub, .expander {
+	position: absolute;
+	bottom: 0;
+	right: 8px;
+	z-index: 1;
 	text-align: center;
 	display: inline-block;
-	margin: 0 0 0 10px;
-	@include border-radiuses(8px, 0, 0, 8px);
-	color: black;
+	.box-js & {
+		right: 0;
+	}
 	span {
 		display: inline-block;
-		padding: 8px 8px 2px 8px;
+		padding: 0 10px;
+		height: 100%;
+		background: black;
+		color: white;
 		@include transition((all 0.2s ease));
+		@include rotate(180);
 	}
 	&.open span {
-		@include rotate(180);
-		padding: 6px 8px 6px 8px;
+		@include rotate(0);
+		background: #dfdfdf;
+		color: black;
+		padding-top: 6px;
+		position: relative;
+		top: 3px;
 	}
 	&:active {
 		color: red;
@@ -171,15 +196,22 @@ header {
 		background: #dfdfdf;
 	}
 }
+.expander {
+	right: 50px;
+	.box-js & {
+		right: 42px;
+	}
+}
 
 .result {
 	clear: both;
 	position: relative;
+	top: 10px;
 	iframe {
 		border: 0;
 		background: white;
 		width: 100%;
-		height: 100%;
+		height: 80%;
 	}
 	h2 {
 		@include transition(opacity 0.2 ease);
@@ -189,45 +221,17 @@ header {
 	}
 }
 
-
-
-// --------------------------- HANDLES
-.handle {
-	position: absolute;
-	z-index: 20;
-}
-.handle-vert {
-	background: #F3F3F3 center center no-repeat;
-	width: 9px;
-	height: 100%;
-	top: 0;	
-	// cursor: col-resize;
-}
-.handle-horz {
-	background: #F3F3F3 center center no-repeat;
-	width: 100%;
-	left: 0;
-	height: 9px;
-	// cursor: row-resize;
-}
-.handle-1 {
-	left: 33.333333%;
-	margin-left: -9px;
-}
-.handle-2 {
-	left: 66.6666666%;
-	margin-left: -9px;
-}
-.handle-3 {
-	top: 50%;
-}
-
 // --------------------------- FOOTER
 footer {
 	padding: 5px;
 	font-size: 14px;
 	display: block;
 	position: relative;
+	color: white;
+	a {
+		color: white;
+		text-decoration: underline;
+	}
 }
 .footer-actions {
 	position: absolute;

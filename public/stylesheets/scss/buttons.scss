@@ -16,13 +16,16 @@
 	a {
 		color: #333;
 	}
+	header div > & {
+		height: 40px;
+	}
 }
 
 button + button,
 button + .button,
 .button + button,
 .button + .button {
-	border-left: 0;
+	margin-left: -1px;
 }
 
 .icon:before {
@@ -77,9 +80,7 @@ header button, header .button {
 	position: relative;
 	z-index: 100;
 }
-#app-settings-panel {
-	z-index: 99;
-}
+
 .dropdown {
 	&:before {
 		font-size: 12px;
