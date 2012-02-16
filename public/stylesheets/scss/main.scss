@@ -16,7 +16,7 @@ html, body {
 }
 
 html {
-	background: #333;
+	@include gradient(#333, black);
 }
 
 @import "typography";
@@ -128,7 +128,7 @@ header {
 	height: 25px;
 	line-height: 25px;
 	color: white;
-	background: #666;
+	@include gradient(#666, #333);
 	padding: 0 0 0 10px;
 }
 .settings {
@@ -165,13 +165,10 @@ header {
 .settings-nub, .expander {
 	position: absolute;
 	bottom: 0;
-	right: 8px;
+	right: 0px;
 	z-index: 1;
 	text-align: center;
 	display: inline-block;
-	.box-js & {
-		right: 0;
-	}
 	span {
 		display: inline-block;
 		padding: 0 10px;
@@ -197,10 +194,7 @@ header {
 	}
 }
 .expander {
-	right: 50px;
-	.box-js & {
-		right: 42px;
-	}
+	right: 40px;
 }
 
 .result {
