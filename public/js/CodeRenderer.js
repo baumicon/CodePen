@@ -1,6 +1,11 @@
 var CodeRenderer = (function() {
 
 	var CodeRenderer = {
+	    
+	    // reference versions of data
+	    refHTML     : '',
+	    refCSS      : '',
+	    refJS       : '',
         
         // cached html results
         cachedHTML  : '',
@@ -46,11 +51,13 @@ var CodeRenderer = (function() {
 	    },
 
 	    getResultContent: function() {
+	        this.renderContentUpdateCache();
+	        
 	    	var values = {
   				TITLE : "Tinkerbox",
-  				CSS   : this.getCSS(),
-  				HTML  : this.getHTML(),
-  				JS    : this.getJS(),
+  				CSS   : this.cachedCSS,
+  				HTML  : this.cachedHTML,
+  				JS    : this.cachedJS,
   				JSLIB : this.getJSLibrary(),
   				PREFIX: this.getPrefixFree()
 			};
@@ -75,91 +82,89 @@ var CodeRenderer = (function() {
 	            return '';
 	        }
 	    },
-
-	    getHTML: function() {
-	        // check if any preprocessors are set
-	        if(!this.useCache('html', CodeRenderer.cachedHTML)) {
-    	        if(this.processOnServer(TBData.htmlPreProcessor)) {
-    	            $.ajax({
-          				url: '/process/html/',
-          				type: 'POST',
-          				async: false,
-          				data: 'type=' + TBData.htmlPreProcessor + '&html=' + encodeURIComponent(TBData.html),
-          				success: function( result ) {
-          				    obj = $.parseJSON(result);
-            				CodeRenderer.cachedHTML = obj.html;
-          				}
-        			});
-    	        }
-    	        else {
-    	            CodeRenderer.cachedHTML = TBData.html;
-    	        }
+	    
+	    // Render content, serverside or client, then update cached content
+	    renderContentUpdateCache: function() {
+	        params = { };
+	        processContent = false;
+	        
+	        var keys = ['html', 'css', 'js'];
+	        
+	        for (var i=0; i < keys.length; i++) {
+	            var key = keys[i];
+	            var upKey = keys[i].toUpperCase();
+	           
+                if(!this.useCache(key)) {
+   	                this['ref' + upKey] = TBData[key];
+   	                
+       	            if(this.processOnServer(TBData[key + 'PreProcessor'])) {
+       	                processContent = true;
+       	                params[key] = TBData[key];
+       	                params[key + 'PreProcessor'] = TBData[key + 'PreProcessor'];
+       	            }
+       	            else {
+       	                this['cached' + upKey] = TBData[key];
+       	            }
+   	            }
 	        }
 	        
-	    	return CodeRenderer.cachedHTML;
-	    },
-
-       getCSS: function() {
-	        if(!this.useCache('css', CodeRenderer.cachedCSS)) {
-    	        if(this.processOnServer(TBData.cssPreProcessor)) {
-    	            $.ajax({
-          				url: '/process/css/',
-          				type: 'POST',
-          				async: false,
-          				data: 'type=' + TBData.cssPreProcessor + '&css=' + encodeURIComponent(TBData.css),
-          				success: function( result ) {
-          				    obj = $.parseJSON(result);
-            				CodeRenderer.cachedCSS = obj.css;
-          				}
-        			});
-    	        }
-    	        else {
-    	            CodeRenderer.cachedCSS = TBData.css;
-    	        }
-            }
-			
-			return CodeRenderer.cachedCSS;
-	    },
-
-	    getJS: function() {
-	        // check if this editor even changed before making request
-	        if(!this.useCache('js', CodeRenderer.cachedJS)) {
-	            if(this.processOnServer(TBData.jsPreProcessor)) {
-    	            $.ajax({
-          				url: '/process/js/',
-          				type: 'POST',
-          				async: false,
-          				data: 'type=' + TBData.jsPreProcessor + '&js=' + encodeURIComponent(TBData.js),
-          				success: function( result ) {
-          				    obj = $.parseJSON(result);
-            				CodeRenderer.cachedJS = obj.js;
-          				}
-        			});
-    	        }
-    	        else {
-    	            CodeRenderer.cachedJS = TBData.js;
-    	        }
+	        if(processContent) {
+	            this.processContent(params);
 	        }
-	        
-            return CodeRenderer.cachedJS;
 	    },
 	    
-	    useCache: function(type, cached) {
-	        if(TBData.editorChanged != type && cached) {
-	            return true;
+	    processContent: function(params) {
+	        $.ajax({
+  				url: '/process/',
+  				type: 'POST',
+  				async: false,
+  				data: this.getDataValues(params),
+  				success: function( result ) {
+  				    obj = $.parseJSON(result);
+  				    
+  				    for(var key in obj) {
+  				        var upKey = key.toUpperCase();
+  				        if(obj[key]) CodeRenderer['cached' + upKey] = obj[key];
+  				    }
+  				}
+			});
+	    },
+	    
+	    getDataValues: function(params) {
+	        var dataValues = '';
+	        var count = 0;
+	        
+	        for(var key in params) {
+	            if(count > 0) dataValues += '&';
+	            dataValues += key + '=' + encodeURIComponent(params[key]);
+	            count += 1;
+	        }
+	        
+	        return dataValues;
+	    },
+	    
+	    // determine if what's in the editor is the same 
+	    // as what's saved in reference (unprocessed content) cache. 
+	    // if so use cached version of content, e.g. cachedHTML, cachedCSS
+	    useCache: function(type) {
+	        if(type == 'html') {
+	            if(this.refHTML == TBData.html) return true;
+	            else return false;
+	        }
+	        else if(type == 'css') {
+	            if(this.refCSS == TBData.css) return true;
+	            else return false;
 	        }
 	        else {
-	            return false;
+	            if(this.refJS == TBData.js) return true;
+	            else return false;
 	        }
 	    },
 	    
+	    // Determine if the content needs to be processed on the server
+	    // All preprocessors are rendered server side
 	    processOnServer: function(preProcessor) {
-	        if(preProcessor && preProcessor != 'none') {
-	            return true;
-	        }
-	        else {
-	            return false;
-	        }
+	        return (preProcessor && preProcessor != 'none');
 	    },
 
 	    getTPL: function(name) {

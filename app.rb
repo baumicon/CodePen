@@ -68,25 +68,22 @@ class App < Sinatra::Base
     
     # PREPROCESSORS
     
-    post '/process/html/' do
-      preprocessor_service = PreProcessorService.new
-      html = preprocessor_service.process_html(params[:type], params[:html])
+    post '/process/' do
+      pps = PreProcessorService.new
+      
+      if params[:html] != nil and !params[:html].empty?
+        html = pps.process_html(params[:htmlPreProcessor], params[:html])
+      end
+      
+      if params[:css] != nil and !params[:css].empty?
+        css = pps.process_css(params[:cssPreProcessor], params[:css])
+      end
+      
+      if params[:js] != nil and !params[:js].empty?
+        js = pps.process_js(params[:jsPreProcessor], params[:js])
+      end
 
-      encode({'html' => html})
-    end
-    
-    post '/process/css/' do
-      preprocessor_service = PreProcessorService.new
-      css = preprocessor_service.process_css(params[:type], params[:css])
-
-      encode({'css' => css})
-    end
-
-    post '/process/js/' do
-      preprocessor_service = PreProcessorService.new
-      js = preprocessor_service.process_js(params[:type], params[:js])
-
-      encode({'js' => js})
+      encode({ 'html' => html, 'css' => css, 'js' => js})
     end
     
     def encode(obj)	  	
@@ -102,9 +99,6 @@ class App < Sinatra::Base
     end
 
     helpers do
-        def close embedded_json
-            embedded_json.gsub('</', '<\/')
-        end
         def get_templates
             {'result' => (erb :template)}.to_json.gsub('/', '\/')
         end

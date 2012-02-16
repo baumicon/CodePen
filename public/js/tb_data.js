@@ -1,7 +1,7 @@
 var TBData = (function() {
 
 	/***********************
-	* Keeps the apps states.
+	* Keeps the app's state.
 	* Persist state to local storage first,
 	* then to the backend storage
 	************************/
@@ -16,7 +16,6 @@ var TBData = (function() {
 		// keep version number and increment that
 		version           : 1,
 		compileInRealTime : false,
-		editorChanged     : '',
 		htmlPreProcessor  : 'none',
 		
 		cssPreProcessor   : 'none',
@@ -42,34 +41,37 @@ var TBData = (function() {
 	        // for more than one tinkerbox, use the name in the URL!
 	        if(typeof(localStorage) != 'undefined') {
 	            localStorage.clear();
-	            TBData.updateTimeStamp();
                 localStorage['tb'] = JSON.stringify(TBData);
             }
 	    },
 
-        // Looks for data stored locally on the client
-	    // If it exists and the date is fresher than the date
-	    // provided by the data served by the server, the local
-	    // data is used
+        // Use the most recent data, either localstorage or from db
 	    loadStoredData: function() {
 	        var data = { };
 	        
 	        if(__tbdata['dateUpdated']) {
-	            // alextodo enable localstorage when i start adding a date
-	            // for now nothing
+	            // alextodo enable localstorage we start pulling from db
 	            // data = __tbdata;
+	            // If you use tbdata, the version number 
+	            // has to be incremented immediately to differentiate it
+	            // on save, we should check version number doesn't already exist
+	            // so that you can't overwrite someones data
+	            // and make sure they are logged in
 	        }
 	        
 	        if(typeof(localStorage) != 'undefined') {
 	            if(localStorage['tb']) {
 	                localData = $.parseJSON(localStorage['tb']);
-	                // alextodo, will need to determine which one is fresher
-	                // for now always use localStorage if it exists
-	                data = localData;
+	                locVersion = (localData['version']) ? localData['version'] : 0;
+	                datVersion = (data['version']) ? data['version'] : 0;
+	                
+	                if(locVersion > datVersion) {
+	                   data = localData;
+	                }
 	            }
 	        }
 	        
-	    	if(data['dateUpdated']) {
+	    	if(data['version']) {
 	    	    this.syncThisWithDataObj(data);
 	    	}	    	
 	    },
@@ -80,7 +82,6 @@ var TBData = (function() {
 			this.css  = data.css;
 			this.js   = data.js;
 			this.version = data.version;
-			this.dateUpdated = data.dateUpdated;
 
             this.htmlPreProcessor = data.htmlPreProcessor;
             
@@ -104,16 +105,13 @@ var TBData = (function() {
 	        }
 	    },
 
-        // alextodo, also update the compileInRealTime here
 	    setHTMLOption: function(name, value) {
 	    	this.htmlPreProcessor = value;
-	    	this.updateTimeStamp();
 	    	this.updateCompileInRealTime();
 	    },
 
 	    setCSSOption: function(name, value) {
 	    	this.cssPreProcessor = value;
-	    	this.updateTimeStamp();
 	    	this.updateCompileInRealTime();
 	    },
 	    
@@ -125,7 +123,6 @@ var TBData = (function() {
 
 	    setJSOption: function(name, value) {
 	    	this.jsPreProcessor = value;
-	    	this.updateTimeStamp();
 	    	this.updateCompileInRealTime();
 	    },
 	    
@@ -154,28 +151,6 @@ var TBData = (function() {
 	    	}
 	    	
             this[mode] = value;
-            this.editorChanged = mode;
-	    	this.updateTimeStamp();
-	    },
-
-        // alextodo, need to use version numbers
-        
-	    // Update the time stamp, save in the format
-	    // yyyy-mm-dd hh:mm:ss
-	    updateTimeStamp: function() {
-	    	var now = new Date()
-
-	    	yyyy = now.getFullYear();
-	    	mm = now.getMonth() + 1;
-	    	mm = (mm > 9) ? mm : '0' + mm;
-	    	dd = now.getDate();
-	    	dd = (dd > 9) ? dd : '0' + dd;
-	    	var date = yyyy + '-' + mm + '-' + dd;
-
-	    	var regex = /\d\d:\d\d:\d\d/g;
-			var time = regex.exec(now.toString());
-            
-	    	this.dateUpdated = date + ' ' + time;
 	    }
     };
 
