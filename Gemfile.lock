@@ -23,6 +23,7 @@ GEM
     hashie (1.2.0)
     i18n (0.6.0)
     jsmin (1.0.1)
+    json (1.6.5)
     mongo (1.5.2)
       bson (= 1.5.2)
     mongo_mapper (0.11.0)
@@ -65,6 +66,7 @@ DEPENDENCIES
   compass
   haml
   jsmin
+  json
   mongo_mapper
   multi_json
   omniauth-twitter

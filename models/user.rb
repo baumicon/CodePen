@@ -7,5 +7,8 @@ class User
     key :provider,      String
     key :nickname,      String
     key :name,          String
+
     timestamps!
+
+    #TODO: validations
 end

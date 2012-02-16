@@ -6,7 +6,7 @@ require 'compass'
 NODE_URL = 'http://127.0.0.1:8124'
 
 class PreProcessorService
-  
+
   def process_html(type, html)
     begin
       if type == 'jade'
@@ -43,10 +43,10 @@ class PreProcessorService
     rescue Exception => msg
       print 'Unable to process CSS: ' + css
     end
-    
+
     css
   end
-  
+
   def process_js(type, js)
     begin
       if type == 'coffeescript'
@@ -57,8 +57,8 @@ class PreProcessorService
     rescue Exception => msg
       print 'Unable to process JS: ' + js
     end
-    
+
     js
   end
-  
+
 end
