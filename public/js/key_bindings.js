@@ -12,7 +12,7 @@ var KeyBindings = (function() {
 	var KeyBindings = {
 
 		lastKeyPressed:  0,
-		altKeyPressedPreviously: false,
+		commandKeyPressed: false,
 		
 		HTMLeditor: '', 
 		CSSeditor: '', 
@@ -41,37 +41,26 @@ var KeyBindings = (function() {
 	    },
         
         // todo, implment CMD-SHIFT-C - Copy current URL
-        // todo, when the user presses ?, show the overlay screen with shortcuts
-        // ask coyier to mock this up for me
         bindKeys: function() {
-            $(window).on('keydown keypress', function(event) {
-
+            $(window).on('keydown', function(event) {
                 // mac os x uses command key (91) as alt key
-                // every other OS uses actual alt key (18)
-                if(KeyBindings.lastKeyPressed == 18 || KeyBindings.lastKeyPressed == 91) {
-                    this.altKeyPressedPreviously = true;
+                // every other OS will use the control key (17)
+                if(event.keyCode == 17 || event.keyCode == 91) {
+                    KeyBindings.commandKeyPressed = true;
                 }
-                else {
-                    this.altKeyPressedPreviously = false;
+            });
+            
+            $(window).on('keyup', function(event) {
+                if(event.keyCode == 17 || event.keyCode == 91) {
+                    KeyBindings.commandKeyPressed = false;
                 }
-                
-                // If the user is holding down the cmd key, then you won't get another key press
-                // event for that. Only update lastKeyPressed only if key isn't the same as previous key
-                if(KeyBindings.lastKeyPressed != event.keyCode) {
-                    KeyBindings.lastKeyPressed = event.keyCode;
-                }
-                
+            });
+            
+            $(window).on('keydown', function(event) {
                 stop = false;
-
-                if(event.keyCode == 27) {
-                    $(".expanded").removeClass("expanded");
-                }
-                
-                // todo, will need to create a keydown status for a key
-                // then change on keyup, that way you know if that key 
                 
                 // Process all the altKey pressed events
-                if(altKeyPressedPreviously) {
+                if(KeyBindings.commandKeyPressed) {
                     if(event.keyCode == 49) {
                         // cmd + 1
                         stop = true;
@@ -90,32 +79,30 @@ var KeyBindings = (function() {
                     else if(event.keyCode == 67) {
                         // cmd + c
                         // compile and run code
-                        console.log('compile');
-                        CodeRenderer.codeChanged();
+                        CodeRenderer.codeChanged(true);
                     }
                     else if(event.keyCode == 75) {
                         // command + K
                         // fork this project
                         console.log('fork');
-                        console.log(event);
                     }
                     else if(event.keyCode == 71) {
                         // command + g
                         // create a gist
                         console.log('gist');
                     }
-                    else if(event.keyCode == 78) {
-                        // command + n
-                        // create a new tinker box
-                        console.log('create new tinker box in new tab');
-                        // warn if changes will be lost
-                        stop = true;
-                    }
                     else if(event.keyCode == 83) {
                         // command + s
                         console.log('save');
-                        stop = true;
+                        // alextodo, i think the command key is captured wrong,
+                        // you can't type s
+                        // stop = true;
                     }
+                }
+                
+                if(event.keyCode == 27) {
+                    // alextodo, put main into a mains, Main module
+                    Main.closeExpandedAreas();
                 }
                 
                 if(stop) {

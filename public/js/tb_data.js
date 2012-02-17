@@ -1,7 +1,7 @@
 var TBData = (function() {
 
 	/***********************
-	* Keeps the apps states.
+	* Keeps the app's state.
 	* Persist state to local storage first,
 	* then to the backend storage
 	************************/
@@ -13,21 +13,16 @@ var TBData = (function() {
 		html              : '',
 		css               : '',
 		js                : '',
+		theme             : '',
 		version           : 1,
-		dateUpdated       : '',
 		compileInRealTime : false,
-		editorChanged     : '',
 		htmlPreProcessor  : 'none',
 		
 		cssPreProcessor   : 'none',
-		cssOptions : {
-		    prefixFree        : '',
-		},
+		cssPreFixFree     : '',
 		
 		jsPreProcessor    : 'none',
-		jsOptions         : {
-            'libraries'    : [ ],
-        },
+		jsLibrary         : '',
 
 	    init: function() {
 	        this.bindSaveToLocalStorage();
@@ -46,53 +41,55 @@ var TBData = (function() {
 	        // for more than one tinkerbox, use the name in the URL!
 	        if(typeof(localStorage) != 'undefined') {
 	            localStorage.clear();
-	            TBData.updateTimeStamp();
                 localStorage['tb'] = JSON.stringify(TBData);
             }
 	    },
 
-        // Looks for data stored locally on the client
-	    // If it exists and the date is fresher than the date
-	    // provided by the data served by the server, the local
-	    // data is used
+        // Use the most recent data, either localstorage or from db
 	    loadStoredData: function() {
 	        var data = { };
 	        
 	        if(__tbdata['dateUpdated']) {
-	            // alextodo enable localstorage when i start adding a date
-	            // for now nothing
+	            // alextodo enable localstorage we start pulling from db
 	            // data = __tbdata;
+	            // If you use tbdata, the version number 
+	            // has to be incremented immediately to differentiate it
+	            // on save, we should check version number doesn't already exist
+	            // so that you can't overwrite someones data
+	            // and make sure they are logged in
 	        }
 	        
 	        if(typeof(localStorage) != 'undefined') {
 	            if(localStorage['tb']) {
 	                localData = $.parseJSON(localStorage['tb']);
-	                // alextodo, will need to determine which one is fresher
-	                // for now always use localStorage if it exists
-	                data = localData;
+	                locVersion = (localData['version']) ? localData['version'] : 0;
+	                datVersion = (data['version']) ? data['version'] : 0;
+	                
+	                if(locVersion > datVersion) {
+	                   data = localData;
+	                }
 	            }
 	        }
 	        
-	    	if(data['dateUpdated']) {
+	    	if(data['version']) {
 	    	    this.syncThisWithDataObj(data);
 	    	}	    	
 	    },
 
 	    syncThisWithDataObj: function(data) {
-			this.name = data.name;
-			this.html = data.html;
-			this.css  = data.css;
-			this.js   = data.js;
-			this.version = data.version;
-			this.dateUpdated = data.dateUpdated;
-
+			this.name             = data.name;
+			this.html             = data.html;
+			this.css              = data.css;
+			this.js               = data.js;
+			this.version          = data.version;
+            this.theme            = data.theme;
             this.htmlPreProcessor = data.htmlPreProcessor;
             
-            this.cssPreProcessor = data.cssPreProcessor;
-            this.cssOptions.prefixFree = data.cssOptions.prefixFree;
+            this.cssPreProcessor  = data.cssPreProcessor;
+            this.cssPreFixFree    = data.cssPreFixFree;
             
-            this.jsPreProcessor = data.jsPreProcessor;
-            this.jsOptions.libraries = data.jsOptions.libraries;
+            this.jsPreProcessor   = data.jsPreProcessor;
+            this.jsLibrary        = data.jsLibrary;
 	    },
 	    
 	    // If any preprocessors are chosen (jade, less, coffeescript etc.)
@@ -108,31 +105,33 @@ var TBData = (function() {
 	        }
 	    },
 
-        // alextodo, also update the compileInRealTime here
 	    setHTMLOption: function(name, value) {
 	    	this.htmlPreProcessor = value;
-	    	this.updateTimeStamp();
 	    	this.updateCompileInRealTime();
 	    },
 
 	    setCSSOption: function(name, value) {
-	    	if(name == 'prefixFree') {
-	    		// TODO: Make URL Dynamic or Settable
-	    		value = (value) ? "/box-libs/prefixfree.min.js" : '';
-	    		this.cssOptions[name] = value;
-	    	}
-	    	else {
-	    	    this.cssPreProcessor = value;
-	    	}
-	    	
-	    	this.updateTimeStamp();
+	    	this.cssPreProcessor = value;
 	    	this.updateCompileInRealTime();
+	    },
+	    
+	    setPrefixFree: function(value) {
+	        // TODO: Make URL Dynamic or Settable, hmmm, dunno, let's see
+	        // why offer more than one?
+    		this.cssPreFixFree = (value) ? "/box-libs/prefixfree.min.js" : '';
 	    },
 
 	    setJSOption: function(name, value) {
 	    	this.jsPreProcessor = value;
-	    	this.updateTimeStamp();
 	    	this.updateCompileInRealTime();
+	    },
+	    
+	    setJSLibrary: function(value) {
+	        this.jsLibrary = value;
+	    },
+	    
+	    setTheme: function(value) {
+	        this.theme = value;
 	    },
 
 	    getOption: function(mode, name) {
@@ -156,26 +155,6 @@ var TBData = (function() {
 	    	}
 	    	
             this[mode] = value;
-            this.editorChanged = mode;
-	    	this.updateTimeStamp();
-	    },
-
-	    // Update the time stamp, save in the format
-	    // yyyy-mm-dd hh:mm:ss
-	    updateTimeStamp: function() {
-	    	var now = new Date()
-
-	    	yyyy = now.getFullYear();
-	    	mm = now.getMonth() + 1;
-	    	mm = (mm > 9) ? mm : '0' + mm;
-	    	dd = now.getDate();
-	    	dd = (dd > 9) ? dd : '0' + dd;
-	    	var date = yyyy + '-' + mm + '-' + dd;
-
-	    	var regex = /\d\d:\d\d:\d\d/g;
-			var time = regex.exec(now.toString());
-            
-	    	this.dateUpdated = date + ' ' + time;
 	    }
     };
 

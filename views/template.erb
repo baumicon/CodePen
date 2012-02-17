@@ -2,32 +2,30 @@
 <html>
 
 <head>
-
 	<meta charset="UTF-8">
-
 	<title><%%= TITLE %></title>
 
 	<style>
-		<%%= CSS %>
+	<%%= CSS %>
 	</style>
-	
 </head>
 
 <body>
 
 	<%%= HTML %>
-
-	<!-- 
-	<script src="<%%= JSLIB %>"></script>
-	<script src="<%%= PREFIX %>"></script>
-	-->
-
+	
+	<!-- selected JS Library -->
+	<%%= JSLIB %>
+	
+	<!-- free fix free library -->
+	<%%= PREFIX %>
+	
 	<script>
 		function __run() {
-			<%%= JS %>
+		    <%%= JS %>
 		}
 	</script>
-
+	
 	<!-- Add stuff in here about capturing key events and passing them back up? -->
 
 </body>

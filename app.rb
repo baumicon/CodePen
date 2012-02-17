@@ -68,25 +68,28 @@ class App < Sinatra::Base
     
     # PREPROCESSORS
     
-    post '/process/html/' do
-      preprocessor_service = PreProcessorService.new
-      html = preprocessor_service.process_html(params[:type], params[:html])
-
-      encode({'html' => html})
-    end
-    
-    post '/process/css/' do
-      preprocessor_service = PreProcessorService.new
-      css = preprocessor_service.process_css(params[:type], params[:css])
-
-      encode({'css' => css})
-    end
-
-    post '/process/js/' do
-      preprocessor_service = PreProcessorService.new
-      js = preprocessor_service.process_js(params[:type], params[:js])
-
-      encode({'js' => js})
+    post '/process/' do
+      pps = PreProcessorService.new
+      results = { }
+      
+      if params[:html] != nil and !params[:html].empty?
+        results['html'] = pps.process_html(params[:htmlPreProcessor], params[:html])
+      end
+      
+      if params[:css] != nil and !params[:css].empty?
+        results['css'] = pps.process_css(params[:cssPreProcessor], params[:css])
+      end
+      
+      if params[:js] != nil and !params[:js].empty?
+        results['js'] = pps.process_js(params[:jsPreProcessor], params[:js])
+      end
+      
+      if pps.errors.length > 0
+        @errors = pps.errors
+        results['error_html'] = erb :errors
+      end
+      
+      encode(results)
     end
     
     def encode(obj)	  	
@@ -102,9 +105,6 @@ class App < Sinatra::Base
     end
 
     helpers do
-        def close embedded_json
-            embedded_json.gsub('</', '<\/')
-        end
         def get_templates
             {'result' => (erb :template)}.to_json.gsub('/', '\/')
         end
@@ -115,9 +115,6 @@ class App < Sinatra::Base
             return session[:user_id]
         end
 
-        # alextodo, break out into second class that is configurable
-        # should be able to simply include, but also make it configurable
-        # so that certain libs are grouped into a single file together
         def js_scripts(scripts)
             minify = Minify.new()
             minify.script_tags(scripts)
