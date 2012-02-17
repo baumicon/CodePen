@@ -85,9 +85,8 @@ class App < Sinatra::Base
       end
       
       if pps.errors.length > 0
-        puts pps.errors
-        
-        results['errors'] = pps.errors
+        @errors = pps.errors
+        results['error_html'] = erb :errors
       end
       
       encode(results)
@@ -116,9 +115,6 @@ class App < Sinatra::Base
             return session[:user_id]
         end
 
-        # alextodo, break out into second class that is configurable
-        # should be able to simply include, but also make it configurable
-        # so that certain libs are grouped into a single file together
         def js_scripts(scripts)
             minify = Minify.new()
             minify.script_tags(scripts)

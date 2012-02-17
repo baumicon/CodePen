@@ -12,11 +12,7 @@ var CodeRenderer = (function() {
         cachedCSS   : '',
         cachedJS    : '',
         
-        errHTML     : '',
-        
-	    init: function() {
-	    	this.codeChanged(true);
-	    },
+        errorHTML     : '',
 	    
 	    codeChanged: function(forceCompile) {
 	        if(forceCompile || TBData.compileInRealTime) {
@@ -27,20 +23,10 @@ var CodeRenderer = (function() {
 	    },
 
 	    writeContentToIFrame: function(content) {
-	    	var doc = $('#result').contents()[0];
-	    	
-	    	try {
-	    	   	doc.open();
-    			// alextodo, having some sort of tool that checks html, css, and js
-    			// for validdity would really help
-    			// good error reporting would help as well
-    			// otherwise we'll be showing error on the console to the user
-    			doc.write(content);
-    			doc.close();
-	    	}
-	    	catch(err) {
-	    	    console.log(err);
-	    	}
+	        var doc = $('#result').contents()[0];
+	    	doc.open();
+			doc.write(content);
+			doc.close();
 	    },
 
 	    executeIFrameJS: function() {
@@ -55,9 +41,9 @@ var CodeRenderer = (function() {
 	    getResultContent: function() {
 	        this.renderContentUpdateCache();
 	        
-	        if(CodeRenderer.errHTML) {
+	        if(CodeRenderer.errorHTML) {
 	           // errors exist, show those as result
-	           return CodeRenderer.errHTML;
+	           return CodeRenderer.errorHTML;
 	        }
 	        else {
 	           	var values = {
@@ -117,7 +103,7 @@ var CodeRenderer = (function() {
 	        }
 	        
 	        if(processContent) {
-	            CodeRenderer.errHTML = '';
+	            CodeRenderer.errorHTML = '';
 	            this.processContent(params);
 	        }
 	    },
@@ -131,8 +117,8 @@ var CodeRenderer = (function() {
   				success: function( result ) {
   				    obj = $.parseJSON(result);
   				    
-  				    if(obj['errors']) {
-  				        CodeRenderer.buildErrorContent(obj['errors']);
+  				    if(obj['error_html']) {
+  				        CodeRenderer.errorHTML = obj['error_html'];
   				    }
   				    else {
   				        for(var key in obj) {
@@ -142,23 +128,6 @@ var CodeRenderer = (function() {
   				    }
   				}
 			});
-	    },
-	    
-	    // alextodo, need to figure out what's happenning with errors
-	    // not being related properly, like if you edit html, but there was previously
-	    // an error with css, i should still show error with css
-	    
-	    // also it seems like like only a single error shows at a time
-	    buildErrorContent: function(errors) {
-	        CodeRenderer.errHTML = '';
-	        
-	        // errors exist, show them on content page
-	        for(var err in errors) {
-	            type = new String(err);
-	            
-	            CodeRenderer.errHTML += '<p>There was an error with ' + type + ' :(</p>';
-	            CodeRenderer.errHTML += '<p><strong>' +errors[err] + '</strong></p>';
-	        }
 	    },
 	    
 	    getDataValues: function(params) {
@@ -185,13 +154,16 @@ var CodeRenderer = (function() {
 	            this.refJS = '';
 	        }
 	        
-	        CodeRenderer.errHTML = '';
+	        CodeRenderer.errorHTML = '';
 	    },
 	    
 	    // determine if what's in the editor is the same 
 	    // as what's saved in reference (unprocessed content) cache. 
 	    // if so use cached version of content, e.g. cachedHTML, cachedCSS
 	    useCache: function(type) {
+	        // if any errors exist, don't use cache
+	        if(CodeRenderer.errorHTML) return false;
+	        
 	        if(type == 'html') {
 	            if(this.refHTML == TBData.html) return true;
 	            else return false;

@@ -2,6 +2,7 @@ require 'net/http'
 require 'haml'
 require 'sass'
 require 'compass'
+require 'json'
 
 NODE_URL = 'http://127.0.0.1:8124'
 
@@ -14,9 +15,7 @@ class PreProcessorService
   
   def process_html(type, html)
     if type == 'jade'
-      uri = URI(NODE_URL + '/jade/')
-      res = Net::HTTP.post_form(uri, 'html' => html)
-      html = res.body
+      html = node_req('/jade/', 'html', html, 'Jade')
     elsif type == 'haml'
       begin
         html = Haml::Engine.new(html).render
@@ -29,50 +28,51 @@ class PreProcessorService
   end
 
   def process_css(type, css)
-    begin
-      if type == 'less'
-        uri = URI(NODE_URL + '/less/')
-        res = Net::HTTP.post_form(uri, 'css' => css)
-        css = res.body
-      elsif type == 'stylus'
-        uri = URI(NODE_URL + '/stylus/')
-        res = Net::HTTP.post_form(uri, 'css' => css)
-        css = res.body
-      elsif type == 'scss'
-        begin
-          # simple sass
-          css = Sass::Engine.new(css, :syntax => :scss).render
-        rescue Sass::SyntaxError => e
-          @errors['SCSS'] = e.message
-        end
-      elsif type == 'sass'
-        begin
-          # compass with sass
-          css = Sass::Engine.new(css, :syntax => :sass).render
-        rescue Sass::SyntaxError => e
-          @errors['SASS with Compass'] = e.message
-        end
+    if type == 'less'
+      css = node_req('/less/', 'css', css, 'LESS')
+    elsif type == 'stylus'
+      css = node_req('/stylus/', 'css', css, 'Stylus')
+    elsif type == 'scss'
+      begin
+        # simple sass
+        css = Sass::Engine.new(css, :syntax => :scss).render
+      rescue Sass::SyntaxError => e
+        @errors['SCSS'] = e.message
       end
-    rescue
-      puts 'Unable to process CSS: ' + "#{$!}"
+    elsif type == 'sass'
+      begin
+        # sass with compass
+        css = Sass::Engine.new(css, :syntax => :sass).render
+      rescue Sass::SyntaxError => e
+        @errors['SASS with Compass'] = e.message
+      end
     end
     
     css
   end
   
   def process_js(type, js)
-    begin
-      if type == 'coffeescript'
-        uri = URI(NODE_URL + '/coffeescript/')
-        res = Net::HTTP.post_form(uri, 'js' => js)
-        js = res.body
-      end
-    rescue Exception => e
-      puts 'Unable to process JS: ' + e.message
-      @errors['Coffee Script'] = e.message
+    if type == 'coffeescript'
+      js = node_req('/coffeescript/', 'js', js, 'Coffee Script')
     end
     
     js
   end
   
+  def node_req(path, key, value, err_key)
+    uri = URI(NODE_URL + path)
+    res = Net::HTTP.post_form(uri, key => value)
+    
+    obj = JSON.parse(res.body)
+    record_errors(obj, err_key)
+    
+    obj[key]
+  end
+  
+  # Add any errors to the errors hash
+  def record_errors(obj, key)
+    if obj['error']
+      @errors[key] = obj['error']
+    end
+  end
 end
