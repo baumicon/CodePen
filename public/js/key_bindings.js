@@ -101,7 +101,6 @@ var KeyBindings = (function() {
                 }
                 
                 if(event.keyCode == 27) {
-                    // alextodo, put main into a mains, Main module
                     Main.closeExpandedAreas();
                 }
                 
