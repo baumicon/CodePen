@@ -2,8 +2,7 @@
 	float: left;
 	border: 0;
 	padding: 12px 16px;
-	@include gradient(#fff, #eee);
-	border: 1px solid #ccc;
+	@include gradient(#fff, #ccc);
 	font-family: "pt-sans-narrow", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-size: 16px;
 	&:hover, &:focus {
@@ -21,13 +20,6 @@
 	}
 }
 
-button + button,
-button + .button,
-.button + button,
-.button + .button {
-	margin-left: -1px;
-}
-
 .icon:before {
 	font-family: 'Pictos Custom';
 	content: attr(data-icon);
@@ -36,7 +28,6 @@ button + .button,
 	margin-right: 6px;
 	font-size: 21px;
 	vertical-align: middle;
-	@include border-radius(5px);
 }
 
 .icon-replace {
@@ -54,8 +45,12 @@ header button, header .button {
 #update:before {
 	top: 1px;
 }
+#save {
+	border-left: 1px solid #ccc;
+}
 #save:before {
-	top: 2px;
+	top: 1px;
+	right: 2px;
 }
 #new:before {
 	top: 2px;

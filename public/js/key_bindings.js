@@ -45,6 +45,7 @@ var KeyBindings = (function() {
         // ask coyier to mock this up for me
         bindKeys: function() {
             $(window).on('keydown keypress', function(event) {
+
                 // mac os x uses command key (91) as alt key
                 // every other OS uses actual alt key (18)
                 if(KeyBindings.lastKeyPressed == 18 || KeyBindings.lastKeyPressed == 91) {
@@ -61,6 +62,10 @@ var KeyBindings = (function() {
                 }
                 
                 stop = false;
+
+                if(event.keyCode == 27) {
+                    $(".expanded").removeClass("expanded");
+                }
                 
                 // todo, will need to create a keydown status for a key
                 // then change on keyup, that way you know if that key 

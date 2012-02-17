@@ -18,4 +18,10 @@ h2 {
 
 a {
 	text-decoration: none;
+	&:focus {
+		outline: 0;
+	}
+	&:active {
+		color: red;
+	}
 }

@@ -135,12 +135,14 @@
   $('input[name="html-preprocessor"]').on('click', function() {
   	TBData.setHTMLOption('preprocessor', this.value);
   	codeChanged(HTMLeditor, '', true);
+    $(".box-html").removeClass("jade haml").addClass(this.value);
   });
 
   // CSS related
   $('input[name="css-preprocessor"]').on('click', function() {
   	TBData.setCSSOption('preprocessor', this.value);
   	codeChanged(CSSeditor, '', true);
+    $(".box-css").removeClass("scss sass stylus less").addClass(this.value);
   });
 
   // prefix free checkbox
@@ -152,6 +154,7 @@
   $('input[name="js-preprocessor"]').on('click', function() {
   	TBData.setJSOption('preprocessor', this.value);
   	codeChanged(JSeditor, '', true);
+    $(".box-js").removeClass("coffeescript").addClass(this.value);
   });
 
   // Bind keys
