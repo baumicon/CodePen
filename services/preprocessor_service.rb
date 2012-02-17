@@ -6,18 +6,23 @@ require 'compass'
 NODE_URL = 'http://127.0.0.1:8124'
 
 class PreProcessorService
+  attr_accessor :errors
+  
+  def initialize()
+    @errors = { }
+  end
   
   def process_html(type, html)
-    begin
-      if type == 'jade'
-        uri = URI(NODE_URL + '/jade/')
-        res = Net::HTTP.post_form(uri, 'html' => html)
-        html = res.body
-      elsif type == 'haml'
+    if type == 'jade'
+      uri = URI(NODE_URL + '/jade/')
+      res = Net::HTTP.post_form(uri, 'html' => html)
+      html = res.body
+    elsif type == 'haml'
+      begin
         html = Haml::Engine.new(html).render
+      rescue Exception => e
+        @errors['HAML'] = e.message
       end
-    rescue Exception => msg
-      puts 'Unable to process HTML: ' + msg
     end
 
     html
@@ -34,14 +39,22 @@ class PreProcessorService
         res = Net::HTTP.post_form(uri, 'css' => css)
         css = res.body
       elsif type == 'scss'
-        # just simple sass
-        css = Sass::Engine.new(css, :syntax => :scss).render
+        begin
+          # simple sass
+          css = Sass::Engine.new(css, :syntax => :scss).render
+        rescue Sass::SyntaxError => e
+          @errors['SCSS'] = e.message
+        end
       elsif type == 'sass'
-        # compass with sass
-        css = Sass::Engine.new(css).render
+        begin
+          # compass with sass
+          css = Sass::Engine.new(css, :syntax => :sass).render
+        rescue Sass::SyntaxError => e
+          @errors['SASS with Compass'] = e.message
+        end
       end
-    rescue Exception => msg
-      puts 'Unable to process CSS: ' + msg
+    rescue
+      puts 'Unable to process CSS: ' + "#{$!}"
     end
     
     css
@@ -54,8 +67,9 @@ class PreProcessorService
         res = Net::HTTP.post_form(uri, 'js' => js)
         js = res.body
       end
-    rescue Exception => msg
-      puts 'Unable to process JS: ' + msg
+    rescue Exception => e
+      puts 'Unable to process JS: ' + e.message
+      @errors['Coffee Script'] = e.message
     end
     
     js

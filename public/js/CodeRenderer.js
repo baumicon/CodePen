@@ -12,6 +12,8 @@ var CodeRenderer = (function() {
         cachedCSS   : '',
         cachedJS    : '',
         
+        errHTML     : '',
+        
 	    init: function() {
 	    	this.codeChanged(true);
 	    },
@@ -53,16 +55,22 @@ var CodeRenderer = (function() {
 	    getResultContent: function() {
 	        this.renderContentUpdateCache();
 	        
-	    	var values = {
-  				TITLE : "Tinkerbox",
-  				CSS   : this.cachedCSS,
-  				HTML  : this.cachedHTML,
-  				JS    : this.cachedJS,
-  				JSLIB : this.getJSLibrary(),
-  				PREFIX: this.getPrefixFree()
-			};
+	        if(CodeRenderer.errHTML) {
+	           // errors exist, show those as result
+	           return CodeRenderer.errHTML;
+	        }
+	        else {
+	           	var values = {
+      				TITLE : "Tinkerbox",
+      				CSS   : this.cachedCSS,
+      				HTML  : this.cachedHTML,
+      				JS    : this.cachedJS,
+      				JSLIB : this.getJSLibrary(),
+      				PREFIX: this.getPrefixFree()
+    			};
 
-			return tmpl(this.getTPL('result'), values);
+    			return tmpl(this.getTPL('result'), values);
+	        }
 	    },
 	    
 	    getJSLibrary: function() {
@@ -109,6 +117,7 @@ var CodeRenderer = (function() {
 	        }
 	        
 	        if(processContent) {
+	            CodeRenderer.errHTML = '';
 	            this.processContent(params);
 	        }
 	    },
@@ -122,12 +131,34 @@ var CodeRenderer = (function() {
   				success: function( result ) {
   				    obj = $.parseJSON(result);
   				    
-  				    for(var key in obj) {
-  				        var upKey = key.toUpperCase();
-  				        if(obj[key]) CodeRenderer['cached' + upKey] = obj[key];
+  				    if(obj['errors']) {
+  				        CodeRenderer.buildErrorContent(obj['errors']);
+  				    }
+  				    else {
+  				        for(var key in obj) {
+      				        var upKey = key.toUpperCase();
+      				        if(obj[key]) CodeRenderer['cached' + upKey] = obj[key];
+      				    }
   				    }
   				}
 			});
+	    },
+	    
+	    // alextodo, need to figure out what's happenning with errors
+	    // not being related properly, like if you edit html, but there was previously
+	    // an error with css, i should still show error with css
+	    
+	    // also it seems like like only a single error shows at a time
+	    buildErrorContent: function(errors) {
+	        CodeRenderer.errHTML = '';
+	        
+	        // errors exist, show them on content page
+	        for(var err in errors) {
+	            type = new String(err);
+	            
+	            CodeRenderer.errHTML += '<p>There was an error with ' + type + ' :(</p>';
+	            CodeRenderer.errHTML += '<p><strong>' +errors[err] + '</strong></p>';
+	        }
 	    },
 	    
 	    getDataValues: function(params) {
@@ -153,6 +184,8 @@ var CodeRenderer = (function() {
 	        else {
 	            this.refJS = '';
 	        }
+	        
+	        CodeRenderer.errHTML = '';
 	    },
 	    
 	    // determine if what's in the editor is the same 

@@ -70,22 +70,27 @@ class App < Sinatra::Base
     
     post '/process/' do
       pps = PreProcessorService.new
+      results = { }
       
       if params[:html] != nil and !params[:html].empty?
-        html = pps.process_html(params[:htmlPreProcessor], params[:html])
+        results['html'] = pps.process_html(params[:htmlPreProcessor], params[:html])
       end
       
       if params[:css] != nil and !params[:css].empty?
-        css = pps.process_css(params[:cssPreProcessor], params[:css])
+        results['css'] = pps.process_css(params[:cssPreProcessor], params[:css])
       end
       
       if params[:js] != nil and !params[:js].empty?
-        js = pps.process_js(params[:jsPreProcessor], params[:js])
+        results['js'] = pps.process_js(params[:jsPreProcessor], params[:js])
       end
       
-      # todo, need to collect error messages and send along with json
-      # like so, errors => {js: [log of errors], html: errors, css: errors}
-      encode({ 'html' => html, 'css' => css, 'js' => js})
+      if pps.errors.length > 0
+        puts pps.errors
+        
+        results['errors'] = pps.errors
+      end
+      
+      encode(results)
     end
     
     def encode(obj)	  	

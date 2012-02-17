@@ -2,23 +2,23 @@
 
 	// "GLOBALS"
 	var win          = $(window),
-		  body         = $("body"),
+		body         = $("body"),
 
-		  boxes        = $(".boxes"),
-      boxHTML      = $(".box-html"),
-      boxCSS       = $(".box-css"),
-      boxJS        = $(".box-js"),
-      boxResult    = $(".result"),
+		boxes        = $(".boxes"),
+        boxHTML      = $(".box-html"),
+        boxCSS       = $(".box-css"),
+        boxJS        = $(".box-js"),
+        boxResult    = $(".result"),
 
-      topBoxesCon  = $(".top-boxes"),
-      topBoxes     = $(".box-html, .box-css, .box-js"),
+        topBoxesCon  = $(".top-boxes"),
+        topBoxes     = $(".box-html, .box-css, .box-js"),
 
-      handle1      = $("#handle-1"),
-      handle2      = $("#handle-2"),
-      handle3      = $("#handle-3");
+        handle1      = $("#handle-1"),
+        handle2      = $("#handle-2"),
+        handle3      = $("#handle-3");
 
-      // Initialize the data backing object
-  	  TBData.init();
+    // Initialize the data backing object
+    TBData.init();
   	
     // Opening and closing settings panels
     $(".settings-nub").on("click", function(e) {
@@ -50,40 +50,40 @@
             .parent()
             .parent()
             .toggleClass("expanded");
-  });
+    });
 
-  $("#app-settings-panel").position({
-    "my": "right top",
-    "at": "right bottom",
-    "of": "#app-settings",
-    "offset": "5px -1px"
-  }).hide(); // to do, adjust position after window size change
+    $("#app-settings-panel").position({
+        "my": "right top",
+        "at": "right bottom",
+        "of": "#app-settings",
+        "offset": "5px -1px"
+    }).hide(); // to do, adjust position after window size change
 
-  // Opening and closing app settings
-  $("#app-settings").on("click", function(e) {
-    e.preventDefault();
-    $("#app-settings-panel").toggle();
-  });
+    // Opening and closing app settings
+    $("#app-settings").on("click", function(e) {
+        e.preventDefault();
+        $("#app-settings-panel").toggle();
+    });
 
-  // select current theme
-  $('#theme').val(TBData.theme);
-  // show a specific theme
-  body.attr("data-theme", TBData.theme);
+    // select current theme
+    $('#theme').val(TBData.theme);
+    // show a specific theme
+    body.attr("data-theme", TBData.theme);
   
-  $("#save-template").on('click', function() {
-     // alextodo, save as template to user settings
-     // will you need anything else beyond that? will u have to give ur template a name?
-     // will it be an overlay, where will the user select an existing template 
-     $("#app-settings-panel").toggle();
-  });
+    $("#save-template").on('click', function() {
+         // alextodo, save as template to user settings
+         // will you need anything else beyond that? will u have to give ur template a name?
+         // will it be an overlay, where will the user select an existing template 
+         $("#app-settings-panel").toggle();
+    });
 
 	// Resize all boxes when window resized
 	// TO DO: Debounce? 
-  win.resize(function() {
+    win.resize(function() {
 		var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
 		topBoxesCon.height(space / 2);
 		boxResult.height(space / 2);
-  }).trigger("resize");
+    }).trigger("resize");
 
 	// Sync UI with data values
 	$('#slug').val(TBData.name);
@@ -145,13 +145,12 @@
 	});
 	 
 	// Initialize the CodeRenderer
-  CodeRenderer.init();
+    CodeRenderer.init();
 
-  // Bind events
-  
-  $('#run').on('click', function() {
-      CodeRenderer.codeChanged(true);
-  });
+    // Bind events
+    $('#run').on('click', function() {
+        CodeRenderer.codeChanged(true);
+    });
   
     // HTML related
     $('input[name="html-preprocessor"]').on('click', function() {
