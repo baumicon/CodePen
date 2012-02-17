@@ -72,8 +72,8 @@
                  $('input[name="html-preprocessor"]').on('click', function() {
                	    TBData.setHTMLOption('preprocessor', this.value);
                	    CodeRenderer.clearCache('html');
-
                	    Main.codeChanged(HTMLeditor, '', true);
+                    $(".box-html").removeClass("jade haml").addClass(this.value);
                  });
 
                  // CSS related
@@ -81,6 +81,7 @@
                	    TBData.setCSSOption('preprocessor', this.value);
                	    CodeRenderer.clearCache('css');
                	    Main.codeChanged(CSSeditor, '', true);
+                    $(".box-css").removeClass("scss sass stylus less").addClass(this.value);
                  });
 
                  // prefix free checkbox
@@ -93,6 +94,7 @@
                	    TBData.setJSOption('preprocessor', this.value);
                	    CodeRenderer.clearCache('js');
                	    Main.codeChanged(JSeditor, '', true);
+                    $(".box-js").removeClass("coffeescript").addClass(this.value);
                  });
 
                  $('#js-select').on('change', function(index, select) {

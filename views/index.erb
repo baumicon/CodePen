@@ -38,16 +38,16 @@
 
 						<form>
 							<div>
-								<input type="radio" id="html-none" checked name="html-preprocessor" value="none">
+								<input type="radio" class="hidden" id="html-none" checked name="html-preprocessor" value="none">
 								<label class="button" for="html-none">None</label>
 							</div>
 							<div>
-								<input type="radio" id="jade" name="html-preprocessor" value="jade">
-								<label class="button" for="jade">Jade</label>
+								<input type="radio" class="hidden" id="jade" name="html-preprocessor" value="jade">
+								<label class="button" for="jade">Jade <a target="_blank" href="http://jade-lang.com/">?</a></label>
 							</div>
 							<div>
-								<input type="radio" id="haml" name="html-preprocessor" value="haml">
-								<label class="button" for="haml">HAML</label>
+								<input type="radio" class="hidden" id="haml" name="html-preprocessor" value="haml">
+								<label class="button" for="haml">HAML <a target="_blank" href="#">?</a></label>
 							</div>
 						</form>
 
@@ -55,7 +55,7 @@
 
 				</div><!-- END div.box-html -->
 
-				<div class="box-css">
+				<div class="box-css" id="box-css">
 
 					<div class="powers">
 						<h2>CSS</h2>
@@ -66,33 +66,49 @@
 					<textarea id="css" class="code-box"></textarea>
 
 					<div class="settings">
-						<form>
+						<form class="doublerow">
 							<div>
-								<input type="radio" id="css-none" checked name="css-preprocessor" value="none">
+								<input type="radio" class="hidden" id="css-none" checked name="css-preprocessor" value="none">
 								<label class="button" for="css-none">None</label>
 							</div>
 							<div>
-								<input type="radio" id="less" name="css-preprocessor" value="less">
-								<label class="button" for="less">LESS</label>
+								<input type="radio" class="hidden" id="less" name="css-preprocessor" value="less">
+								<label class="button" for="less">LESS <a target="_blank" href="#">?</a></label>
 							</div>
 							<div>
-								<input type="radio" id="stylus" name="css-preprocessor" value="stylus">
-								<label class="button" for="stylus">Stylus</label>
+								<input type="radio" class="hidden" id="stylus" name="css-preprocessor" value="stylus">
+								<label class="button" for="stylus">Stylus <a target="_blank" href="#">?</a></label>
 							</div>
 							<div>
-								<input type="radio" id="scss" name="css-preprocessor" value="scss">
-								<label class="button" for="scss">SCSS</label>
+								<input type="radio" class="hidden" id="scss" name="css-preprocessor" value="scss">
+								<label class="button" for="scss">SCSS <a target="_blank" href="#">?</a></label>
 							</div>
-							<div>
-								<input type="radio" id="sass" name="css-preprocessor" value="sass">
-								<label class="button" for="sass">SASS with Compass</label>
+							<div class="double">
+								<input type="radio" class="hidden" id="sass" name="css-preprocessor" value="sass">
+								<label class="button" for="sass">SASS with Compass <a target="_blank" href="#">?</a></label>
 							</div>
+						</form>
+
+						<form>
+								<input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
+								<label for="startercss-normalize">Normalize</label>
+
+								&ensp;
+							
+								<input type="radio" id="startercss-reset" name="startercss" value="reset">
+								<label for="startercss-reset">Reset</label>
+
+								&ensp;
+
+								<input type="radio" id="startercss-neither" name="startercss" value="neither">
+								<label for="startercss-neither">Neither</label>
 						</form>
 
 						<form>
 							<input type="checkbox" id="prefix-free" name="prefix-free">
 							<label for="prefix-free">Prefix free</label>
 						</form>
+
 					</div>
 
 				</div><!-- END div.box-css -->
@@ -110,12 +126,12 @@
 					<div class="settings">
 						<form>
 							<div>
-								<input type="radio" id="js-none" checked name="js-preprocessor" value="none">
+								<input type="radio" class="hidden" id="js-none" checked name="js-preprocessor" value="none">
 								<label class="button" for="js-none">None</label>
 							</div>
-							<div>
-								<input type="radio" id="coffeescript" name="js-preprocessor" value="coffeescript">
-								<label class="button" for="coffeescript">CoffeScript</label>
+							<div class="double">
+								<input type="radio" class="hidden" id="coffeescript" name="js-preprocessor" value="coffeescript">
+								<label class="button" for="coffeescript">CoffeeScript <a target="_blank" href="#">?</a></label>
 							</div>
 						</form>
 
