@@ -143,6 +143,18 @@ var CodeRenderer = (function() {
 	        return dataValues;
 	    },
 	    
+	    clearCache: function(type) {
+	        if(type == 'html') {
+	            this.refHTML = '';
+	        }
+	        else if(type == 'css') {
+	            this.refCSS = '';
+	        }
+	        else {
+	            this.refJS = '';
+	        }
+	    },
+	    
 	    // determine if what's in the editor is the same 
 	    // as what's saved in reference (unprocessed content) cache. 
 	    // if so use cached version of content, e.g. cachedHTML, cachedCSS

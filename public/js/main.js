@@ -20,24 +20,36 @@
       // Initialize the data backing object
   	  TBData.init();
   	
-  // Opening and closing settings panels
-  $(".settings-nub").on("click", function(e) {
-    e.preventDefault();
-    $(this)
-      .toggleClass("open")
-      .parent()
-      .parent()
-      .find(".settings")
-      .toggleClass("open");
-  });
+    // Opening and closing settings panels
+    $(".settings-nub").on("click", function(e) {
+        e.preventDefault();
+        $(this)
+            .toggleClass("open")
+            .parent()
+            .parent()
+            .find(".settings")
+            .toggleClass("open");
+    });
+  
+    closeExpandedAreas = function() {
+        $.each($(".expander"), function(index, el) {
+            body.toggleClass("focus");
+            
+            $(this)
+                .parent()
+                .parent()
+                .removeClass('expanded');
+        });
+    }
 
-  $(".expander").on("click", function(e) {
-    e.preventDefault();
-    body.toggleClass("focus");
-    $(this)
-      .parent()
-      .parent()
-      .toggleClass("expanded");
+    $(".expander").on("click", function(e) {
+        e.preventDefault();
+        body.toggleClass("focus");
+        
+        $(this)
+            .parent()
+            .parent()
+            .toggleClass("expanded");
   });
 
   $("#app-settings-panel").position({
@@ -141,40 +153,44 @@
       CodeRenderer.codeChanged(true);
   });
   
-  // HTML related
-  $('input[name="html-preprocessor"]').on('click', function() {
-  	TBData.setHTMLOption('preprocessor', this.value);
-  	codeChanged(HTMLeditor, '', true);
-  });
+    // HTML related
+    $('input[name="html-preprocessor"]').on('click', function() {
+  	    TBData.setHTMLOption('preprocessor', this.value);
+  	    CodeRenderer.clearCache('html');
+  	    
+  	    codeChanged(HTMLeditor, '', true);
+    });
 
-  // CSS related
-  $('input[name="css-preprocessor"]').on('click', function() {
-  	TBData.setCSSOption('preprocessor', this.value);
-  	codeChanged(CSSeditor, '', true);
-  });
+    // CSS related
+    $('input[name="css-preprocessor"]').on('click', function() {
+  	    TBData.setCSSOption('preprocessor', this.value);
+  	    CodeRenderer.clearCache('css');
+  	    codeChanged(CSSeditor, '', true);
+    });
 
-  // prefix free checkbox
-  $('#prefix-free').on('click', function() {
-      TBData.setPrefixFree($(this).is(":checked"));
-  });
+    // prefix free checkbox
+    $('#prefix-free').on('click', function() {
+        TBData.setPrefixFree($(this).is(":checked"));
+    });
 
-  // JS related
-  $('input[name="js-preprocessor"]').on('click', function() {
-  	TBData.setJSOption('preprocessor', this.value);
-  	codeChanged(JSeditor, '', true);
-  });
+    // JS related
+    $('input[name="js-preprocessor"]').on('click', function() {
+  	    TBData.setJSOption('preprocessor', this.value);
+  	    CodeRenderer.clearCache('js');
+  	    codeChanged(JSeditor, '', true);
+    });
     
-  $('#js-select').on('change', function(index, select) {
-      TBData.setJSLibrary(this.value);
-  });
-  
-  $('#theme').on('change', function(index, select) {
-      TBData.setTheme(this.value);
-      // Update current theme
-      body.attr("data-theme", this.value);
-  });
+    $('#js-select').on('change', function(index, select) {
+        TBData.setJSLibrary(this.value);
+    });
+    
+    $('#theme').on('change', function(index, select) {
+        TBData.setTheme(this.value);
+        // Update current theme
+        body.attr("data-theme", this.value);
+    });
 
-  // Bind keys
-  KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
+    // Bind keys
+    KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
 
 })(jQuery);
