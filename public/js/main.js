@@ -20,7 +20,6 @@
             
             bindUIActions: function() {
                 // Resize all boxes when window resized
-            	// TO DO: Debounce? 
                 win.resize(function() {
             		var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
             		topBoxesCon.height(space / 2);
@@ -42,19 +41,13 @@
                 $(".expander").on("click", function(e) {
                     e.preventDefault();
                     body.toggleClass("focus");
-                    
                     $(this)
                         .parent()
                         .parent()
                         .toggleClass("expanded");
                 });
 
-                $("#app-settings-panel").position({
-                    "my": "right top",
-                    "at": "right bottom",
-                    "of": "#app-settings",
-                    "offset": "5px -1px"
-                }).hide(); // to do, adjust position after window size change
+                $("#app-settings-panel").hide();
 
                 // Opening and closing app settings
                 $("#app-settings").on("click", function(e) {
@@ -234,4 +227,5 @@
         handle3      = $("#handle-3");
 	
     Main.init();
+
 })(jQuery);

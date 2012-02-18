@@ -103,13 +103,11 @@
 }
 @mixin linear-gradient-m ($fallback, $string) {
   background-color: $fallback;
-  // Notice no older WebKit Support yet, maybe can do if you can do conditional variables in scss
   background: -webkit-linear-gradient($string);
   background: -moz-linear-gradient($string);
   background: -ms-linear-gradient($string);
   background: -o-linear-gradient($string);
 }
-// [Chris]: Wish we had one for multiple backgrounds that worked well
 
 // ANIMATIONS / TRANSITIONS / TRANSFORMS
 @mixin transition ($string) {

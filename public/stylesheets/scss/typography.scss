@@ -1,5 +1,9 @@
-body {
+@mixin font-stack {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+body {
+	@include font-stack;
 }
 
 h1, h2, h3 {
@@ -28,3 +32,17 @@ a {
 		color: red;
 	}
 }
+
+label.small {
+	display: block;
+	font-size: 12px;
+	margin: 0 0 2px 0;
+}
+input.fullwidth {
+	width: 100%;
+}
+input[type=text], input[type=url] {
+	@include gradient(#eee, #fff);
+  padding: 4px 20px 4px 5px;
+  outline: 0;
+ }
