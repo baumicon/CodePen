@@ -105,26 +105,61 @@ class App < Sinatra::Base
     erb :fullpage
   end
 
-  helpers do
-    def close embedded_json
-      embedded_json.gsub('</', '<\/')
-    end
-    def get_templates
-      {'result' => (erb :template)}.to_json.gsub('/', '\/')
-    end
-    def partial template
-      erb template, :layout => false
-    end
-    def logged_in
-      return session[:user_id]
+      # PREPROCESSORS
+
+    post '/process/' do
+      pps = PreProcessorService.new
+      results = { }
+
+      if params[:html] != nil and !params[:html].empty?
+        results['html'] = pps.process_html(params[:htmlPreProcessor], params[:html])
+      end
+
+      if params[:css] != nil and !params[:css].empty?
+        results['css'] = pps.process_css(params[:cssPreProcessor], params[:css])
+      end
+
+      if params[:js] != nil and !params[:js].empty?
+        results['js'] = pps.process_js(params[:jsPreProcessor], params[:js])
+      end
+
+      if pps.errors.length > 0
+        @errors = pps.errors
+        results['error_html'] = erb :errors
+      end
+
+      encode(results)
     end
 
-    # alextodo, break out into second class that is configurable
-    # should be able to simply include, but also make it configurable
-    # so that certain libs are grouped into a single file together
-    def js_scripts(scripts)
-      minify = Minify.new()
-      minify.script_tags(scripts)
+    def encode(obj)	  	
+      obj.to_json.gsub('/', '\/')	  	
+    end
+
+    get '/:slug/fullpage/' do
+      # todo, will need to actually pull
+      # the right data for the url
+      @tbdb = get_tbdb()
+
+      erb :fullpage
+    end
+
+    helpers do
+        def get_templates
+            {'result' => (erb :template)}.to_json.gsub('/', '\/')
+        end
+        def partial template
+            erb template, :layout => false
+        end
+        def logged_in
+            return session[:user_id]
+        end
+        def js_scripts(scripts)
+            minify = Minify.new()
+            minify.script_tags(scripts)
+        end
+        def close embedded_json
+          embedded_json.gsub('</', '<\/')
+        end
     end
   end
 

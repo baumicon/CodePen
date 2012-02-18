@@ -18,7 +18,7 @@ var TBData = (function() {
 		compileInRealTime : false,
 		editorChanged     : '',
 		htmlPreProcessor  : 'none',
-
+		
 		cssPreProcessor   : 'none',
 		cssPreFixFree     : '',
 		
@@ -30,13 +30,13 @@ var TBData = (function() {
 	        this.loadStoredData();
 	        this.updateCompileInRealTime();
 	    },
-
+	    
 	    bindSaveToLocalStorage: function() {
             $(window).unload( function () {
                 TBData.saveDataToLocalStorage();
             });
 	    },
-
+	    
 	    saveDataToLocalStorage: function() {
 	        // alextodo, future feature, allow you to save data
 	        // for more than one tinkerbox, use the name in the URL!
@@ -53,13 +53,13 @@ var TBData = (function() {
 	    // data is used
 	    loadStoredData: function() {
 	        var data = { };
-
+	        
 	        if(__tbdata['dateUpdated']) {
 	            // alextodo enable localstorage when i start adding a date
 	            // for now nothing
 	            // data = __tbdata;
 	        }
-
+	        
 	        if(typeof(localStorage) != 'undefined') {
 	            if(localStorage['tb']) {
 	                localData = $.parseJSON(localStorage['tb']);
@@ -68,10 +68,10 @@ var TBData = (function() {
 	                data = localData;
 	            }
 	        }
-
+	        
 	    	if(data['dateUpdated']) {
 	    	    this.syncThisWithDataObj(data);
-	    	}
+	    	}	    	
 	    },
 
 	    syncThisWithDataObj: function(data) {
@@ -83,18 +83,18 @@ var TBData = (function() {
 			this.dateUpdated = data.dateUpdated;
 
             this.htmlPreProcessor = data.htmlPreProcessor;
-
+            
             this.cssPreProcessor = data.cssPreProcessor;
             this.cssPreFixFree = data.cssPreFixFree;
-
+            
             this.jsPreProcessor = data.jsPreProcessor;
             this.jsLibrary = data.jsLibrary;
 	    },
-
+	    
 	    // If any preprocessors are chosen (jade, less, coffeescript etc.)
 	    // don't compile in real time
 	    updateCompileInRealTime: function() {
-	        if( this.htmlPreProcessor == 'none' &&
+	        if( this.htmlPreProcessor == 'none' && 
 	            this.cssPreProcessor  == 'none' &&
 	            this.jsPreProcessor   == 'none' ) {
 	            this.compileInRealTime = true;
@@ -152,7 +152,7 @@ var TBData = (function() {
 	    	else if(mode == 'javascript') {
 	    	    mode = 'js';
 	    	}
-
+	    	
             this[mode] = value;
             this.editorChanged = mode;
 	    	this.updateTimeStamp();
@@ -174,7 +174,7 @@ var TBData = (function() {
 
 	    	var regex = /\d\d:\d\d:\d\d/g;
 			var time = regex.exec(now.toString());
-
+            
 	    	this.dateUpdated = date + ' ' + time;
 	    }
     };

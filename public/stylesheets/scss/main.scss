@@ -113,12 +113,47 @@ header {
 }
 .box-html {
 	left: 0;
+	&.jade {
+		h2:after {
+			content: " (Jade)";
+		}
+	}
+	&.haml {
+		h2:after {
+			content: " (HAML)";
+		}
+	}
 }
 .box-css {
 	left: 33.7%;
+	&.scss {
+		h2:after {
+			content: " (SCSS)";
+		}
+	}
+	&.sass {
+		h2:after {
+			content: " (SASS w/ Compass)";
+		}
+	}
+	&.stylus {
+		h2:after {
+			content: " (Stylus)";
+		}
+	}
+	&.less {
+		h2:after {
+			content: " (LESS)";
+		}
+	}
 }
 .box-js {
 	left: 67.4%;
+	&.coffeescript {
+		h2:after {
+			content: " (CoffeeScript)";
+		}
+	}
 }
 
 
@@ -126,76 +161,112 @@ header {
 .powers {
 	position: relative;
 	height: 25px;
-	line-height: 25px;
 	color: white;
 	@include gradient(#666, #333);
 	padding: 0 0 0 10px;
+	h2 {
+		line-height: 24px;
+	}
 }
 .settings {
-	background: #dfdfdf;
+	background: #bfbfbf;
 	display: none;
 	position: relative;
+	@include drop-shadow(0, 20px, 20px, 5px, 0.9);
 	&.open {
 		display: block;
 	}
 	form {
-		padding: 10px;
+		padding: 10px 10px 0 10px;
 		div {
 			display: inline-block;
 			margin: 0 1% 2% 0;
 			position: relative; 
 			min-width: 31%;
+			&.double {
+				min-width: 64%;
+			}
 			label {
 				display: inline-block;
 				width: 100%;
+				position: relative;
+				a {
+					position: absolute;
+					right: 10px;
+					top: 50%;
+					margin-top: -6px;
+					text-align: center;
+					font-size: 11px;
+					width: 15px;
+					height: 15px;
+					line-height: 15px;
+					@include border-radius(15px);
+					background: #999;
+					color: white;
+					&:hover {
+						background: #666;
+					}
+				}
 			}
 		}
 	}
-	
-	input[type=radio] {
+	input[type=radio].hidden {
 		display: none;
 	}
-	input[type=radio]:checked + label {
-		@include drop-shadow(0,0,0,0,0);
-		border-color: black;
-		position: relative;
-		top: 1px;
+	input[type=radio].hidden:checked + label {
+		outline: 1px solid black;
+		font-weight: 700;
 	}
 }
 .settings-nub, .expander {
 	position: absolute;
 	bottom: 0;
-	right: 0px;
+	right: 0;
 	z-index: 1;
 	text-align: center;
 	display: inline-block;
+	height: 25px;
 	span {
+		height: 25px;	
+		line-height: 29px;
+		padding: 0 8px;
 		display: inline-block;
-		padding: 0 10px;
-		height: 100%;
 		background: black;
 		color: white;
+		vertical-align: middle;
 		@include transition((all 0.2s ease));
 		@include rotate(180);
 	}
 	&.open span {
 		@include rotate(0);
-		background: #dfdfdf;
+		background: #bfbfbf;
 		color: black;
-		padding-top: 6px;
-		position: relative;
-		top: 3px;
-	}
-	&:active {
-		color: red;
-	}
-	&:hover, &:focus {
-		background: #dfdfdf;
 	}
 }
 .expander {
 	right: 40px;
+	strong {
+		color: #eee;
+		font-size: 13px;
+		text-shadow: 0 -1px 1px black;
+		.expanded & {
+			display: none;
+		}
+	}
 }
+.expanded .expander {
+	&:before {
+		content: "(ESC) ";
+		background: none;
+		font-size: 10px;
+		color: white;
+		margin-right: 2px;
+	}
+	span {
+		background: white;
+		color: black;
+	}
+}		
 
 .result {
 	clear: both;
@@ -205,7 +276,7 @@ header {
 		border: 0;
 		background: white;
 		width: 100%;
-		height: 80%;
+		height: 80%; // todo: fix
 	}
 	h2 {
 		@include transition(opacity 0.2 ease);
