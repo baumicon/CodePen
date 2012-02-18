@@ -2,9 +2,10 @@ require 'sinatra'
 require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
-require_relative 'minify.rb'
+require './services/preprocessor_service'
+require './services/user_service'
 
-Dir.glob("services/*.rb").each {|r| require_relative r }
+require_relative 'minify.rb'
 
 class App < Sinatra::Base
 
@@ -33,7 +34,7 @@ class App < Sinatra::Base
     return true
   end
 
-  get '/content/:slug_name'
+  get '/content/:slug_name' do
     return true
   end
 
@@ -42,77 +43,77 @@ class App < Sinatra::Base
   end
 
   def get_tbdb()
-  # default instance of a tinker box
-  # in the future, it will be loaded from db
-  data = {
-    "name" => "My kickass TB",
-    "html" => "<div>Howdy, folks!</div>",
-    "css"  => "body { background: #BADA55; }",
-    "js"   => "var myString = 'Badda bing!';",
-    "htmlOptions" => {
-    "jade" => "",
-    "haml" => ""
-    },
-    "cssOptions"  => {
-      "less"   => "",
-      "stylus"   => "",
-      "scss"   => "",
-      "sass"   => "",
-      "prefixTree" => "/box-libs/prefixfree.min.js"
-    },
-    "jsOptions"   => {
-    "coffeeScript" => "",
-    "libraries" => [ ]
+    # default instance of a tinker box
+    # in the future, it will be loaded from db
+    data = {
+      "name" => "My kickass TB",
+      "html" => "<div>Howdy, folks!</div>",
+      "css"  => "body { background: #BADA55; }",
+      "js"   => "var myString = 'Badda bing!';",
+      "htmlOptions" => {
+      "jade" => "",
+      "haml" => ""
+      },
+      "cssOptions"  => {
+        "less"   => "",
+        "stylus"   => "",
+        "scss"   => "",
+        "sass"   => "",
+        "prefixTree" => "/box-libs/prefixfree.min.js"
+      },
+      "jsOptions"   => {
+      "coffeeScript" => "",
+      "libraries" => [ ]
+      }
     }
-  }
 
-  return data.to_json.gsub('/', '\/')
+    return data.to_json.gsub('/', '\/')
   end
 
   get '/auth/:name/callback' do
-  user_service = UserService.new
-  user = user_service.first_or_new(request.env['omniauth.auth'])
-  session[:user_id] = user._id
-  redirect '/'
+    user_service = UserService.new
+    user = user_service.first_or_new(request.env['omniauth.auth'])
+    session[:user_id] = user._id
+    redirect '/'
   end
 
   get '/auth/failure' do
-  'Authentication Failed'
+    'Authentication Failed'
   end
 
   # PREPROCESSORS
 
   post '/process/html/' do
-  preprocessor_service = PreProcessorService.new
-  html = preprocessor_service.process_html(params[:type], params[:html])
+    preprocessor_service = PreProcessorService.new
+    html = preprocessor_service.process_html(params[:type], params[:html])
 
-  encode({'html' => html})
+    encode({'html' => html})
   end
 
   post '/process/css/' do
-  preprocessor_service = PreProcessorService.new
-  css = preprocessor_service.process_css(params[:type], params[:css])
+    preprocessor_service = PreProcessorService.new
+    css = preprocessor_service.process_css(params[:type], params[:css])
 
-  encode({'css' => css})
+    encode({'css' => css})
   end
 
   post '/process/js/' do
-  preprocessor_service = PreProcessorService.new
-  js = preprocessor_service.process_js(params[:type], params[:js])
+    preprocessor_service = PreProcessorService.new
+    js = preprocessor_service.process_js(params[:type], params[:js])
 
-  encode({'js' => js})
+    encode({'js' => js})
   end
 
   def encode(obj)
-  obj.to_json.gsub('/', '\/')
+    obj.to_json.gsub('/', '\/')
   end
 
   get '/:slug/fullpage/' do
-  # todo, will need to actually pull
-  # the right data for the url
-  @tbdb = get_tbdb()
+    # todo, will need to actually pull
+    # the right data for the url
+    @tbdb = get_tbdb()
 
-  erb :fullpage
+    erb :fullpage
   end
 
     # PREPROCESSORS
@@ -141,8 +142,8 @@ class App < Sinatra::Base
     encode(results)
   end
 
-  def encode(obj)	  	
-    obj.to_json.gsub('/', '\/')	  	
+  def encode(obj)
+    obj.to_json.gsub('/', '\/')
   end
 
   get '/:slug/fullpage/' do
@@ -171,4 +172,4 @@ class App < Sinatra::Base
       embedded_json.gsub('</', '<\/')
     end
   end
-  end
+end
