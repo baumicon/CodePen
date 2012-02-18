@@ -15,6 +15,10 @@ class App < Sinatra::Base
       provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
+  get '/hi' do
+    "Hello World"
+  end
+
   get '/' do
     user_service = UserService.new
     @user = user_service.user_by_id(session[:user_id]) or user_service.default_user

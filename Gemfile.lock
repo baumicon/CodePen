@@ -17,6 +17,7 @@ GEM
       fssm (>= 0.2.7)
       sass (~> 3.1)
     daemons (1.1.7)
+    diff-lcs (1.1.3)
     eventmachine (0.12.10)
     fssm (0.2.8.1)
     haml (3.1.4)
@@ -45,6 +46,16 @@ GEM
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
+    rack-test (0.6.1)
+      rack (>= 1.0)
+    rspec (2.8.0)
+      rspec-core (~> 2.8.0)
+      rspec-expectations (~> 2.8.0)
+      rspec-mocks (~> 2.8.0)
+    rspec-core (2.8.0)
+    rspec-expectations (2.8.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.8.0)
     sass (3.1.15)
     shotgun (0.9)
       rack (>= 1.0)
@@ -70,6 +81,8 @@ DEPENDENCIES
   mongo_mapper
   multi_json
   omniauth-twitter
+  rack-test
+  rspec
   sass
   shotgun
   sinatra
