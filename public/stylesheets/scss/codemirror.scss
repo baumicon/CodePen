@@ -1,6 +1,5 @@
 .CodeMirror {
-  line-height: 1em;
-  font-family: monospace;
+  font: 11px/15px Monaco, Courier, MonoSpace;
   background: white;
   position: absolute;
   top: 25px;
@@ -10,8 +9,6 @@
 }
 
 .CodeMirror-scroll {
-  overflow: auto;
-  // This is needed to prevent an IE[67] bug where the scrolled content is visible outside of the scrolling box.
   position: absolute;
   top: 0;
   right: 0;
@@ -20,17 +17,18 @@
 }
 
 .CodeMirror-gutter {
-  position: absolute; left: 0; top: 0;
+  position: absolute; 
+  left: 0; 
+  top: 0;
   z-index: 10;
-  background-color: #f7f7f7;
-  border-right: 1px solid #eee;
-  min-width: 2em;
+  border-right: 1px solid #333;
+  width: 20px;
   height: 100%;
+  padding: 10px 4px 0 0;
 }
 .CodeMirror-gutter-text {
-  color: #aaa;
+  color: black;
   text-align: right;
-  padding: .4em .2em .4em .4em;
   white-space: pre !important;
 }
 .CodeMirror-lines {
@@ -80,10 +78,6 @@ div.CodeMirror-selected { background: #d9d9d9; }
   background: #ffa;
   background: rgba(255, 255, 0, .4);
 }
-
-// Themes
-@import "../themes/codemirror";
-@import "../themes/sublime";
 
 span.cm-header, span.cm-strong {font-weight: bold;}
 span.cm-em {font-style: italic;}

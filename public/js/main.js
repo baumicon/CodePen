@@ -164,7 +164,7 @@
             	// INITIALIZE EDITORS
             	//
             	window.HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
-            	    lineNumbers  : false,
+            	    lineNumbers  : true,
             	    value        : TBData.html,
             	    mode         : "xml",
             	    tabSize      : 2,
@@ -172,7 +172,7 @@
             	});
 
             	window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
-            	    lineNumbers  : false,
+            	    lineNumbers  : true,
             	    value        : TBData.css,
             	    mode         : "css",
             	    tabSize      : 2,
@@ -180,7 +180,7 @@
             	});
 
             	window.JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
-            	    lineNumbers  : false,
+            	    lineNumbers  : true,
             	    value        : TBData.js,
             	    mode         : "javascript",
             	    tabSize      : 2,
