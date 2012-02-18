@@ -1,10 +1,26 @@
-<!-- make doctype n stuff -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Preprocessor Error</title>
+  <link rel="stylesheet" href="/stylesheets/css/errors.css">
+</head>
+
+<body>
 
 <% @errors.each do |type, msg| %>
-    <p>There was an error with <%= type %> :(</p>
-    <p><strong><%= msg %></strong></p>
+
+  <div class="<%= type %>">
+
+    <h1><span>Preprocessing Error in:</span> <%= type %></h1>
+
+    <pre><%= msg %></pre>
+
+  </div>    
+
 <% end %>
 
-<!-- Line Numbers -->
+</body>
 
-<!-- Class Name for which preprocessor -->
+</html>
