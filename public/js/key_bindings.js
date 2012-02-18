@@ -40,7 +40,6 @@ var KeyBindings = (function() {
             editor.setCursor(text.length, text.length, true);
 	    },
         
-        // todo, implment CMD-SHIFT-C - Copy current URL
         bindKeys: function() {
             $(window).on('keydown', function(event) {
                 // mac os x uses command key (91) as alt key
@@ -84,17 +83,23 @@ var KeyBindings = (function() {
                     else if(event.keyCode == 67) {
                         // cmd + c
                         // compile and run code
+                        stop = true;
                         CodeRenderer.codeChanged(true);
                     }
                     else if(event.keyCode == 75) {
                         // command + K
                         // fork this project
-                        console.log('fork');
+                        // alextodo, what does fork this project mean?
+                        // start with another, save to local storage?
+                        // then start using that? yea
+                        TBData.forkData();
+                        window.open('/');
                     }
                     else if(event.keyCode == 71) {
                         // command + g
                         // create a gist
-                        console.log('gist');
+                        stop = true;
+                        CodeRenderer.createGist();
                     }
                     else if(event.keyCode == 83) {
                         // command + s
@@ -102,6 +107,12 @@ var KeyBindings = (function() {
                         // alextodo, i think the command key is captured wrong,
                         // you can't type s
                         // stop = true;
+                    }
+                    else if(event.keyCode == 76) {
+                        // command + l
+                        // need to pull the actual slug once it's saved
+                        // what about unsaved accounts?
+                        window.open('/slug/fullpage/');
                     }
                 }
                 

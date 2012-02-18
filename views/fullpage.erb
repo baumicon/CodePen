@@ -3,27 +3,29 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title><%= @tbdb['slug'] %></title>
+	<title><%= @TITLE %></title>
+
+	<%= @CSS_STARTER %>
 
 	<style>
-	<%= @tbdb['css'] %>
+	<%= @CSS %>
 	</style>
 </head>
 
 <body>
-	<%= @tbdb['html'] %>
 
-	<script src=""></script>
-	<script src="<%= @tbdb['cssOptions']['prefixTree'] %>"></script>
+	<%= @HTML %>
+	
+	<%= @JSLIB %>
+	<%= @PREFIX %>
+	
 	<script>
 		function __run() {
-			<%= @tbdb['js'] %>
+		    <%= @JS %>
 		}
 		
 		__run();
 	</script>
-
-	<!-- Add stuff in here about capturing key events and passing them back up? -->
 
 </body>
 

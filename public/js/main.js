@@ -12,7 +12,7 @@
                 this.buildEditors();
                 
                 this.bindUIActions();
-                this.bindEvents();
+                this.bindDataActions();
                 
             	// Run initial compile
                 CodeRenderer.codeChanged(true);
@@ -56,7 +56,7 @@
                 });
             },
             
-            bindEvents: function() {
+            bindDataActions: function() {
                 // Bind events
                  $('#run').on('click', function() {
                      CodeRenderer.codeChanged(true);
@@ -123,9 +123,6 @@
             	$('#html').html(TBData.html);
             	$('#css').html(TBData.css);
             	$('#js').html(TBData.js);
-            	
-            	// alextodo, there are three editors, see about working things for all editors
-            	// maybe in editor wrapper, see that, also start looking for inconsistencies in copy
             	
                 // Sync preprocessors with correct data
             	$('input[value="' + TBData.htmlPreProcessor + '"]').attr('checked', true);

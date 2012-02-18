@@ -41,11 +41,10 @@ var TBData = (function() {
 	        // alextodo, future feature, allow you to save data
 	        // for more than one tinkerbox, use the name in the URL!
 	        if(typeof(localStorage) != 'undefined') {
-	            localStorage.clear();
                 localStorage['tb'] = JSON.stringify(TBData);
             }
 	    },
-
+        
         // Use the most recent data, either localstorage or from db
 	    loadStoredData: function() {
 	        var data = { };
@@ -61,6 +60,11 @@ var TBData = (function() {
 	        }
 	        
 	        if(typeof(localStorage) != 'undefined') {
+	            if(localStorage['fork']) {
+	                localStorage['tb'] = localStorage['fork'];
+	                localStorage.removeItem('fork');
+	            }
+	            
 	            if(localStorage['tb']) {
 	                localData = $.parseJSON(localStorage['tb']);
 	                locVersion = (localData['version']) ? localData['version'] : 0;
@@ -75,6 +79,16 @@ var TBData = (function() {
 	    	if(data['version']) {
 	    	    this.syncThisWithDataObj(data);
 	    	}	    	
+	    },
+	    
+	    forkData: function() {
+	        // save fork to tb store
+            // reset version number
+            // alextodo, reset any values that id this box
+            // alextodo, what doesn't have localStorage? which browsers
+            this.name = '';
+            this.version = 1;
+            localStorage['fork'] = JSON.stringify(TBData);
 	    },
 
 	    syncThisWithDataObj: function(data) {
@@ -118,9 +132,7 @@ var TBData = (function() {
 	    },
 	    
 	    setPrefixFree: function(value) {
-	        // TODO: Make URL Dynamic or Settable, hmmm, dunno, let's see
-	        // why offer more than one?
-    		this.cssPreFixFree = (value) ? "/box-libs/prefixfree.min.js" : '';
+    		this.cssPreFixFree = value;
 	    },
 	    
 	    setCSSStarter: function(value) {

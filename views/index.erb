@@ -152,7 +152,7 @@
 							<label class="small" for="js-select">Library</label>
 							<select data-placeholder="JavaScript Library" id="js-select">
 					      <option value="">No Library</option>
-				        <option value="http://code.jquery.com/jquery-latest.js">jQuery 1.7.1</option>
+				        <option value="//code.jquery.com/jquery-latest.js">jQuery 1.7.1</option>
 				        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option>
 				        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option>
       				</select>
@@ -194,13 +194,13 @@
 	    so that it doesn't slow this page down, see require.js
 	-->
 	<%= js_scripts([
-	    '/js/jquery.js',
-	    '/js/codemirror.js',
-	    '/js/tmpl.js',
+	    '/js/libs/jquery.js',
+	    '/js/libs/codemirror.js',
+	    '/js/libs/tmpl.js',
+	    '/js/libs/chosen.jquery.min.js',
 	    '/mode/javascript/javascript.js',
 	    '/mode/css/css.js',
 	    '/mode/xml/xml.js',
-	    '/js/chosen.jquery.min.js',
 	    '/js/tb_data.js',
 	    '/js/key_bindings.js',
 	    '/js/code_renderer.js',
