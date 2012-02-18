@@ -161,10 +161,12 @@ header {
 .powers {
 	position: relative;
 	height: 25px;
-	line-height: 25px;
 	color: white;
 	@include gradient(#666, #333);
 	padding: 0 0 0 10px;
+	h2 {
+		line-height: 24px;
+	}
 }
 .settings {
 	background: #bfbfbf;
@@ -219,16 +221,19 @@ header {
 .settings-nub, .expander {
 	position: absolute;
 	bottom: 0;
-	right: 0px;
+	right: 0;
 	z-index: 1;
 	text-align: center;
 	display: inline-block;
+	height: 25px;
 	span {
+		height: 25px;	
+		line-height: 29px;
+		padding: 0 8px;
 		display: inline-block;
-		padding: 0 10px;
-		height: 100%;
 		background: black;
 		color: white;
+		vertical-align: middle;
 		@include transition((all 0.2s ease));
 		@include rotate(180);
 	}
@@ -236,20 +241,26 @@ header {
 		@include rotate(0);
 		background: #bfbfbf;
 		color: black;
-		padding-top: 6px;
-		position: relative;
-		top: 3px;
 	}
 }
 .expander {
 	right: 40px;
+	strong {
+		color: #eee;
+		font-size: 13px;
+		text-shadow: 0 -1px 1px black;
+		.expanded & {
+			display: none;
+		}
+	}
 }
 .expanded .expander {
 	&:before {
 		content: "(ESC) ";
 		background: none;
-		font-size: 11px;
+		font-size: 10px;
 		color: white;
+		margin-right: 2px;
 	}
 	span {
 		background: white;
