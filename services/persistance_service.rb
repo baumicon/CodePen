@@ -11,13 +11,16 @@ class PersistanceService
     content = Content.new_from_json(json, user.uid, slugs)
     return {'success' => true} unless not content.valid?
 
+    require 'awesome_print'
+    ap content.errors.messages
+
     begin
       content.save
     rescue
       #TODO: learn how to get a safe stack trace to display.  For now, generic message
       return {'success' => false, 'errors' => {:unable_to_save => 'get error stack'}}
     end
-    {'success' => false, 'errors' => content.messages}
+    {'success' => false, 'errors' => content.errors}
   end
 
 end

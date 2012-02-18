@@ -29,6 +29,14 @@ class App < Sinatra::Base
     return "awesome"
   end
 
+  get '/slugs' do
+    return true
+  end
+
+  get '/content/:slug_name'
+    return true
+  end
+
   post '/save/content' do
         {'success' => true}.to_json
   end
