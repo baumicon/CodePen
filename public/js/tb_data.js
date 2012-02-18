@@ -20,6 +20,7 @@ var TBData = (function() {
 		
 		cssPreProcessor   : 'none',
 		cssPreFixFree     : '',
+		cssStarter        : '',
 		
 		jsPreProcessor    : 'none',
 		jsLibrary         : '',
@@ -87,6 +88,7 @@ var TBData = (function() {
             
             this.cssPreProcessor  = data.cssPreProcessor;
             this.cssPreFixFree    = data.cssPreFixFree;
+            this.cssStarter       = data.cssStarter;
             
             this.jsPreProcessor   = data.jsPreProcessor;
             this.jsLibrary        = data.jsLibrary;
@@ -119,6 +121,10 @@ var TBData = (function() {
 	        // TODO: Make URL Dynamic or Settable, hmmm, dunno, let's see
 	        // why offer more than one?
     		this.cssPreFixFree = (value) ? "/box-libs/prefixfree.min.js" : '';
+	    },
+	    
+	    setCSSStarter: function(value) {
+	        this.cssStarter = value;
 	    },
 
 	    setJSOption: function(name, value) {

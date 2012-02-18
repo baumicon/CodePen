@@ -38,10 +38,11 @@
                         .toggleClass("open");
                 });
                 
+                // Opening and closing the editor
                 $(".expander").on("click", function(e) {
                     e.preventDefault();
                     body.toggleClass("focus");
-
+                    
                     $(this)
                         .parent()
                         .parent()
@@ -88,6 +89,11 @@
                  $('#prefix-free').on('click', function() {
                      TBData.setPrefixFree($(this).is(":checked"));
                  });
+                 
+                 // CSS Resests
+                 $('input[name="startercss"]').on('click', function() {
+                     TBData.setCSSStarter(this.value);
+                 });
 
                  // JS related
                  $('input[name="js-preprocessor"]').on('click', function() {
@@ -125,19 +131,20 @@
             	$('#css').html(TBData.css);
             	$('#js').html(TBData.js);
             	
+            	// alextodo, there are three editors, see about working things for all editors
+            	// maybe in editor wrapper, see that, also start looking for inconsistencies in copy
+            	
                 // Sync preprocessors with correct data
-            	$('input[name="html-preprocessor"]').each(function(index, input) {
-            	    input.checked = (TBData.htmlPreProcessor == input.value) ? true : false;
-            	});
-
-                $('input[name="css-preprocessor"]').each(function(index, input) {
-                	input.checked = (TBData.cssPreProcessor == input.value) ? true : false;
-                });
-
-                $('input[name="js-preprocessor"]').each(function(index, input) {
-                	input.checked = (TBData.jsPreProcessor == input.value) ? true : false;
-                });
-
+            	$('input[value="' + TBData.htmlPreProcessor + '"]').attr('checked', true);
+                $('input[value="' + TBData.cssPreProcessor + '"]').attr('checked', true);
+                $('input[value="' + TBData.cssStarter + '"]').attr('checked', true);
+                $('input[value="' + TBData.jsPreProcessor + '"]').attr('checked', true);
+                
+                // Set the header type indicator for editors
+                $(".box-html").addClass(TBData.htmlPreProcessor);
+                $(".box-css").addClass(TBData.cssPreProcessor);
+                $(".box-js").addClass(TBData.jsPreProcessor);
+                
                 // Sync library with correct data as well
                 $('#js-select').val(TBData.jsLibrary);
 
@@ -184,6 +191,11 @@
             codeChanged: function(editor, changes, forceCompile) {
         		TBData.setEditorValue(editor.getOption('mode'), editor.getValue());
         		CodeRenderer.codeChanged(forceCompile);
+        	},
+        	
+        	openExpandedArea: function(areaID) {
+        	    Main.closeExpandedAreas();
+                $(areaID).addClass('expanded');
         	},
         	
         	closeExpandedAreas: function() {

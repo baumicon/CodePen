@@ -47,12 +47,13 @@ var CodeRenderer = (function() {
 	        }
 	        else {
 	           	var values = {
-      				TITLE : "Tinkerbox",
-      				CSS   : this.cachedCSS,
-      				HTML  : this.cachedHTML,
-      				JS    : this.cachedJS,
-      				JSLIB : this.getJSLibrary(),
-      				PREFIX: this.getPrefixFree()
+      				TITLE      : "Tinkerbox",
+      				CSS        : this.cachedCSS,
+      				HTML       : this.cachedHTML,
+      				JS         : this.cachedJS,
+      				JSLIB      : this.getJSLibrary(),
+      				PREFIX     : this.getPrefixFree(),
+      				CSS_STARTER: this.getCSSStarter()
     			};
 
     			return tmpl(this.getTPL('result'), values);
@@ -75,6 +76,20 @@ var CodeRenderer = (function() {
 	        else {
 	            return '';
 	        }
+	    },
+	    
+	    getCSSStarter: function() {
+	        if(TBData.cssStarter == 'normalize') {
+                href = '/stylesheets/css/normalize.css';
+                return '<link rel="stylesheet" href="'+ href + '">';
+            }
+            else if(TBData.cssStarter == 'reset') {
+                href = '/stylesheets/css/reset.css';
+                return '<link rel="stylesheet" href="'+ href + '">';
+            }
+            else {
+                return '';
+            }
 	    },
 	    
 	    // Render content, serverside or client, then update cached content

@@ -64,16 +64,21 @@ var KeyBindings = (function() {
                     if(event.keyCode == 49) {
                         // cmd + 1
                         stop = true;
+                        Main.openExpandedArea('#box-html');
+                        // alextodo, is this really the best place for it?
+                        // have a wrapper around the editors? better place for it no?
                         KeyBindings.giveEditorFocus(KeyBindings.HTMLeditor);
                     }
                     else if(event.keyCode == 50) {
                         // cmd + 2
                         stop = true;
+                        Main.openExpandedArea('#box-css');
                         KeyBindings.giveEditorFocus(KeyBindings.CSSeditor);
                     }
                     else if(event.keyCode == 51) {
                         // cmd + 3
                         stop = true;
+                        Main.openExpandedArea('#box-js');
                         KeyBindings.giveEditorFocus(KeyBindings.JSeditor);
                     }
                     else if(event.keyCode == 67) {
