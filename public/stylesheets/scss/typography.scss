@@ -38,6 +38,11 @@ label.small {
 	font-size: 12px;
 	margin: 0 0 2px 0;
 }
+label.small-inline {
+	font-size: 12px;
+	display: inline-block;
+	margin-right: 3px;
+}
 input.fullwidth {
 	width: 100%;
 }
@@ -45,4 +50,4 @@ input[type=text], input[type=url] {
 	@include gradient(#eee, #fff);
   padding: 4px 20px 4px 5px;
   outline: 0;
- }
+}
