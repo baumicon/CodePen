@@ -23,6 +23,10 @@ class UserService
          :provider => "tinkerbox")
   end
 
+  def user_by_session(id)
+    user_by_id(id) or default_user
+  end
+
   # ID is mongo identifier (and session ID)
   def user_by_id(id)
     User.find_by_id id

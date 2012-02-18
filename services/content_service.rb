@@ -7,9 +7,8 @@ class ContentService
     MongoMapper.database = db
   end
 
-  def save_content(user_id, content)
+  def save(user_id, content)
     begin
-
       Content.new(content).save
     rescue
       #TODO: handle exceptions
