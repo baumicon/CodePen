@@ -16,9 +16,9 @@ var CodeRenderer = (function() {
 	    
 	    codeChanged: function(forceCompile) {
 	        if(forceCompile || TBData.compileInRealTime) {
-	           	var content = CodeRenderer.getResultContent();
-    	    	CodeRenderer.writeContentToIFrame(content);
-    	    	CodeRenderer.executeIFrameJS();
+	            var content = CodeRenderer.getResultContent();
+                CodeRenderer.writeContentToIFrame(content);
+                CodeRenderer.executeIFrameJS();
 	        }
 	    },
 

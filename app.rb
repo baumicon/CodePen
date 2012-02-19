@@ -2,9 +2,10 @@ require 'sinatra'
 require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
-require_relative 'minify.rb'
+require './services/preprocessor_service'
+require './services/user_service'
 
-Dir.glob("services/*.rb").each {|r| require_relative r }
+require_relative 'minify.rb'
 
 class App < Sinatra::Base
 
@@ -25,6 +26,18 @@ class App < Sinatra::Base
     {'success' => true}.to_json
   end
 
+  get '/slugs' do
+    return true
+  end
+
+  get '/content/:slug_name' do
+    return true
+  end
+
+  post '/save/content' do
+    {'success' => true}.to_json
+  end
+
   get '/auth/:name/callback' do
     user_service = UserService.new
     user = user_service.first_or_new(request.env['omniauth.auth'])
@@ -36,8 +49,6 @@ class App < Sinatra::Base
     'Authentication Failed'
   end
 
-  # PREPROCESSORS
-  
   post '/process/' do
     pps = PreProcessorService.new
     results = { }
@@ -154,4 +165,5 @@ class App < Sinatra::Base
       embedded_json.gsub('</', '<\/')
     end
   end
+  
 end

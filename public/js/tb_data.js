@@ -106,6 +106,9 @@ var TBData = (function() {
 	    
 	    // If any preprocessors are chosen (jade, less, coffeescript etc.)
 	    // don't compile in real time
+	    // alextodo
+	    // this should actually be a lot more complex, like it should figure out if
+	    // you've started typeing in a code box that doesn't need processing, that is all
 	    updateCompileInRealTime: function() {
 	        if( this.htmlPreProcessor == 'none' && 
 	            this.cssPreProcessor  == 'none' &&
