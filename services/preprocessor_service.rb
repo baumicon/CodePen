@@ -7,12 +7,13 @@ require 'json'
 NODE_URL = 'http://127.0.0.1:8124'
 
 class PreProcessorService
+
   attr_accessor :errors
-  
+
   def initialize()
     @errors = { }
   end
-  
+
   def process_html(type, html)
     if type == 'jade'
       html = node_req('/jade/', 'html', html, 'Jade')
@@ -47,28 +48,28 @@ class PreProcessorService
         @errors['SASS with Compass'] = e.message
       end
     end
-    
+
     css
   end
-  
+
   def process_js(type, js)
     if type == 'coffeescript'
       js = node_req('/coffeescript/', 'js', js, 'CoffeeScript')
     end
-    
+
     js
   end
-  
+
   def node_req(path, key, value, err_key)
     uri = URI(NODE_URL + path)
     res = Net::HTTP.post_form(uri, key => value)
-    
+
     obj = JSON.parse(res.body)
     record_errors(obj, err_key)
-    
+
     obj[key]
   end
-  
+
   # Add any errors to the errors hash
   def record_errors(obj, key)
     if obj['error']

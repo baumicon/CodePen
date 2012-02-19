@@ -16,82 +16,71 @@
 *   npm install coffee-script
 */
 
+var jade = require('jade');
+
 var express = require('express');
 var app = express.createServer();
-
 app.use(express.bodyParser());
-app.listen(8124);
 
-console.log('Server running at http://127.0.0.1:8124/');
-
-// Home page
 app.get('/', function(req, res) {
     var html = "h1 This server is running. You better catch it.";
     
     res.send(compileJade(html));
 });
 
-// Process Jade template engine requests
-app.post('/jade/', function(req, res) {
-    var resp = { };
-    
+function compileJade(html) {
     try {
-        var jade = require('jade');
-        var tmpl_func = jade.compile(req.body.html);
-        
-        resp['html'] = tmpl_func({ });
+        var tmpl_func = jade.compile(html);
+
+        return tmpl_func({ });
     }
     catch(e) {
-        resp['error'] = e.message;
+        // Don't had back errors, yet. will need a different pane for that later.
+        // will need to format the error.
+        return html;
     }
+}
+
+// url post sends request to /jade/ with post body
+// {html: '[jade goes here]'}
+app.post('/jade/', function(req, res) {
+    var html = compileJade(req.body.html);
     
-    res.send(JSON.stringify(resp));
+    res.send(html);
 });
 
-// Process Less css requests
 app.post('/less/', function(req, res) {
     var less = require('less');
-    var resp = { };
+    var css = req.body.css;
     
-    less.render(req.body.css, function (e, renderedCSS) {
-        if(e) {
-            resp['error'] = e.message;
-        }
-        
-        resp['css'] = renderedCSS;
+    less.render(css, function (e, renderedCSS) {
+        css = renderedCSS;
     });
     
-    res.send(JSON.stringify(resp));
+    res.send(css);
 });
 
-// Process stylus requests
 app.post('/stylus/', function(req, res) {
     var stylus = require('stylus');
-    var resp = { };
+    var css = req.body.css;
     
-    stylus.render(req.body.css, { }, function(e, renderedCSS) {
-        if(e) {
-            resp['error'] = e.message;
+    stylus.render(css, { }, function(err, renderedCSS) {
+        if(renderedCSS) {
+            css = renderedCSS;
         }
-        
-        resp['css'] = renderedCSS;
     });
     
-    res.send(JSON.stringify(resp));
+    res.send(css);
 });
 
 app.post('/coffeescript/', function(req, res) {
-    var resp = { };
+    var CoffeeScript = require("coffee-script");
+    var code = req.body.js;
     
-    try {
-        var coffee = require("coffee-script");
-        resp['js'] = coffee.compile(req.body.js, { });
-    }
-    catch(e) {
-        console.log('err');
-        console.log(e);
-        resp['error'] = e.message;
-    }
-    console.log(resp);
-    res.send(JSON.stringify(resp));
+    code = CoffeeScript.compile(code, { });
+    res.send(code);
 });
+
+app.listen(8124);
+
+console.log('Server running at http://127.0.0.1:8124/');

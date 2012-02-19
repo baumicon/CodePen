@@ -1,17 +1,19 @@
 require 'mongo_mapper'
-require_relative '../models/slug'
+require_relative '../models/content'
 
-class SlugService
+class ContentService
+
   def initialize(db = 'tinkerbox')
     MongoMapper.database = db
   end
 
-  def save_slug(slug)
+  def save(user_id, content)
     begin
-      Slug.new(slug).save
+      Content.new(content).save
     rescue
       #TODO: handle exceptions
-      throw "Double Fuck!"
+      throw "Fuck!"
     end
   end
+
 end
