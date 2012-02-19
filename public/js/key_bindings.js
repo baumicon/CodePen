@@ -1,44 +1,44 @@
 var KeyBindings = (function() {
 
-	/***********************
-	* Manages the key bindings for Tinkerbox
-	*
-	* Tinkerbox, let's get fancy
-	* Tinkerbox, women wear dresses, men use Tinkerbox
-	* Tinkerbox, don't let your mom catch you using it
-	* Tinkerbox, hide your women, hide your childen
-	************************/
+    /***********************
+    * Manages the key bindings for Code Pen
+    *
+    * Code Pen, let's get fancy
+    * Code Pen, women wear dresses, men use Code Pen
+    * Code Pen, don't let your mom catch you using it
+    * Code Pen, hide your women, hide your childen
+    ************************/
 
-	var KeyBindings = {
+    var KeyBindings = {
 
-		lastKeyPressed:  0,
-		commandKeyPressed: false,
-		
-		HTMLeditor: '', 
-		CSSeditor: '', 
-		JSeditor: '',
+        lastKeyPressed:  0,
+        commandKeyPressed: false,
+        
+        HTMLeditor: '', 
+        CSSeditor: '', 
+        JSeditor: '',
 
-	    init: function(HTMLeditor, CSSeditor, JSeditor) {
-	    	this.bindKeys();
-	    	this.HTMLeditor = HTMLeditor;
-	    	this.CSSeditor = CSSeditor;
-	    	this.JSeditor = JSeditor;
-	    },
-	    
-	    giveEditorFocus: function(editor) {
-	        editor.focus();
+        init: function(HTMLeditor, CSSeditor, JSeditor) {
+            this.bindKeys();
+            this.HTMLeditor = HTMLeditor;
+            this.CSSeditor = CSSeditor;
+            this.JSeditor = JSeditor;
+        },
+        
+        giveEditorFocus: function(editor) {
+            editor.focus();
             KeyBindings.setCursorToEnd(editor);
-	    },
-	    
-	    setCursorToEnd: function(editor) {
-	        var text = editor.getValue();
+        },
+        
+        setCursorToEnd: function(editor) {
+            var text = editor.getValue();
             
             // set the cursor to the end of the editor
             // Make sure it's at the end by line num and char num to
             // same value as the actual number of chars, CodeMirror will
             // simply move the cursor to the end
             editor.setCursor(text.length, text.length, true);
-	    },
+        },
         
         bindKeys: function() {
             $(window).on('keydown', function(event) {
@@ -129,8 +129,8 @@ var KeyBindings = (function() {
         }
     };
 
-	// This ends the KeyBindings module
+    // This ends the KeyBindings module
 
-	return KeyBindings;
+    return KeyBindings;
 
 })();

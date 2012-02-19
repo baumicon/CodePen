@@ -2,7 +2,7 @@
     
     window.Main = (function() {
 
-    	var Main = {
+        var Main = {
             
             init: function() {
                 // Initialize the data backing object
@@ -14,16 +14,16 @@
                 this.bindUIActions();
                 this.bindDataActions();
                 
-            	// Run initial compile
+                // Run initial compile
                 CodeRenderer.codeChanged(true);
             },
             
             bindUIActions: function() {
                 // Resize all boxes when window resized
                 win.resize(function() {
-            		var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
-            		topBoxesCon.height(space / 2);
-            		boxResult.height(space / 2);
+                    var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
+                    topBoxesCon.height(space / 2);
+                    boxResult.height(space / 2);
                 }).trigger("resize");
                 
                 // Opening and closing settings panels
@@ -64,17 +64,17 @@
 
                  // HTML related
                  $('input[name="html-preprocessor"]').on('click', function() {
-               	    TBData.setHTMLOption('preprocessor', this.value);
-               	    CodeRenderer.clearCache('html');
-               	    Main.codeChanged(HTMLeditor, '', true);
+                       TBData.setHTMLOption('preprocessor', this.value);
+                       CodeRenderer.clearCache('html');
+                       Main.codeChanged(HTMLeditor, '', true);
                     $(".box-html").removeClass("jade haml").addClass(this.value);
                  });
 
                  // CSS related
                  $('input[name="css-preprocessor"]').on('click', function() {
-               	    TBData.setCSSOption('preprocessor', this.value);
-               	    CodeRenderer.clearCache('css');
-               	    Main.codeChanged(CSSeditor, '', true);
+                       TBData.setCSSOption('preprocessor', this.value);
+                       CodeRenderer.clearCache('css');
+                       Main.codeChanged(CSSeditor, '', true);
                     $(".box-css").removeClass("scss sass stylus less").addClass(this.value);
                  });
 
@@ -90,9 +90,9 @@
 
                  // JS related
                  $('input[name="js-preprocessor"]').on('click', function() {
-               	    TBData.setJSOption('preprocessor', this.value);
-               	    CodeRenderer.clearCache('js');
-               	    Main.codeChanged(JSeditor, '', true);
+                       TBData.setJSOption('preprocessor', this.value);
+                       CodeRenderer.clearCache('js');
+                       Main.codeChanged(JSeditor, '', true);
                     $(".box-js").removeClass("coffeescript").addClass(this.value);
                  });
 
@@ -119,13 +119,13 @@
             
             syncUIWithDBO: function() {
                 // Sync UI with data values
-            	$('#slug').val(TBData.name);
-            	$('#html').html(TBData.html);
-            	$('#css').html(TBData.css);
-            	$('#js').html(TBData.js);
-            	
+                $('#slug').val(TBData.name);
+                $('#html').html(TBData.html);
+                $('#css').html(TBData.css);
+                $('#js').html(TBData.js);
+                
                 // Sync preprocessors with correct data
-            	$('input[value="' + TBData.htmlPreProcessor + '"]').attr('checked', true);
+                $('input[value="' + TBData.htmlPreProcessor + '"]').attr('checked', true);
                 $('input[value="' + TBData.cssPreProcessor + '"]').attr('checked', true);
                 $('input[value="' + TBData.cssStarter + '"]').attr('checked', true);
                 $('input[value="' + TBData.jsPreProcessor + '"]').attr('checked', true);
@@ -141,9 +141,9 @@
                 // Better select box for chosing JS library
                 $("#js-select, #theme").chosen();
 
-            	if(TBData.cssPreFixFree != '') $('#prefix-free').prop('checked', true);
-            	
-            	// select current theme
+                if(TBData.cssPreFixFree != '') $('#prefix-free').prop('checked', true);
+                
+                // select current theme
                 $('#theme').val(TBData.theme);
                 // show a specific theme
                 body.attr("data-theme", TBData.theme);
@@ -151,44 +151,44 @@
             
             buildEditors: function() {
                 // 
-            	// INITIALIZE EDITORS
-            	//
-            	window.HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
-            	    lineNumbers  : true,
-            	    value        : TBData.html,
-            	    mode         : "xml",
-            	    tabSize      : 2,
-            	    onChange     : Main.codeChanged
-            	});
+                // INITIALIZE EDITORS
+                //
+                window.HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
+                    lineNumbers  : true,
+                    value        : TBData.html,
+                    mode         : "xml",
+                    tabSize      : 2,
+                    onChange     : Main.codeChanged
+                });
 
-            	window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
-            	    lineNumbers  : true,
-            	    value        : TBData.css,
-            	    mode         : "css",
-            	    tabSize      : 2,
-            	    onChange     : Main.codeChanged
-            	});
+                window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
+                    lineNumbers  : true,
+                    value        : TBData.css,
+                    mode         : "css",
+                    tabSize      : 2,
+                    onChange     : Main.codeChanged
+                });
 
-            	window.JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
-            	    lineNumbers  : true,
-            	    value        : TBData.js,
-            	    mode         : "javascript",
-            	    tabSize      : 2,
-            	    onChange     : Main.codeChanged
-            	});
+                window.JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
+                    lineNumbers  : true,
+                    value        : TBData.js,
+                    mode         : "javascript",
+                    tabSize      : 2,
+                    onChange     : Main.codeChanged
+                });
             },
             
             codeChanged: function(editor, changes, forceCompile) {
-        		TBData.setEditorValue(editor.getOption('mode'), editor.getValue());
-        		CodeRenderer.codeChanged(forceCompile);
-        	},
-        	
-        	openExpandedArea: function(areaID) {
-        	    Main.closeExpandedAreas();
+                TBData.setEditorValue(editor.getOption('mode'), editor.getValue());
+                CodeRenderer.codeChanged(forceCompile);
+            },
+            
+            openExpandedArea: function(areaID) {
+                Main.closeExpandedAreas();
                 $(areaID).addClass('expanded');
-        	},
-        	
-        	closeExpandedAreas: function() {
+            },
+            
+            closeExpandedAreas: function() {
                 $.each($(".expander"), function(index, el) {
                     body.toggleClass("focus");
 
@@ -200,17 +200,17 @@
             }
         };
 
-    	// This ends the Main module
+        // This ends the Main module
 
-    	return Main;
+        return Main;
 
     })();
     
-	// "GLOBALS"
-	var win          = $(window),
-		body         = $("body"),
+    // "GLOBALS"
+    var win          = $(window),
+        body         = $("body"),
 
-		boxes        = $(".boxes"),
+        boxes        = $(".boxes"),
         boxHTML      = $(".box-html"),
         boxCSS       = $(".box-css"),
         boxJS        = $(".box-js"),
@@ -222,7 +222,7 @@
         handle1      = $("#handle-1"),
         handle2      = $("#handle-2"),
         handle3      = $("#handle-3");
-	
+    
     Main.init();
 
 })(jQuery);
