@@ -1,13 +1,11 @@
 .chzn-container {
-  font-size: 13px;
   position: relative;
   display: inline-block;
-  zoom: 1;
-  *display: inline;
+  margin-right: 0 !important;
+  font-size: 14px;
 }
 .chzn-container .chzn-drop {
   background: #fff;
-  border: 1px solid #aaa;
   border-top: 0;
   position: absolute;
   top: 29px;
@@ -15,28 +13,24 @@
   @include drop-shadow(0, 4px, 5px, 0, 0.15);
   z-index: 999;
 }
-
 .chzn-container, .chzn-drop, .chzn-search input {
   width: 100% !important;
 }
-
 .chzn-container-single .chzn-single {
   @include gradient(#fff, #eee);
-  @include border-radius(5px);
-  border: 1px solid #aaaaaa;
   @include drop-shadow(1px, 1px, 0, 0, 0.4);
   display: block;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
-  height: 23px;
   line-height: 24px;
-  padding: 0 0 0 8px;
+  padding: 4px 10px;
   color: #444444;
+  width: 100%;
   text-decoration: none;
 }
 .chzn-container-single .chzn-single span {
-  margin-right: 26px;
+  font-weight: 700;
   display: block;
   overflow: hidden;
   white-space: nowrap;
@@ -70,35 +64,19 @@
   height: 100%;
 }
 .chzn-container-single .chzn-search {
-  padding: 3px 4px;
+  padding: 3px 10px;
   position: relative;
+  display: block;
   margin: 0;
   white-space: nowrap;
   z-index: 1010;
 }
-.chzn-container-single .chzn-search input {
-  @include gradient(#eee, #fff);
-  margin: 1px 0;
-  padding: 4px 20px 4px 5px;
-  outline: 0;
-  border: 1px solid #aaa;
-  font-family: sans-serif;
-  font-size: 1em;
-}
-.chzn-container-single .chzn-drop {
-  @include border-radiuses(0, 4px, 4px, 0);
-}
-/* @end */
-
 .chzn-container-single-nosearch .chzn-search input {
   position: absolute;
   left: -9000px;
 }
-
-/* @group Multi Chosen */
 .chzn-container-multi .chzn-choices {
   @include linear-gradient-m(#eee, ((top, #eeeeee 1%, #ffffff 15%)));
-  border: 1px solid #aaa;
   margin: 0;
   padding: 0;
   cursor: text;
@@ -119,41 +97,22 @@
 .chzn-container-multi .chzn-choices .search-field input {
   color: #666;
   background: transparent !important;
-  border: 0 !important;
   font-family: sans-serif;
   font-size: 100%;
   height: 15px;
   padding: 5px;
   margin: 1px 0;
   outline: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow   : none;
-  -o-box-shadow     : none;
-  box-shadow        : none;
+  @include box-shadow((none));
 }
 .chzn-container-multi .chzn-choices .search-field .default {
   color: #999;
 }
 .chzn-container-multi .chzn-choices .search-choice {
-  -webkit-border-radius: 3px;
-  -moz-border-radius   : 3px;
-  border-radius        : 3px;
-  -moz-background-clip   : padding;
-  -webkit-background-clip: padding-box;
-  background-clip        : padding-box;
-  background-color: #e4e4e4;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#eeeeee', GradientType=0 ); 
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), color-stop(100%, #eeeeee));
-  background-image: -webkit-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
-  background-image: -moz-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
-  background-image: -o-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
-  background-image: -ms-linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
-  background-image: linear-gradient(top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%); 
-  -webkit-box-shadow: 0 0 2px #ffffff inset, 0 1px 0 rgba(0,0,0,0.05);
-  -moz-box-shadow   : 0 0 2px #ffffff inset, 0 1px 0 rgba(0,0,0,0.05);
-  box-shadow        : 0 0 2px #ffffff inset, 0 1px 0 rgba(0,0,0,0.05);
+  @include border-radius(3px);
+  @include linear-gradient-m(#e4e4e4, ((top, #f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%)));
+  @include box-shadow((0 0 2px #ffffff inset, 0 1px 0 rgba(0,0,0,0.05)));
   color: #333;
-  border: 1px solid #aaaaaa;
   line-height: 13px;
   padding: 3px 20px 3px 5px;
   margin: 3px 0 3px 5px;
@@ -178,8 +137,6 @@
 .chzn-container-multi .chzn-choices .search-choice-focus .search-choice-close {
   background-position: right -11px;
 }
-
-
 .chzn-container .chzn-results {
   margin: 0 4px 4px 0;
   max-height: 240px;
@@ -204,14 +161,7 @@
   display: list-item;
 }
 .chzn-container .chzn-results .highlighted {
-  background-color: #3875d7;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3875d7', endColorstr='#2a62bc', GradientType=0 );  
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
-  background-image: -webkit-linear-gradient(top, #3875d7 20%, #2a62bc 90%);
-  background-image: -moz-linear-gradient(top, #3875d7 20%, #2a62bc 90%);
-  background-image: -o-linear-gradient(top, #3875d7 20%, #2a62bc 90%);
-  background-image: -ms-linear-gradient(top, #3875d7 20%, #2a62bc 90%);
-  background-image: linear-gradient(top, #3875d7 20%, #2a62bc 90%);
+  @include linear-gradient-m(#3875d7, ((top, #3875d7 20%, #2a62bc 90%)));
   color: #fff;
 }
 .chzn-container .chzn-results li em {
@@ -223,6 +173,7 @@
 }
 .chzn-container .chzn-results .no-results {
   background: #f4f4f4;
+  margin: 5px;
   display: list-item;
 }
 .chzn-container .chzn-results .group-result {
@@ -241,7 +192,7 @@
   margin: 0 4px;
   position: absolute;
   text-align: center;
-  width: 321px; /* This should by dynamic with js */
+  width: 321px; // dynamic
   z-index: 1;
 }
 .chzn-container .chzn-results-scroll span {
@@ -253,33 +204,14 @@
 .chzn-container .chzn-results-scroll-down {
   bottom: 0;
 }
-
 .chzn-container-active .chzn-single {
-  -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
-  -moz-box-shadow   : 0 0 5px rgba(0,0,0,.3);
-  -o-box-shadow     : 0 0 5px rgba(0,0,0,.3);
-  box-shadow        : 0 0 5px rgba(0,0,0,.3);
-  border: 1px solid #5897fb;
+  @include box-shadow((0 0 5px rgba(0,0,0,.3)));
 }
 .chzn-container-active .chzn-single-with-drop {
-  border: 1px solid #aaa;
-  -webkit-box-shadow: 0 1px 0 #fff inset;
-  -moz-box-shadow   : 0 1px 0 #fff inset;
-  -o-box-shadow     : 0 1px 0 #fff inset;
-  box-shadow        : 0 1px 0 #fff inset;
-  background-color: #eee;
-  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(20%, #eeeeee), color-stop(80%, #ffffff));
-  background-image: -webkit-linear-gradient(top, #eeeeee 20%, #ffffff 80%);
-  background-image: -moz-linear-gradient(top, #eeeeee 20%, #ffffff 80%);
-  background-image: -o-linear-gradient(top, #eeeeee 20%, #ffffff 80%);
-  background-image: -ms-linear-gradient(top, #eeeeee 20%, #ffffff 80%);
-  background-image: linear-gradient(top, #eeeeee 20%, #ffffff 80%);
-  -webkit-border-bottom-left-radius : 0;
-  -webkit-border-bottom-right-radius: 0;
-  -moz-border-radius-bottomleft : 0;
-  -moz-border-radius-bottomright: 0;
-  border-bottom-left-radius : 0;
-  border-bottom-right-radius: 0;
+  @include box-shadow((0 1px 0 #fff inset));
+  @include linear-gradient-m(#eee, ((top, #eeeeee 20%, #ffffff 80%)));
+  @include border-radius-bottom-left(0);
+  @include border-radius-bottom-right(0);
 }
 .chzn-container-active .chzn-single-with-drop div {
   background: transparent;
@@ -289,11 +221,7 @@
   background-position: -18px 1px;
 }
 .chzn-container-active .chzn-choices {
-  -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
-  -moz-box-shadow   : 0 0 5px rgba(0,0,0,.3);
-  -o-box-shadow     : 0 0 5px rgba(0,0,0,.3);
-  box-shadow        : 0 0 5px rgba(0,0,0,.3);
-  border: 1px solid #5897fb;
+  @include drop-shadow(0, 0, 5px, 0, 0.3);
 }
 .chzn-container-active .chzn-choices .search-field input {
   color: #111 !important;

@@ -2,15 +2,18 @@
 	float: left;
 	border: 0;
 	padding: 12px 16px;
-	@include gradient(#fff, #ccc);
+	@include gradient(white, #ccc);
+	@include drop-shadow(0, 3px, 3px, -2px, 0.5);
 	font-family: "pt-sans-narrow", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-size: 15px;
 	&:hover, &:focus {
-		background: #efefef;
+		background: #ddd;
+		@include drop-shadow(0, 2px, 3px, -2px, 0.5);
 	}
 	&:active {
 		position: relative;
 		top: 1px;
+		@include drop-shadow(0, 0, 0, 0, 0);
 	}
 	a {
 		color: #333;
@@ -72,8 +75,9 @@ header button, header .button {
 #app-settings {
 	padding-right: 4px;
 	margin-right: 10px;
-	position: relative;
-	z-index: 100;
+}
+.save-template {
+	width: 100%;
 }
 
 .dropdown {

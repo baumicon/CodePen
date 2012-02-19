@@ -47,7 +47,7 @@
 								<input type="radio" class="hidden" id="jade" name="html-preprocessor" value="jade">
 								<label class="button" for="jade">Jade <a target="_blank" href="http://jade-lang.com/">?</a></label>
 							</div>
-							<div>
+							<div class="last">
 								<input type="radio" class="hidden" id="haml" name="html-preprocessor" value="haml">
 								<label class="button" for="haml">HAML <a target="_blank" href="#">?</a></label>
 							</div>
@@ -80,7 +80,7 @@
 								<input type="radio" class="hidden" id="less" name="css-preprocessor" value="less">
 								<label class="button" for="less">LESS <a target="_blank" href="#">?</a></label>
 							</div>
-							<div>
+							<div class="last">
 								<input type="radio" class="hidden" id="stylus" name="css-preprocessor" value="stylus">
 								<label class="button" for="stylus">Stylus <a target="_blank" href="#">?</a></label>
 							</div>
@@ -88,7 +88,7 @@
 								<input type="radio" class="hidden" id="scss" name="css-preprocessor" value="scss">
 								<label class="button" for="scss">SCSS <a target="_blank" href="#">?</a></label>
 							</div>
-							<div class="double">
+							<div class="double last">
 								<input type="radio" class="hidden" id="sass" name="css-preprocessor" value="sass">
 								<label class="button" for="sass">SASS with Compass <a target="_blank" href="#">?</a></label>
 							</div>
@@ -96,23 +96,28 @@
 
 						<form>
 								<input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
-								<label for="startercss-normalize">Normalize</label>
+								<label for="startercss-normalize" class="small-inline">Normalize</label>
 
 								&ensp;
 							
 								<input type="radio" id="startercss-reset" name="startercss" value="reset">
-								<label for="startercss-reset">Reset</label>
+								<label for="startercss-reset" class="small-inline">Reset</label>
 
 								&ensp;
 
 								<input type="radio" id="startercss-neither" name="startercss" value="neither">
-								<label for="startercss-neither">Neither</label>
+								<label for="startercss-neither" class="small-inline">Neither</label>
 						</form>
 
 						<form>
 							<input type="checkbox" id="prefix-free" name="prefix-free">
-							<label for="prefix-free">Prefix free</label>
+							<label for="prefix-free" class="small-inline">Prefix free</label>
 						</form>
+
+						<form>
+      				<label class="small" for="js-select">External CSS File</label>
+      				<input class="fullwidth" type="url" id="external-css" name="external-css" placeholder="http://yourwebsite.com/external.css">
+          	</form>
 
 					</div>
 
@@ -137,20 +142,27 @@
 								<input type="radio" class="hidden" id="js-none" checked name="js-preprocessor" value="none">
 								<label class="button" for="js-none">None</label>
 							</div>
-							<div class="double">
+							<div class="double last">
 								<input type="radio" class="hidden" id="coffeescript" name="js-preprocessor" value="coffeescript">
 								<label class="button" for="coffeescript">CoffeeScript <a target="_blank" href="#">?</a></label>
 							</div>
 						</form>
 
 						<form>
-							<select style="width: 100%;" data-placeholder="JavaScript Library" id="js-select">
-					      <option value=""></option>
-				        <option value="jquery-latest">jQuery 1.7.1</option>
-				        <option value="mootools">MooTools 1.4.1</option>
-				        <option value="prototype">Prototype 1.7.0.0</option>
+							<label class="small" for="js-select">Library</label>
+							<select data-placeholder="JavaScript Library" id="js-select">
+					      <option value="">No Library</option>
+				        <option value="//code.jquery.com/jquery-latest.js">jQuery 1.7.1</option>
+				        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option>
+				        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option>
       				</select>
+      			</form>
+
+      			<form>
+      				<label class="small" for="js-select">External JS File</label>
+      				<input class="fullwidth" type="url" id="external-js" name="external-js" placeholder="http://yourwebsite.com/external.js">
           	</form>
+
 					</div>					
 
 				</div><!-- END div.box-css -->
@@ -186,7 +198,6 @@
 	    '/js/libs/codemirror.js',
 	    '/js/libs/tmpl.js',
 	    '/js/libs/chosen.jquery.min.js',
-	    '/js/libs/jquery-ui-1.8.17.custom.min.js',
 	    '/mode/javascript/javascript.js',
 	    '/mode/css/css.js',
 	    '/mode/xml/xml.js',
