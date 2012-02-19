@@ -4,6 +4,14 @@
 
         var Main = {
             
+            win         : $(window),
+            body        : $('body'),
+            boxHTML     : $("#box-html"),
+            boxCSS      : $("#box-css"),
+            boxJS       : $("#box-js"),
+            boxResult   : $(".result"),
+            topBoxesCon : $(".top-boxes"),
+            
             init: function() {
                 // Initialize the data backing object first
                 TBData.init();
@@ -26,15 +34,18 @@
                 $('#js').html(TBData.js);
                 
                 // Sync preprocessors with correct data
-                $('input[value="' + TBData.htmlPreProcessor + '"]').attr('checked', true);
-                $('input[value="' + TBData.cssPreProcessor + '"]').attr('checked', true);
-                $('input[value="' + TBData.cssStarter + '"]').attr('checked', true);
-                $('input[value="' + TBData.jsPreProcessor + '"]').attr('checked', true);
+                // alextodo, for some reason these stopped working, why?
+                // I can't check the radio button anymore
+                $('input[type="radio"]').prop('checked', false);
+                $('input[value="' + TBData.htmlPreProcessor + '"]').prop('checked', true);
+                $('input[value="' + TBData.cssPreProcessor + '"]').prop('checked', true);
+                $('input[value="' + TBData.cssStarter + '"]').prop('checked', true);
+                $('input[value="' + TBData.jsPreProcessor + '"]').prop('checked', true);
                 
                 // Set the header type indicator for editors
-                $(".box-html").addClass(TBData.htmlPreProcessor);
-                $(".box-css").addClass(TBData.cssPreProcessor);
-                $(".box-js").addClass(TBData.jsPreProcessor);
+                this.addClassBoxHTML(TBData.htmlPreProcessor);
+                this.addClassBoxCSS(TBData.cssPreProcessor);
+                this.addClassBoxJS(TBData.jsPreProcessor);
                 
                 // Sync library with correct data as well
                 $('#js-select').val(TBData.jsLibrary);
@@ -43,19 +54,37 @@
                 $("#js-select, #theme").chosen();
 
                 if(TBData.cssPreFixFree) $('#prefix-free').prop('checked', true);
+                if(TBData.jsModernizr) $('#modernizr').prop('checked', true);
+                
+                // externals
+                if(TBData.htmlClasses) $('#html-classes').val(TBData.htmlClasses);
+                if(TBData.cssExternal) $('#external-css').val(TBData.cssExternal);
+                if(TBData.jsExternal) $('#external-js').val(TBData.jsExternal);
                 
                 // select current theme
                 $('#theme').val(TBData.theme);
                 // show a specific theme
-                body.attr("data-theme", TBData.theme);
+                this.body.attr("data-theme", TBData.theme);
+            },
+            
+            addClassBoxHTML: function(clazz) {
+                this.boxHTML.removeClass('none jade haml').addClass(clazz);
+            },
+            
+            addClassBoxCSS: function(clazz) {
+                this.boxCSS.removeClass("scss sass stylus less").addClass(clazz);
+            },
+            
+            addClassBoxJS: function(clazz) {
+                this.boxJS.removeClass("coffeescript").addClass(clazz);
             },
             
             bindUIActions: function() {
                 // Resize all boxes when window resized
-                win.resize(function() {
-                    var space = body.height() - 100; // TO DO: Make less ghetto (problems with floats)
-                    topBoxesCon.height(space / 2);
-                    boxResult.height(space / 2);
+                this.win.resize(function() {
+                    var space = Main.body.height() - 100; // TO DO: Make less ghetto (problems with floats)
+                    Main.topBoxesCon.height(space / 2);
+                    Main.boxResult.height(space / 2);
                 }).trigger("resize");
                 
                 // Opening and closing settings panels
@@ -72,7 +101,7 @@
                 // Opening and closing the editor
                 $(".expander").on("click", function(e) {
                     e.preventDefault();
-                    body.toggleClass("focus");
+                    Main.body.toggleClass("focus");
                     $(this)
                         .parent()
                         .parent()
@@ -96,16 +125,16 @@
 
                  // HTML related
                  $('input[name="html-preprocessor"]').on('click', function() {
-                       TBData.setHTMLOption('preprocessor', this.value);
-                       Main.compileContent(HTMLeditor, '', true);
-                    $(".box-html").removeClass("jade haml").addClass(this.value);
+                     TBData.setHTMLOption('preprocessor', this.value);
+                     Main.compileContent(HTMLeditor, '', true);
+                     Main.addClassBoxHTML(this.value);
                  });
 
                  // CSS related
                  $('input[name="css-preprocessor"]').on('click', function() {
                        TBData.setCSSOption('preprocessor', this.value);
                        Main.compileContent(CSSeditor, '', true);
-                    $(".box-css").removeClass("scss sass stylus less").addClass(this.value);
+                       Main.addClassBoxCSS(this.value);
                  });
 
                  // prefix free checkbox
@@ -122,12 +151,24 @@
                  $('input[name="js-preprocessor"]').on('click', function() {
                        TBData.setJSOption('preprocessor', this.value);
                        Main.compileContent(JSeditor, '', true);
-                    $(".box-js").removeClass("coffeescript").addClass(this.value);
+                       Main.addClassBoxJS(this.value);
                  });
 
                  $('#js-select').on('change', function(index, select) {
                      TBData.setJSLibrary(this.value);
                  });
+                 
+                 $('#modernizr').on('click', function() {
+                     TBData.setModernizr($(this).is(":checked"));
+                 });
+                 
+                 $('#html-classes,#external-css,#external-js').on('keypress', function(e) {
+                     if(this.id == 'html-classes') TBData.setHTMLClass(this.value);
+                     else if(this.id == 'external-css') TBData.setCSSExternal(this.value);
+                     else if(this.id == 'external-js') TBData.setJSExternal(this.value);
+                 });
+                 
+                 // Theme related
 
                  $('#theme').on('change', function(index, select) {
                      TBData.setTheme(this.value);
@@ -207,24 +248,6 @@
         return Main;
 
     })();
-    
-    // "GLOBALS"
-    // alextodo talk to chris, are any of these globals necessary
-    var win          = $(window),
-        body         = $("body"),
-
-        boxes        = $(".boxes"),
-        boxHTML      = $(".box-html"),
-        boxCSS       = $(".box-css"),
-        boxJS        = $(".box-js"),
-        boxResult    = $(".result"),
-
-        topBoxesCon  = $(".top-boxes"),
-        topBoxes     = $(".box-html, .box-css, .box-js"),
-
-        handle1      = $("#handle-1"),
-        handle2      = $("#handle-2"),
-        handle3      = $("#handle-3");
     
     Main.init();
 

@@ -16,13 +16,17 @@ var TBData = (function() {
 		theme             : '',
 		version           : 1,
 		htmlPreProcessor  : 'none',
+		htmlClasses         : '',
 		
 		cssPreProcessor   : 'none',
 		cssPreFixFree     : '',
 		cssStarter        : '',
+		cssExternal       : '',
 		
 		jsPreProcessor    : 'none',
 		jsLibrary         : '',
+		jsModernizr       : '',
+		jsExternal        : '',
 
 	    init: function() {
 	        this.bindSaveToLocalStorage();
@@ -90,24 +94,17 @@ var TBData = (function() {
 	    },
 
 	    syncThisWithDataObj: function(data) {
-			this.name             = data.name;
-			this.html             = data.html;
-			this.css              = data.css;
-			this.js               = data.js;
-			this.version          = data.version;
-            this.theme            = data.theme;
-            this.htmlPreProcessor = data.htmlPreProcessor;
-            
-            this.cssPreProcessor  = data.cssPreProcessor;
-            this.cssPreFixFree    = data.cssPreFixFree;
-            this.cssStarter       = data.cssStarter;
-            
-            this.jsPreProcessor   = data.jsPreProcessor;
-            this.jsLibrary        = data.jsLibrary;
+	        for(var key in data) {
+	            this[key] = data[key];
+	        }
 	    },
 
 	    setHTMLOption: function(name, value) {
 	    	this.htmlPreProcessor = value;
+	    },
+	    
+	    setHTMLClass: function(value) {
+	        this.htmlClasses = value;
 	    },
 
 	    setCSSOption: function(name, value) {
@@ -121,6 +118,10 @@ var TBData = (function() {
 	    setCSSStarter: function(value) {
 	        this.cssStarter = value;
 	    },
+	    
+	    setCSSExternal: function(value) {
+	        this.cssExternal = value;
+	    },
 
 	    setJSOption: function(name, value) {
 	    	this.jsPreProcessor = value;
@@ -128,6 +129,14 @@ var TBData = (function() {
 	    
 	    setJSLibrary: function(value) {
 	        this.jsLibrary = value;
+	    },
+	    
+	    setModernizr: function(value) {
+	        this.jsModernizr = value;
+	    },
+	    
+	    setJSExternal: function(value) {
+	        this.jsExternal = value;
 	    },
 	    
 	    setTheme: function(value) {
