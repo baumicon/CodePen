@@ -294,6 +294,7 @@ header {
 	clear: both;
 	position: relative;
 	top: 10px;
+	z-index: 200; // stay above expanded tops
 	iframe {
 		border: 0;
 		background: white;
