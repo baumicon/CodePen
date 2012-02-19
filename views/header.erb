@@ -10,28 +10,28 @@
                 
 				<div class="box-actions">
 
-					<button id="fork" data-icon="f" class="icon">
-						Fork
+					<button id="fork">
+						<strong>⌘F</strong> Fork
 					</button>
 
 					<% if @slug %>
-						<button id="update" data-icon="u" class="icon">
-							Update
+						<button id="update">
+							<strong>⌘U</strong> Update
 						</button>
 					<% else %>
-						<button id="save" data-icon="v" class="icon">
-							Save
+						<button id="save">
+							<strong>⌘S</strong> Save
 						</button>
 					<% end %>
 
 					<% if @slug %>
-					 	<button id="new" data-icon="b" class="icon">
-					 		Brand New Box
+					 	<button id="new">
+					 		<strong>⌘N</strong> Brand New Box
 					 	</button>	
 					<% end %>
                     
           <% if not logged_in %>
-					<a id="login" href="auth/twitter" data-icon="t" class="icon button">
+					<a id="login" href="auth/twitter" class="button">
 						Twitter Login
 					</a>
 					<% else %>
@@ -43,11 +43,12 @@
 
 			<div class="app-actions">
 				
-				<button id="run" data-icon="g" class="icon">Run</button>
+				<button id="run"><strong>⌘⏎</strong> Run</button>
 
 				<span class="button" id="app-settings" class="app-settings">
-					<a href="#app-settings-panel" data-icon="s" class="icon"></a>
-					<a href="#app-settings-panel" data-icon="w" class="icon dropdown"></a>
+					<a href="#app-settings-panel">
+						Settings
+					</a>
 				</span> 
 
 				<section id="app-settings-panel" class="app-settings-panel">

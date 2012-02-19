@@ -6,9 +6,15 @@
 	@include drop-shadow(0, 3px, 3px, -2px, 0.5);
 	font-family: "pt-sans-narrow", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-size: 15px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 	&:hover, &:focus {
 		background: #ddd;
 		@include drop-shadow(0, 2px, 3px, -2px, 0.5);
+		strong {
+			
+		}
 	}
 	&:active {
 		position: relative;
@@ -21,21 +27,19 @@
 	header div > & {
 		height: 40px;
 	}
-}
-
-.icon:before {
-	font-family: 'Pictos Custom';
-	content: attr(data-icon);
-	font-weight: 400 !important;
-	position: relative;
-	margin-right: 6px;
-	font-size: 21px;
-	vertical-align: middle;
-}
-
-.icon-replace {
-	font-family: 'Pictos Custom';
-	font-weight: 400 !important;
+	strong {
+		background: white;
+		vertical-align: middle;
+		padding: 1px 3px;
+		@include border-radius(4px);
+		@include inner-shadow(1px, 1px, 0, 0, 0.3);
+		font-size: 12px;
+		letter-spacing: 1px;
+		color: black;
+		position: relative;
+		top: -3px;
+		margin-right: 3px;
+	}
 }
 
 header button, header .button {
@@ -73,7 +77,6 @@ header button, header .button {
 	}
 }
 #app-settings {
-	padding-right: 4px;
 	margin-right: 10px;
 }
 .save-template {

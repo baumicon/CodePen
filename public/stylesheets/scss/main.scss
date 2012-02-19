@@ -1,6 +1,13 @@
 @import "functions";
 @import "colors";
 
+::selection {
+	background: #BADA55;
+}
+::-moz-selection {
+	background: #BADA55;
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -191,9 +198,9 @@ header {
 			display: inline-block;
 			margin: 0 1% 2% 0;
 			position: relative; 
-			min-width: 32%;
+			width: 31.5%;
 			&.double {
-				min-width: 66%;
+				width: 65%;
 			}
 			label {
 				display: inline-block;
@@ -240,20 +247,22 @@ header {
 		line-height: 29px;
 		padding: 0 8px;
 		display: inline-block;
-		background: black;
+		background: rgba(0,0,0,0.2);
 		color: white;
 		vertical-align: middle;
 		@include transition((all 0.2s ease));
-		@include rotate(180);
+		@include rotate(0);
 	}
 	&.open span {
-		@include rotate(0);
+		@include rotate(180);
 		background: $settingsPanelBG;
 		color: black;
+		line-height: 24px;
 	}
 }
 .expander {
 	right: 40px;
+	bottom: -2px;
 	strong {
 		color: #eee;
 		font-size: 13px;
@@ -269,8 +278,11 @@ header {
 		text-shadow: 0 -1px 0 black;
 		background: none;
 		font-size: 10px;
+		font-weight: 700;
 		color: #eee;
 		margin-right: 2px;
+		position: relative;
+		top: -2px;
 	}
 	span {
 		background: white;
@@ -287,12 +299,6 @@ header {
 		background: white;
 		width: 100%;
 		height: 80%; // todo: fix
-	}
-	h2 {
-		@include transition(opacity 0.2 ease);
-	}
-	&:hover h2 {
-		@include opacity(0);
 	}
 }
 
