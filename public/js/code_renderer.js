@@ -15,10 +15,25 @@ var CodeRenderer = (function() {
         errorHTML   : '',
         
         codeChanged: function(forceCompile) {
-            if(forceCompile || TBData.compileInRealTime) {
+            if(forceCompile || this.compileInRealTime()) {
                 var content = CodeRenderer.getResultContent();
                 CodeRenderer.writeContentToIFrame(content);
                 CodeRenderer.executeIFrameJS();
+            }
+        },
+        
+        // Allows the editor to determine if it can show results in realtime
+        compileInRealTime: function() {
+            // Determine if we have a cached result for any of the content types
+            // (html, css and js) and it's doesn't need a pre processor
+            if( ( !this.useCache('html') && TBData.htmlPreProcessor != 'none') ||
+                ( !this.useCache('css')  && TBData.cssPreProcessor  != 'none') ||
+                ( !this.useCache('js')   && TBData.jsPreProcessor   != 'none') ) {
+                // we don't have cache type and it needs a server pre processor
+                return false;
+            }
+            else {
+                return true;
             }
         },
 
@@ -55,13 +70,23 @@ var CodeRenderer = (function() {
                   TITLE      : "Code Pen",
                   CSS        : this.cachedCSS,
                   HTML       : this.cachedHTML,
-                  JS         : this.cachedJS,
+                  JS         : this.getJS(),
                   JSLIB      : this.getJSLibrary(),
                   PREFIX     : this.getPrefixFree(),
                   CSS_STARTER: this.getCSSStarter()
             };
 
             return tmpl(this.getTPL('result'), values);
+        },
+        
+        getJS: function() {
+            if(this.cachedJS) {
+                var js = 'function __run() { ';
+                js += this.cachedJS + ' }';
+            }
+            else {
+                return '';
+            }
         },
         
         getJSLibrary: function() {

@@ -5,7 +5,7 @@
         var Main = {
             
             init: function() {
-                // Initialize the data backing object
+                // Initialize the data backing object first
                 TBData.init();
                 
                 this.syncUIWithDBO();
@@ -16,6 +16,38 @@
                 
                 // Run initial compile
                 CodeRenderer.codeChanged(true);
+            },
+            
+            syncUIWithDBO: function() {
+                // Sync UI with data values
+                $('#slug').val(TBData.name);
+                $('#html').html(TBData.html);
+                $('#css').html(TBData.css);
+                $('#js').html(TBData.js);
+                
+                // Sync preprocessors with correct data
+                $('input[value="' + TBData.htmlPreProcessor + '"]').attr('checked', true);
+                $('input[value="' + TBData.cssPreProcessor + '"]').attr('checked', true);
+                $('input[value="' + TBData.cssStarter + '"]').attr('checked', true);
+                $('input[value="' + TBData.jsPreProcessor + '"]').attr('checked', true);
+                
+                // Set the header type indicator for editors
+                $(".box-html").addClass(TBData.htmlPreProcessor);
+                $(".box-css").addClass(TBData.cssPreProcessor);
+                $(".box-js").addClass(TBData.jsPreProcessor);
+                
+                // Sync library with correct data as well
+                $('#js-select').val(TBData.jsLibrary);
+
+                // Better select box for chosing JS library
+                $("#js-select, #theme").chosen();
+
+                if(TBData.cssPreFixFree) $('#prefix-free').prop('checked', true);
+                
+                // select current theme
+                $('#theme').val(TBData.theme);
+                // show a specific theme
+                body.attr("data-theme", TBData.theme);
             },
             
             bindUIActions: function() {
@@ -113,40 +145,13 @@
                       $("#app-settings-panel").toggle();
                  });
                  
+                 // save this code pen
+                 $("#save").on('click', function() {
+                    // save data to backend
+                 });
+                 
                  // Bind keys
                  KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
-            },
-            
-            syncUIWithDBO: function() {
-                // Sync UI with data values
-                $('#slug').val(TBData.name);
-                $('#html').html(TBData.html);
-                $('#css').html(TBData.css);
-                $('#js').html(TBData.js);
-                
-                // Sync preprocessors with correct data
-                $('input[value="' + TBData.htmlPreProcessor + '"]').attr('checked', true);
-                $('input[value="' + TBData.cssPreProcessor + '"]').attr('checked', true);
-                $('input[value="' + TBData.cssStarter + '"]').attr('checked', true);
-                $('input[value="' + TBData.jsPreProcessor + '"]').attr('checked', true);
-                
-                // Set the header type indicator for editors
-                $(".box-html").addClass(TBData.htmlPreProcessor);
-                $(".box-css").addClass(TBData.cssPreProcessor);
-                $(".box-js").addClass(TBData.jsPreProcessor);
-                
-                // Sync library with correct data as well
-                $('#js-select').val(TBData.jsLibrary);
-
-                // Better select box for chosing JS library
-                $("#js-select, #theme").chosen();
-
-                if(TBData.cssPreFixFree != '') $('#prefix-free').prop('checked', true);
-                
-                // select current theme
-                $('#theme').val(TBData.theme);
-                // show a specific theme
-                body.attr("data-theme", TBData.theme);
             },
             
             buildEditors: function() {
@@ -158,7 +163,7 @@
                     value        : TBData.html,
                     mode         : "xml",
                     tabSize      : 2,
-                    onChange     : Main.codeChanged
+                    onChange     : Main.codeChanged,
                 });
 
                 window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
@@ -207,6 +212,7 @@
     })();
     
     // "GLOBALS"
+    // alextodo talk to chris, are any of these globals necessary
     var win          = $(window),
         body         = $("body"),
 
