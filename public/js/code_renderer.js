@@ -7,16 +7,26 @@ var CodeRenderer = (function() {
         refCSS      : '',
         refJS       : '',
         
-        // cached html results
-        cachedHTML  : '',
-        cachedCSS   : '',
-        cachedJS    : '',
+        // reference pre processors
+        refHTMLPP   : '',
+        refCSSPP    : '',
+        refJSPP     : '',
+        
+        // Cached result of content
+        postProcessedHTML  : '',
+        postProcessedCSS   : '',
+        postProcessedJS    : '',
         
         errorHTML   : '',
         
-        codeChanged: function(forceCompile) {
+        init: function() {
+            this.compileContent(true);
+        },
+        
+        // Main entry point to this module. Renders content to iframe.
+        compileContent: function(forceCompile) {
             if(forceCompile || this.compileInRealTime()) {
-                var content = CodeRenderer.getResultContent();
+                var content = CodeRenderer.getIFrameContent();
                 CodeRenderer.writeContentToIFrame(content);
                 CodeRenderer.executeIFrameJS();
             }
@@ -26,13 +36,16 @@ var CodeRenderer = (function() {
         compileInRealTime: function() {
             // Determine if we have a cached result for any of the content types
             // (html, css and js) and it's doesn't need a pre processor
-            if( ( !this.useCache('html') && TBData.htmlPreProcessor != 'none') ||
-                ( !this.useCache('css')  && TBData.cssPreProcessor  != 'none') ||
-                ( !this.useCache('js')   && TBData.jsPreProcessor   != 'none') ) {
-                // we don't have cache type and it needs a server pre processor
+            if( ( this.useCache('html') == false && TBData.htmlPreProcessor != 'none') ||
+                ( this.useCache('css')  == false && TBData.cssPreProcessor  != 'none') ||
+                ( this.useCache('js')   == false && TBData.jsPreProcessor   != 'none') ) {
+                // If we've come here, it's because we don't have a cached result
+                // and the content needs to be sent to the server for processing
                 return false;
             }
             else {
+                // We have everything we need to render the content in real time
+                // No server needed. Update iframe.
                 return true;
             }
         },
@@ -43,18 +56,24 @@ var CodeRenderer = (function() {
             doc.write(content);
             doc.close();
         },
-
+        
         executeIFrameJS: function() {
-            // TO DO: look at the security implications of this
-            var contentWindow = $('#result')[0].contentWindow;
-            
-            if(contentWindow.__run) {
-                contentWindow.__run();
+            // Only execute if no errors exist
+            // the iframe seems to cache the JS, even though we
+            // over write the content of the iframe. It will hold 
+            // onto the javascript and execute it. If it has nothing
+            // it seems to hold onto the cache as well.
+            if(!this.errorHTML && this.postProcessedJS) {
+                var contentWindow = $('#result')[0].contentWindow;
+
+                if(contentWindow.__run) {
+                    contentWindow.__run();
+                }
             }
         },
 
-        getResultContent: function() {
-            this.renderContentUpdateCache();
+        getIFrameContent: function() {
+            this.processContent();
             
             if(CodeRenderer.errorHTML) {
                // errors exist, show those as result
@@ -68,8 +87,8 @@ var CodeRenderer = (function() {
         getIFrameHTML: function() {
             var values = {
                   TITLE      : "Code Pen",
-                  CSS        : this.cachedCSS,
-                  HTML       : this.cachedHTML,
+                  CSS        : this.postProcessedCSS,
+                  HTML       : this.postProcessedHTML,
                   JS         : this.getJS(),
                   JSLIB      : this.getJSLibrary(),
                   PREFIX     : this.getPrefixFree(),
@@ -80,9 +99,11 @@ var CodeRenderer = (function() {
         },
         
         getJS: function() {
-            if(this.cachedJS) {
+            if(this.postProcessedJS) {
                 var js = 'function __run() { ';
-                js += this.cachedJS + ' }';
+                js += this.postProcessedJS + ' }';
+                
+                return js;
             }
             else {
                 return '';
@@ -127,37 +148,64 @@ var CodeRenderer = (function() {
         },
         
         // Render content, serverside or client, then update cached content
-        renderContentUpdateCache: function() {
+        // All content saved to postProcessed(HTML|CSS|JS)
+        processContent: function() {
             params = { };
-            processContent = false;
             
-            var keys = ['html', 'css', 'js'];
-            
-            for (var i=0; i < keys.length; i++) {
-                var key = keys[i];
-                var upKey = keys[i].toUpperCase();
-               
-                if(!this.useCache(key)) {
-                       this['ref' + upKey] = TBData[key];
-                       
-                       if(this.processOnServer(TBData[key + 'PreProcessor'])) {
-                           processContent = true;
-                           params[key] = TBData[key];
-                           params[key + 'PreProcessor'] = TBData[key + 'PreProcessor'];
-                       }
-                       else {
-                           this['cached' + upKey] = TBData[key];
-                       }
-                   }
+            if(!this.useCache('html')) {
+                if(this.needsPreProcessing(TBData.htmlPreProcessor)) {
+                    params['html'] = TBData.html;
+                    params['htmlPreProcessor'] = TBData.htmlPreProcessor;
+                }
+                else {
+                    // Since the html is simply html, it is post processed
+                    this.postProcessedHTML = TBData.html;
+                }
             }
             
-            if(processContent) {
+            if(!this.useCache('css')) {
+                if(this.needsPreProcessing(TBData.cssPreProcessor)) {
+                    params['css'] = TBData.css;
+                    params['cssPreProcessor'] = TBData.cssPreProcessor;
+                }
+                else {
+                    // Since the css is simply css, it is post processed
+                    this.postProcessedCSS = TBData.css;
+                }
+            }
+            
+            if(!this.useCache('js')) {
+                if(this.needsPreProcessing(TBData.jsPreProcessor)) {
+                    params['js'] = TBData.js;
+                    params['jsPreProcessor'] = TBData.jsPreProcessor;
+                }
+                else {
+                    // Since the js is simply js, it is post processed
+                    this.postProcessedJS = TBData.js;
+                }
+            }
+            
+            if(params['html'] || params['css'] || params['js']) {
                 CodeRenderer.errorHTML = '';
-                this.processContent(params);
+                this.sendContentToServer(params);
             }
+            
+            this.storeRefContent();
         },
         
-        processContent: function(params) {
+        storeRefContent: function() {
+            this.refHTML   = TBData.html;
+            this.refHTMLPP = TBData.htmlPreProcessor;
+            
+            this.refCSS    = TBData.css;
+            this.refCSSPP  = TBData.cssPreProcessor;
+            
+            this.refJS     = TBData.js;
+            this.refJSPP   = TBData.jsPreProcessor;
+        },
+        
+        // Send content to server for processing
+        sendContentToServer: function(params) {
             $.ajax({
                   url: '/process/',
                   type: 'POST',
@@ -170,9 +218,13 @@ var CodeRenderer = (function() {
                           CodeRenderer.errorHTML = obj['error_html'];
                       }
                       else {
+                          // keys are html, css or js
+                          // Saved results to postProcssed(HTML|CSS|JS)
+                          
                           for(var key in obj) {
                               var upKey = key.toUpperCase();
-                              if(obj[key]) CodeRenderer['cached' + upKey] = obj[key];
+                              
+                              CodeRenderer['postProcessed' + upKey] = obj[key];
                           }
                       }
                   }
@@ -184,52 +236,55 @@ var CodeRenderer = (function() {
             var count = 0;
             
             for(var key in params) {
-                if(count > 0) dataValues += '&';
+                if(dataValues != '') dataValues += '&';
                 dataValues += key + '=' + encodeURIComponent(params[key]);
-                count += 1;
             }
             
             return dataValues;
         },
         
-        clearCache: function(type) {
-            if(type == 'html') {
-                this.refHTML = '';
-            }
-            else if(type == 'css') {
-                this.refCSS = '';
-            }
-            else {
-                this.refJS = '';
-            }
-            
-            CodeRenderer.errorHTML = '';
-        },
-        
         // determine if what's in the editor is the same 
         // as what's saved in reference (unprocessed content) cache. 
-        // if so use cached version of content, e.g. cachedHTML, cachedCSS
+        // if so use cached version of content, e.g. postProcessedHTML, postProcessedCSS
         useCache: function(type) {
             // if any errors exist, don't use cache
             if(CodeRenderer.errorHTML) return false;
             
             if(type == 'html') {
-                if(this.refHTML == TBData.html) return true;
-                else return false;
+                if( this.refHTML   == TBData.html && 
+                    this.refHTMLPP == TBData.htmlPreProcessor) {
+                    return true;
+                }
+                else {
+                    this.postProcessedHTML = '';
+                    return false;
+                }
             }
             else if(type == 'css') {
-                if(this.refCSS == TBData.css) return true;
-                else return false;
+                if( this.refCSS   == TBData.css && 
+                    this.refCSSPP == TBData.cssPreProcessor) {
+                    return true;
+                }
+                else {
+                    this.postProcessedCSS = '';
+                    return false;
+                }
             }
             else {
-                if(this.refJS == TBData.js) return true;
-                else return false;
+                if( this.refJS   == TBData.js && 
+                    this.refJSPP == TBData.jsPreProcessor) {
+                    return true
+                }
+                else {
+                    this.postProcessedJS = '';
+                    return false;
+                }
             }
         },
         
         // Determine if the content needs to be processed on the server
         // All preprocessors are rendered server side
-        processOnServer: function(preProcessor) {
+        needsPreProcessing: function(preProcessor) {
             return (preProcessor && preProcessor != 'none');
         },
 
@@ -239,9 +294,9 @@ var CodeRenderer = (function() {
         
         createGist: function() {
             var gistData = {
-                'html': this.cachedHTML,
-                'css' : this.cachedCSS,
-                'js'  : this.cachedJS,
+                'html': this.postProcessedHTML,
+                'css' : this.postProcessedCSS,
+                'js'  : this.postProcessedJS,
             }
             
             $.ajax({
@@ -252,8 +307,8 @@ var CodeRenderer = (function() {
                   success: function( result ) {
                       obj = $.parseJSON(result);
                       
-                      console.log('response from github');
-                      console.log(obj);
+                      // console.log('response from github');
+                      //                       console.log(obj);
                       
                       // once succssefull need to open new tab
                   }

@@ -84,7 +84,7 @@ var KeyBindings = (function() {
                         // cmd + c
                         // compile and run code
                         stop = true;
-                        CodeRenderer.codeChanged(true);
+                        CodeRenderer.compileContent(true);
                     }
                     else if(event.keyCode == 75) {
                         // command + K
@@ -112,7 +112,7 @@ var KeyBindings = (function() {
                         // command + l
                         // need to pull the actual slug once it's saved
                         // what about unsaved accounts?
-                        window.open('/slug/fullpage/');
+                        // window.open('/slug/fullpage/');
                     }
                 }
                 

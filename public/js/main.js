@@ -15,7 +15,7 @@
                 this.bindDataActions();
                 
                 // Run initial compile
-                CodeRenderer.codeChanged(true);
+                CodeRenderer.init();
             },
             
             syncUIWithDBO: function() {
@@ -91,22 +91,20 @@
             bindDataActions: function() {
                 // Bind events
                  $('#run').on('click', function() {
-                     CodeRenderer.codeChanged(true);
+                     CodeRenderer.compileContent(true);
                  });
 
                  // HTML related
                  $('input[name="html-preprocessor"]').on('click', function() {
                        TBData.setHTMLOption('preprocessor', this.value);
-                       CodeRenderer.clearCache('html');
-                       Main.codeChanged(HTMLeditor, '', true);
+                       Main.compileContent(HTMLeditor, '', true);
                     $(".box-html").removeClass("jade haml").addClass(this.value);
                  });
 
                  // CSS related
                  $('input[name="css-preprocessor"]').on('click', function() {
                        TBData.setCSSOption('preprocessor', this.value);
-                       CodeRenderer.clearCache('css');
-                       Main.codeChanged(CSSeditor, '', true);
+                       Main.compileContent(CSSeditor, '', true);
                     $(".box-css").removeClass("scss sass stylus less").addClass(this.value);
                  });
 
@@ -123,8 +121,7 @@
                  // JS related
                  $('input[name="js-preprocessor"]').on('click', function() {
                        TBData.setJSOption('preprocessor', this.value);
-                       CodeRenderer.clearCache('js');
-                       Main.codeChanged(JSeditor, '', true);
+                       Main.compileContent(JSeditor, '', true);
                     $(".box-js").removeClass("coffeescript").addClass(this.value);
                  });
 
@@ -163,7 +160,7 @@
                     value        : TBData.html,
                     mode         : "xml",
                     tabSize      : 2,
-                    onChange     : Main.codeChanged,
+                    onChange     : Main.compileContent,
                 });
 
                 window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
@@ -171,7 +168,7 @@
                     value        : TBData.css,
                     mode         : "css",
                     tabSize      : 2,
-                    onChange     : Main.codeChanged
+                    onChange     : Main.compileContent
                 });
 
                 window.JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
@@ -179,13 +176,13 @@
                     value        : TBData.js,
                     mode         : "javascript",
                     tabSize      : 2,
-                    onChange     : Main.codeChanged
+                    onChange     : Main.compileContent
                 });
             },
             
-            codeChanged: function(editor, changes, forceCompile) {
+            compileContent: function(editor, changes, forceCompile) {
                 TBData.setEditorValue(editor.getOption('mode'), editor.getValue());
-                CodeRenderer.codeChanged(forceCompile);
+                CodeRenderer.compileContent(forceCompile);
             },
             
             openExpandedArea: function(areaID) {

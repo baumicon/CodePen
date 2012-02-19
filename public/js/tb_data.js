@@ -8,7 +8,7 @@ var TBData = (function() {
 
 	var TBData = {
 
-		// Tinkerbox data
+		// Code Pen data
 		name              : '',
 		html              : '',
 		css               : '',
@@ -37,7 +37,7 @@ var TBData = (function() {
 	    
 	    saveDataToLocalStorage: function() {
 	        // alextodo, future feature, allow you to save data
-	        // for more than one tinkerbox, use the name in the URL!
+	        // for more than one codepen, use the name in the URL!
 	        if(typeof(localStorage) != 'undefined') {
                 localStorage['tb'] = JSON.stringify(TBData);
             }
