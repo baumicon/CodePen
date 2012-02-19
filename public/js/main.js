@@ -42,6 +42,8 @@
                 $('input[value="' + TBData.cssStarter + '"]').prop('checked', true);
                 $('input[value="' + TBData.jsPreProcessor + '"]').prop('checked', true);
                 
+                Main.updatePrefixFreeBox(TBData.cssPreProcessor);
+                
                 // Set the header type indicator for editors
                 this.addClassBoxHTML(TBData.htmlPreProcessor);
                 this.addClassBoxCSS(TBData.cssPreProcessor);
@@ -135,11 +137,14 @@
                        TBData.setCSSOption('preprocessor', this.value);
                        Main.compileContent(CSSeditor, '', true);
                        Main.addClassBoxCSS(this.value);
+                       Main.updatePrefixFreeBox(this.value);
                  });
 
                  // prefix free checkbox
                  $('#prefix-free').on('click', function() {
-                     TBData.setPrefixFree($(this).is(":checked"));
+                     if(TBData.cssPreProcessor != 'sass') {
+                        TBData.setPrefixFree($(this).is(":checked"));
+                     }
                  });
                  
                  // CSS Resests
@@ -190,6 +195,18 @@
                  
                  // Bind keys
                  KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
+            },
+            
+            updatePrefixFreeBox: function(cssPreProcessor) {
+                if(cssPreProcessor == 'sass') {
+                       // turn off prefix free
+                       TBData.setPrefixFree(false);
+                       $('#prefix-free').prop('checked', false);
+                       $('#prefix-free').prop('disabled', true);
+                   }
+                   else {
+                       $('#prefix-free').prop('disabled', false);
+                   }
             },
             
             buildEditors: function() {
