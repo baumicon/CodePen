@@ -48,6 +48,12 @@ class App < Sinatra::Base
   get '/auth/failure' do
     'Authentication Failed'
   end
+  
+  get '/list/' do
+    @pens = [ ]
+    
+    erb :list
+  end
 
   post '/process/' do
     pps = PreProcessorService.new

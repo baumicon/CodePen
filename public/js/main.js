@@ -150,6 +150,7 @@
                  // CSS Resests
                  $('input[name="startercss"]').on('click', function() {
                      TBData.setCSSStarter(this.value);
+                     Main.compileContent(CSSeditor, '', true);
                  });
 
                  // JS related
