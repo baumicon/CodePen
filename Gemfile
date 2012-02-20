@@ -14,3 +14,6 @@ gem "sass"
 gem "compass"
 gem "rspec"
 gem "rack-test"
+#TODO: create groups for testing/development
+gem 'awesome_print'
+gem 'spork', '~> 1.0rc'

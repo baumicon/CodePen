@@ -2,13 +2,15 @@ require 'sinatra'
 require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
-require './services/preprocessor_service'
-require './services/user_service'
-
+require 'mongo_mapper'
+require_relative 'models/user'
+require_relative 'services/preprocessor_service'
 require_relative 'minify.rb'
+
 
 class App < Sinatra::Base
 
+  MongoMapper.database = 'tinkerbox'
   use Rack::Session::Cookie
   enable :sessions
 
@@ -16,18 +18,19 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
-  get '/hi' do
-    "Hello World"
+  def set_session
+    @user = User.get_by_session_id(session[:user_id])
+    session[:user_id] = @user.uid
+  end
+
+  get '/sanity' do
+    "working"
   end
 
   get '/' do
-    @user = UserService.new().user_by_session(session[:user_id])
+    set_session
     @tbdb = get_tbdb()
     erb :index
-  end
-
-  get '/return/stuff/' do
-    return "awesome"
   end
 
   get '/slugs' do
@@ -39,7 +42,7 @@ class App < Sinatra::Base
   end
 
   post '/save/content' do
-        {'success' => true}.to_json
+    {'success' => true}.to_json
   end
 
   def get_tbdb()

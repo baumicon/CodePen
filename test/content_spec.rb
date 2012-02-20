@@ -3,7 +3,7 @@ require '../models/slug'
 
 describe Content do
   it "should validate required fields" do
-    c = Content.new_from_json('{}', 'my_uid')
+    c = Content.new_from_json('{}', 'my_uid', [])
     c.valid?.should be_false
     c.errors.should have_key :version
     c.errors.should have_key :slug_name

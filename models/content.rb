@@ -4,7 +4,7 @@ require '../lib/json_util'
 class Content
     include MongoMapper::Document
 
-    attr_accessible :uid, :slug_name, :version, :html, :css, :js, :html_preprocessor, :css_preprocessor, :js_preprocesor
+    attr_accessible :uid, :slug_name, :version, :html, :css, :js, :html_pre_processor, :css_pre_processor, :js_pre_processor
     attr_accessor :slugs
 
     validate :validate_slug_owned
@@ -17,13 +17,13 @@ class Content
     key :html, String
     key :css, String
     key :js, String
-    key :html_preprocessor, String
-    key :css_preprocessor, String
-    key :js_preprocesor, String
+    key :html_pre_processor, String
+    key :css_pre_processor, String
+    key :js_pre_procesor, String
 
     timestamps!
 
-    def self.new_from_json(json, uid, slugs = [])
+    def self.new_from_json(json, uid, slugs)
       payload = JsonUtil.condition_json(json)
       payload['uid'] = uid
       content = Content.new payload
