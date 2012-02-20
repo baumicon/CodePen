@@ -171,7 +171,6 @@
   width: 12px;
   height: 13px;
   font-size: 1px;
-  background: url(/images/chosen-sprite.png) right top no-repeat;
 }
 .chzn-container-multi .chzn-choices .search-choice .search-choice-close:hover {
   background-position: right -11px;
@@ -254,13 +253,6 @@
 .chzn-container .chzn-results-scroll-down {
   bottom: 0;
 }
-.chzn-container .chzn-results-scroll-down span {
-  background: url('chosen-sprite.png') no-repeat -4px -3px;
-}
-.chzn-container .chzn-results-scroll-up span {
-  background: url('chosen-sprite.png') no-repeat -22px -3px;
-}
-
 
 .chzn-container-active .chzn-single {
   -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
@@ -276,7 +268,6 @@
   -o-box-shadow     : 0 1px 0 #fff inset;
   box-shadow        : 0 1px 0 #fff inset;
   background-color: #eee;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff', GradientType=0 );
   background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(20%, #eeeeee), color-stop(80%, #ffffff));
   background-image: -webkit-linear-gradient(top, #eeeeee 20%, #ffffff 80%);
   background-image: -moz-linear-gradient(top, #eeeeee 20%, #ffffff 80%);

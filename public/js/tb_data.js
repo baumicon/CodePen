@@ -41,8 +41,6 @@ var TBData = (function() {
 	        // alextodo, future feature, allow you to save data
 	        // for more than one tinkerbox, use the name in the URL!
 	        if(typeof(localStorage) != 'undefined') {
-	            localStorage.clear();
-	            TBData.updateTimeStamp();
                 localStorage['tb'] = JSON.stringify(TBData);
             }
 	    },
@@ -61,6 +59,11 @@ var TBData = (function() {
 	        }
 	        
 	        if(typeof(localStorage) != 'undefined') {
+	            if(localStorage['fork']) {
+	                localStorage['tb'] = localStorage['fork'];
+	                localStorage.removeItem('fork');
+	            }
+	            
 	            if(localStorage['tb']) {
 	                localData = $.parseJSON(localStorage['tb']);
 	                // alextodo, will need to determine which one is fresher
@@ -72,6 +75,16 @@ var TBData = (function() {
 	    	if(data['dateUpdated']) {
 	    	    this.syncThisWithDataObj(data);
 	    	}	    	
+	    },
+	    
+	    forkData: function() {
+	        // save fork to tb store
+            // reset version number
+            // alextodo, reset any values that id this box
+            // alextodo, what doesn't have localStorage? which browsers
+            this.name = '';
+            this.version = 1;
+            localStorage['fork'] = JSON.stringify(TBData);
 	    },
 
 	    syncThisWithDataObj: function(data) {
@@ -93,6 +106,9 @@ var TBData = (function() {
 	    
 	    // If any preprocessors are chosen (jade, less, coffeescript etc.)
 	    // don't compile in real time
+	    // alextodo
+	    // this should actually be a lot more complex, like it should figure out if
+	    // you've started typeing in a code box that doesn't need processing, that is all
 	    updateCompileInRealTime: function() {
 	        if( this.htmlPreProcessor == 'none' && 
 	            this.cssPreProcessor  == 'none' &&
@@ -118,9 +134,7 @@ var TBData = (function() {
 	    },
 	    
 	    setPrefixFree: function(value) {
-	        // TODO: Make URL Dynamic or Settable, hmmm, dunno, let's see
-	        // why offer more than one?
-    		this.cssPreFixFree = (value) ? "/box-libs/prefixfree.min.js" : '';
+    		this.cssPreFixFree = value;
 	    },
 
 	    setJSOption: function(name, value) {

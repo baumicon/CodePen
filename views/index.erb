@@ -5,11 +5,9 @@
 
 	<meta charset="UTF-8">
 
-	<title>Tinkerbox</title>
-
+	<title>CodePen</title>
+    
     <link href="//get.pictos.cc/fonts/555/1" rel="stylesheet">
-    <script src="http://use.typekit.com/nnp0iyi.js"></script>
-    <script>try { Typekit.load(); } catch(e) {}</script>
 
     <link rel="stylesheet" href="/stylesheets/css/main.css">
 </head>
@@ -148,9 +146,9 @@
 						<form>
 							<select style="width: 100%;" data-placeholder="JavaScript Library" id="js-select">
 					      <option value=""></option>
-				        <option value="http://code.jquery.com/jquery-latest.js">jQuery 1.7.1</option>
-				        <option value="//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js">MooTools 1.4.1</option>
-				        <option value="//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js">Prototype 1.7.0.0</option>
+				        <option value="jquery-latest">jQuery 1.7.1</option>
+				        <option value="mootools">MooTools 1.4.1</option>
+				        <option value="prototype">Prototype 1.7.0.0</option>
       				</select>
           	</form>
 					</div>					
@@ -184,18 +182,17 @@
 	    so that it doesn't slow this page down, see require.js
 	-->
 	<%= js_scripts([
-	    '/js/jquery.js',
-	    '/js/codemirror.js',
-	    '/js/tmpl.js',
+	    '/js/libs/jquery.js',
+	    '/js/libs/codemirror.js',
+	    '/js/libs/tmpl.js',
+	    '/js/libs/chosen.jquery.min.js',
+	    '/js/libs/jquery-ui-1.8.17.custom.min.js',
 	    '/mode/javascript/javascript.js',
 	    '/mode/css/css.js',
 	    '/mode/xml/xml.js',
-	    '/js/chosen.jquery.min.js',
 	    '/js/tb_data.js',
 	    '/js/key_bindings.js',
-        '/js/coderenderer.js',
-        '/js/contentwrangler.js',
-	    '/js/jquery-ui-1.8.17.custom.min.js',
+	    '/js/code_renderer.js',
 	    '/js/main.js'
 	    ])
 	%>

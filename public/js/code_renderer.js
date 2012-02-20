@@ -12,13 +12,13 @@ var CodeRenderer = (function() {
         cachedCSS   : '',
         cachedJS    : '',
         
-        errorHTML     : '',
+        errorHTML   : '',
 	    
 	    codeChanged: function(forceCompile) {
 	        if(forceCompile || TBData.compileInRealTime) {
-	           	var content = CodeRenderer.getResultContent();
-    	    	CodeRenderer.writeContentToIFrame(content);
-    	    	CodeRenderer.executeIFrameJS();
+	            var content = CodeRenderer.getResultContent();
+                CodeRenderer.writeContentToIFrame(content);
+                CodeRenderer.executeIFrameJS();
 	        }
 	    },
 
@@ -46,32 +46,41 @@ var CodeRenderer = (function() {
 	           return CodeRenderer.errorHTML;
 	        }
 	        else {
-	           	var values = {
-      				TITLE      : "Tinkerbox",
-      				CSS        : this.cachedCSS,
-      				HTML       : this.cachedHTML,
-      				JS         : this.cachedJS,
-      				JSLIB      : this.getJSLibrary(),
-      				PREFIX     : this.getPrefixFree(),
-      				CSS_STARTER: this.getCSSStarter()
-    			};
-
-    			return tmpl(this.getTPL('result'), values);
+	           	return this.getIFrameHTML();
 	        }
+	    },
+	    
+	    getIFrameHTML: function() {
+	        var values = {
+  				TITLE      : "Tinkerbox",
+  				CSS        : this.cachedCSS,
+  				HTML       : this.cachedHTML,
+  				JS         : this.cachedJS,
+  				JSLIB      : this.getJSLibrary(),
+  				PREFIX     : this.getPrefixFree(),
+  				CSS_STARTER: this.getCSSStarter()
+			};
+
+			return tmpl(this.getTPL('result'), values);
 	    },
 	    
 	    getJSLibrary: function() {
 	        if(TBData.jsLibrary) {
-	            return '<script src="' + TBData.jsLibrary + '"></script>';
+	            var jsLibs = {
+	                'jquery-latest': 'http://code.jquery.com/jquery-latest.js',
+	                'mootools'     : '//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js',
+	                'prototype'    : '//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js'
+	            }
+	            return '<script src="' + jsLibs[TBData.jsLibrary] + '"></script>';
 	        }
 	        else {
 	            return '';
 	        }
 	    },
 	    
-	    getPrefixFree: function() {
-	        if(TBData.jsLibrary) {
-	            return '<script src="' + TBData.jsLibrary + '"></script>';
+        getPrefixFree: function() {
+	        if(TBData.cssPreFixFree) {
+	            return '<script src="/box-libs/prefixfree.min.js"></script>';
 	        }
 	        else {
 	            return '';
@@ -201,6 +210,29 @@ var CodeRenderer = (function() {
 
 	    getTPL: function(name) {
 	    	return __templates[name];
+	    },
+	    
+	    createGist: function() {
+	        var gistData = {
+	            'html': this.cachedHTML,
+	            'css' : this.cachedCSS,
+	            'js'  : this.cachedJS,
+	        }
+	        
+	        $.ajax({
+  				url: '/gist/',
+  				type: 'POST',
+  				async: false,
+  				data: this.getDataValues(gistData),
+  				success: function( result ) {
+  				    obj = $.parseJSON(result);
+  				    
+  				    console.log('response from github');
+  				    console.log(obj);
+  				    
+  				    // once succssefull need to open new tab
+  				}
+			});
 	    }
     };
 

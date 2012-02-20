@@ -54,7 +54,7 @@ class PreProcessorService
 
   def process_js(type, js)
     if type == 'coffeescript'
-      js = node_req('/coffeescript/', 'js', js, 'Coffee Script')
+      js = node_req('/coffeescript/', 'js', js, 'CoffeeScript')
     end
 
     js
