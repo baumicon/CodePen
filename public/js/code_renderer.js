@@ -87,12 +87,18 @@ var CodeRenderer = (function() {
         getIFrameHTML: function() {
             var values = {
                   TITLE      : "Code Pen",
-                  CSS        : this.postProcessedCSS,
                   HTML       : this.postProcessedHTML,
-                  JS         : this.getJS(),
-                  JSLIB      : this.getJSLibrary(),
-                  PREFIX     : this.getPrefixFree(),
-                  CSS_STARTER: this.getCSSStarter()
+                  HTML_CLASSES : '',
+                  
+                  CSS          : this.postProcessedCSS,
+                  PREFIX       : this.getPrefixFree(),
+                  CSS_STARTER  : this.getCSSStarter(),
+                  CSS_EXTERNAL : '',
+                  
+                  JS           : this.getJS(),
+                  JSLIBRARY    : this.getJSLibrary(),
+                  JS_MODERNIZR : '',
+                  JS_EXTERNAL  : '',
             };
 
             return tmpl(this.getTPL('result'), values);
@@ -125,7 +131,7 @@ var CodeRenderer = (function() {
         },
         
         getPrefixFree: function() {
-            if(TBData.cssPreFixFree) {
+            if(TBData.cssPrefixFree) {
                 return '<script src="/box-libs/prefixfree.min.js"></script>';
             }
             else {
@@ -292,25 +298,17 @@ var CodeRenderer = (function() {
             return __templates[name];
         },
         
+        // Send data to backend to create a gist on github.com
+        // return the URL to the new gist
         createGist: function() {
-            var gistData = {
-                'html': this.postProcessedHTML,
-                'css' : this.postProcessedCSS,
-                'js'  : this.postProcessedJS,
-            }
-            
             $.ajax({
                   url: '/gist/',
                   type: 'POST',
-                  async: false,
-                  data: this.getDataValues(gistData),
+                  data: this.getDataValues({ 'data': JSON.stringify(TBData) }),
                   success: function( result ) {
                       obj = $.parseJSON(result);
-                      
-                      // console.log('response from github');
-                      //                       console.log(obj);
-                      
-                      // once succssefull need to open new tab
+                      // Open new gist in a tab!
+                      window.open(obj.url);
                   }
             });
         }

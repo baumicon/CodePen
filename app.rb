@@ -3,8 +3,10 @@ require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
 require './services/preprocessor_service'
+require './services/gist_service'
 require './services/user_service'
 
+require_relative 'renderer.rb'
 require_relative 'minify.rb'
 
 class App < Sinatra::Base
@@ -86,71 +88,67 @@ class App < Sinatra::Base
   get '/:slug/fullpage/' do
     # todo, will need to actually pull
     # the right data for the url from data service
-    rend = Renderer.new
     data = get_data_by_slug()
-    
-    @TITLE       = data['title']
-    @HTML        = rend.get_html(data['html'], data['html_pre_processor'])
-    @CSS         = rend.get_css(data['css'], data['css_pre_processor'])
-    @JS          = rend.get_js(data['js'], data['js_pre_processor'])
-    @CSS_STARTER = rend.get_css_starter(data['CSS_STARTER'])
-    @PREFIX      = rend.get_prefix(data['PREFIX'])
-    @JSLIB       = rend.get_jslib(data['JSLIB'])
-    
-    erb :fullpage
+    rend = Renderer.new(data)
+    rend.render_full_page()
   end
   
   def get_data_by_slug
     return {
       'title'       => 'CODE PEN',
-      'css'         => 'body { background-color: blue; }',
       'html'        => '<h1>holy guac batman!</h1>',
+      'css'         => 'body { background-color: blue; }',
       'js'          => 'console.log("testing");',
-      'jslib'       => 'jquery-latest',
-      'prefix'      => '',
-      'css_starter' => 'none',
+      
+      'html_pre_processor' => 'none',
+      'html_classes'       => 'en',
+      
+      'css_pre_processor' => 'none',
+      'css_prefix_free'   => '',
+      'css_starter'       => 'none',
+      'css_external'      => '',
+      
+      'js_pre_processor' => 'none',
+      'js_library'       => 'jquery-latest',
+      'js_modernizr'     => '',
+      'js_external'      => ''
     }
   end
 
   post '/gist/' do
-    # alextodo, create a public gist, with 4 files
-    # html, css, js, and result
-    # http://developer.github.com/v3/gists/
-    gistData = {
-        'Description' => 'A code snippet, created with Code Pen',
-        'public'      => true,
-        'files'       => {
-            'index.html' => {
-                'content' => params[:html]
-            },
-            'style.css'  => {
-                'content' => params[:css]
-            },
-            'index.js'   => {
-                'content' => params[:js]
-            }
-        }
+    data = get_gist_data(params[:data])
+    rend = Renderer.new(data)
+    result = rend.render_full_page()
+    
+    gs = GistService.new(data)
+    url_to_gist = gs.create_gist(data, result)
+    
+    encode({ 'url' => url_to_gist })
+  end
+  
+  # alextodo, look at replacing with tim's code that uses regex and underscores
+  def get_gist_data(data)
+    data = JSON.parse(data)
+    
+    return {
+      'title' => data['name'],
+      'html'  => data['html'],
+      'css'   => data['css'],
+      'js'    => data['js'],
+      
+      'html_pre_processor' => data['htmlPreProcessor'],
+      'html_classes'       => data['htmlClasses'],
+      
+      'css_pre_processor' => data['cssPreProcessor'],
+      'css_prefix_free'   => data['cssPrefixFree'],
+      'css_starter'       => data['cssStarter'],
+      'css_external'      => data['cssExternal'],
+      
+      'js_pre_processor' => data['jsPreProcessor'],
+      'js_library'       => data['js_library'],
+      'js_modernizr'     => data['jsModernizr'],
+      'js_external'      => data['jsExternal']
     }
-    
-    # see about getting the result in a bit
-    # 'result.html' => {
-    #     'content' => this.getIFrameHTML()
-    # }
-    uri = URI.parse("https://api.github.com/gists")
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-    request = Net::HTTP::Post.new(uri.request_uri)
-    puts encode(gistData)
-    request.set_form_data({ "data" => encode(gistData) })
-    
-    res = http.request(request)
-    puts 'response ' + res.body
-    
-    obj = JSON.parse(res.body)
-    
-    res.body
   end
   
   helpers do

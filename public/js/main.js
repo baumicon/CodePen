@@ -55,7 +55,7 @@
                 // Better select box for chosing JS library
                 $("#js-select, #theme").chosen();
 
-                if(TBData.cssPreFixFree) $('#prefix-free').prop('checked', true);
+                if(TBData.cssPrefixFree) $('#prefix-free').prop('checked', true);
                 if(TBData.jsModernizr) $('#modernizr').prop('checked', true);
                 
                 // externals

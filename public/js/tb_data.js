@@ -19,7 +19,7 @@ var TBData = (function() {
 		htmlClasses         : '',
 		
 		cssPreProcessor   : 'none',
-		cssPreFixFree     : '',
+		cssPrefixFree     : '',
 		cssStarter        : '',
 		cssExternal       : '',
 		
@@ -112,7 +112,7 @@ var TBData = (function() {
 	    },
 	    
 	    setPrefixFree: function(value) {
-    		this.cssPreFixFree = value;
+    		this.cssPrefixFree = value;
 	    },
 	    
 	    setCSSStarter: function(value) {

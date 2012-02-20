@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html <%= @HTML_CLASSES %>>
 
 <head>
 	<meta charset="UTF-8">
@@ -10,14 +10,18 @@
 	<style>
 	<%= @CSS %>
 	</style>
+	
+	<%= @CSS_EXTERNAL %>
 </head>
 
 <body>
 
 	<%= @HTML %>
 	
-	<%= @JSLIB %>
+	<%= @JSLIBRARY %>
 	<%= @PREFIX %>
+	<%= @JS_MODERNIZR %>
+	<%= @JS_EXTERNAL %>
 	
 	<script>
 		function __run() {
