@@ -2,8 +2,10 @@ require '../models/slug'
 require '../models/content'
 require '../models/user'
 require '../lib/json_util'
+require '../lib/ajax_util'
 
-class PersistanceService
+class ContentService
+  include AjaxUtil
 
   def save_content(session_id, json)
     begin
@@ -20,15 +22,21 @@ class PersistanceService
 
       return errors(content.errors) unless content.valid?
       content.save
-      {'success' => true}
+      success
     rescue Exception => ex
-      throw ex
       #TODO: learn how to get a safe stack trace to display.  For now, generic message
       return errors({:unable_to_save => 'Error Saving From Persistance Service'})
     end
   end
 
-  def errors(errors)
-    {'success' => false, 'errors' => errors}
+  def get_latest(slug_name)
+    begin
+      content = Content.first(:order => :created_at.desc, :slug_name => slug_name).attribute
+      content['t_obj_type'] = 'content'
+      success content
+    rescue Exception => ex
+      require 'awesome_print'; ap ex
+      return errors({:get_latest => "Error getting most recent content for '#{slug_name}'."})
+    end
   end
 end
