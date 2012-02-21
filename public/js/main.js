@@ -179,7 +179,7 @@
                  $('#theme').on('change', function(index, select) {
                      TBData.setTheme(this.value);
                      // Update current theme
-                     body.attr("data-theme", this.value);
+                     Main.body.attr("data-theme", this.value);
                  });
                  
                  $("#save-template").on('click', function() {
