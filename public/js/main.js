@@ -262,7 +262,7 @@
             
             closeExpandedAreas: function() {
                 $.each($(".expander"), function(index, el) {
-                    body.toggleClass("focus");
+                    Main.body.toggleClass("focus");
 
                     $(this)
                         .parent()

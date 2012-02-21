@@ -92,7 +92,7 @@ var KeyBindings = (function() {
                         // alextodo, what does fork this project mean?
                         // start with another, save to local storage?
                         // then start using that? yea
-                        TBData.forkData();
+                        CData.forkData();
                         window.open('/');
                     }
                     else if(event.keyCode == 71) {
@@ -122,7 +122,6 @@ var KeyBindings = (function() {
                 
                 if(stop) {
                     $.Event(event).stopPropagation();
-                    
                     return false;
                 }
             });

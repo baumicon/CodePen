@@ -36,9 +36,9 @@ var CodeRenderer = (function() {
         compileInRealTime: function() {
             // Determine if we have a cached result for any of the content types
             // (html, css and js) and it's doesn't need a pre processor
-            if( ( this.useCache('html') == false && CData.htmlPreProcessor != 'none') ||
-                ( this.useCache('css')  == false && CData.cssPreProcessor  != 'none') ||
-                ( this.useCache('js')   == false && CData.jsPreProcessor   != 'none') ) {
+            if( ( this.useCache('html') == false && CData.html_pre_processor != 'none') ||
+                ( this.useCache('css')  == false && CData.css_pre_processor  != 'none') ||
+                ( this.useCache('js')   == false && CData.js_pre_processor   != 'none') ) {
                 // If we've come here, it's because we don't have a cached result
                 // and the content needs to be sent to the server for processing
                 return false;
@@ -88,7 +88,7 @@ var CodeRenderer = (function() {
             var values = {
                   TITLE        : "Code Pen",
                   HTML         : this.postProcessedHTML,
-                  HTML_CLASSES : CData.htmlClasses,
+                  HTML_CLASSES : CData.html_classes,
                   
                   CSS          : this.postProcessedCSS,
                   PREFIX       : this.getPrefixFree(),
@@ -107,7 +107,7 @@ var CodeRenderer = (function() {
         // Get CSS Options
         
         getPrefixFree: function() {
-            if(CData.cssPrefixFree) {
+            if(CData.css_prefix_free) {
                 return '<script src="/box-libs/prefixfree.min.js"></script>';
             }
             else {
@@ -116,11 +116,11 @@ var CodeRenderer = (function() {
         },
         
         getCSSStarter: function() {
-            if(CData.cssStarter == 'normalize') {
+            if(CData.css_starter == 'normalize') {
                 href = '/stylesheets/css/normalize.css';
                 return '<link rel="stylesheet" href="'+ href + '">';
             }
-            else if(CData.cssStarter == 'reset') {
+            else if(CData.css_starter == 'reset') {
                 href = '/stylesheets/css/reset.css';
                 return '<link rel="stylesheet" href="'+ href + '">';
             }
@@ -132,15 +132,15 @@ var CodeRenderer = (function() {
         getCSSExternal: function() {
             stylesheet = '';
             
-            if(CData.cssExternal) {
+            if(CData.css_external) {
                 // Make sure the url is a valid URL and ends with css
-                if(this.isValidExternal(CData.cssExternal, -3, 3, 'css')) {
+                if(this.isValidExternal(CData.css_external, -3, 3, 'css')) {
                     stylesheet = '<link rel="stylesheet" href="';
-                    stylesheet+= CData.cssExternal + '">';
+                    stylesheet+= CData.css_external + '">';
                 }
                 else {
                     stylesheet = '<!-- invalid external stylesheet: ';
-                    stylesheet+= CData.cssExternal + ' -->';
+                    stylesheet+= CData.css_external + ' -->';
                 }
             }
             
@@ -162,13 +162,13 @@ var CodeRenderer = (function() {
         },
         
         getJSLibrary: function() {
-            if(CData.jsLibrary) {
+            if(CData.js_library) {
                 var jsLibs = {
                     'jquery-latest': 'http://code.jquery.com/jquery-latest.js',
                     'mootools'     : '//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js',
                     'prototype'    : '//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js'
                 }
-                return '<script src="' + jsLibs[CData.jsLibrary] + '"></script>';
+                return '<script src="' + jsLibs[CData.js_library] + '"></script>';
             }
             else {
                 return '';
@@ -176,20 +176,20 @@ var CodeRenderer = (function() {
         },
         
         getModernizr: function() {
-            return (CData.jsModernizr) ? '<script src="/js/libs/modernizr.js"></script>' : '';
+            return (CData.js_modernizr) ? '<script src="/js/libs/modernizr.js"></script>' : '';
         },
         
         getJSExternal: function() {
             script = '';
             
-            if(CData.jsExternal) {
+            if(CData.js_external) {
                 // Make sure the url is a valid URL and ends with js
-                if(this.isValidExternal(CData.jsExternal, -2, 2, 'js')) {
-                    script = '<script src="' + CData.jsExternal + '"></script>';
+                if(this.isValidExternal(CData.js_external, -2, 2, 'js')) {
+                    script = '<script src="' + CData.js_external + '"></script>';
                 }
                 else {
                     script = '<!-- invalid external javascript file: ';
-                    script+= CData.jsExternal + ' -->';
+                    script+= CData.js_external + ' -->';
                 }
             }
             
@@ -212,9 +212,9 @@ var CodeRenderer = (function() {
             params = { };
             
             if(!this.useCache('html')) {
-                if(this.needsPreProcessing(CData.htmlPreProcessor)) {
+                if(this.needsPreProcessing(CData.html_pre_processor)) {
                     params['html'] = CData.html;
-                    params['htmlPreProcessor'] = CData.htmlPreProcessor;
+                    params['html_pre_processor'] = CData.html_pre_processor;
                 }
                 else {
                     // Since the html is simply html, it is post processed
@@ -223,9 +223,9 @@ var CodeRenderer = (function() {
             }
             
             if(!this.useCache('css')) {
-                if(this.needsPreProcessing(CData.cssPreProcessor)) {
+                if(this.needsPreProcessing(CData.css_pre_processor)) {
                     params['css'] = CData.css;
-                    params['cssPreProcessor'] = CData.cssPreProcessor;
+                    params['css_pre_processor'] = CData.css_pre_processor;
                 }
                 else {
                     // Since the css is simply css, it is post processed
@@ -234,9 +234,9 @@ var CodeRenderer = (function() {
             }
             
             if(!this.useCache('js')) {
-                if(this.needsPreProcessing(CData.jsPreProcessor)) {
+                if(this.needsPreProcessing(CData.js_pre_processor)) {
                     params['js'] = CData.js;
-                    params['jsPreProcessor'] = CData.jsPreProcessor;
+                    params['js_pre_processor'] = CData.js_pre_processor;
                 }
                 else {
                     // Since the js is simply js, it is post processed
@@ -254,13 +254,13 @@ var CodeRenderer = (function() {
         
         storeRefContent: function() {
             this.refHTML   = CData.html;
-            this.refHTMLPP = CData.htmlPreProcessor;
+            this.refHTMLPP = CData.html_pre_processor;
             
             this.refCSS    = CData.css;
-            this.refCSSPP  = CData.cssPreProcessor;
+            this.refCSSPP  = CData.css_pre_processor;
             
             this.refJS     = CData.js;
-            this.refJSPP   = CData.jsPreProcessor;
+            this.refJSPP   = CData.js_pre_processor;
         },
         
         // Send content to server for processing
@@ -311,7 +311,7 @@ var CodeRenderer = (function() {
             
             if(type == 'html') {
                 if( this.refHTML   == CData.html && 
-                    this.refHTMLPP == CData.htmlPreProcessor) {
+                    this.refHTMLPP == CData.html_pre_processor) {
                     return true;
                 }
                 else {
@@ -321,7 +321,7 @@ var CodeRenderer = (function() {
             }
             else if(type == 'css') {
                 if( this.refCSS   == CData.css && 
-                    this.refCSSPP == CData.cssPreProcessor) {
+                    this.refCSSPP == CData.css_pre_processor) {
                     return true;
                 }
                 else {
@@ -331,7 +331,7 @@ var CodeRenderer = (function() {
             }
             else {
                 if( this.refJS   == CData.js && 
-                    this.refJSPP == CData.jsPreProcessor) {
+                    this.refJSPP == CData.js_pre_processor) {
                     return true
                 }
                 else {
