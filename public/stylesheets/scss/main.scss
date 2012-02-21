@@ -311,11 +311,27 @@ header {
 	// height: 50px;
 }
 
+.vert-resizer {
+	@include gradient(#505050, #383838);
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	@include box-shadow((
+		inset 0 1px 0 #6e6e6e,
+		0 2px 2px rgba(0,0,0,0.4)
+	));
+	position: absolute;
+	z-index: 250;
+	left: 0;
+	top: 50%;
+	width: 100%; 
+	height: 18px;
+}
+
 .result {
 	clear: both;
 	position: absolute;
 	bottom: 0;
-	left: 0;
+	left: -8px;
 	width: 100%;
 	z-index: 200; // stay above expanded tops
 	iframe {

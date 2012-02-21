@@ -13,6 +13,7 @@
             result      : $("#result"),
             boxes       : $(".boxes"),
             topBoxesCon : $(".top-boxes"),
+            vertResizer : $("#vert-resizer"),
             
             init: function() {
                 // Initialize the data backing object first
@@ -86,11 +87,17 @@
             bindUIActions: function() {
                 // Resize all boxes when window resized
                 this.win.resize(function() {
-                    var space = Main.body.height() - 30;
+                    var space = Main.body.height() - 25;
                     Main.topBoxesCon.height(space / 2);
                     Main.boxResult.height(space / 2);
-                    Main.result.height(space / 2);
+                    Main.result.css({
+                        "height"  : space / 2,
+                        "width"   : Main.win.width()
+                    });
                     Main.boxes.height(Main.win.height());
+                    Main.vertResizer.css({
+                        "top"    : space / 2 + 82 + "px",
+                    });
                 }).trigger("resize");
                 
                 // Opening and closing settings panels
