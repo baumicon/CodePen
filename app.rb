@@ -62,15 +62,15 @@ class App < Sinatra::Base
     results = { }
     
     if params[:html] != nil and !params[:html].empty?
-      results['html'] = pps.process_html(params[:htmlPreProcessor], params[:html])
+      results['html'] = pps.process_html(params[:html_pre_processor], params[:html])
     end
     
     if params[:css] != nil and !params[:css].empty?
-      results['css'] = pps.process_css(params[:cssPreProcessor], params[:css])
+      results['css'] = pps.process_css(params[:css_pre_processor], params[:css])
     end
     
     if params[:js] != nil and !params[:js].empty?
-      results['js'] = pps.process_js(params[:jsPreProcessor], params[:js])
+      results['js'] = pps.process_js(params[:js_pre_processor], params[:js])
     end
     
     if pps.errors.length > 0
@@ -136,18 +136,18 @@ class App < Sinatra::Base
       'css'   => data['css'],
       'js'    => data['js'],
       
-      'html_pre_processor' => data['htmlPreProcessor'],
-      'html_classes'       => data['htmlClasses'],
+      'html_pre_processor' => data['html_pre_processor'],
+      'html_classes'       => data['html_classes'],
       
-      'css_pre_processor' => data['cssPreProcessor'],
-      'css_prefix_free'   => data['cssPrefixFree'],
-      'css_starter'       => data['cssStarter'],
-      'css_external'      => data['cssExternal'],
+      'css_pre_processor' => data['css_pre_processor'],
+      'css_prefix_free'   => data['css_prefix_free'],
+      'css_starter'       => data['css_starter'],
+      'css_external'      => data['css_external'],
       
-      'js_pre_processor' => data['jsPreProcessor'],
+      'js_pre_processor' => data['js_pre_processor'],
       'js_library'       => data['js_library'],
-      'js_modernizr'     => data['jsModernizr'],
-      'js_external'      => data['jsExternal']
+      'js_modernizr'     => data['js_modernizr'],
+      'js_external'      => data['js_external']
     }
   end
   

@@ -36,9 +36,9 @@ var CodeRenderer = (function() {
         compileInRealTime: function() {
             // Determine if we have a cached result for any of the content types
             // (html, css and js) and it's doesn't need a pre processor
-            if( ( this.useCache('html') == false && TBData.htmlPreProcessor != 'none') ||
-                ( this.useCache('css')  == false && TBData.cssPreProcessor  != 'none') ||
-                ( this.useCache('js')   == false && TBData.jsPreProcessor   != 'none') ) {
+            if( ( this.useCache('html') == false && CData.htmlPreProcessor != 'none') ||
+                ( this.useCache('css')  == false && CData.cssPreProcessor  != 'none') ||
+                ( this.useCache('js')   == false && CData.jsPreProcessor   != 'none') ) {
                 // If we've come here, it's because we don't have a cached result
                 // and the content needs to be sent to the server for processing
                 return false;
@@ -88,7 +88,7 @@ var CodeRenderer = (function() {
             var values = {
                   TITLE        : "Code Pen",
                   HTML         : this.postProcessedHTML,
-                  HTML_CLASSES : TBData.htmlClasses,
+                  HTML_CLASSES : CData.htmlClasses,
                   
                   CSS          : this.postProcessedCSS,
                   PREFIX       : this.getPrefixFree(),
@@ -107,7 +107,7 @@ var CodeRenderer = (function() {
         // Get CSS Options
         
         getPrefixFree: function() {
-            if(TBData.cssPrefixFree) {
+            if(CData.cssPrefixFree) {
                 return '<script src="/box-libs/prefixfree.min.js"></script>';
             }
             else {
@@ -116,11 +116,11 @@ var CodeRenderer = (function() {
         },
         
         getCSSStarter: function() {
-            if(TBData.cssStarter == 'normalize') {
+            if(CData.cssStarter == 'normalize') {
                 href = '/stylesheets/css/normalize.css';
                 return '<link rel="stylesheet" href="'+ href + '">';
             }
-            else if(TBData.cssStarter == 'reset') {
+            else if(CData.cssStarter == 'reset') {
                 href = '/stylesheets/css/reset.css';
                 return '<link rel="stylesheet" href="'+ href + '">';
             }
@@ -132,15 +132,15 @@ var CodeRenderer = (function() {
         getCSSExternal: function() {
             stylesheet = '';
             
-            if(TBData.cssExternal) {
+            if(CData.cssExternal) {
                 // Make sure the url is a valid URL and ends with css
-                if(this.isValidExternal(TBData.cssExternal, -3, 3, 'css')) {
+                if(this.isValidExternal(CData.cssExternal, -3, 3, 'css')) {
                     stylesheet = '<link rel="stylesheet" href="';
-                    stylesheet+= TBData.cssExternal + '">';
+                    stylesheet+= CData.cssExternal + '">';
                 }
                 else {
                     stylesheet = '<!-- invalid external stylesheet: ';
-                    stylesheet+= TBData.cssExternal + ' -->';
+                    stylesheet+= CData.cssExternal + ' -->';
                 }
             }
             
@@ -162,13 +162,13 @@ var CodeRenderer = (function() {
         },
         
         getJSLibrary: function() {
-            if(TBData.jsLibrary) {
+            if(CData.jsLibrary) {
                 var jsLibs = {
                     'jquery-latest': 'http://code.jquery.com/jquery-latest.js',
                     'mootools'     : '//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js',
                     'prototype'    : '//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js'
                 }
-                return '<script src="' + jsLibs[TBData.jsLibrary] + '"></script>';
+                return '<script src="' + jsLibs[CData.jsLibrary] + '"></script>';
             }
             else {
                 return '';
@@ -176,20 +176,20 @@ var CodeRenderer = (function() {
         },
         
         getModernizr: function() {
-            return (TBData.jsModernizr) ? '<script src="/js/libs/modernizr.js"></script>' : '';
+            return (CData.jsModernizr) ? '<script src="/js/libs/modernizr.js"></script>' : '';
         },
         
         getJSExternal: function() {
             script = '';
             
-            if(TBData.jsExternal) {
+            if(CData.jsExternal) {
                 // Make sure the url is a valid URL and ends with js
-                if(this.isValidExternal(TBData.jsExternal, -2, 2, 'js')) {
-                    script = '<script src="' + TBData.jsExternal + '"></script>';
+                if(this.isValidExternal(CData.jsExternal, -2, 2, 'js')) {
+                    script = '<script src="' + CData.jsExternal + '"></script>';
                 }
                 else {
                     script = '<!-- invalid external javascript file: ';
-                    script+= TBData.jsExternal + ' -->';
+                    script+= CData.jsExternal + ' -->';
                 }
             }
             
@@ -212,35 +212,35 @@ var CodeRenderer = (function() {
             params = { };
             
             if(!this.useCache('html')) {
-                if(this.needsPreProcessing(TBData.htmlPreProcessor)) {
-                    params['html'] = TBData.html;
-                    params['htmlPreProcessor'] = TBData.htmlPreProcessor;
+                if(this.needsPreProcessing(CData.htmlPreProcessor)) {
+                    params['html'] = CData.html;
+                    params['htmlPreProcessor'] = CData.htmlPreProcessor;
                 }
                 else {
                     // Since the html is simply html, it is post processed
-                    this.postProcessedHTML = TBData.html;
+                    this.postProcessedHTML = CData.html;
                 }
             }
             
             if(!this.useCache('css')) {
-                if(this.needsPreProcessing(TBData.cssPreProcessor)) {
-                    params['css'] = TBData.css;
-                    params['cssPreProcessor'] = TBData.cssPreProcessor;
+                if(this.needsPreProcessing(CData.cssPreProcessor)) {
+                    params['css'] = CData.css;
+                    params['cssPreProcessor'] = CData.cssPreProcessor;
                 }
                 else {
                     // Since the css is simply css, it is post processed
-                    this.postProcessedCSS = TBData.css;
+                    this.postProcessedCSS = CData.css;
                 }
             }
             
             if(!this.useCache('js')) {
-                if(this.needsPreProcessing(TBData.jsPreProcessor)) {
-                    params['js'] = TBData.js;
-                    params['jsPreProcessor'] = TBData.jsPreProcessor;
+                if(this.needsPreProcessing(CData.jsPreProcessor)) {
+                    params['js'] = CData.js;
+                    params['jsPreProcessor'] = CData.jsPreProcessor;
                 }
                 else {
                     // Since the js is simply js, it is post processed
-                    this.postProcessedJS = TBData.js;
+                    this.postProcessedJS = CData.js;
                 }
             }
             
@@ -253,14 +253,14 @@ var CodeRenderer = (function() {
         },
         
         storeRefContent: function() {
-            this.refHTML   = TBData.html;
-            this.refHTMLPP = TBData.htmlPreProcessor;
+            this.refHTML   = CData.html;
+            this.refHTMLPP = CData.htmlPreProcessor;
             
-            this.refCSS    = TBData.css;
-            this.refCSSPP  = TBData.cssPreProcessor;
+            this.refCSS    = CData.css;
+            this.refCSSPP  = CData.cssPreProcessor;
             
-            this.refJS     = TBData.js;
-            this.refJSPP   = TBData.jsPreProcessor;
+            this.refJS     = CData.js;
+            this.refJSPP   = CData.jsPreProcessor;
         },
         
         // Send content to server for processing
@@ -310,8 +310,8 @@ var CodeRenderer = (function() {
             if(CodeRenderer.errorHTML) return false;
             
             if(type == 'html') {
-                if( this.refHTML   == TBData.html && 
-                    this.refHTMLPP == TBData.htmlPreProcessor) {
+                if( this.refHTML   == CData.html && 
+                    this.refHTMLPP == CData.htmlPreProcessor) {
                     return true;
                 }
                 else {
@@ -320,8 +320,8 @@ var CodeRenderer = (function() {
                 }
             }
             else if(type == 'css') {
-                if( this.refCSS   == TBData.css && 
-                    this.refCSSPP == TBData.cssPreProcessor) {
+                if( this.refCSS   == CData.css && 
+                    this.refCSSPP == CData.cssPreProcessor) {
                     return true;
                 }
                 else {
@@ -330,8 +330,8 @@ var CodeRenderer = (function() {
                 }
             }
             else {
-                if( this.refJS   == TBData.js && 
-                    this.refJSPP == TBData.jsPreProcessor) {
+                if( this.refJS   == CData.js && 
+                    this.refJSPP == CData.jsPreProcessor) {
                     return true
                 }
                 else {
@@ -357,7 +357,7 @@ var CodeRenderer = (function() {
             $.ajax({
                   url: '/gist/',
                   type: 'POST',
-                  data: this.getDataValues({ 'data': JSON.stringify(TBData) }),
+                  data: this.getDataValues({ 'data': JSON.stringify(CData) }),
                   success: function( result ) {
                       obj = $.parseJSON(result);
                       // Open new gist in a tab!

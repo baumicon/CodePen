@@ -13,7 +13,7 @@ class Renderer
   end
   
   def render_full_page
-    @TITLE       = @data['title']
+    @TITLE       = @data['slug']
     
     # html related
     @HTML         = @pps.process_html(@data['html_pre_processor'], @data['html'])

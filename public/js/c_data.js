@@ -1,4 +1,4 @@
-var TBData = (function() {
+var CData = (function() {
 
 	/***********************
 	* Keeps the app's state.
@@ -6,27 +6,28 @@ var TBData = (function() {
 	* then to the backend storage
 	************************/
 
-	var TBData = {
+	var CData = {
 
 		// Code Pen data
-		name              : '',
+		slug              : '',
+		url               : '',
 		html              : '',
 		css               : '',
 		js                : '',
 		theme             : '',
 		version           : 1,
-		htmlPreProcessor  : 'none',
-		htmlClasses         : '',
+		html_pre_processor  : 'none',
+		html_classes         : '',
 		
-		cssPreProcessor   : 'none',
-		cssPrefixFree     : '',
-		cssStarter        : '',
-		cssExternal       : '',
+		css_pre_processor   : 'none',
+		css_prefix_free     : '',
+		css_starter        : '',
+		css_external       : '',
 		
-		jsPreProcessor    : 'none',
-		jsLibrary         : '',
-		jsModernizr       : '',
-		jsExternal        : '',
+		js_pre_processor    : 'none',
+		js_library         : '',
+		js_modernizr       : '',
+		js_external        : '',
 
 	    init: function() {
 	        this.bindSaveToLocalStorage();
@@ -35,7 +36,7 @@ var TBData = (function() {
 	    
 	    bindSaveToLocalStorage: function() {
             $(window).unload( function () {
-                TBData.saveDataToLocalStorage();
+                CData.saveDataToLocalStorage();
             });
 	    },
 	    
@@ -43,7 +44,7 @@ var TBData = (function() {
 	        // alextodo, future feature, allow you to save data
 	        // for more than one codepen, use the name in the URL!
 	        if(typeof(localStorage) != 'undefined') {
-                localStorage['tb'] = JSON.stringify(TBData);
+                localStorage['tb'] = JSON.stringify(CData);
             }
 	    },
         
@@ -90,7 +91,7 @@ var TBData = (function() {
             // alextodo, what doesn't have localStorage? which browsers
             this.name = '';
             this.version = 1;
-            localStorage['fork'] = JSON.stringify(TBData);
+            localStorage['fork'] = JSON.stringify(CData);
 	    },
 
 	    syncThisWithDataObj: function(data) {
@@ -100,43 +101,43 @@ var TBData = (function() {
 	    },
 
 	    setHTMLOption: function(name, value) {
-	    	this.htmlPreProcessor = value;
+	    	this.html_pre_processor = value;
 	    },
 	    
 	    setHTMLClass: function(value) {
-	        this.htmlClasses = value;
+	        this.html_classes = value;
 	    },
 
 	    setCSSOption: function(name, value) {
-	    	this.cssPreProcessor = value;
+	    	this.css_pre_processor = value;
 	    },
 	    
 	    setPrefixFree: function(value) {
-    		this.cssPrefixFree = value;
+    		this.css_prefix_free = value;
 	    },
 	    
 	    setCSSStarter: function(value) {
-	        this.cssStarter = value;
+	        this.css_starter = value;
 	    },
 	    
 	    setCSSExternal: function(value) {
-	        this.cssExternal = value;
+	        this.css_external = value;
 	    },
 
 	    setJSOption: function(name, value) {
-	    	this.jsPreProcessor = value;
+	    	this.js_pre_processor = value;
 	    },
 	    
 	    setJSLibrary: function(value) {
-	        this.jsLibrary = value;
+	        this.js_library = value;
 	    },
 	    
 	    setModernizr: function(value) {
-	        this.jsModernizr = value;
+	        this.js_modernizr = value;
 	    },
 	    
 	    setJSExternal: function(value) {
-	        this.jsExternal = value;
+	        this.js_external = value;
 	    },
 	    
 	    setTheme: function(value) {
@@ -145,13 +146,13 @@ var TBData = (function() {
 
 	    getOption: function(mode, name) {
 	    	if(mode == 'xml') {
-	    		return this.htmlPreProcessor;
+	    		return this.html_pre_processor;
 	    	}
 	    	else if(mode == 'css') {
-	    		return this.cssPreProcessor;
+	    		return this.css_pre_processor;
 	    	}
 	    	else {
-	    		return this.jsPreProcessor;
+	    		return this.js_pre_processor;
 	    	}
 	    },
 
@@ -167,8 +168,8 @@ var TBData = (function() {
 	    }
     };
 
-	// This ends the TBData module
+	// This ends the CData module
 
-	return TBData;
+	return CData;
 
 })();

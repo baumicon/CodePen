@@ -17,7 +17,7 @@
             
             init: function() {
                 // Initialize the data backing object first
-                TBData.init();
+                CData.init();
                 
                 this.syncUIWithDBO();
                 this.buildEditors();
@@ -31,45 +31,45 @@
             
             syncUIWithDBO: function() {
                 // Sync UI with data values
-                $('#slug').val(TBData.name);
-                $('#html').html(TBData.html);
-                $('#css').html(TBData.css);
-                $('#js').html(TBData.js);
+                $('#slug').val(CData.name);
+                $('#html').html(CData.html);
+                $('#css').html(CData.css);
+                $('#js').html(CData.js);
                 
                 // Sync preprocessors with correct data
                 // alextodo, for some reason these stopped working, why?
                 // I can't check the radio button anymore
                 $('input[type="radio"]').prop('checked', false);
-                $('input[value="' + TBData.htmlPreProcessor + '"]').prop('checked', true);
-                $('input[value="' + TBData.cssPreProcessor + '"]').prop('checked', true);
-                $('input[value="' + TBData.cssStarter + '"]').prop('checked', true);
-                $('input[value="' + TBData.jsPreProcessor + '"]').prop('checked', true);
+                $('input[value="' + CData.html_pre_processor + '"]').prop('checked', true);
+                $('input[value="' + CData.css_pre_processor + '"]').prop('checked', true);
+                $('input[value="' + CData.css_starter + '"]').prop('checked', true);
+                $('input[value="' + CData.js_pre_processor + '"]').prop('checked', true);
                 
-                Main.updatePrefixFreeBox(TBData.cssPreProcessor);
+                Main.updatePrefixFreeBox(CData.css_pre_processor);
                 
                 // Set the header type indicator for editors
-                this.addClassBoxHTML(TBData.htmlPreProcessor);
-                this.addClassBoxCSS(TBData.cssPreProcessor);
-                this.addClassBoxJS(TBData.jsPreProcessor);
+                this.addClassBoxHTML(CData.html_pre_processor);
+                this.addClassBoxCSS(CData.css_pre_processor);
+                this.addClassBoxJS(CData.js_pre_processor);
                 
                 // Sync library with correct data as well
-                $('#js-select').val(TBData.jsLibrary);
+                $('#js-select').val(CData.js_library);
 
                 // Better select box for chosing JS library
                 $("#js-select, #theme").chosen();
 
-                if(TBData.cssPrefixFree) $('#prefix-free').prop('checked', true);
-                if(TBData.jsModernizr) $('#modernizr').prop('checked', true);
+                if(CData.css_prefix_free) $('#prefix-free').prop('checked', true);
+                if(CData.js_modernizr) $('#modernizr').prop('checked', true);
                 
                 // externals
-                if(TBData.htmlClasses) $('#html-classes').val(TBData.htmlClasses);
-                if(TBData.cssExternal) $('#external-css').val(TBData.cssExternal);
-                if(TBData.jsExternal) $('#external-js').val(TBData.jsExternal);
+                if(CData.html_classes) $('#html-classes').val(CData.html_classes);
+                if(CData.css_external) $('#external-css').val(CData.css_external);
+                if(CData.js_external) $('#external-js').val(CData.js_external);
                 
                 // select current theme
-                $('#theme').val(TBData.theme);
+                $('#theme').val(CData.theme);
                 // show a specific theme
-                this.body.attr("data-theme", TBData.theme);
+                this.body.attr("data-theme", CData.theme);
             },
             
             addClassBoxHTML: function(clazz) {
@@ -138,14 +138,14 @@
 
                  // HTML related
                  $('input[name="html-preprocessor"]').on('click', function() {
-                     TBData.setHTMLOption('preprocessor', this.value);
+                     CData.setHTMLOption('preprocessor', this.value);
                      Main.compileContent(HTMLeditor, '', true);
                      Main.addClassBoxHTML(this.value);
                  });
 
                  // CSS related
                  $('input[name="css-preprocessor"]').on('click', function() {
-                       TBData.setCSSOption('preprocessor', this.value);
+                       CData.setCSSOption('preprocessor', this.value);
                        Main.compileContent(CSSeditor, '', true);
                        Main.addClassBoxCSS(this.value);
                        Main.updatePrefixFreeBox(this.value);
@@ -153,42 +153,42 @@
 
                  // prefix free checkbox
                  $('#prefix-free').on('click', function() {
-                     if(TBData.cssPreProcessor != 'sass') {
-                        TBData.setPrefixFree($(this).is(":checked"));
+                     if(CData.css_pre_processor != 'sass') {
+                        CData.setPrefixFree($(this).is(":checked"));
                      }
                  });
                  
                  // CSS Resests
                  $('input[name="startercss"]').on('click', function() {
-                     TBData.setCSSStarter(this.value);
+                     CData.setCSSStarter(this.value);
                      Main.compileContent(CSSeditor, '', true);
                  });
 
                  // JS related
                  $('input[name="js-preprocessor"]').on('click', function() {
-                       TBData.setJSOption('preprocessor', this.value);
+                       CData.setJSOption('preprocessor', this.value);
                        Main.compileContent(JSeditor, '', true);
                        Main.addClassBoxJS(this.value);
                  });
 
                  $('#js-select').on('change', function(index, select) {
-                     TBData.setJSLibrary(this.value);
+                     CData.setJSLibrary(this.value);
                  });
                  
                  $('#modernizr').on('click', function() {
-                     TBData.setModernizr($(this).is(":checked"));
+                     CData.setModernizr($(this).is(":checked"));
                  });
                  
                  $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
-                     if(this.id == 'html-classes') TBData.setHTMLClass(this.value);
-                     else if(this.id == 'external-css') TBData.setCSSExternal(this.value);
-                     else if(this.id == 'external-js') TBData.setJSExternal(this.value);
+                     if(this.id == 'html-classes') CData.setHTMLClass(this.value);
+                     else if(this.id == 'external-css') CData.setCSSExternal(this.value);
+                     else if(this.id == 'external-js') CData.setJSExternal(this.value);
                  });
                  
                  // Theme related
 
                  $('#theme').on('change', function(index, select) {
-                     TBData.setTheme(this.value);
+                     CData.setTheme(this.value);
                      // Update current theme
                      Main.body.attr("data-theme", this.value);
                  });
@@ -209,10 +209,10 @@
                  KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
             },
             
-            updatePrefixFreeBox: function(cssPreProcessor) {
-                if(cssPreProcessor == 'sass') {
+            updatePrefixFreeBox: function(css_pre_processor) {
+                if(css_pre_processor == 'sass') {
                        // turn off prefix free
-                       TBData.setPrefixFree(false);
+                       CData.setPrefixFree(false);
                        $('#prefix-free').prop('checked', false);
                        $('#prefix-free').prop('disabled', true);
                    }
@@ -227,7 +227,7 @@
                 //
                 window.HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
                     lineNumbers  : true,
-                    value        : TBData.html,
+                    value        : CData.html,
                     mode         : "xml",
                     tabSize      : 2,
                     onChange     : Main.compileContent,
@@ -235,7 +235,7 @@
 
                 window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
                     lineNumbers  : true,
-                    value        : TBData.css,
+                    value        : CData.css,
                     mode         : "css",
                     tabSize      : 2,
                     onChange     : Main.compileContent
@@ -243,7 +243,7 @@
 
                 window.JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
                     lineNumbers  : true,
-                    value        : TBData.js,
+                    value        : CData.js,
                     mode         : "javascript",
                     tabSize      : 2,
                     onChange     : Main.compileContent
@@ -251,7 +251,7 @@
             },
             
             compileContent: function(editor, changes, forceCompile) {
-                TBData.setEditorValue(editor.getOption('mode'), editor.getValue());
+                CData.setEditorValue(editor.getOption('mode'), editor.getValue());
                 CodeRenderer.compileContent(forceCompile);
             },
             
