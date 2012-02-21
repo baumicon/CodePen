@@ -1,10 +1,10 @@
 require 'mongo_mapper'
-require '../lib/json_util'
+require './lib/json_util'
 
 class Content
     include MongoMapper::Document
 
-    attr_accessible :uid, :slug_name, :version, :html, :css, :js, :html_pre_processor, :css_pre_processor, :js_pre_processor
+    attr_accessible :uid, :slug, :version, :html, :css, :js, :html_pre_processor, :css_pre_processor, :js_pre_processor
     attr_accessor :slugs
 
     validate :validate_slug_owned
@@ -12,7 +12,7 @@ class Content
 
     #Foreign Keys
     key :uid, String, :required => true
-    key :slug_name, String, :required => true
+    key :slug, String, :required => true
 
     key :version, Integer, :required => true
     key :html, String
@@ -35,7 +35,7 @@ class Content
     private
 
     def validate_slug_owned
-        errors.add(:slug_not_owned, "You must own a slug to save to it") unless @slugs.include?(@slug_name)
+        errors.add(:slug_not_owned, "You must own a slug to save to it") unless @slugs.include?(@slug)
     end
 
     def validate_version_is_positive

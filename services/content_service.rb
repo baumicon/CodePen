@@ -1,8 +1,8 @@
-require '../models/slug'
-require '../models/content'
-require '../models/user'
-require '../lib/json_util'
-require '../lib/ajax_util'
+require './models/slug'
+require './models/content'
+require './models/user'
+require './lib/json_util'
+require './lib/ajax_util'
 
 class ContentService
   include AjaxUtil
@@ -18,8 +18,8 @@ class ContentService
         return errors({:invalid_sequence => check[:message]})
       end
 
-      if not slugs.include? content['slug_name']
-        slug = Slug.new(:uid => user.uid, :name => content['slug_name'])
+      if not slugs.include? content['slug']
+        slug = Slug.new(:uid => user.uid, :name => content['slug'])
         return errors(slug.errors) unless slug.valid?
         slug.save
         content.slugs << slug.name
@@ -34,20 +34,20 @@ class ContentService
     end
   end
 
-  def get_latest(slug_name)
+  def latest(slug)
     begin
-      content = Content.first(:order => :version.desc, :slug_name => slug_name)
+      content = Content.first(:order => :version.desc, :slug => slug)
       return success(content.attributes) if content
-      return errors({:no_conent_for_slug => "Can't find content for slug name '#{slug_name}'"})
+      return errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
     rescue Exception => ex
-      return errors({:get_latest => "Error getting most recent content for '#{slug_name}'."})
+      return errors({:get_latest => "Error getting most recent content for '#{slug}'."})
     end
   end
 
   private
 
   def sequence_check(content)
-    previous_content = Content.first(:order => :version.desc, :slug_name => content['slug_name'])
+    previous_content = Content.first(:order => :version.desc, :slug => content['slug'])
     return {:is_sequential => true} if previous_content.nil?
     return {:is_sequential => true} if content['version'] - previous_content['version'] == 1
     return {:is_sequential => false, :message => "Invalid Sequence.  Expected #{previous_content['version'] + 1}. Got #{content['version']}"}

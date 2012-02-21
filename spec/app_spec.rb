@@ -1,11 +1,9 @@
-require '../app'
-require 'rspec'
-require 'rack/test'
+require './app'
+require 'spec_helper'
 
 set :environment, :test
 
 describe 'The App' do
-  include Rack::Test::Methods
 
   def app
     App.new
@@ -27,7 +25,6 @@ describe 'The App' do
   end
 
   describe "api" do
-
     it "saves content" do
       post '/save/content', params={"payload" =>'{"SlugName":"testing", "html" : "<html><body>hi there</body></html>"}' }
       last_response.should be_ok

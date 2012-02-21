@@ -35,9 +35,10 @@ class App < Sinatra::Base
   end
 
   post '/save/content' do
+    set_session
     service = ContentService.new
-    result = service.save_content(user.uid, params[:payload])
-    {'success' => true}.to_json
+    result = service.save_content(@user.uid, params[:content])
+    return result.to_json
   end
 
   get '/slugs' do
@@ -46,10 +47,6 @@ class App < Sinatra::Base
 
   get '/content/:slug_name' do
     return true
-  end
-
-  post '/save/content' do
-    {'success' => true}.to_json
   end
 
   get '/auth/:name/callback' do

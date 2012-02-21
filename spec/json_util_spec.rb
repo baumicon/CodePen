@@ -1,4 +1,4 @@
-require '../lib/json_util'
+require './lib/json_util'
 
 def get_json1
   '{"camelCased":"value"}'

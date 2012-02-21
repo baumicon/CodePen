@@ -49,5 +49,12 @@ end
 
 
 ENV['RACK_ENV'] = "test"
+
+require 'rack/test'
+require './spec/util_mongo'
 require 'rspec'
 require 'awesome_print'
+
+include MongoUtil
+include Rack::Test::Methods
+

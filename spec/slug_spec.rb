@@ -1,6 +1,5 @@
-require '../models/slug'
-
-MongoMapper.database = 'integration_test'
+require './models/slug'
+require 'spec_helper'
 
 def setup
   Slug.collection.remove
