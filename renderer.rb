@@ -1,4 +1,5 @@
 require 'erb'
+require 'uri'
 require './services/preprocessor_service'
 
 class Renderer
@@ -26,7 +27,7 @@ class Renderer
     @JS           = @pps.process_js(@data['js_pre_processor'], @data['js'])
     @JSLIBRARY    = get_js_library(@data['js_library'])
     @JS_MODERNIZR = get_js_modernizr(@data['js_modernizr'])
-    @JS_EXTERNAL  = get_css_external(@data['js_external'])
+    @JS_EXTERNAL  = get_js_external(@data['js_external'])
     
     render_tpl()
   end
@@ -56,7 +57,17 @@ class Renderer
   end
   
   def get_css_external(css_external)
-    (css_external) ? '<link rel="stylesheet" href="' + css_external + '">' : ''
+    stylesheet = ''
+    
+    if css_external and css_external != ''
+      if !(css_external =~ URI::regexp).nil? and css_external[-3, 3] == 'css'
+        stylesheet = '<link rel="stylesheet" href="' + css_external + '">'
+      else
+        stylesheet = '<!-- invalid external stylesheet: ' + css_external + '-->'
+      end
+    end
+    
+    stylesheet
   end
   
   def get_js_library(js_library)
@@ -75,7 +86,18 @@ class Renderer
     (js_modernizr) ? '<script src="/js/libs/modernizr.js"></script>' : ''
   end
   
-  def get_css_external(js_external)
-    (js_external) ? '<script src="' + js_external + '"></script>' : ''
+  def get_js_external(js_external)
+    script = ''
+    
+    if js_external and js_external != ''
+      if !(js_external =~ URI::regexp).nil? and js_external[-2, 2] == 'js'
+        script = '<script src="' + js_external + '"></script>'
+      else
+        script = '<!-- invalid external javascript file: ' + js_external + '-->'
+      end
+    end
+    
+    script
   end
+  
 end

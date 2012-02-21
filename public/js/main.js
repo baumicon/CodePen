@@ -168,7 +168,7 @@
                      TBData.setModernizr($(this).is(":checked"));
                  });
                  
-                 $('#html-classes,#external-css,#external-js').on('keypress', function(e) {
+                 $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
                      if(this.id == 'html-classes') TBData.setHTMLClass(this.value);
                      else if(this.id == 'external-css') TBData.setCSSExternal(this.value);
                      else if(this.id == 'external-js') TBData.setJSExternal(this.value);

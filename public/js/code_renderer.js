@@ -86,23 +86,68 @@ var CodeRenderer = (function() {
         
         getIFrameHTML: function() {
             var values = {
-                  TITLE      : "Code Pen",
-                  HTML       : this.postProcessedHTML,
-                  HTML_CLASSES : '',
+                  TITLE        : "Code Pen",
+                  HTML         : this.postProcessedHTML,
+                  HTML_CLASSES : TBData.htmlClasses,
                   
                   CSS          : this.postProcessedCSS,
                   PREFIX       : this.getPrefixFree(),
                   CSS_STARTER  : this.getCSSStarter(),
-                  CSS_EXTERNAL : '',
+                  CSS_EXTERNAL : this.getCSSExternal(),
                   
                   JS           : this.getJS(),
                   JSLIBRARY    : this.getJSLibrary(),
-                  JS_MODERNIZR : '',
-                  JS_EXTERNAL  : '',
+                  JS_MODERNIZR : this.getModernizr(),
+                  JS_EXTERNAL  : this.getJSExternal(),
             };
 
             return tmpl(this.getTPL('result'), values);
         },
+        
+        // Get CSS Options
+        
+        getPrefixFree: function() {
+            if(TBData.cssPrefixFree) {
+                return '<script src="/box-libs/prefixfree.min.js"></script>';
+            }
+            else {
+                return '';
+            }
+        },
+        
+        getCSSStarter: function() {
+            if(TBData.cssStarter == 'normalize') {
+                href = '/stylesheets/css/normalize.css';
+                return '<link rel="stylesheet" href="'+ href + '">';
+            }
+            else if(TBData.cssStarter == 'reset') {
+                href = '/stylesheets/css/reset.css';
+                return '<link rel="stylesheet" href="'+ href + '">';
+            }
+            else {
+                return '';
+            }
+        },
+        
+        getCSSExternal: function() {
+            stylesheet = '';
+            
+            if(TBData.cssExternal) {
+                // Make sure the url is a valid URL and ends with css
+                if(this.isValidExternal(TBData.cssExternal, -3, 3, 'css')) {
+                    stylesheet = '<link rel="stylesheet" href="';
+                    stylesheet+= TBData.cssExternal + '">';
+                }
+                else {
+                    stylesheet = '<!-- invalid external stylesheet: ';
+                    stylesheet+= TBData.cssExternal + ' -->';
+                }
+            }
+            
+            return stylesheet;
+        },
+        
+        // Get JS Options
         
         getJS: function() {
             if(this.postProcessedJS) {
@@ -130,27 +175,35 @@ var CodeRenderer = (function() {
             }
         },
         
-        getPrefixFree: function() {
-            if(TBData.cssPrefixFree) {
-                return '<script src="/box-libs/prefixfree.min.js"></script>';
-            }
-            else {
-                return '';
-            }
+        getModernizr: function() {
+            return (TBData.jsModernizr) ? '<script src="/js/libs/modernizr.js"></script>' : '';
         },
         
-        getCSSStarter: function() {
-            if(TBData.cssStarter == 'normalize') {
-                href = '/stylesheets/css/normalize.css';
-                return '<link rel="stylesheet" href="'+ href + '">';
+        getJSExternal: function() {
+            script = '';
+            
+            if(TBData.jsExternal) {
+                // Make sure the url is a valid URL and ends with js
+                if(this.isValidExternal(TBData.jsExternal, -2, 2, 'js')) {
+                    script = '<script src="' + TBData.jsExternal + '"></script>';
+                }
+                else {
+                    script = '<!-- invalid external javascript file: ';
+                    script+= TBData.jsExternal + ' -->';
+                }
             }
-            else if(TBData.cssStarter == 'reset') {
-                href = '/stylesheets/css/reset.css';
-                return '<link rel="stylesheet" href="'+ href + '">';
-            }
-            else {
-                return '';
-            }
+            
+            return script;
+        },
+        
+        isValidExternal: function(url, start, length, value) {
+            return (this.isURL(url) && url.substr(start, length) == value);
+        },
+        
+        isURL: function(url) {
+            var r = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+            
+            return r.test(url);
         },
         
         // Render content, serverside or client, then update cached content
