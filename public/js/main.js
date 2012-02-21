@@ -10,6 +10,8 @@
             boxCSS      : $("#box-css"),
             boxJS       : $("#box-js"),
             boxResult   : $(".result"),
+            result      : $("#result"),
+            boxes       : $(".boxes"),
             topBoxesCon : $(".top-boxes"),
             
             init: function() {
@@ -84,9 +86,11 @@
             bindUIActions: function() {
                 // Resize all boxes when window resized
                 this.win.resize(function() {
-                    var space = Main.body.height() - 100; // TO DO: Make less ghetto (problems with floats)
+                    var space = Main.body.height() - 30;
                     Main.topBoxesCon.height(space / 2);
                     Main.boxResult.height(space / 2);
+                    Main.result.height(space / 2);
+                    Main.boxes.height(Main.win.height());
                 }).trigger("resize");
                 
                 // Opening and closing settings panels
