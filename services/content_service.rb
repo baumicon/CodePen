@@ -13,6 +13,11 @@ class ContentService
       slugs = Slug.where(:uid => user.uid).all.map{|slug| slug.name}
       content = Content.new_from_json(json, user.uid, slugs)
 
+      check = sequence_check(content)
+      if not check[:is_sequential]
+        return errors({:invalid_sequence => check[:message]})
+      end
+
       if not slugs.include? content['slug_name']
         slug = Slug.new(:uid => user.uid, :name => content['slug_name'])
         return errors(slug.errors) unless slug.valid?
@@ -31,12 +36,20 @@ class ContentService
 
   def get_latest(slug_name)
     begin
-      content = Content.first(:order => :created_at.desc, :slug_name => slug_name).attribute
-      content['t_obj_type'] = 'content'
-      success content
+      content = Content.first(:order => :version.desc, :slug_name => slug_name)
+      return success(content.attributes) if content
+      return errors({:no_conent_for_slug => "Can't find content for slug name '#{slug_name}'"})
     rescue Exception => ex
-      require 'awesome_print'; ap ex
       return errors({:get_latest => "Error getting most recent content for '#{slug_name}'."})
     end
+  end
+
+  private
+
+  def sequence_check(content)
+    previous_content = Content.first(:order => :version.desc, :slug_name => content['slug_name'])
+    return {:is_sequential => true} if previous_content.nil?
+    return {:is_sequential => true} if content['version'] - previous_content['version'] == 1
+    return {:is_sequential => false, :message => "Invalid Sequence.  Expected #{previous_content['version'] + 1}. Got #{content['version']}"}
   end
 end

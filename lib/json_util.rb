@@ -1,17 +1,12 @@
 require 'json'
-
-class String
-  def underscore
-    self.gsub(/::/, '/').
-    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-    gsub(/([a-z\d])([A-Z])/,'\1_\2').
-    tr("-", "_").
-    downcase
-  end
-end
+require 'active_support/inflector'
 
 class JsonUtil
-  def self.condition_json(json)
+  def self.js_to_ruby_hash(json)
     JSON.parse(json).inject({}) { |h, (k, v)| h[k.underscore] = v; h }
+  end
+
+  def self.snake_to_camel(hash)
+    return hash.inject({}) {|h, (k, v)| h[k.camelize(:lower)] = v; h}
   end
 end

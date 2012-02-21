@@ -50,4 +50,4 @@ end
 
 ENV['RACK_ENV'] = "test"
 require 'rspec'
-
+require 'awesome_print'

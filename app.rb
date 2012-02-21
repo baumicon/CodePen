@@ -4,6 +4,7 @@ require 'omniauth'
 require 'omniauth-twitter'
 require 'mongo_mapper'
 require_relative 'models/user'
+require_relative 'services/content_service'
 require_relative 'services/preprocessor_service'
 require_relative 'minify.rb'
 
@@ -34,6 +35,8 @@ class App < Sinatra::Base
   end
 
   post '/save/content' do
+    service = ContentService.new
+    result = service.save_content(user.uid, params[:payload])
     {'success' => true}.to_json
   end
 

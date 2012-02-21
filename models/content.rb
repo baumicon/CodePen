@@ -8,6 +8,7 @@ class Content
     attr_accessor :slugs
 
     validate :validate_slug_owned
+    #validate :validate_version_is_positive
 
     #Foreign Keys
     key :uid, String, :required => true
@@ -24,7 +25,7 @@ class Content
     timestamps!
 
     def self.new_from_json(json, uid, slugs)
-      payload = JsonUtil.condition_json(json)
+      payload = JsonUtil.js_to_ruby_hash(json)
       payload['uid'] = uid
       content = Content.new payload
       content.slugs = slugs
@@ -35,5 +36,9 @@ class Content
 
     def validate_slug_owned
         errors.add(:slug_not_owned, "You must own a slug to save to it") unless @slugs.include?(@slug_name)
+    end
+
+    def validate_version_is_positive
+      errors.add(:version_not_positive, "version must be positive") unless @version > -1
     end
 end

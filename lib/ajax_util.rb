@@ -1,7 +1,8 @@
 module AjaxUtil
 
   def success(payload = false)
-    return ret = {'success' => true} unless payload
+    ret = {'success' => true}
+    return ret unless payload
     ret['payload'] = payload
     ret
   end
