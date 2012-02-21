@@ -192,7 +192,7 @@ header {
 	border-bottom: 0;
 	@include gradient(#3b3b3b, #323232);
 	@include box-shadow((inset 0 1px 0 #454545));
-	@include border-radiuses(5px, 0, 0, 5px);
+	@include border-radiuses(8px, 0, 0, 8px);
 	padding: 0 0 0 10px;
 	h2 {
 		line-height: 31px;
@@ -264,7 +264,7 @@ header {
 		display: inline-block;
 		color: #999;
 		vertical-align: middle;
-		@include border-radiuses(0, 5px, 5px, 0);
+		@include border-radiuses(0, 8px, 8px, 0);
 		@include transition((all 0.2s ease));
 		@include rotate(0);
 	}
