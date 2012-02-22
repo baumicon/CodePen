@@ -109,15 +109,15 @@ class App < Sinatra::Base
       'html'        => '<h1>holy guac batman!</h1>',
       'css'         => 'body { background-color: blue; }',
       'js'          => 'console.log("testing");',
-      
+
       'html_pre_processor' => 'none',
       'html_classes'       => 'en',
-      
+
       'css_pre_processor' => 'none',
       'css_prefix_free'   => '',
       'css_starter'       => 'none',
       'css_external'      => '',
-      
+
       'js_pre_processor' => 'none',
       'js_library'       => 'jquery-latest',
       'js_modernizr'     => '',
