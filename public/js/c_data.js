@@ -151,14 +151,13 @@ var CData = (function() {
             $.ajax({
                   url: '/save/content',
                   type: 'POST',
-                  data: this.getDataValues({ 'data': JSON.stringify(CData) }),
+                  data: Util.getDataValues({ 'content': JSON.stringify(CData) }),
                   success: function( result ) {
-                      obj = $.parseJSON(result);
-                      // Open new gist in a tab!
-                      window.open(obj.url);
+                      console.log(result);
+                      // obj = $.parseJSON(result);
                   }
             });
-        }
+        },
         
 	    logout: function() {
 	        if(localStorage) {

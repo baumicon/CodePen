@@ -270,7 +270,7 @@ var CodeRenderer = (function() {
                   url: '/process/',
                   type: 'POST',
                   async: false,
-                  data: this.getDataValues(params),
+                  data: Util.getDataValues(params),
                   success: function( result ) {
                       obj = $.parseJSON(result);
                       
@@ -289,18 +289,6 @@ var CodeRenderer = (function() {
                       }
                   }
             });
-        },
-        
-        getDataValues: function(params) {
-            var dataValues = '';
-            var count = 0;
-            
-            for(var key in params) {
-                if(dataValues != '') dataValues += '&';
-                dataValues += key + '=' + encodeURIComponent(params[key]);
-            }
-            
-            return dataValues;
         },
         
         // determine if what's in the editor is the same 
@@ -358,7 +346,7 @@ var CodeRenderer = (function() {
             $.ajax({
                   url: '/gist/',
                   type: 'POST',
-                  data: this.getDataValues({ 'data': JSON.stringify(CData) }),
+                  data: Util.getDataValues({ 'data': JSON.stringify(CData) }),
                   success: function( result ) {
                       obj = $.parseJSON(result);
                       // Open new gist in a tab!
