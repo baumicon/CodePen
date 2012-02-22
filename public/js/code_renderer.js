@@ -151,6 +151,7 @@ var CodeRenderer = (function() {
         
         getJS: function() {
             if(this.postProcessedJS) {
+                console.log('this: ' + this.postProcessedJS);
                 var js = 'function __run() { ';
                 js += this.postProcessedJS + ' }';
                 

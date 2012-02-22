@@ -31,7 +31,7 @@ class App < Sinatra::Base
 
   get '/' do
     set_session
-    @tbdb = {}
+    @c_data = {}
     erb :index
   end
 
@@ -59,6 +59,12 @@ class App < Sinatra::Base
 
   get '/auth/failure' do
     'Authentication Failed'
+  end
+  
+  get '/logout' do
+    session.delete(session[:user_id])
+    
+    redirect '/'
   end
   
   get '/list/' do

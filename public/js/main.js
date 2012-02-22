@@ -37,8 +37,6 @@
                 $('#js').html(CData.js);
                 
                 // Sync preprocessors with correct data
-                // alextodo, for some reason these stopped working, why?
-                // I can't check the radio button anymore
                 $('input[type="radio"]').prop('checked', false);
                 $('input[value="' + CData.html_pre_processor + '"]').prop('checked', true);
                 $('input[value="' + CData.css_pre_processor + '"]').prop('checked', true);
@@ -203,6 +201,10 @@
                  // save this code pen
                  $("#save").on('click', function() {
                     // save data to backend
+                 });
+                 
+                 $('#logout').on('click', function() {
+                    CData.logout();
                  });
                  
                  // Bind keys

@@ -35,6 +35,8 @@ var CData = (function() {
 	    },
 	    
 	    bindSaveToLocalStorage: function() {
+	        localStorage.removeItem("logout");
+	        
             $(window).unload( function () {
                 CData.saveDataToLocalStorage();
             });
@@ -42,9 +44,11 @@ var CData = (function() {
 	    
 	    saveDataToLocalStorage: function() {
 	        // alextodo, future feature, allow you to save data
-	        // for more than one codepen, use the name in the URL!
+	        // for more than one piece of content, use the name in the URL!
 	        if(typeof(localStorage) != 'undefined') {
-                localStorage['tb'] = JSON.stringify(CData);
+	            if(localStorage['logout'] != 'true') {
+	                localStorage['content'] = JSON.stringify(CData);
+	            }
             }
 	    },
         
@@ -52,9 +56,9 @@ var CData = (function() {
 	    loadStoredData: function() {
 	        var data = { };
 	        
-	        if(__tbdata['dateUpdated']) {
+	        if(__c_data['version']) {
 	            // alextodo enable localstorage we start pulling from db
-	            // data = __tbdata;
+	            // data = __c_data;
 	            // If you use tbdata, the version number 
 	            // has to be incremented immediately to differentiate it
 	            // on save, we should check version number doesn't already exist
@@ -64,12 +68,12 @@ var CData = (function() {
 	        
 	        if(typeof(localStorage) != 'undefined') {
 	            if(localStorage['fork']) {
-	                localStorage['tb'] = localStorage['fork'];
+	                localStorage['content'] = localStorage['fork'];
 	                localStorage.removeItem('fork');
 	            }
 	            
-	            if(localStorage['tb']) {
-	                localData = $.parseJSON(localStorage['tb']);
+	            if(localStorage['content']) {
+	                localData = $.parseJSON(localStorage['content']);
 	                locVersion = (localData['version']) ? localData['version'] : 0;
 	                datVersion = (data['version']) ? data['version'] : 0;
 	                
@@ -85,7 +89,7 @@ var CData = (function() {
 	    },
 	    
 	    forkData: function() {
-	        // save fork to tb store
+	        // save fork to content store
             // reset version number
             // alextodo, reset any values that id this box
             // alextodo, what doesn't have localStorage? which browsers
@@ -165,6 +169,14 @@ var CData = (function() {
 	    	}
 	    	
             this[mode] = value;
+	    },
+	    
+	    logout: function() {
+	        if(localStorage) {
+	            localStorage.removeItem("fork");
+	            localStorage.removeItem("content");
+	            localStorage['logout'] = 'true';
+	        }
 	    }
     };
 
