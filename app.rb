@@ -2,15 +2,17 @@ require 'sinatra'
 require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
-require './services/preprocessor_service'
+require 'mongo_mapper'
 require './services/gist_service'
-require './services/user_service'
-
-require_relative 'renderer.rb'
-require_relative 'minify.rb'
+require './models/user'
+require './services/content_service'
+require './services/preprocessor_service'
+require './renderer'
+require './minify'
 
 class App < Sinatra::Base
 
+  MongoMapper.database = 'tinkerbox'
   use Rack::Session::Cookie
   enable :sessions
 
@@ -18,14 +20,26 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
+  def set_session
+    @user = User.get_by_session_id(session[:user_id])
+    session[:user_id] = @user.uid
+  end
+
+  get '/sanity' do
+    "working"
+  end
+
   get '/' do
-    @user = UserService.new().user_by_session(session[:user_id])
-    @tbdb = { }
+    set_session
+    @tbdb = {}
     erb :index
   end
 
   post '/save/content' do
-    {'success' => true}.to_json
+    set_session
+    service = ContentService.new
+    result = service.save_content(@user.uid, params[:content])
+    return result.to_json
   end
 
   get '/slugs' do
@@ -34,10 +48,6 @@ class App < Sinatra::Base
 
   get '/content/:slug_name' do
     return true
-  end
-
-  post '/save/content' do
-    {'success' => true}.to_json
   end
 
   get '/auth/:name/callback' do
@@ -60,24 +70,24 @@ class App < Sinatra::Base
   post '/process/' do
     pps = PreProcessorService.new
     results = { }
-    
+
     if params[:html] != nil and !params[:html].empty?
       results['html'] = pps.process_html(params[:html_pre_processor], params[:html])
     end
-    
+
     if params[:css] != nil and !params[:css].empty?
       results['css'] = pps.process_css(params[:css_pre_processor], params[:css])
     end
-    
+
     if params[:js] != nil and !params[:js].empty?
       results['js'] = pps.process_js(params[:js_pre_processor], params[:js])
     end
-    
+
     if pps.errors.length > 0
       @errors = pps.errors
       results['error_html'] = erb :errors
     end
-    
+
     encode(results)
   end
 
@@ -92,10 +102,10 @@ class App < Sinatra::Base
     rend = Renderer.new(data)
     rend.render_full_page()
   end
-  
+
   def get_data_by_slug
     return {
-      'title'       => 'CODE PEN',
+      'slug'       => 'CODE PEN',
       'html'        => '<h1>holy guac batman!</h1>',
       'css'         => 'body { background-color: blue; }',
       'js'          => 'console.log("testing");',
@@ -116,41 +126,15 @@ class App < Sinatra::Base
   end
 
   post '/gist/' do
-    data = get_gist_data(params[:data])
-    rend = Renderer.new(data)
+    rend = Renderer.new(params[:data])
     result = rend.render_full_page()
     
-    gs = GistService.new(data)
-    url_to_gist = gs.create_gist(data, result)
+    gs = GistService.new(params[:data])
+    url_to_gist = gs.create_gist(params[:data], result)
     
     encode({ 'url' => url_to_gist })
   end
-  
-  # alextodo, look at replacing with tim's code that uses regex and underscores
-  def get_gist_data(data)
-    data = JSON.parse(data)
-    
-    return {
-      'title' => data['name'],
-      'html'  => data['html'],
-      'css'   => data['css'],
-      'js'    => data['js'],
-      
-      'html_pre_processor' => data['html_pre_processor'],
-      'html_classes'       => data['html_classes'],
-      
-      'css_pre_processor' => data['css_pre_processor'],
-      'css_prefix_free'   => data['css_prefix_free'],
-      'css_starter'       => data['css_starter'],
-      'css_external'      => data['css_external'],
-      
-      'js_pre_processor' => data['js_pre_processor'],
-      'js_library'       => data['js_library'],
-      'js_modernizr'     => data['js_modernizr'],
-      'js_external'      => data['js_external']
-    }
-  end
-  
+
   helpers do
     def get_templates
       {'result' => (erb :template)}.to_json.gsub('/', '\/')

@@ -1,13 +1,21 @@
 require 'mongo_mapper'
 
 class Slug
-    include MongoMapper::Document
+  include MongoMapper::Document
 
-    key :uid, String
-    key :name, String
+  key :uid, String
+  key :name, String
 
-    timestamps!
+  validate :validate_available
+  timestamps!
 
-    #TODO: validations
-    #TODO: index on name, uid
+  #TODO: validations
+  #TODO: index on name, uid
+
+  private
+
+  def validate_available
+    errors.add(:slug_not_owned, "That slug is already taken.") if Slug.find_by_name(@name)
+  end
+
 end
