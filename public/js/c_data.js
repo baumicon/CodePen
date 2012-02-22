@@ -9,24 +9,24 @@ var CData = (function() {
 	var CData = {
 
 		// Code Pen data
-		slug              : '',
-		url               : '',
-		html              : '',
-		css               : '',
-		js                : '',
-		theme             : '',
-		version           : 1,
-		html_pre_processor  : 'none',
-		html_classes         : '',
+		slug               : '',
+		url                : '',
+		html               : '',
+		css                : '',
+		js                 : '',
+		theme              : 'sublime',
+		version            : 1,
+		html_pre_processor : 'none',
+		html_classes       : '',
 		
-		css_pre_processor   : 'none',
-		css_prefix_free     : '',
-		css_starter        : '',
+		css_pre_processor  : 'none',
+		css_prefix_free    : false,
+		css_starter        : 'neither',
 		css_external       : '',
 		
-		js_pre_processor    : 'none',
+		js_pre_processor   : 'none',
 		js_library         : '',
-		js_modernizr       : '',
+		js_modernizr       : false,
 		js_external        : '',
 
 	    init: function() {
@@ -113,35 +113,11 @@ var CData = (function() {
 	    },
 
 	    setCSSOption: function(name, value) {
-	    	this.css_pre_processor = value;
-	    },
-	    
-	    setPrefixFree: function(value) {
-    		this.css_prefix_free = value;
-	    },
-	    
-	    setCSSStarter: function(value) {
-	        this.css_starter = value;
-	    },
-	    
-	    setCSSExternal: function(value) {
-	        this.css_external = value;
+	        this[name] = value;
 	    },
 
 	    setJSOption: function(name, value) {
-	    	this.js_pre_processor = value;
-	    },
-	    
-	    setJSLibrary: function(value) {
-	        this.js_library = value;
-	    },
-	    
-	    setModernizr: function(value) {
-	        this.js_modernizr = value;
-	    },
-	    
-	    setJSExternal: function(value) {
-	        this.js_external = value;
+	    	this[name] = value;
 	    },
 	    
 	    setTheme: function(value) {
@@ -171,6 +147,19 @@ var CData = (function() {
             this[mode] = value;
 	    },
 	    
+	    save: function() {
+            $.ajax({
+                  url: '/save/content',
+                  type: 'POST',
+                  data: this.getDataValues({ 'data': JSON.stringify(CData) }),
+                  success: function( result ) {
+                      obj = $.parseJSON(result);
+                      // Open new gist in a tab!
+                      window.open(obj.url);
+                  }
+            });
+        }
+        
 	    logout: function() {
 	        if(localStorage) {
 	            localStorage.removeItem("fork");

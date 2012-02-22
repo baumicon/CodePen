@@ -62,7 +62,7 @@ class App < Sinatra::Base
   end
   
   get '/logout' do
-    session.delete(session[:user_id])
+    session[:user_id] = false
     
     redirect '/'
   end

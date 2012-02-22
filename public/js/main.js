@@ -143,7 +143,7 @@
 
                  // CSS related
                  $('input[name="css-preprocessor"]').on('click', function() {
-                       CData.setCSSOption('preprocessor', this.value);
+                       CData.setCSSOption('css_pre_processor', this.value);
                        Main.compileContent(CSSeditor, '', true);
                        Main.addClassBoxCSS(this.value);
                        Main.updatePrefixFreeBox(this.value);
@@ -152,35 +152,35 @@
                  // prefix free checkbox
                  $('#prefix-free').on('click', function() {
                      if(CData.css_pre_processor != 'sass') {
-                        CData.setPrefixFree($(this).is(":checked"));
+                        CData.setCSSOption('css_prefix_free', $(this).is(":checked"));
                      }
                  });
                  
                  // CSS Resests
                  $('input[name="startercss"]').on('click', function() {
-                     CData.setCSSStarter(this.value);
+                     CData.setCSSOption('css_starter', this.value);
                      Main.compileContent(CSSeditor, '', true);
                  });
 
                  // JS related
                  $('input[name="js-preprocessor"]').on('click', function() {
-                       CData.setJSOption('preprocessor', this.value);
-                       Main.compileContent(JSeditor, '', true);
-                       Main.addClassBoxJS(this.value);
+                     CData.setJSOption('js_pre_processor', this.value);
+                     Main.compileContent(JSeditor, '', true);
+                     Main.addClassBoxJS(this.value);
                  });
 
                  $('#js-select').on('change', function(index, select) {
-                     CData.setJSLibrary(this.value);
+                     CData.setJSOption('js_library', this.value);
                  });
                  
                  $('#modernizr').on('click', function() {
-                     CData.setModernizr($(this).is(":checked"));
+                     CData.setJSOption('js_modernizr', $(this).is(":checked"));
                  });
                  
                  $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
                      if(this.id == 'html-classes') CData.setHTMLClass(this.value);
-                     else if(this.id == 'external-css') CData.setCSSExternal(this.value);
-                     else if(this.id == 'external-js') CData.setJSExternal(this.value);
+                     else if(this.id == 'external-css') CData.setCSSOption('css_external', this.value);
+                     else if(this.id == 'external-js') CData.setJSOption('js_external', this.value);
                  });
                  
                  // Theme related
@@ -200,7 +200,9 @@
                  
                  // save this code pen
                  $("#save").on('click', function() {
-                    // save data to backend
+                    CData.save();
+                    
+                    return false;
                  });
                  
                  $('#logout').on('click', function() {
@@ -214,7 +216,7 @@
             updatePrefixFreeBox: function(css_pre_processor) {
                 if(css_pre_processor == 'sass') {
                        // turn off prefix free
-                       CData.setPrefixFree(false);
+                       CData.setCSSOption('css_prefix_free', false);
                        $('#prefix-free').prop('checked', false);
                        $('#prefix-free').prop('disabled', true);
                    }
