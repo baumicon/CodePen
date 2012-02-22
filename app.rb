@@ -132,11 +132,13 @@ class App < Sinatra::Base
   end
 
   post '/gist/' do
-    rend = Renderer.new(params[:data])
-    result = rend.render_full_page()
+    data = JSON.parse(params[:data])
     
-    gs = GistService.new(params[:data])
-    url_to_gist = gs.create_gist(params[:data], result)
+    rend = Renderer.new()
+    result = rend.render_full_page(data)
+    
+    gs = GistService.new
+    url_to_gist = gs.create_gist(data, result)
     
     encode({ 'url' => url_to_gist })
   end
