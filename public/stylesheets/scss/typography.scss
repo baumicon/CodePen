@@ -1,13 +1,17 @@
-@mixin font-stack {
+@mixin font-stack-normal {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
+@mixin font-stack-bold {
+	font-family: "HelveticaNeue-CondensedBold", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
 
 body {
-	@include font-stack;
+	@include font-stack-normal;
 }
 
 h1, h2, h3 {
-	font-family: "HelveticaNeue-CondensedBold", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	@include font-stack-bold;
 }
 
 h1 {
