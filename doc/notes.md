@@ -45,8 +45,9 @@ show all slugs for logged in user
 
 `/content/:slug_name`
 
-i thought this was for rendering the latest content at the different subdomain
+I thought this was for rendering the latest content at the different subdomain
 
 `/auth/failure`
 
 I will hit this when login does not work.  The post param of
+
