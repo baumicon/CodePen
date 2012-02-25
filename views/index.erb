@@ -2,219 +2,219 @@
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<title>CodePen</title>
+  <meta charset="UTF-8">
+  <title>CodePen</title>
   <link rel="stylesheet" href="/stylesheets/css/main.css">
 </head>
 
 <body data-theme="sublime">
 
-	<%= partial :header %>
+  <%= partial :header %>
 
-	<div class="wrap">
+  <div class="wrap">
 
-		<div class="boxes">
+    <div class="boxes">
 
-			<div class="top-boxes group">
+      <div class="top-boxes group">
 
-				<div id="box-html" class="box-html">
+        <div id="box-html" class="box-html">
 
-					<div class="powers">
-						<h2>HTML</h2>
-						<a href="#" class="settings-nub" title="Open Settings">
-							<span aria-hidden="true">⬇</span>
-							</a>
-						
-						<a href="#" class="expander" title="Expand">
-							<strong>⌘1</strong>
-						</a>
-					</div>
+          <div class="powers">
+            <h2>HTML</h2>
+            <a href="#" class="settings-nub" title="Open Settings">
+              <span aria-hidden="true">⬇</span>
+              </a>
+            
+            <a href="#" class="expander" title="Expand">
+              <strong>⌘1</strong>
+            </a>
+          </div>
 
-					<div class="code-wrap">
-						<textarea id="html" class="code-box"></textarea>
-					</div>
+          <div class="code-wrap">
+            <textarea id="html" class="code-box"></textarea>
+          </div>
 
-					<div class="settings">
+          <div class="settings">
 
-						<form>
-							<div>
-								<input type="radio" class="hidden" id="html-none" checked name="html-preprocessor" value="none">
-								<label class="button" for="html-none">None</label>
-							</div>
-							<div>
-								<input type="radio" class="hidden" id="jade" name="html-preprocessor" value="jade">
-								<label class="button" for="jade">Jade <a target="_blank" href="http://jade-lang.com/">?</a></label>
-							</div>
-							<div class="last">
-								<input type="radio" class="hidden" id="haml" name="html-preprocessor" value="haml">
-								<label class="button" for="haml">HAML <a target="_blank" href="#">?</a></label>
-							</div>
-						</form>
+            <form>
+              <div>
+                <input type="radio" class="hidden" id="html-none" checked name="html-preprocessor" value="none">
+                <label class="button" for="html-none">None</label>
+              </div>
+              <div>
+                <input type="radio" class="hidden" id="jade" name="html-preprocessor" value="jade">
+                <label class="button" for="jade">Jade <a target="_blank" href="http://jade-lang.com/">?</a></label>
+              </div>
+              <div class="last">
+                <input type="radio" class="hidden" id="haml" name="html-preprocessor" value="haml">
+                <label class="button" for="haml">HAML <a target="_blank" href="#">?</a></label>
+              </div>
+            </form>
 
-						<form>
-							<label for="html-classes" class="small">Add Class(es) to &lt;html></label>
-							<input type="text" id="html-classes" name="html-classes" class="fullwidth" placeholder="e.g. single post post-1234">
-						</form>
+            <form>
+              <label for="html-classes" class="small">Add Class(es) to &lt;html></label>
+              <input type="text" id="html-classes" name="html-classes" class="fullwidth" placeholder="e.g. single post post-1234">
+            </form>
 
-					</div>
+          </div>
 
-				</div><!-- END div.box-html -->
+        </div><!-- END div.box-html -->
 
-				<div class="box-css" id="box-css">
+        <div class="box-css" id="box-css">
 
-					<div class="powers">
-						<h2>CSS</h2>
-						<a href="#" class="settings-nub" aria-hidden="true" data-icon="d">
-							<span>⬇</span>
-						</a>
-						<a href="#" class="expander" title="Expand">
-							<strong>⌘2</strong>
-						</a>
-					</div>
+          <div class="powers">
+            <h2>CSS</h2>
+            <a href="#" class="settings-nub" aria-hidden="true" data-icon="d">
+              <span>⬇</span>
+            </a>
+            <a href="#" class="expander" title="Expand">
+              <strong>⌘2</strong>
+            </a>
+          </div>
 
-					<div class="code-wrap">
-						<textarea id="css" class="code-box"></textarea>
-					</div>
+          <div class="code-wrap">
+            <textarea id="css" class="code-box"></textarea>
+          </div>
 
-					<div class="settings">
-						<form class="doublerow">
-							<div>
-								<input type="radio" class="hidden" id="css-none" checked name="css-preprocessor" value="none">
-								<label class="button" for="css-none">None</label>
-							</div>
-							<div>
-								<input type="radio" class="hidden" id="less" name="css-preprocessor" value="less">
-								<label class="button" for="less">LESS <a target="_blank" href="#">?</a></label>
-							</div>
-							<div class="last">
-								<input type="radio" class="hidden" id="stylus" name="css-preprocessor" value="stylus">
-								<label class="button" for="stylus">Stylus <a target="_blank" href="#">?</a></label>
-							</div>
-							<div>
-								<input type="radio" class="hidden" id="scss" name="css-preprocessor" value="scss">
-								<label class="button" for="scss">SCSS <a target="_blank" href="#">?</a></label>
-							</div>
-							<div class="double last">
-								<input type="radio" class="hidden" id="sass" name="css-preprocessor" value="sass">
-								<label class="button" for="sass">SASS with Compass <a target="_blank" href="#">?</a></label>
-							</div>
-						</form>
+          <div class="settings">
+            <form class="doublerow">
+              <div>
+                <input type="radio" class="hidden" id="css-none" checked name="css-preprocessor" value="none">
+                <label class="button" for="css-none">None</label>
+              </div>
+              <div>
+                <input type="radio" class="hidden" id="less" name="css-preprocessor" value="less">
+                <label class="button" for="less">LESS <a target="_blank" href="#">?</a></label>
+              </div>
+              <div class="last">
+                <input type="radio" class="hidden" id="stylus" name="css-preprocessor" value="stylus">
+                <label class="button" for="stylus">Stylus <a target="_blank" href="#">?</a></label>
+              </div>
+              <div>
+                <input type="radio" class="hidden" id="scss" name="css-preprocessor" value="scss">
+                <label class="button" for="scss">SCSS <a target="_blank" href="#">?</a></label>
+              </div>
+              <div class="double last">
+                <input type="radio" class="hidden" id="sass" name="css-preprocessor" value="sass">
+                <label class="button" for="sass">SASS with Compass <a target="_blank" href="#">?</a></label>
+              </div>
+            </form>
 
-						<form>
-								<input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
-								<label for="startercss-normalize" class="small-inline">Normalize</label>
+            <form>
+                <input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
+                <label for="startercss-normalize" class="small-inline">Normalize</label>
 
-								&ensp;
-							
-								<input type="radio" id="startercss-reset" name="startercss" value="reset">
-								<label for="startercss-reset" class="small-inline">Reset</label>
+                &ensp;
+              
+                <input type="radio" id="startercss-reset" name="startercss" value="reset">
+                <label for="startercss-reset" class="small-inline">Reset</label>
 
-								&ensp;
+                &ensp;
 
-								<input type="radio" id="startercss-neither" name="startercss" value="neither">
-								<label for="startercss-neither" class="small-inline">Neither</label>
-						</form>
+                <input type="radio" id="startercss-neither" name="startercss" value="neither">
+                <label for="startercss-neither" class="small-inline">Neither</label>
+            </form>
 
-						<form>
-							<input type="checkbox" id="prefix-free" name="prefix-free">
-							<label for="prefix-free" class="small-inline">Prefix free</label>
-						</form>
+            <form>
+              <input type="checkbox" id="prefix-free" name="prefix-free">
+              <label for="prefix-free" class="small-inline">Prefix free</label>
+            </form>
 
-						<form>
-      				<label class="small" for="js-select">External CSS File</label>
-      				<input class="fullwidth" type="url" id="external-css" name="external-css" placeholder="http://yourwebsite.com/external.css">
-          	</form>
+            <form>
+              <label class="small" for="js-select">External CSS File</label>
+              <input class="fullwidth" type="url" id="external-css" name="external-css" placeholder="http://yourwebsite.com/external.css">
+            </form>
 
-					</div>
+          </div>
 
-				</div><!-- END div.box-css -->
+        </div><!-- END div.box-css -->
 
-				<div id="box-js" class="box-js last">
+        <div id="box-js" class="box-js last">
 
-					<div class="powers">
-						<h2>JS</h2>
-						<a href="#" class="settings-nub" aria-hidden="true" data-icon="d">
-							<span>⬇</span>
-						</a>
-						<a href="#" class="expander" title="Expand">
-							<strong>⌘3</strong>
-						</a>
-					</div>
+          <div class="powers">
+            <h2>JS</h2>
+            <a href="#" class="settings-nub" aria-hidden="true" data-icon="d">
+              <span>⬇</span>
+            </a>
+            <a href="#" class="expander" title="Expand">
+              <strong>⌘3</strong>
+            </a>
+          </div>
 
-					<div class="code-wrap">
-						<textarea id="js" class="code-box"></textarea>
-					</div>
+          <div class="code-wrap">
+            <textarea id="js" class="code-box"></textarea>
+          </div>
 
-					<div class="settings">
-						<form>
-							<div>
-								<input type="radio" class="hidden" id="js-none" checked name="js-preprocessor" value="none">
-								<label class="button" for="js-none">None</label>
-							</div>
-							<div class="double last">
-								<input type="radio" class="hidden" id="coffeescript" name="js-preprocessor" value="coffeescript">
-								<label class="button" for="coffeescript">CoffeeScript <a target="_blank" href="#">?</a></label>
-							</div>
-						</form>
+          <div class="settings">
+            <form>
+              <div>
+                <input type="radio" class="hidden" id="js-none" checked name="js-preprocessor" value="none">
+                <label class="button" for="js-none">None</label>
+              </div>
+              <div class="double last">
+                <input type="radio" class="hidden" id="coffeescript" name="js-preprocessor" value="coffeescript">
+                <label class="button" for="coffeescript">CoffeeScript <a target="_blank" href="#">?</a></label>
+              </div>
+            </form>
 
-						<form>
-							<label class="small" for="js-select">Library</label>
-							<select data-placeholder="JavaScript Library" id="js-select">
-					      <option value="">No Library</option>
-				        <option value="jquery-latest">jQuery 1.7.1</option>
-				        <option value="mootools">MooTools 1.4.1</option>
-				        <option value="prototype">Prototype 1.7.0.0</option>
-      				</select>
-      			</form>
+            <form>
+              <label class="small" for="js-select">Library</label>
+              <select data-placeholder="JavaScript Library" id="js-select">
+                <option value="">No Library</option>
+                <option value="jquery-latest">jQuery 1.7.1</option>
+                <option value="mootools">MooTools 1.4.1</option>
+                <option value="prototype">Prototype 1.7.0.0</option>
+              </select>
+            </form>
 
-      			<form>
-      				<label class="small" for="js-select">External JS File</label>
-      				<input class="fullwidth" type="url" id="external-js" name="external-js" placeholder="http://yourwebsite.com/external.js">
-          	</form>
+            <form>
+              <label class="small" for="js-select">External JS File</label>
+              <input class="fullwidth" type="url" id="external-js" name="external-js" placeholder="http://yourwebsite.com/external.js">
+            </form>
 
-          	<form>
-							<input type="checkbox" id="modernizr" name="modernizr">
-							<label for="modernizr" class="small-inline">Modernizr</label>
-						</form>
+            <form>
+              <input type="checkbox" id="modernizr" name="modernizr">
+              <label for="modernizr" class="small-inline">Modernizr</label>
+            </form>
 
-					</div>					
+          </div>          
 
-				</div><!-- END div.box-css -->
+        </div><!-- END div.box-css -->
 
-			</div><!-- END div.top-boxes -->
+      </div><!-- END div.top-boxes -->
 
-			<div class="result">
+      <div class="result">
 
-				<iframe src="" id="result"></iframe>
+        <iframe src="" id="result"></iframe>
 
-			</div>
+      </div>
 
-		</div><!--END div.boxes -->
+    </div><!--END div.boxes -->
 
-	</div><!-- END div.wrap -->
+  </div><!-- END div.wrap -->
 
-	<div id="vert-resizer" class="vert-resizer"></div>
+  <div id="vert-resizer" class="vert-resizer"></div>
 
-	<script>
-		__c_data = <%= @c_data %>;
+  <script>
+    __c_data = <%= @c_data %>;
         __templates = <%= get_templates  %>;
-	</script>
+  </script>
 
-	<%= js_scripts([
-	    '/js/libs/jquery.js',
-	    '/js/libs/codemirror.js',
-	    '/js/libs/tmpl.js',
-	    '/js/libs/chosen.jquery.min.js',
-	    '/mode/javascript/javascript.js',
-	    '/mode/css/css.js',
-	    '/mode/xml/xml.js',
-	    '/js/util.js',
-	    '/js/c_data.js',
-	    '/js/key_bindings.js',
-	    '/js/code_renderer.js',
-	    '/js/main.js'
-	    ])
-	%>
+  <%= js_scripts([
+      '/js/libs/jquery.js',
+      '/js/libs/codemirror.js',
+      '/js/libs/tmpl.js',
+      '/js/libs/chosen.jquery.min.js',
+      '/mode/javascript/javascript.js',
+      '/mode/css/css.js',
+      '/mode/xml/xml.js',
+      '/js/util.js',
+      '/js/c_data.js',
+      '/js/key_bindings.js',
+      '/js/code_renderer.js',
+      '/js/main.js'
+      ])
+  %>
 
 </body>
 
