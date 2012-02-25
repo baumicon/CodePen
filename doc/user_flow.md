@@ -19,7 +19,7 @@ uuid flow
             Content.save(content, @user)
 
     Login
-        uuid?
+        session[:uuid]?
             content = Content.find_by_uuid?
                 slugs = slug.find_by_uuid(:uuid)
                 User.find_or_create(:uuid, :uid_from_omniauth)
@@ -27,7 +27,8 @@ uuid flow
                 slugs.update_user(:uid)
             session.remove[:uuid]
             @user = User.new(:uid_from_omniauth).save
+            session[:uuid] = @user.uid
         else
-            User.new(:uid_from_omniauth).save
+            @user = User.new(:uid_from_omniauth).save
 
 
