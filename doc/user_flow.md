@@ -2,12 +2,13 @@ uuid flow
 
     Any Page Load
         session?
-            :uid?
+            session[:uid]?
                 @user = User.find(:uid)
             else
                 @user = User.find(:uuid)
         else
             session[:uuid] = UUID.new
+            @user = User.new
 
     Save
         session[:uuid]?
@@ -25,8 +26,8 @@ uuid flow
                 content.update_user(:uid)
                 slugs.update_user(:uid)
             session.remove[:uuid]
-            @user = User.new(:uid_from_omniauth)
+            @user = User.new(:uid_from_omniauth).save
         else
-            User.new(:uid_from_omniauth)
+            User.new(:uid_from_omniauth).save
 
 
