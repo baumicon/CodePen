@@ -322,6 +322,8 @@ header {
   // height: 50px;
 }
 
+
+//-------------------------------------RESULTS AREA
 .vert-resizer {
   @include gradient(#505050, #383838);
   border-top: 1px solid black;
@@ -353,7 +355,33 @@ header {
   }
 }
 
-// --------------------------- FOOTER
+
+//-------------------------------------SIDEBAR
+.sidebar {
+  position: absolute;
+  top: 73px;
+  right: 10px;
+  width: 18.5%;
+  background: #444;
+  padding: 10px;
+  @include border-radius(10px);
+  @include box-shadow((
+    0 1px 0 rgba(255,255,255,0.2),
+    0 1px 0 rgba(0,0,0,0.7) inset
+  ));
+  img {
+    display: block;
+    margin: 0 0 10px 0;
+    max-width: 100%;
+  }
+  p {
+    color: #eee;
+    font-size: 12px;
+  }
+}
+
+
+//-------------------------------------FOOTER
 footer {
   padding: 5px;
   font-size: 14px;
