@@ -48,6 +48,8 @@ class PreProcessorService
 
   def process_css(type, css)
     if type == 'less'
+      # alextodo take a look at less errors
+      # they should be able to add to errors array
       css = node_req('/less/', 'css', css, 'LESS')
     elsif type == 'stylus'
       css = node_req('/stylus/', 'css', css, 'Stylus')
@@ -64,11 +66,33 @@ class PreProcessorService
         engine = get_sass_compass_engine(css)
         css = engine.render
       rescue Sass::SyntaxError => e
-        @errors['SASS with Compass'] = e.message
+        msg = suggest_compass_error_fix(e.message)
+        @errors['SASS with Compass'] = msg
       end
     end
 
     css
+  end
+  
+  # alextodo, talk to coyier about adding a suggestion spot
+  # for now ghettofy it
+  def suggest_compass_error_fix(msg)
+    # suggest a fix for Undefined mixins
+    match = msg.scan(/undefined mixin '([-\d\w]+)'/i)
+    match = match[0][0]
+    
+    if !empty?(match)
+      suggestions = {
+        'box-shadow'    => 'Try adding @import "compass/css3/box-shadow"',
+        'border-radius' => 'Try adding @import "compass/css3/border-radius"'
+      }
+      
+      if suggestions.has_key?(match)
+        msg += "\n<br />" + suggestions[match]
+      end
+    end
+    
+    msg
   end
   
   # A sass engine for compiling sass content with compass
