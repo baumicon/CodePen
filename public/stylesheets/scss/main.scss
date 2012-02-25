@@ -33,7 +33,7 @@ html {
 header {
   display: block;
   position: relative;
-  padding: 10px 20% 10px 20px;
+  padding: 10px 10px 10px 20px;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   @include gradient(#3d3d3e, #2a2a2a);
@@ -68,7 +68,6 @@ header {
   float: right;
   position: relative;
   min-width: 230px;
-  padding-right: 3px;
   .button, button {
     float: right;
   }
@@ -87,6 +86,13 @@ header {
     float: none;
     text-align: center;
     margin: 0 0 15px 0;
+  }
+}
+.app-auth {
+  float: right; 
+  width: 20%;
+  .button, button {
+    float: right;
   }
 }
 

@@ -5,7 +5,7 @@
 				<h1>CodePen</h1>
 
 				<% if logged_in %>
-					/ <input type="text" id="slug" name="slug">
+					<input type="text" id="slug" name="slug">
         <% end %>
                 
 				<div class="box-actions">
@@ -29,19 +29,21 @@
 					 		<strong>⌘N</strong> Brand New Box
 					 	</button>	
 					<% end %>
-                    
-          <% if not logged_in %>
-					<a id="login" href="auth/twitter" class="button">
-						Twitter Login
-					</a>
-					<% else %>
-					<a id="logout" href="/logout" class="button">
-						Logout
-					</a>
-          <% end %>
 
 				</div>
 			</form>
+
+			<div class="app-auth">
+			  <% if not logged_in %>
+					<a id="login" href="auth/twitter" class="button">
+						Twitter Login
+					</a>
+				<% else %>
+					<a id="logout" href="/logout" class="button">
+						Logout
+					</a>
+        <% end %>
+      </div>
 
 			<div class="app-actions">
 				
@@ -65,6 +67,6 @@
 
 				</section>
 
-			</div>
+			</div><!-- div.app-actions -->
 
 		</header>
