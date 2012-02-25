@@ -15,6 +15,9 @@ uuid flow
             @user = User.find_or_create(:uuid)
             Content.save(content, @user)
         else
+            # i think instead of just else you should check for uid like this
+            # it'll be another layer of protection from bots and automated creation
+            #elsif session[:uid]?
             @user = User.find(:uid)
             Content.save(content, @user)
 
