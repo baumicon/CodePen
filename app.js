@@ -37,7 +37,8 @@ app.post('/jade/', function(req, res) {
     
     try {
         var jade = require('jade');
-        var tmpl_func = jade.compile(req.body.html);
+        // Prettify the html, otherwise you'll get a single line of text
+        var tmpl_func = jade.compile(req.body.html, { pretty: true} );
         
         resp['html'] = tmpl_func({ });
     }

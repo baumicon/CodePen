@@ -75,25 +75,13 @@ class App < Sinatra::Base
 
   post '/process/' do
     pps = PreProcessorService.new
-    results = { }
-
-    if params[:html] != nil and !params[:html].empty?
-      results['html'] = pps.process_html(params[:html_pre_processor], params[:html])
-    end
-
-    if params[:css] != nil and !params[:css].empty?
-      results['css'] = pps.process_css(params[:css_pre_processor], params[:css])
-    end
-
-    if params[:js] != nil and !params[:js].empty?
-      results['js'] = pps.process_js(params[:js_pre_processor], params[:js])
-    end
-
+    results = pps.process_content(params)
+    
     if pps.errors.length > 0
       @errors = pps.errors
       results['error_html'] = erb :errors
     end
-
+    
     encode(results)
   end
 

@@ -4,29 +4,25 @@
 <head>
 	<meta charset="UTF-8">
 	<title><%= @TITLE %></title>
+    <%= @CSS_STARTER %>
+<style>
+<%= @CSS %>
+</style>
 
-	<%= @CSS_STARTER %>
-
-	<style>
-	<%= @CSS %>
-	</style>
-	
-	<%= @CSS_EXTERNAL %>
+    <%= @CSS_EXTERNAL %>
 </head>
 
 <body>
 
-	<%= @HTML %>
-	
+<%= @HTML %>
+
 	<%= @JSLIBRARY %>
 	<%= @PREFIX %>
 	<%= @JS_MODERNIZR %>
 	<%= @JS_EXTERNAL %>
-	
 	<script>
 	    <%= @JS %>
 	</script>
-
 </body>
 
 </html>

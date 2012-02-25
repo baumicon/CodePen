@@ -13,7 +13,25 @@ class PreProcessorService
   def initialize()
     @errors = { }
   end
+  
+  def process_content(data)
+    results = { }
+    
+    if !empty?(data[:html])
+      results['html'] = process_html(data[:html_pre_processor], data[:html])
+    end
 
+    if !empty?(data[:css])
+      results['css'] = process_css(data[:css_pre_processor], data[:css])
+    end
+
+    if !empty?(data[:js])
+      results['js'] = process_js(data[:js_pre_processor], data[:js])
+    end
+    
+    results
+  end
+  
   def process_html(type, html)
     if type == 'jade'
       html = node_req('/jade/', 'html', html, 'Jade')
@@ -35,7 +53,7 @@ class PreProcessorService
       css = node_req('/stylus/', 'css', css, 'Stylus')
     elsif type == 'scss'
       begin
-        # simple sass
+        # simple scss
         css = Sass::Engine.new(css, :syntax => :scss).render
       rescue Sass::SyntaxError => e
         @errors['SCSS'] = e.message
@@ -99,4 +117,9 @@ class PreProcessorService
       @errors[key] = obj['error']
     end
   end
+  
+  def empty?(content)
+    content == nil or content.empty?
+  end
+  
 end
