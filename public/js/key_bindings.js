@@ -17,6 +17,8 @@ var KeyBindings = (function() {
         HTMLeditor: '', 
         CSSeditor: '', 
         JSeditor: '',
+        
+        // alextodo, map keys to strings for clarity
 
         init: function(HTMLeditor, CSSeditor, JSeditor) {
             this.bindKeys();
@@ -41,7 +43,7 @@ var KeyBindings = (function() {
         },
         
         bindKeys: function() {
-            $(window).on('keydown', function(event) {
+            $(document).on('keydown', function(event) {
                 // mac os x uses command key (91) as alt key
                 // every other OS will use the control key (17)
                 if(event.keyCode == 17 || event.keyCode == 91) {
@@ -49,13 +51,13 @@ var KeyBindings = (function() {
                 }
             });
             
-            $(window).on('keyup', function(event) {
+            $(document).on('keyup', function(event) {
                 if(event.keyCode == 17 || event.keyCode == 91) {
                     KeyBindings.commandKeyPressed = false;
                 }
             });
             
-            $(window).on('keydown', function(event) {
+            $(document).on('keydown', function(event) {
                 stop = false;
                 
                 // Process all the altKey pressed events
