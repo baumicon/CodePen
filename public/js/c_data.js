@@ -104,6 +104,10 @@ var CData = (function() {
 	        }
 	    },
 
+        setSlug: function(value) {
+            this.slug = value;
+        },
+        
 	    setHTMLOption: function(name, value) {
 	    	this.html_pre_processor = value;
 	    },
@@ -148,15 +152,42 @@ var CData = (function() {
 	    },
 	    
 	    save: function() {
-            $.ajax({
-                  url: '/save/content',
-                  type: 'POST',
-                  data: Util.getDataValues({ 'content': JSON.stringify(CData) }),
-                  success: function( result ) {
-                      console.log(result);
-                      // obj = $.parseJSON(result);
-                  }
-            });
+	        var errors = this.validateContentOnSave();
+	        
+	        if(errors.length > 0) {
+	            for (var i=0; i < errors.length; i++) {
+	               alert(errors[i]['msg']);
+	            };
+	        }
+	        else {
+	            $.ajax({
+                      url: '/save/content',
+                      type: 'POST',
+                      data: Util.getDataValues({ 'content': JSON.stringify(CData) }),
+                      success: function(result) {
+                          var obj = $.parseJSON(result);
+                          
+                          if(obj.success) {
+                              // redirect to new slug URL. I will need to get that
+                              // I need more than just success true
+                              // error on duplicate slug
+                              // {"success":false,"errors":{"invalid_sequence":"Invalid Sequence.  Expected 2. Got 1"}}
+                          }
+                      }
+                });
+	        }
+        },
+        
+        validateContentOnSave: function() {
+            var errors = [ ];
+            
+            if(!$.trim(this.slug)) {
+                var err = {'type': 'required', 'msg': 'You must add a slug'};
+                
+                errors.push(err);
+            }
+            
+            return errors;
         },
         
 	    logout: function() {

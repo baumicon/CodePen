@@ -1,4 +1,5 @@
 (function($) {
+    // alextodo, look at using spine.js to organize this?
     
     window.Main = (function() {
 
@@ -133,7 +134,14 @@
                  $('#run').on('click', function() {
                      CodeRenderer.compileContent(true);
                  });
-
+                 
+                 // todo
+                 // once the slug is set, you can't edit it
+                 // you can only fork it and create a second slug
+                 $('#slug').on('keydown', function() {
+                     CData.setSlug(this.value);
+                 });
+                 
                  // HTML related
                  $('input[name="html-preprocessor"]').on('click', function() {
                      CData.setHTMLOption('preprocessor', this.value);
@@ -200,6 +208,7 @@
                  
                  // save this code pen
                  $("#save").on('click', function() {
+                    // validate save
                     CData.save();
                     
                     return false;
