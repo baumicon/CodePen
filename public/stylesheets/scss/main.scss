@@ -113,7 +113,10 @@ header {
   height: 100%;
   top: 0;
   position: absolute;
-  @include transition((all 0.4s ease));
+  @include transition(( // don't transition z-index
+    width 0.4s ease,
+    left 0.4s ease
+  ));
   @include border-radius(8px);
   > pre {
     position: absolute;
@@ -128,9 +131,10 @@ header {
     font: 11px Monaco, Courier, MonoSpace;
   }
   &.expanded {
+    z-index: 101;
     left: 0;
     width: 100%;
-    z-index: 101;
+    @include box-shadow((0 0 5px red));
   }
   h2:after {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -180,7 +184,7 @@ header {
   }
 }
 .box-js {
-  left: 67.4%;
+  left: 67.6%;
   &.coffeescript {
     h2:after {
       content: " (CoffeeScript)";
@@ -312,10 +316,10 @@ header {
     background: none;
     font-size: 10px;
     font-weight: 700;
-    color: #eee;
+    color: red;
     margin-right: 2px;
     position: relative;
-    top: -4px;
+    top: -2px;
   }
   span {
     background: white;
@@ -368,13 +372,16 @@ header {
   top: 73px;
   right: 10px;
   width: 18.5%;
-  background: #444;
-  padding: 10px;
-  @include border-radius(10px);
-  @include box-shadow((
-    0 1px 0 rgba(255,255,255,0.2),
-    0 1px 0 rgba(0,0,0,0.7) inset
-  ));
+  .module {
+    background: #444;
+    padding: 10px;
+    @include border-radius(10px);
+    @include box-shadow((
+      0 1px 0 rgba(255,255,255,0.2),
+      0 1px 0 rgba(0,0,0,0.7) inset
+    ));
+    margin: 0 0 10px 0;
+  }
   img {
     display: block;
     margin: 0 0 10px 0;
@@ -383,6 +390,13 @@ header {
   p {
     color: #eee;
     font-size: 12px;
+  }
+  h2 {
+    color: white;
+    margin: 0 0 8px 0;
+  }
+  a {
+    color: #76daff;
   }
 }
 
