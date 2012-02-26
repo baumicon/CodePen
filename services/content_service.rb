@@ -27,7 +27,7 @@ class ContentService
 
       return errors(content.errors) unless content.valid?
       content.save
-      success
+      success("slug" => content.slug)
     rescue Exception => ex
       #TODO: learn how to get a safe stack trace to display.  For now, generic message
       return errors({:unable_to_save => 'Error Saving From Persistance Service'})
