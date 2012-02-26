@@ -74,6 +74,14 @@ class PreProcessorService
     css
   end
   
+  def get_compass_imports()
+    imports = '@import "compass/css3/border-radius"'
+    imports+= '@import "compass/css3/box-shadow"'
+    imports+= '@import "compass/css3/box-shadow"'
+    
+    imports
+  end
+  
   # alextodo, talk to coyier about adding a suggestion spot
   # for now ghettofy it
   def suggest_compass_error_fix(msg)
