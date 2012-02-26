@@ -152,7 +152,7 @@ var CData = (function() {
 	    },
 	    
 	    save: function() {
-	        this.version+= 1;
+	        this.version += 1;
 	        
 	        $.ajax({
                   url: '/save/content',
@@ -161,6 +161,7 @@ var CData = (function() {
                   success: function(result) {
                       var obj = $.parseJSON(result);
                       console.log(result);
+                      
                       if(obj.success) {
                           // redirect to new slug URL. I will need to get that
                           // I need more than just success true
