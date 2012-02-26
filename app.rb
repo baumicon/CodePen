@@ -13,8 +13,7 @@ require './minify'
 class App < Sinatra::Base
 
   MongoMapper.database = 'tinkerbox'
-  use Rack::Session::Cookie
-  enable :sessions
+  use Rack::Session::Cookie, :key => 'codepen'
 
   use OmniAuth::Builder do
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
@@ -43,11 +42,13 @@ class App < Sinatra::Base
   end
 
   get '/slugs' do
-    return true
+
   end
 
-  get '/content/:slug_name' do
-    return true
+  get '/content/:slug_name' do |name|
+    set_session
+    service = ContentService.new
+    service.latest(name).to_json
   end
 
   get '/auth/:name/callback' do
