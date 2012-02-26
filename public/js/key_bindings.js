@@ -41,6 +41,14 @@ var KeyBindings = (function() {
             // simply move the cursor to the end
             editor.setCursor(text.length, text.length, true);
         },
+
+        showOverlay: function() {
+            // $("#overlay").show();
+        },
+
+        hideOverlay: function() {
+            // $("#overlay").hide();
+        },
         
         bindKeys: function() {
             $(document).on('keydown', function(event) {
@@ -52,11 +60,15 @@ var KeyBindings = (function() {
                     // Because keyup is so unreliable (we may not capture the keyup event)
                     // because the browser swallows it
                     // we automatically set it to false after 1 second
-                    setTimeout(function() {
-                        KeyBindings.commandKeyPressed = false;
-                    }, 1000);
+                    // setTimeout(function() {
+                    //     KeyBindings.commandKeyPressed = false;
+                    // }, 1000);
                 }
             });
+
+            window.onblur = function() {
+                console.log("blur");
+            };
             
             $(document).on('keyup', function(event) {
                 if(event.keyCode == 17 || event.keyCode == 91) {
@@ -76,18 +88,21 @@ var KeyBindings = (function() {
                         // alextodo, is this really the best place for it?
                         // have a wrapper around the editors? better place for it no?
                         KeyBindings.giveEditorFocus(KeyBindings.HTMLeditor);
+                        KeyBindings.showOverlay();
                     }
                     else if(event.keyCode == 50) {
                         // cmd + 2
                         stop = true;
                         Main.openExpandedArea('#box-css');
                         KeyBindings.giveEditorFocus(KeyBindings.CSSeditor);
+                        KeyBindings.showOverlay();
                     }
                     else if(event.keyCode == 51) {
                         // cmd + 3
                         stop = true;
                         Main.openExpandedArea('#box-js');
                         KeyBindings.giveEditorFocus(KeyBindings.JSeditor);
+                        KeyBindings.showOverlay();
                     }
                     else if(event.keyCode == 13) {
                         // cmd + return
@@ -127,6 +142,7 @@ var KeyBindings = (function() {
                 
                 if(event.keyCode == 27) {
                     Main.closeExpandedAreas();
+                    KeyBindings.hideOverlay();
                 }
                 
                 if(stop) {

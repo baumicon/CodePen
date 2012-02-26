@@ -1,13 +1,15 @@
 @import "functions";
 @import "colors";
 
-$glowSize: 50px;
+$glowSize: 10px;
+
+$selectionColor: #BADA55;
 
 ::selection {
-  background: #BADA55;
+  background: $selectionColor;
 }
 ::-moz-selection {
-  background: #BADA55;
+  background: $selectionColor;
 }
 
 * {
@@ -141,7 +143,7 @@ header {
     font: 11px Monaco, Courier, MonoSpace;
   }
   &.expanded {
-    z-index: 101;
+    z-index: 1001;
     left: 0;
     width: 100%;
   }
@@ -436,6 +438,21 @@ footer {
   right: 6px;
   top: 0;
 }
+
+
+
+#overlay {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  background: rgba(0,0,0,0.75);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
 
 // Themes
 @import "../themes/codemirror";
