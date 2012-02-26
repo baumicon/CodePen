@@ -89,15 +89,18 @@ class Renderer
   end
   
   def get_js_library(js_library)
-    if js_library == 'jquery-latest'
-      return '<script src="http://code.jquery.com/jquery-latest.js"></script>'
+    if js_library == 'jquery'
+      href = '//code.jquery.com/jquery-latest.js'
     elsif js_library == 'mootools'
-      href = '//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js'
-      return '<script src="' + href + '"></script>'
+      href = '//ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js'
     elsif js_library == 'prototype'
-      href = '//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js'
-      return '<script src="' + href + '"></script>'
+      href = '//ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'
+    elsif js_library == 'extjs'
+      href = '//ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js'
+    elsif js_library == 'dojo'
+      href = '//ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js'
     end
+    return '<script src="' + href + '"></script>'
   end
   
   def get_js_modernizr(js_modernizr)
