@@ -48,6 +48,13 @@ var KeyBindings = (function() {
                 // every other OS will use the control key (17)
                 if(event.keyCode == 17 || event.keyCode == 91) {
                     KeyBindings.commandKeyPressed = true;
+                    
+                    // Because keyup is so unreliable (we may not capture the keyup event)
+                    // because the browser swallows it
+                    // we automatically set it to false after 1 second
+                    setTimeout(function() {
+                        KeyBindings.commandKeyPressed = false;
+                    }, 1000);
                 }
             });
             
@@ -82,8 +89,8 @@ var KeyBindings = (function() {
                         Main.openExpandedArea('#box-js');
                         KeyBindings.giveEditorFocus(KeyBindings.JSeditor);
                     }
-                    else if(event.keyCode == 67) {
-                        // cmd + c
+                    else if(event.keyCode == 13) {
+                        // cmd + return
                         // compile and run code
                         stop = true;
                         CodeRenderer.compileContent(true);
