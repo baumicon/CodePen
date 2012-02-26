@@ -35,7 +35,12 @@ class Renderer
   def render_tpl()
     tpl = File.open("./views/fullpage.erb", "rb")
     renderer = ERB.new(tpl.read)
-    renderer.result(binding)
+    result = renderer.result(binding)
+    
+    # Replaces lines that only have whitespaces a new line char
+    result = result.gsub(/^\s*$/, "\n")
+    # Combine two or more line breaks into just 2 line breaks
+    result.gsub(/[\n]{2,}/, "\n\n")
   end
   
   def get_css_starter(css_starter)

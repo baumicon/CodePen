@@ -25,7 +25,7 @@ class Content
     timestamps!
 
     def self.new_from_json(json, uid, slugs)
-      payload = JsonUtil.js_to_ruby_hash(json)
+      payload = JSON.parse(json)
       payload['uid'] = uid
       content = Content.new payload
       content.slugs = slugs

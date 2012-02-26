@@ -42,7 +42,7 @@ class PreProcessorService
         @errors['HAML'] = e.message
       end
     end
-
+    
     html
   end
 
@@ -72,6 +72,14 @@ class PreProcessorService
     end
 
     css
+  end
+  
+  def get_compass_imports()
+    imports = '@import "compass/css3/border-radius"'
+    imports+= '@import "compass/css3/box-shadow"'
+    imports+= '@import "compass/css3/box-shadow"'
+    
+    imports
   end
   
   # alextodo, talk to coyier about adding a suggestion spot
