@@ -55,14 +55,21 @@ header {
 }
 #slug {
   border: 0;
-  @include font-stack-normal;
-  font-size: 12px;
-  top: 1px;
-  padding: 2px;
+  font-size: 16px;
+  padding: 1px 3px;
+  top: -1px;
+  width: 100px;
   position: relative;
+  @include font-stack-bold;
   &:focus {
     outline: 0;
   }
+}
+.slash {
+  color: orange;
+  font-weight: 700;
+  vertical-align: bottom;
+  margin: 0 0 0 4px;
 }
 .app-actions {
   float: right;
