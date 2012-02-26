@@ -42,7 +42,7 @@ class PreProcessorService
         @errors['HAML'] = e.message
       end
     end
-
+    
     html
   end
 

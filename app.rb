@@ -130,7 +130,7 @@ class App < Sinatra::Base
     
     encode({ 'url' => url_to_gist })
   end
-
+  
   helpers do
     def get_templates
       {'result' => (erb :template)}.to_json.gsub('/', '\/')
