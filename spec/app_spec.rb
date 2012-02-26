@@ -2,8 +2,6 @@ require './app'
 require 'spec_helper'
 require 'json'
 
-set :environment, :test
-
 describe 'The App' do
 
   def app
@@ -27,11 +25,18 @@ describe 'The App' do
 
   describe "api" do
 
+    it "should properly route /:slug(int)/:version(int)" do
+      get '/1/2', params={"test" => true}
+      resp = JSON.parse(last_response.body)
+      resp['slug'].should == "1"
+      resp['version'].should == "2"
+    end
+
     it "saves content" do
       clear_db
       post '/save/content', params={"content" =>'{"slug":"testing", "html" : "<html><body>hi there</body></html>", "version" : "1"}' }
       last_response.should be_ok
-      last_response.body.to_json["success"].should == true
+      JSON.parse(last_response.body)["success"].should == true
     end
 
     it "retrieves content" do
@@ -43,6 +48,6 @@ describe 'The App' do
       body = JSON.parse(last_response.body)
       body['payload']['slug'].should == 'testing'
     end
-  end
 
+  end
 end

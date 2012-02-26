@@ -28,6 +28,16 @@ class App < Sinatra::Base
     "working"
   end
 
+  get '/session/:stuff' do |stuff|
+    session[:stuff] = stuff
+  end
+
+  get %r{/(\d)/(\d)} do |slug, version|
+    #TODO: remove this when we're sure that routing works as we want.
+    return {"slug" => slug, "version" => version}.to_json if params[:test]
+    
+  end
+
   get '/' do
     set_session
     @c_data = {}

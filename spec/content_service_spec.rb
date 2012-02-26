@@ -40,7 +40,6 @@ describe ContentService do
       User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
       service = ContentService.new
       result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
-      ap result
       result['success'].should == true
       result['payload']['slug'].should == 'new_slug'
     end
@@ -83,11 +82,24 @@ describe ContentService do
       content['payload']['version'].should equal 6
     end
 
+    it "should retrieve content by slug and version" do
+      clear_db
+    end
+
     it "should return 'success' == false if no content exists for slug" do
       clear_db
       service = ContentService.new
-      content = service.latest "testing"
+      content = service.latest("testing")
       content['success'].should == false
+    end
+
+    it "should successfully return content by slug and version" do
+      clear_db
+      service = ContentService.new
+      service.save_content('7', '{"slug":"testing", "version":"6"}')['success'].should == true
+      content = service.retrieve(:slug => "testing", :version => "6", :uid => "7")
+      content['success'].should == true
+      content['payload']['version'].should equal 6
     end
 
   end

@@ -9,6 +9,15 @@ Spork.prefork do
   # need to restart spork for it take effect.
   require 'mongo_mapper'
 
+  require 'rack/test'
+  require './spec/util_mongo'
+  require 'rspec'
+  require 'awesome_print'
+
+  include MongoUtil
+  include Rack::Test::Methods
+
+
 end
 
 Spork.each_run do
@@ -49,12 +58,8 @@ end
 
 
 ENV['RACK_ENV'] = "test"
-
-require 'rack/test'
-require './spec/util_mongo'
-require 'rspec'
-require 'awesome_print'
-
-include MongoUtil
-include Rack::Test::Methods
-
+#
+# http://bloggitation.appspot.com/entry/access-to-the-rack-session-from-rspec
+def session
+    last_request.env['rack.session']
+end
