@@ -38,11 +38,15 @@
                 $('#js').html(CData.js);
                 
                 // Sync preprocessors with correct data
-                $('input[type="radio"]').prop('checked', false);
-                $('input[value="' + CData.html_pre_processor + '"]').prop('checked', true);
-                $('input[value="' + CData.css_pre_processor + '"]').prop('checked', true);
+                var selector = function(prefix, value) {
+                    return ':input[name="' + prefix + '-preprocessor"][value="' + value + '"]';
+                }
+                
+                $(selector('html', CData.html_pre_processor)).prop('checked', true);
+                $(selector('css', CData.css_pre_processor)).prop('checked', true);
+                $(selector('js', CData.js_pre_processor)).prop('checked', true);
+                
                 $('input[value="' + CData.css_starter + '"]').prop('checked', true);
-                $('input[value="' + CData.js_pre_processor + '"]').prop('checked', true);
                 
                 Main.updatePrefixFreeBox(CData.css_pre_processor);
                 
