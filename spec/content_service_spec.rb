@@ -12,7 +12,7 @@ describe ContentService do
     it "should save if user already owns slug" do
       clear_db
       Slug.new(:uid => '7', :name => 'testing').save
-      User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
 
       service = ContentService.new
       service.save_content('7', '{"slug":"testing", "version":"5"}')['success'].should == true
@@ -20,7 +20,7 @@ describe ContentService do
 
     it "should save if slug is new and not already taken" do
       clear_db
-      User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
       service = ContentService.new
       result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
       result['success'].should == true
@@ -28,7 +28,7 @@ describe ContentService do
 
     it "should NOT save if slug is already taken by another user" do
       clear_db
-      User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
       Slug.new(:name => 'new_slug', :uid => '5').save
       service = ContentService.new
       result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
@@ -37,7 +37,7 @@ describe ContentService do
 
     it "should return the slug name on successful save" do
       clear_db
-      User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
       service = ContentService.new
       result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
       result['success'].should == true
@@ -53,7 +53,7 @@ describe ContentService do
 
     it "should accept a valid sequence" do
       clear_db
-      User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
       service = ContentService.new
       result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
       result = service.save_content('7', '{"slug":"new_slug", "version":"6"}')
@@ -62,7 +62,7 @@ describe ContentService do
 
     it "should reject an invalid sequence" do
       clear_db
-      User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
       service = ContentService.new
       result = service.save_content('7', '{"slug":"new_slug", "version":"8"}')
       result = service.save_content('7', '{"slug":"new_slug", "version":"6"}')

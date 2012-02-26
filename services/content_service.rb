@@ -9,7 +9,7 @@ class ContentService
 
   def save_content(session_id, json)
     begin
-      user = User.get_by_session_id(session_id)
+      user = TwitterUser.get_by_session_id(session_id)
       slugs = Slug.where(:uid => user.uid).all.map{|slug| slug.name}
       content = Content.new_from_json(json, user.uid, slugs)
 

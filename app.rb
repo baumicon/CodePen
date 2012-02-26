@@ -4,7 +4,7 @@ require 'omniauth'
 require 'omniauth-twitter'
 require 'mongo_mapper'
 require './services/gist_service'
-require './models/user'
+require './models/twitter_user'
 require './services/content_service'
 require './services/preprocessor_service'
 require './renderer'
@@ -20,8 +20,14 @@ class App < Sinatra::Base
   end
 
   def set_session
-    @user = User.get_by_session_id(session[:user_id])
+    @user = TwitterUser.get_by_session_id(session[:user_id])
     session[:user_id] = @user.uid
+  end
+
+  def session_setup
+    uid =   session[:uid]
+    uuid =  session[:uuid]
+
   end
 
   get '/sanity' do
@@ -29,7 +35,7 @@ class App < Sinatra::Base
   end
 
   get '/session/:stuff' do |stuff|
-    session[:stuff] = stuff
+    session[:stuff] = User.new(:uid => stuff)
   end
 
   get %r{/(\d)/(\d)} do |slug, version|
