@@ -1,6 +1,8 @@
 @import "functions";
 @import "colors";
 
+$glowSize: 50px;
+
 ::selection {
   background: #BADA55;
 }
@@ -17,6 +19,7 @@
 html, body {
   height: 100%;
   overflow: hidden;
+
 }
 
 html {
@@ -141,7 +144,6 @@ header {
     z-index: 101;
     left: 0;
     width: 100%;
-    @include box-shadow((0 0 5px red));
   }
   h2:after {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -166,6 +168,9 @@ header {
       content: " (HAML)";
     }
   }
+  &.expanded {
+    @include box-shadow((0 0 $glowSize #76daff));
+  }
 }
 .box-css {
   left: 33.7%;
@@ -189,6 +194,9 @@ header {
       content: " (LESS)";
     }
   }
+  &.expanded {
+    @include box-shadow((0 0 $glowSize #4edb47));
+  }
 }
 .box-js {
   left: 67.6%;
@@ -196,6 +204,9 @@ header {
     h2:after {
       content: " (CoffeeScript)";
     }
+  }
+  &.expanded {
+    @include box-shadow((0 0 $glowSize #9d59fa));
   }
 }
 
@@ -323,7 +334,7 @@ header {
     background: none;
     font-size: 10px;
     font-weight: 700;
-    color: red;
+    color: #eee;
     margin-right: 2px;
     position: relative;
     top: -2px;
