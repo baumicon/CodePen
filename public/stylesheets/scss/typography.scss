@@ -1,5 +1,5 @@
 @mixin font-stack-normal {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-family: "Lucida Grande","Lucida Sans Unicode", Tahoma, sans-serif;
 }
 @mixin font-stack-bold {
 	font-family: "HelveticaNeue-CondensedBold", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -29,12 +29,6 @@ h2 {
 
 a {
 	text-decoration: none;
-	&:focus {
-		outline: 0;
-	}
-	&:active {
-		color: red;
-	}
 }
 
 label.small {
