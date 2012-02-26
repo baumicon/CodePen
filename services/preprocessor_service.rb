@@ -63,44 +63,15 @@ class PreProcessorService
     elsif type == 'sass'
       begin
         # sass with compass
-        engine = get_sass_compass_engine(css)
+        imports_and_css = get_compass_imports() + "\n" + css
+        engine = get_sass_compass_engine(imports_and_css)
         css = engine.render
       rescue Sass::SyntaxError => e
-        msg = suggest_compass_error_fix(e.message)
-        @errors['SASS with Compass'] = msg
+        @errors['SASS with Compass'] = e.message
       end
     end
 
     css
-  end
-  
-  def get_compass_imports()
-    imports = '@import "compass/css3/border-radius"'
-    imports+= '@import "compass/css3/box-shadow"'
-    imports+= '@import "compass/css3/box-shadow"'
-    
-    imports
-  end
-  
-  # alextodo, talk to coyier about adding a suggestion spot
-  # for now ghettofy it
-  def suggest_compass_error_fix(msg)
-    # suggest a fix for Undefined mixins
-    match = msg.scan(/undefined mixin '([-\d\w]+)'/i)
-    match = match[0][0]
-    
-    if !empty?(match)
-      suggestions = {
-        'box-shadow'    => 'Try adding @import "compass/css3/box-shadow"',
-        'border-radius' => 'Try adding @import "compass/css3/border-radius"'
-      }
-      
-      if suggestions.has_key?(match)
-        msg += "\n<br />" + suggestions[match]
-      end
-    end
-    
-    msg
   end
   
   # A sass engine for compiling sass content with compass
@@ -125,6 +96,65 @@ class PreProcessorService
     Sass::Engine.new(content, opts)
   end
 
+  def get_compass_imports()
+    imports = <<HERE
+@import "compass"
+@import "lemonade"
+@import "compass/css3"
+@import "compass/layout"
+@import "compass/support"
+@import "compass/typography"
+@import "compass/utilities"
+@import "compass/css3/appearance"
+@import "compass/css3/background-clip"
+@import "compass/css3/background-origin"
+@import "compass/css3/background-size"
+@import "compass/css3/border-radius"
+@import "compass/css3/box-shadow"
+@import "compass/css3/box-sizing"
+@import "compass/css3/box"
+@import "compass/css3/columns"
+@import "compass/css3/font-face"
+@import "compass/css3/gradient"
+@import "compass/css3/images"
+@import "compass/css3/inline-block"
+@import "compass/css3/opacity"
+@import "compass/css3/pie"
+@import "compass/css3/shared"
+@import "compass/css3/text-shadow"
+@import "compass/css3/transform"
+@import "compass/css3/transition"
+@import "compass/css3/user-interface"
+@import "compass/layout/grid-background"
+@import "compass/layout/sticky-footer"
+@import "compass/layout/stretching"
+@import "compass/typography/vertical_rhythm"
+@import "compass/typography/text/ellipsis"
+@import "compass/typography/text/force-wrap"
+@import "compass/typography/text/nowrap"
+@import "compass/typography/text/replacement"
+@import "compass/utilities/color"
+@import "compass/utilities/general"
+@import "compass/utilities/print"
+@import "compass/utilities/sprites"
+@import "compass/utilities/tables"
+@import "compass/utilities/color/contrast"
+@import "compass/utilities/general/clearfix"
+@import "compass/utilities/general/float"
+@import "compass/utilities/general/hacks"
+@import "compass/utilities/general/min"
+@import "compass/utilities/general/tabs"
+@import "compass/utilities/general/tag-cloud"
+@import "compass/utilities/sprites/base"
+@import "compass/utilities/sprites/sprite-img"
+@import "compass/utilities/tables/alternating-rows-and-columns"
+@import "compass/utilities/tables/borders"
+@import "compass/utilities/tables/scaffolding"
+HERE
+
+    imports
+  end
+  
   def process_js(type, js)
     if type == 'coffeescript'
       js = node_req('/coffeescript/', 'js', js, 'CoffeeScript')

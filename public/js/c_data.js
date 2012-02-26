@@ -163,9 +163,6 @@ var CData = (function() {
                       
                       if(obj.success) {
                           window.location = '/' + obj.payload.slug + '/';
-                          // redirect to new slug URL. I will need to get that
-                          // I need more than just success true
-                          // error on duplicate slug
                       }
                       else {
                           // todo, what happens when saving goes wrong?
