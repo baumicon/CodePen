@@ -35,6 +35,16 @@ describe ContentService do
       result['success'].should == false
     end
 
+    it "should return the slug name on successful save" do
+      clear_db
+      User.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      service = ContentService.new
+      result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
+      ap result
+      result['success'].should == true
+      result['payload']['slug'].should == 'new_slug'
+    end
+
     it "should NOT allow invalid content" do
       clear_db
       service = ContentService.new

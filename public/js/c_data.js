@@ -152,42 +152,26 @@ var CData = (function() {
 	    },
 	    
 	    save: function() {
-	        var errors = this.validateContentOnSave();
+	        this.version += 1;
 	        
-	        if(errors.length > 0) {
-	            for (var i=0; i < errors.length; i++) {
-	               alert(errors[i]['msg']);
-	            };
-	        }
-	        else {
-	            $.ajax({
-                      url: '/save/content',
-                      type: 'POST',
-                      data: Util.getDataValues({ 'content': JSON.stringify(CData) }),
-                      success: function(result) {
-                          var obj = $.parseJSON(result);
-                          
-                          if(obj.success) {
-                              // redirect to new slug URL. I will need to get that
-                              // I need more than just success true
-                              // error on duplicate slug
-                              // {"success":false,"errors":{"invalid_sequence":"Invalid Sequence.  Expected 2. Got 1"}}
-                          }
+	        $.ajax({
+                  url: '/save/content',
+                  type: 'POST',
+                  data: Util.getDataValues({ 'content': JSON.stringify(CData) }),
+                  success: function(result) {
+                      var obj = $.parseJSON(result);
+                      
+                      if(obj.success) {
+                          window.location = '/' + obj.payload.slug + '/';
+                          // redirect to new slug URL. I will need to get that
+                          // I need more than just success true
+                          // error on duplicate slug
                       }
-                });
-	        }
-        },
-        
-        validateContentOnSave: function() {
-            var errors = [ ];
-            
-            if(!$.trim(this.slug)) {
-                var err = {'type': 'required', 'msg': 'You must add a slug'};
-                
-                errors.push(err);
-            }
-            
-            return errors;
+                      else {
+                          // todo, what happens when saving goes wrong?
+                      }
+                  }
+            });
         },
         
 	    logout: function() {

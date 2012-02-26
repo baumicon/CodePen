@@ -1,5 +1,6 @@
 require './app'
 require 'spec_helper'
+require 'json'
 
 set :environment, :test
 
@@ -30,7 +31,7 @@ describe 'The App' do
       clear_db
       post '/save/content', params={"content" =>'{"slug":"testing", "html" : "<html><body>hi there</body></html>", "version" : "1"}' }
       last_response.should be_ok
-      last_response.body.should == '{"success":true}'
+      last_response.body.to_json["success"].should == true
     end
 
     it "retrieves content" do
