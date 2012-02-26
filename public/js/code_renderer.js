@@ -164,7 +164,7 @@ var CodeRenderer = (function() {
         getJSLibrary: function() {
             if(CData.js_library) {
                 var jsLibs = {
-                    'jquery-latest': 'http://code.jquery.com/jquery-latest.js',
+                    'jquery': '//code.jquery.com/jquery-latest.js',
                     'mootools'     : '//ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
                     'prototype'    : '//ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'
                     // ,'extjs'        : '//ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js'
