@@ -8,3 +8,9 @@ Pull from git. This will delete the node_modules directory.
 We will no longer store this dir on git because heroku doesn't want it. It will only exist locally.
 
 Run the command 'npm install'. This command reads the package.json file to reinstall all the node dependencies. This time they are ignored by git becayse we've added node_modules to our gitignore file.
+
+TROUBLESHOOTING
+
+If you run into this error 'Permission denied (publickey).' Do the following heroku keys:add ~/.ssh/id_rsa.pub.
+
+http://stackoverflow.com/questions/4269922/permission-denied-publickey-when-deploying-heroku-code-fatal-the-remote-end
