@@ -2,3 +2,4 @@ startup.sh
 _scratch
 /temp
 /.sass-cache
+/node_modules
