@@ -79,6 +79,7 @@ DEPENDENCIES
   awesome_print
   bson_ext
   compass
+  daemons
   haml
   jsmin
   json
