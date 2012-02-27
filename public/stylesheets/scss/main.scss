@@ -36,7 +36,7 @@ html {
 header {
   display: block;
   position: relative;
-  padding: 10px 10px 10px 20px;
+  padding: 10px 10px 10px 0;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   @include gradient(#3d3d3e, #2a2a2a);
@@ -46,7 +46,9 @@ header {
   ));
   height: 62px;
   form {
-    float: left;
+    position: absolute;
+    top: 10px;
+    left: 20px;
     * {
       vertical-align: middle;
     }
@@ -76,8 +78,7 @@ header {
 }
 .app-actions {
   float: right;
-  position: relative;
-  min-width: 230px;
+  min-width: 196px;
   .button, button {
     float: right;
   }
@@ -309,8 +310,9 @@ header {
   bottom: -5px;
   border-left: 0;
   strong {
-    color: #888;
-    font-size: 15px;
+    color: #999;
+    font-size: 13px;
+    @include font-stack-bold;
     text-shadow: 0 -1px 1px black;
     .expanded & {
       display: none;
@@ -467,3 +469,10 @@ footer {
 // Themes
 @import "../themes/codemirror";
 @import "../themes/sublime";
+
+@media (max-width: 900px) {
+  @import "mq-900";
+}
+@media (max-width: 770px) {
+  @import "mq-770";
+}
