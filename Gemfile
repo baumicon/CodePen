@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 
+gem "daemons"
 gem "omniauth-twitter"
 gem "multi_json"
 gem "sinatra"
