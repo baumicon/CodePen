@@ -11,7 +11,8 @@ require './services/renderer'
 require './lib/minify'
 
 class App < Sinatra::Base
-  puts 'Mongo connection: ' + ENV['MONGOHQ_URL']
+  puts 'Mongo connection: '
+  puts ENV['MONGOHQ_URL']
   
   # MongoMapper setup
   mongo_url = ENV['MONGOHQ_URL'] || "mongodb://localhost:27017/tinkerbox"
