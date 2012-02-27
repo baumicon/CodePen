@@ -1,0 +1,10 @@
+To get started with heroku, do the following
+
+Install heroku toolbelt.
+    alextodo, see how to install, maybe install to Gemfile?
+
+Pull from git. This will delete the node_modules directory.
+
+We will no longer store this dir on git because heroku doesn't want it. It will only exist locally.
+
+Run the command 'npm install'. This command reads the package.json file to reinstall all the node dependencies. This time they are ignored by git becayse we've added node_modules to our gitignore file.
