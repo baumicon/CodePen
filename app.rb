@@ -20,6 +20,7 @@ class App < Sinatra::Base
   database = uri.path.gsub('/', '')
   MongoMapper.connection = Mongo::Connection.new(uri.host, uri.port, {})
   MongoMapper.database = database
+  MongoMapper.database.authenticate('heroku', 'holahola')
   
   use Rack::Session::Cookie, :key => 'codepen'
 
