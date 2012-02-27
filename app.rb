@@ -15,12 +15,15 @@ class App < Sinatra::Base
   puts ENV['MONGOHQ_URL']
   
   # MongoMapper setup
-  mongo_url = ENV['MONGOHQ_URL'] || "mongodb://localhost:27017/tinkerbox"
-  uri = URI.parse(mongo_url)
-  database = uri.path.gsub('/', '')
-  MongoMapper.connection = Mongo::Connection.new(uri.host, uri.port, {})
-  MongoMapper.database = database
-  MongoMapper.database.authenticate('heroku', 'holahola')
+  if ENV['MONGOHQ_URL']
+    uri = URI.parse(ENV['MONGOHQ_URL'])
+    database = uri.path.gsub('/', '')
+    MongoMapper.connection = Mongo::Connection.new(uri.host, uri.port, {})
+    MongoMapper.database = database
+    MongoMapper.database.authenticate(ENV['MONGO_USER'], ENV['MONGO_PSWD'])
+  else
+    MongoMapper.database = 'tinkerbox'
+  end
   
   use Rack::Session::Cookie, :key => 'codepen'
 
