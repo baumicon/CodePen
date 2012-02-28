@@ -14,4 +14,5 @@ module Sessionator
     end
 
   end
+
 end

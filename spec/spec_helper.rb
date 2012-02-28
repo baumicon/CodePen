@@ -17,18 +17,19 @@ end
 
 ENV['RACK_ENV'] = "test"
 #
-# http://bloggitation.appspot.com/entry/access-to-the-rack-session-from-rspec
-require 'mongo_mapper'
 
-require 'rack/test'
-require './spec/util_mongo'
 require 'rspec'
+#NOTE: order here is important.  Read: http://stackoverflow.com/a/7179152/182484
+require 'rack/test'
+require 'mongo_mapper'
+require './spec/util_mongo'
 require 'awesome_print'
+require './spec/util_session'
 
 include MongoUtil
 include Rack::Test::Methods
 
-
+# http://bloggitation.appspot.com/entry/access-to-the-rack-session-from-rspec
 def session
     last_request.env['rack.session']
 end

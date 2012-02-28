@@ -44,6 +44,17 @@ class ContentService
     end
   end
 
+  def copy_ownership(user, new_uid)
+    Content.all(:uid => user.uid).each{|c|
+      c.uid = new_uid
+      Content.new(c).save
+    }
+    Slug.all(:uid => user.uid).each{|s|
+      s.uid = new_uid
+      Slug.new(s).save
+    }
+  end
+
   private
 
   def sequence_check(content)

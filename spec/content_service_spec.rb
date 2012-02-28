@@ -103,4 +103,22 @@ describe ContentService do
     end
 
   end
+
+  describe "copying" do
+
+    it "should change ownership of content and slugs" do
+      service = ContentService.new
+      result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
+      result = service.save_content('7', '{"slug":"new_slug", "version":"6"}')
+      service.copy_ownership(User.new(:uid => 7), 10)
+      content = Content.where(:uid => "10").all
+      slugs = Slug.where(:uid => "10").all
+
+      (content + slugs).each{|x|
+        x.uid.should == "10"
+      }
+    end
+
+  end
+
 end

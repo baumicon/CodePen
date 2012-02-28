@@ -1,13 +1,8 @@
-require 'mongo_mapper'
+module SessionUtil
 
-module MongoUtil
-
-  MongoMapper.database = 'integration_test'
-
-  def clear_session
-    MongoMapper.database.collections.each do |collection|
-      collection.remove
-    end
+  def clear_session(session)
+    get '/session/prime/me'
+    session.clear
   end
 
 end

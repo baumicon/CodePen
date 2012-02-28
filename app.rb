@@ -4,43 +4,23 @@ require 'omniauth'
 require 'omniauth-twitter'
 require 'mongo_mapper'
 require './services/gist_service'
-require './models/twitter_user'
 require './services/content_service'
 require './services/preprocessor_service'
 require './renderer'
 require './minify'
+require './lib/sessionator'
 
 class App < Sinatra::Base
 
   MongoMapper.database = 'tinkerbox'
-  use Rack::Session::Cookie, :key => 'codepen'
+  include Sessionator
 
+  set :sessions, true
   use OmniAuth::Builder do
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
-  def set_session
-    @user = TwitterUser.get_by_session_id(session[:user_id])
-    session[:user_id] = @user.uid
-  end
-
-  def session_setup
-    uid =   session[:uid]
-    uuid =  session[:uuid]
-
-  end
-
-  get '/sanity' do
-    "working"
-  end
-
-  get '/session/:stuff' do |stuff|
-    session[:stuff] = User.new(:uid => stuff)
-  end
-
   get %r{/(\d)/(\d)} do |slug, version|
-    #TODO: remove this when we're sure that routing works as we want.
-    return {"slug" => slug, "version" => version}.to_json if params[:test]
     
   end
 

@@ -4,7 +4,7 @@ require_relative './user'
 class TwitterUser < User
   include MongoMapper::Document
 
-  attr_accessible :uid, :provider, :nickname, :name
+  attr_accessible :uid, :nickname, :name
 
   key :uid,         String, :required => true
   key :nickname,    String, :required => true

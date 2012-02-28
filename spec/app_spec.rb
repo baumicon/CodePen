@@ -10,12 +10,6 @@ describe 'The App' do
 
   describe "initilization" do
 
-    it "starts up without error" do
-      get '/sanity'
-      last_response.should be_ok
-      last_response.body.should == 'working'
-    end
-
     it "loads the home page" do
       get '/'
       last_response.should be_ok
@@ -24,13 +18,6 @@ describe 'The App' do
   end
 
   describe "api" do
-
-    it "should properly route /:slug(int)/:version(int)" do
-      get '/1/2', params={"test" => true}
-      resp = JSON.parse(last_response.body)
-      resp['slug'].should == "1"
-      resp['version'].should == "2"
-    end
 
     it "saves content" do
       clear_db
