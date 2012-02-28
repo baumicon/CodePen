@@ -3,3 +3,4 @@ _scratch
 /temp
 /.sass-cache
 /node_modules
+.env

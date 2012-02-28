@@ -1,2 +1,3 @@
+web: bundle exec rackup -p $port 
 web: node app.js
-web: bundle exec rackup -p $PORT
+worker: mongod
