@@ -11,20 +11,8 @@ require './services/renderer'
 require './lib/minify'
 
 class App < Sinatra::Base
-  puts 'Mongo connection: '
-  puts ENV['MONGOHQ_URL']
-  
   # MongoMapper setup
-  if ENV['MONGOHQ_URL']
-    uri = URI.parse(ENV['MONGOHQ_URL'])
-    database = uri.path.gsub('/', '')
-    MongoMapper.connection = Mongo::Connection.new(uri.host, uri.port, {})
-    MongoMapper.database = database
-    MongoMapper.database.authenticate(ENV['MONGO_USER'], ENV['MONGO_PSWD'])
-  else
-    MongoMapper.database = 'tinkerbox'
-  end
-  
+  MongoMapper.database = 'tinkerbox'
   use Rack::Session::Cookie, :key => 'codepen'
 
   use OmniAuth::Builder do
