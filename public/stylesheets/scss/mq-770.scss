@@ -1,0 +1,21 @@
+header {
+  height: 120px;
+  form {
+    width: 100%;
+    left: 10px;
+    top: 20px;
+  }
+}
+
+.box-actions {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  margin-left: 0;
+}
+
+#run {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+}

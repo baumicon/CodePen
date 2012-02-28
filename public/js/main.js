@@ -7,6 +7,7 @@
             
             win         : $(window),
             body        : $('body'),
+            header      : $('body > header'),
             boxHTML     : $("#box-html"),
             boxCSS      : $("#box-css"),
             boxJS       : $("#box-js"),
@@ -89,9 +90,12 @@
             
             bindUIActions: function() {
                 // Resize all boxes when window resized
+
+                console.log(Main.header.outerHeight());
+
                 this.win.resize(function() {
-                    var space = Main.body.height() - 25;
-                    Main.topBoxesCon.height(space / 2);
+                    var space = Main.body.height();
+                    Main.topBoxesCon.height(space / 2 - 20);
                     Main.boxResult.height(space / 2);
                     Main.result.css({
                         "height"  : space / 2,
@@ -99,7 +103,7 @@
                     });
                     Main.boxes.height(Main.win.height());
                     Main.vertResizer.css({
-                        "top"    : space / 2 + 82 + "px",
+                        "top"    : ((space / 2) + Main.header.outerHeight()) + "px",
                     });
                 }).trigger("resize");
                 
