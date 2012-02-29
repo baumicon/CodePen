@@ -48,37 +48,36 @@ class App < Sinatra::Base
   end
 
   get '/auth/:name/callback' do
-    user_service = UserService.new
-    user = user_service.first_or_new(request.env['omniauth.auth'])
-    session[:user_id] = user._id
-    redirect '/'
+    require 'awesome_print'
+    req = request.env['omniauth.auth']
+    ap req
   end
 
   get '/auth/failure' do
     'Authentication Failed'
   end
-  
+
   get '/logout' do
     session[:user_id] = false
-    
+
     redirect '/'
   end
-  
+
   get '/list/' do
     @pens = [ ]
-    
+
     erb :list
   end
 
   post '/process/' do
     pps = PreProcessorService.new
     results = pps.process_content(params)
-    
+
     if pps.errors.length > 0
       @errors = pps.errors
       results['error_html'] = erb :errors
     end
-    
+
     encode(results)
   end
 
