@@ -1,3 +1,3 @@
-web: bundle exec rackup -p 9292 
+web: bundle exec rackup
 web: node app.js
 worker: mongod

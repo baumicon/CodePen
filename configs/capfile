@@ -24,8 +24,7 @@ set :branch, "master"
 set :deploy_via, :remote_cache
 set :repository, "git@github.com:chriscoyier/Tinkerbox.git"
 
-# alextodo, will need to run sinatra with thin, not right out of the box
-# will also need to run nginx in front of this whole hubbub
+# alextodo will also need to run nginx in front of this whole hubbub
 role :web, "50.57.181.132"
 
 namespace :deploy do
@@ -65,18 +64,8 @@ namespace :deploy do
   
   task :restart, :roles => :web do
     run <<-CMD
-      cd #{deploy_to}; bundle exec thin restart -C config/config.yml
+      cd #{deploy_to}; bundle exec thin restart -C configs/config.yml -R config.ru
     CMD
   end
   
-end
-
-# Generate an additional task to fire up the thin clusters
-namespace :deploy_example do
-  desc "Create a symlink from the public/cvs folder to the shared/system/cvs folder"
-  task :update_cv_assets, :except => {:no_release => true} do
-    run <<-CMD
-      ln -s /var/www/shared/cvs /var/www/apps/current/public
-    CMD
-  end
 end
