@@ -9,7 +9,7 @@ To start Code Pen with a single command type:
     
     foreman start
     
-This uses the foreman gem to run all three services simultaneously so don't have to open three terminal sessions for each of the services. All three standard outputs will be sent to the single window. To configure the commands that foreman runs edit the Procfile.
+This uses the foreman gem to run all three services simultaneously so you don't have to open three terminal sessions for each of the services. All three standard outputs will be sent to the single window. To configure the commands that foreman runs edit the Procfile.
 
 ##Server Setup
 
