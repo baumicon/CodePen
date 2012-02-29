@@ -1,13 +1,13 @@
 # Thin configuration
 environment: production
 chdir: "/www/Tinkerbox"
-address: 50.57.181.132
+address: 0.0.0.0
 user: root
-group: admin
+group: root
 port: 5000
 pid: "/www/Tinkerbox/configs/thin.pid"
 rackup: "/www/Tinkerbox/configs/config.ru"
-log: "/www/Tinkerbox/log/thin.log"
+log: "/www/Tinkerbox/configs/thin.log"
 max_conns: 1024
 timeout: 30
 servers: 1

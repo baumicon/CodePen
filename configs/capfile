@@ -53,13 +53,13 @@ namespace :deploy do
   
   task :start , :roles => :web do
     run  <<-CMD
-      cd #{deploy_to}; bundle exec thin start -C configs/config.yml
+      cd #{deploy_to}; bundle exec thin start -C configs/config.yml -R config.ru
     CMD
   end
   
   task :stop, :roles => :web do
     run <<-CMD
-      cd #{deploy_to}; bundle exec thin stop -C configs/config.yml
+      cd #{deploy_to}; bundle exec thin stop -C configs/config.yml -R config.ru
     CMD
   end
   
