@@ -1,0 +1,15 @@
+# Thin configuration
+environment: production
+chdir: "/www/Tinkerbox"
+address: 50.57.181.132
+user: root
+group: admin
+port: 5000
+pid: "/www/Tinkerbox/configs/thin.pid"
+rackup: "/www/Tinkerbox/configs/config.ru"
+log: "/www/Tinkerbox/log/thin.log"
+max_conns: 1024
+timeout: 30
+servers: 1
+max_persistent_conns: 512
+daemonize: true

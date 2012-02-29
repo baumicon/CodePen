@@ -1,0 +1,73 @@
+# Our capistrano file for deployment.
+set :domain, "codepen.io"
+set :application, "codepen"
+set :user, "root"
+set :use_sudo, false
+
+# alextodo, consider moving over to /www/Tinkerbox
+set :deploy_to, "/www/Tinkerbox"
+
+# version control related
+set :scm, :git
+set :scm_username, "quezo"
+set :branch, "master"
+# Use a local cache instead of doing a full clone
+set :deploy_via, :remote_cache
+set :repository, "git@github.com:chriscoyier/Tinkerbox.git"
+
+# alextodo, will need to run sinatra with thin, not right out of the box
+# will also need to run nginx in front of this whole hubbub
+role :web, "50.57.181.132"
+
+namespace :deploy do
+  task :default, :roles => :web do
+    update
+    minify_js
+    start
+  end
+
+  desc "Pull initial code into directory"
+  task :setup, :roles => :web do
+    run "sudo mkdir -p #{deploy_to}"
+    run "git clone #{repository} #{deploy_to}"
+  end
+  
+  desc "Update the deployed code."
+  task :update, :except => { :no_release => true } do
+    run "cd #{deploy_to}; git fetch origin; git reset --hard #{branch}"
+  end
+  
+  desc "Minifies JS for production."
+  task :minify_js, :roles => :web do
+    run "echo 'minify js'"
+  end
+  
+  task :start , :roles => :web do
+    run  <<-CMD
+      cd #{deploy_to}; bundle exec configs/config.yml
+    CMD
+  end
+  
+  task :stop, :roles => :web do
+    run <<-CMD
+      cd #{deploy_to}; bundle exec thin stop -C configs/config.yml
+    CMD
+  end
+  
+  task :restart, :roles => :web do
+    run <<-CMD
+      cd #{deploy_to}; bundle exec thin restart -C config/config.yml
+    CMD
+  end
+  
+end
+
+# Generate an additional task to fire up the thin clusters
+namespace :deploy_example do
+  desc "Create a symlink from the public/cvs folder to the shared/system/cvs folder"
+  task :update_cv_assets, :except => {:no_release => true} do
+    run <<-CMD
+      ln -s /var/www/shared/cvs /var/www/apps/current/public
+    CMD
+  end
+end
