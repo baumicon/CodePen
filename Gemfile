@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 
+gem "daemons"
 gem "omniauth-twitter"
 gem "multi_json"
 gem "sinatra"
@@ -15,6 +16,8 @@ gem "compass"
 gem "rspec"
 gem "rack-test"
 gem "activesupport"
+gem "foreman"
+gem "thin"
 #TODO: create groups for testing/development
 gem 'awesome_print'
 gem 'spork', '~> 1.0rc'

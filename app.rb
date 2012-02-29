@@ -7,11 +7,11 @@ require './services/gist_service'
 require './models/user'
 require './services/content_service'
 require './services/preprocessor_service'
-require './renderer'
-require './minify'
+require './services/renderer'
+require './lib/minify'
 
 class App < Sinatra::Base
-
+  # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
   use Rack::Session::Cookie, :key => 'codepen'
 

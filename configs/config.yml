@@ -1,0 +1,14 @@
+# Thin configuration
+environment: production
+chdir: "/www/Tinkerbox"
+address: 0.0.0.0
+port: 5000
+
+user: root
+# the users group
+group: root
+max_conns: 1024
+timeout: 30
+servers: 1
+max_persistent_conns: 512
+daemonize: false

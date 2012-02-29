@@ -70,6 +70,8 @@ var CodeRenderer = (function() {
                     contentWindow.__run();
                 }
             }
+            
+            console.log(window.postMessage)
         },
 
         getIFrameContent: function() {
