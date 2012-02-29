@@ -29,6 +29,7 @@ namespace :deploy do
   desc "Pull initial code into directory"
   task :setup, :roles => :web do
     run "sudo mkdir -p #{deploy_to}"
+    run "rvm use 1.9.3"
     run "git clone #{repository} #{deploy_to}"
   end
   
@@ -44,7 +45,7 @@ namespace :deploy do
   
   task :start , :roles => :web do
     run  <<-CMD
-      cd #{deploy_to}; bundle exec configs/config.yml
+      cd #{deploy_to}; bundle exec thin start -C configs/config.yml
     CMD
   end
   
