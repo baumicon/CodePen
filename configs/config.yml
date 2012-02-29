@@ -2,12 +2,11 @@
 environment: production
 chdir: "/www/Tinkerbox"
 address: 0.0.0.0
-user: root
-group: root
 port: 5000
-pid: "/www/Tinkerbox/configs/thin.pid"
-rackup: "/www/Tinkerbox/configs/config.ru"
-log: "/www/Tinkerbox/configs/thin.log"
+
+user: root
+# the users group
+group: root
 max_conns: 1024
 timeout: 30
 servers: 1
