@@ -3,7 +3,8 @@ require 'jsmin'
 class Minify
     
     # determine if we should minify the JS
-    MINIFY = false
+    @minify = false
+    @project_path = ''
     
     # relavtive path to public dir
     PUBLIC_DIR = '/public/'
@@ -14,16 +15,23 @@ class Minify
     # path to where production js file will live, relative to public dir
     DEST_DIR = '/prodjs/'
     
+    # name of version file
+    VERSION_FILE = 'version.txt'
+    
     SERVE_FILES_FROM_URL = ''
     GROUPED_FILES = ''
     
+    def initialize(minify, project_path)
+      @minify = minify
+      @project_path = project_path
+    end
+    
     # Prints the <script> tags according to minify and combine level
-    def script_tags(scripts)
+    def script_tags(scripts, prod_filename)
       script_tags = ''
       
-      if MINIFY == true
-        self.compress_js(scripts)
-        src = get_src_to_prodjs(scripts)
+      if @minify
+        src = get_src_to_prodjs(scripts, prod_filename)
         script_tags = '<script src="' + src + '"></script>'
       else
         # for non minified files
@@ -48,7 +56,7 @@ class Minify
         # Roll through files minify them, save result to
         # single string,  then write to file
         scripts.length.times do |i|
-          js_file = self.get_path_to_public() + scripts[i]
+          js_file = @project_path + PUBLIC_DIR + scripts[i]
           
           file = File.open(js_file, "rb")
           minifiedJS += JSMin.minify(file.read)
@@ -61,11 +69,14 @@ class Minify
       end
     end
     
-    def get_src_to_prodjs(scripts)
-       path_to_prod = get_path_to_prodjs_file(scripts)
-       js_file = path_to_prod.split(DEST_DIR).last
-       
-       DEST_DIR + js_file
+    def get_src_to_prodjs(scripts, prod_filename)
+      version = get_version()
+      clean_path(DEST_DIR + prod_filename + '.' + version + '.js')
+    end
+    
+    def get_version
+      path = clean_path(@project_path + PUBLIC_DIR + DEST_DIR)
+      File.read(path + VERSION_FILE)
     end
     
     # Use the last script file passed in as the name of the production file
@@ -79,7 +90,7 @@ class Minify
       js_file_name = js_file_name.split("/").last
       js_file_name = js_file_name.sub('.js', '.' + js_file_id + '.js')
       
-      clean_path(File.dirname(__FILE__) + PUBLIC_DIR + DEST_DIR + js_file_name)
+      clean_path(@project_path + PUBLIC_DIR + DEST_DIR + js_file_name)
     end
     
     # uses some sort of counter to create a unique id for the
@@ -87,10 +98,6 @@ class Minify
     def get_unique_filename_id()
       hash = `git rev-parse HEAD`
       hash.strip
-    end
-    
-    def get_path_to_public()
-      clean_path(File.dirname(__FILE__) + PUBLIC_DIR)
     end
     
     def clean_path(path)

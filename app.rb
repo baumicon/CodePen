@@ -16,10 +16,10 @@ class App < Sinatra::Base
   use Rack::Session::Cookie, :key => 'codepen'
   
   configure :production do
-    puts 'hello production'
+    set :minify, true
     disable :run, :reload, :show_exceptions
   end
-
+    
   use OmniAuth::Builder do
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
@@ -147,9 +147,9 @@ class App < Sinatra::Base
     def logged_in
       return session[:user_id]
     end
-    def js_scripts(scripts)
-      minify = Minify.new()
-      minify.script_tags(scripts)
+    def js_scripts(scripts, prod_filename)
+      minify = Minify.new(settings.minify, File.dirname(__FILE__))
+      minify.script_tags(scripts, prod_filename)
     end
     def close embedded_json
       embedded_json.gsub('</', '<\/')
