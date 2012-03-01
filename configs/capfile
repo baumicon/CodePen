@@ -52,7 +52,7 @@ namespace :deploy do
   
   task :start , :roles => :web do
     run  <<-CMD
-      cd #{deploy_to}; bundle exec thin start -C configs/config.yml -R config.ru
+      cd #{deploy_to}; bundle exec thin start -e production -C configs/config.yml -R config.ru
     CMD
   end
   
@@ -64,7 +64,7 @@ namespace :deploy do
   
   task :restart, :roles => :web do
     run <<-CMD
-      cd #{deploy_to}; bundle exec thin restart -C configs/config.yml -R config.ru
+      cd #{deploy_to}; bundle exec thin restart -e production  -C configs/config.yml -R config.ru
     CMD
   end
   

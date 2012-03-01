@@ -14,6 +14,11 @@ class App < Sinatra::Base
   # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
   use Rack::Session::Cookie, :key => 'codepen'
+  
+  configure :production do
+    puts 'hello production'
+    disable :run, :reload, :show_exceptions
+  end
 
   use OmniAuth::Builder do
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
