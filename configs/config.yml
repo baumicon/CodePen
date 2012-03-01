@@ -3,9 +3,9 @@ environment: production
 chdir: "/www/Tinkerbox"
 address: 0.0.0.0
 port: 5000
-
 user: root
 # the users group
+log: /www/logs/thin.log
 group: root
 max_conns: 1024
 timeout: 30
