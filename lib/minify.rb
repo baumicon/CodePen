@@ -61,14 +61,11 @@ class Minify
     clean_path(PRODJS_DIR + prod_filename + '.' + get_version() + '.js')
   end
   
+  # alextodo, on startup, you should load this anytime this is restarted
   def get_version
-    if @version == -1
-      path = clean_path(@project_path + PUBLIC_DIR + PRODJS_DIR)
-      @version = File.read(path + VERSION_FILE)
-      @version = @version.to_s
-    end
-    
-    @version
+    path = clean_path(@project_path + PUBLIC_DIR + PRODJS_DIR)
+    version = File.read(path + VERSION_FILE)
+    version.to_s
   end
   
 end

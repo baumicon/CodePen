@@ -50,11 +50,6 @@ namespace :deploy do
       cd #{deploy_to};
       ruby lib/minify.rb #{deploy_to};
     CMD
-    
-    run <<-CMD
-      # alextodo, make call to actually create the prod files
-      mkdir prodjs;
-    CMD
   end
   
   # alextodo, these should actually make calls to god file, not this?
@@ -72,8 +67,9 @@ namespace :deploy do
   end
   
   task :restart, :roles => :web do
-    stop
-    start
+    run <<-CMD
+      cd #{deploy_to}; bundle exec thin restart -e production  -C configs/config.yml -R config.ru
+    CMD
   end
   
 end
