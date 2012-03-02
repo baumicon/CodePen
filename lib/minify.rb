@@ -117,9 +117,11 @@ class MinifyProject
     # Prepare the /prodjs/ directory for minification
     # Remove all the files in this directory
     if File.directory?(@prodjs_path)
+      puts 'removing directory: !'
       FileUtils.remove_dir @prodjs_path
     end
     
+    puts 'makding dirs: ' + @prodjs_path
     # Make sure the prod js dir exists
     FileUtils.makedirs @prodjs_path
     
