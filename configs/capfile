@@ -24,7 +24,6 @@ set :branch, "master"
 set :deploy_via, :remote_cache
 set :repository, "git@github.com:chriscoyier/Tinkerbox.git"
 
-# alextodo will also need to run nginx in front of this whole hubbub
 role :web, "50.57.181.132"
 
 namespace :deploy do
@@ -58,7 +57,8 @@ namespace :deploy do
     CMD
   end
   
-  # alextodo, these should actually make calls to god file, not this
+  # alextodo, these should actually make calls to god file, not this?
+  # figure out a good strategy before you continue
   task :start , :roles => :web do
     run  <<-CMD
       cd #{deploy_to}; bundle exec thin start -e production -C configs/config.yml -R config.ru
