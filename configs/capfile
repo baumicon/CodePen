@@ -47,9 +47,18 @@ namespace :deploy do
   
   desc "Minifies JS for production."
   task :minify_js, :roles => :web do
-    run "echo 'minify js'"
+    run <<-CMD
+      cd #{deploy_to};
+      ruby lib/minify.rb #{deploy_to};
+    CMD
+    
+    run <<-CMD
+      # alextodo, make call to actually create the prod files
+      mkdir prodjs;
+    CMD
   end
   
+  # alextodo, these should actually make calls to god file, not this
   task :start , :roles => :web do
     run  <<-CMD
       cd #{deploy_to}; bundle exec thin start -e production -C configs/config.yml -R config.ru

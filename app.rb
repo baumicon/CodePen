@@ -15,11 +15,13 @@ class App < Sinatra::Base
   MongoMapper.database = 'tinkerbox'
   use Rack::Session::Cookie, :key => 'codepen'
   
+  @@minify = true
+  
   configure :production do
-    set :minify, true
+    @@minify = true
     disable :run, :reload, :show_exceptions
   end
-    
+  
   use OmniAuth::Builder do
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
@@ -148,7 +150,7 @@ class App < Sinatra::Base
       return session[:user_id]
     end
     def js_scripts(scripts, prod_filename)
-      minify = Minify.new(settings.minify, File.dirname(__FILE__))
+      minify = Minify.new(@@minify, File.dirname(__FILE__))
       minify.script_tags(scripts, prod_filename)
     end
     def close embedded_json
