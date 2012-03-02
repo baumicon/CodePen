@@ -286,7 +286,7 @@ class MinifyProject
 end
 
 if __FILE__ == $0
-  put'RUNNINGINGNGN'
+  puts 'RUNNINGINGNGN'
   if File.directory?(ARGV[0])
     tpl_path    = ARGV[0] + '/views/'
     js_path     = ARGV[0] + PUBLIC_DIR + JS_DIR
