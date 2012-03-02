@@ -15,7 +15,7 @@ class App < Sinatra::Base
   MongoMapper.database = 'tinkerbox'
   use Rack::Session::Cookie, :key => 'codepen'
   
-  @@minify = true
+  @@minify = false
   
   configure :production do
     @@minify = true
