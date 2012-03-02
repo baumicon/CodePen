@@ -30,7 +30,7 @@ class Minify
   @minify = false
   @project_path = ''
   
-  @@version = -1
+  @version = -1
   
   include PathUtil
   
@@ -62,13 +62,13 @@ class Minify
   end
   
   def get_version
-    if @@version == -1
+    if @version == -1
       path = clean_path(@project_path + PUBLIC_DIR + PRODJS_DIR)
-      @@version = File.read(path + VERSION_FILE)
-      @@version = @@version.to_s
+      @version = File.read(path + VERSION_FILE)
+      @version = @version.to_s
     end
     
-    @@version
+    @version
   end
   
 end
@@ -124,11 +124,11 @@ class MinifyProject
     FileUtils.makedirs @prodjs_path
     
     # use unix timestamp a version
-    @@version = Time.now.to_i.to_s
+    @version = Time.now.to_i.to_s
     
     # Make the /prodjs/version.txt file and save current unix timestamp
     version_file = File.new(clean_path(@prodjs_path + '/' + VERSION_FILE), 'w')
-    version_file.write(@@version)
+    version_file.write(@version)
     version_file.close()
   end
   
@@ -235,7 +235,7 @@ class MinifyProject
     rel = filename.sub(@tpl_path, '')
     prod_file = File.basename(rel, ".erb")
     
-    prod_file + '.' + @@version + '.js'
+    prod_file + '.' + @version + '.js'
   end
   
   def create_prod_file(prod_filename, minified_js)
@@ -251,34 +251,6 @@ class MinifyProject
     prod_file = File.new(prod_file_path, 'w')
     prod_file.write(minified_js)
     prod_file.close()
-  end
-  
-  
-  # FROM OLD COMPRESSION
-  
-  def compress_js(scripts)
-    path_to_prod_file = get_path_to_prodjs_file(scripts)
-    
-    if not File.exists?(path_to_prod_file)
-      # file does not exists, minify the scripts,
-      # create the new prod file
-      
-      minifiedJS = ''
-      
-      # Roll through files minify them, save result to
-      # single string,  then write to file
-      scripts.length.times do |i|
-        js_file = @project_path + PUBLIC_DIR + scripts[i]
-        
-        file = File.open(js_file, "rb")
-        minifiedJS += JSMin.minify(file.read)
-      end
-      
-      # Create the production JS file
-      open(path_to_prod_file, 'w') do |f|
-        f.puts minifiedJS
-      end
-    end
   end
   
 end
