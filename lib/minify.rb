@@ -117,11 +117,9 @@ class MinifyProject
     # Prepare the /prodjs/ directory for minification
     # Remove all the files in this directory
     if File.directory?(@prodjs_path)
-      puts 'removing directory: !'
       FileUtils.remove_dir @prodjs_path
     end
     
-    puts 'makding dirs: ' + @prodjs_path
     # Make sure the prod js dir exists
     FileUtils.makedirs @prodjs_path
     
@@ -286,7 +284,6 @@ class MinifyProject
 end
 
 if __FILE__ == $0
-  puts 'RUNNINGINGNGN'
   if File.directory?(ARGV[0])
     tpl_path    = ARGV[0] + '/views/'
     js_path     = ARGV[0] + PUBLIC_DIR + JS_DIR

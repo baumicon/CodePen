@@ -72,9 +72,8 @@ namespace :deploy do
   end
   
   task :restart, :roles => :web do
-    run <<-CMD
-      cd #{deploy_to}; bundle exec thin restart -e production  -C configs/config.yml -R config.ru
-    CMD
+    stop
+    start
   end
   
 end
