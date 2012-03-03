@@ -13,7 +13,6 @@ set :application, "codepen"
 set :user, "root"
 set :use_sudo, false
 
-# alextodo, consider moving over to /www/Tinkerbox
 set :deploy_to, "/www/Tinkerbox"
 
 # version control related
@@ -52,8 +51,6 @@ namespace :deploy do
     CMD
   end
   
-  # alextodo, these should actually make calls to god file, not this?
-  # figure out a good strategy before you continue
   task :start , :roles => :web do
     run  <<-CMD
       cd #{deploy_to}; bundle exec thin start -e production -C configs/config.yml -R config.ru
