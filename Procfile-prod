@@ -1,3 +1,0 @@
-web1: bundle exec thin start -e production -C configs/config.yml -R config.ru
-web2: node /www/Tinkerbox/node/app.js
-db: mongod

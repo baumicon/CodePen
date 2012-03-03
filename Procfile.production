@@ -1,3 +1,7 @@
+# issue if any of the processes exit, all the processes will exit
+# right now the thin server will daemonize and run in background and exit
+# causing foreman to stop all other services
+# lesson learned
 web1: bundle exec thin start -e production -C configs/config.yml -R config.ru
 web2: node /www/Tinkerbox/node/app.js
 db: mongod
