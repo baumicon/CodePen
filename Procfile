@@ -1,3 +1,3 @@
-web1: bundle exec rackup
-web2: node node/app.js
-db: mongod
+sinatra: bundle exec rackup
+node: node node/app.js
+mongo: mongod

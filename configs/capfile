@@ -39,8 +39,19 @@ namespace :deploy do
   end
   
   desc "Update the deployed code."
-  task :update, :except => { :no_release => true } do
-    run "cd #{deploy_to}; git pull origin #{branch}; git reset --hard #{branch}"
+  task :update, :roles => :web, :except => { :no_release => true } do
+    run <<-CMD
+      cd #{deploy_to};
+      git pull origin #{branch}; git reset --hard #{branch}
+    CMD
+  end
+  
+  desc "Update the upstart files. Export to /etc/init. Restart after making this call."
+  task :update, :roles => :web, :except => { :no_release => true } do
+    run  <<-CMD
+      cd #{deploy_to};
+      foreman export upstart /etc/init -a codepen -f Procfile.production -u root
+    CMD
   end
   
   desc "Minifies JS for production."
@@ -52,21 +63,15 @@ namespace :deploy do
   end
   
   task :start , :roles => :web do
-    run  <<-CMD
-      cd #{deploy_to}; bundle exec thin start -e production -C configs/config.yml -R config.ru
-    CMD
+    run "start codepen"
   end
   
   task :stop, :roles => :web do
-    run <<-CMD
-      cd #{deploy_to}; bundle exec thin stop -C configs/config.yml -R config.ru
-    CMD
+    run "stop codepen"
   end
   
   task :restart, :roles => :web do
-    run <<-CMD
-      cd #{deploy_to}; bundle exec thin restart -e production  -C configs/config.yml -R config.ru
-    CMD
+    run "restart codepen"
   end
   
 end
