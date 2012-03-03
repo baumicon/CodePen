@@ -1,3 +1,3 @@
-web: bundle exec rackup
-web: node node/app.js
-worker: mongod
+web1: bundle exec rackup
+web2: node node/app.js
+db: mongod
