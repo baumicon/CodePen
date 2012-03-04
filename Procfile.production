@@ -1,0 +1,3 @@
+sinatra: bundle exec thin start -e production -C configs/config.yml -R config.ru
+node: node /www/Tinkerbox/node/app.js
+mongo: mongod

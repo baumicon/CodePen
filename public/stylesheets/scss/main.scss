@@ -1,11 +1,13 @@
 @import "functions";
 @import "colors";
 
+$glowSize: 12px;
+
 ::selection {
-  background: #BADA55;
+  background: $selectionColor;
 }
 ::-moz-selection {
-  background: #BADA55;
+  background: $selectionColor;
 }
 
 * {
@@ -17,6 +19,7 @@
 html, body {
   height: 100%;
   overflow: hidden;
+
 }
 
 html {
@@ -33,7 +36,7 @@ html {
 header {
   display: block;
   position: relative;
-  padding: 10px 10px 10px 20px;
+  padding: 10px 10px 10px 0;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   @include gradient(#3d3d3e, #2a2a2a);
@@ -43,7 +46,9 @@ header {
   ));
   height: 62px;
   form {
-    float: left;
+    position: absolute;
+    top: 10px;
+    left: 20px;
     * {
       vertical-align: middle;
     }
@@ -55,19 +60,25 @@ header {
 }
 #slug {
   border: 0;
-  @include font-stack-normal;
-  font-size: 12px;
-  top: 1px;
-  padding: 2px;
+  font-size: 16px;
+  padding: 1px 3px;
+  top: -1px;
+  width: 100px;
   position: relative;
+  @include font-stack-bold;
   &:focus {
     outline: 0;
   }
 }
+.slash {
+  color: $orange;
+  font-weight: 700;
+  vertical-align: bottom;
+  margin: 0 0 0 4px;
+}
 .app-actions {
   float: right;
-  position: relative;
-  min-width: 230px;
+  min-width: 196px;
   .button, button {
     float: right;
   }
@@ -131,10 +142,9 @@ header {
     font: 11px Monaco, Courier, MonoSpace;
   }
   &.expanded {
-    z-index: 101;
+    z-index: 1001;
     left: 0;
     width: 100%;
-    @include box-shadow((0 0 5px red));
   }
   h2:after {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -159,6 +169,9 @@ header {
       content: " (HAML)";
     }
   }
+  &.expanded {
+    @include box-shadow((0 0 $glowSize #76daff));
+  }
 }
 .box-css {
   left: 33.7%;
@@ -182,6 +195,9 @@ header {
       content: " (LESS)";
     }
   }
+  &.expanded {
+    @include box-shadow((0 0 $glowSize #4edb47));
+  }
 }
 .box-js {
   left: 67.6%;
@@ -189,6 +205,9 @@ header {
     h2:after {
       content: " (CoffeeScript)";
     }
+  }
+  &.expanded {
+    @include box-shadow((0 0 $glowSize #9d59fa));
   }
 }
 
@@ -291,8 +310,9 @@ header {
   bottom: -5px;
   border-left: 0;
   strong {
-    color: #888;
-    font-size: 15px;
+    color: #999;
+    font-size: 13px;
+    @include font-stack-bold;
     text-shadow: 0 -1px 1px black;
     .expanded & {
       display: none;
@@ -316,7 +336,7 @@ header {
     background: none;
     font-size: 10px;
     font-weight: 700;
-    color: red;
+    color: #eee;
     margin-right: 2px;
     position: relative;
     top: -2px;
@@ -389,14 +409,26 @@ header {
   }
   p {
     color: #eee;
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 400;
   }
   h2 {
     color: white;
     margin: 0 0 8px 0;
   }
   a {
-    color: #76daff;
+    color: $linkColor;
+    &:hover, &:focus {
+      color: $orange;
+    }
+    &:active {
+      @include border-radius(20px);
+      @include box-shadow((
+        0 2px 10px 8px #444,
+        0 2px 10px 10px black
+      ));
+      position: relative;
+    }
   }
 }
 
@@ -419,6 +451,28 @@ footer {
   top: 0;
 }
 
+
+
+#overlay {  // Unused
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  background: rgba(0,0,0,0.75);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
+
 // Themes
 @import "../themes/codemirror";
 @import "../themes/sublime";
+
+@media (max-width: 900px) {
+  @import "mq-900";
+}
+@media (max-width: 770px) {
+  @import "mq-770";
+}

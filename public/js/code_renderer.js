@@ -70,6 +70,8 @@ var CodeRenderer = (function() {
                     contentWindow.__run();
                 }
             }
+            
+            console.log(window.postMessage)
         },
 
         getIFrameContent: function() {
@@ -164,9 +166,11 @@ var CodeRenderer = (function() {
         getJSLibrary: function() {
             if(CData.js_library) {
                 var jsLibs = {
-                    'jquery-latest': 'http://code.jquery.com/jquery-latest.js',
-                    'mootools'     : '//ajax.googleapis.com/ajax/libs/mootools/1.4.1/mootools-yui-compressed.js',
-                    'prototype'    : '//ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js'
+                    'jquery': '//code.jquery.com/jquery-latest.js',
+                    'mootools'     : '//ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
+                    'prototype'    : '//ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'
+                    // ,'extjs'        : '//ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js'
+                    // ,'dojo'         : '//ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js'
                 }
                 return '<script src="' + jsLibs[CData.js_library] + '"></script>';
             }

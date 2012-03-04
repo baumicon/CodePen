@@ -10,9 +10,6 @@ var KeyBindings = (function() {
     ************************/
 
     var KeyBindings = {
-
-        lastKeyPressed:  0,
-        commandKeyPressed: false,
         
         HTMLeditor: '', 
         CSSeditor: '', 
@@ -41,34 +38,22 @@ var KeyBindings = (function() {
             // simply move the cursor to the end
             editor.setCursor(text.length, text.length, true);
         },
+
+        showOverlay: function() {
+            // $("#overlay").show();
+        },
+
+        hideOverlay: function() {
+            // $("#overlay").hide();
+        },
         
         bindKeys: function() {
             $(document).on('keydown', function(event) {
-                // mac os x uses command key (91) as alt key
-                // every other OS will use the control key (17)
-                if(event.keyCode == 17 || event.keyCode == 91) {
-                    KeyBindings.commandKeyPressed = true;
-                    
-                    // Because keyup is so unreliable (we may not capture the keyup event)
-                    // because the browser swallows it
-                    // we automatically set it to false after 1 second
-                    setTimeout(function() {
-                        KeyBindings.commandKeyPressed = false;
-                    }, 1000);
-                }
-            });
-            
-            $(document).on('keyup', function(event) {
-                if(event.keyCode == 17 || event.keyCode == 91) {
-                    KeyBindings.commandKeyPressed = false;
-                }
-            });
-            
-            $(document).on('keydown', function(event) {
+
                 stop = false;
                 
                 // Process all the altKey pressed events
-                if(KeyBindings.commandKeyPressed) {
+                if(event.metaKey) {
                     if(event.keyCode == 49) {
                         // cmd + 1
                         stop = true;
@@ -76,18 +61,21 @@ var KeyBindings = (function() {
                         // alextodo, is this really the best place for it?
                         // have a wrapper around the editors? better place for it no?
                         KeyBindings.giveEditorFocus(KeyBindings.HTMLeditor);
+                        KeyBindings.showOverlay();
                     }
                     else if(event.keyCode == 50) {
                         // cmd + 2
                         stop = true;
                         Main.openExpandedArea('#box-css');
                         KeyBindings.giveEditorFocus(KeyBindings.CSSeditor);
+                        KeyBindings.showOverlay();
                     }
                     else if(event.keyCode == 51) {
                         // cmd + 3
                         stop = true;
                         Main.openExpandedArea('#box-js');
                         KeyBindings.giveEditorFocus(KeyBindings.JSeditor);
+                        KeyBindings.showOverlay();
                     }
                     else if(event.keyCode == 13) {
                         // cmd + return
@@ -127,6 +115,7 @@ var KeyBindings = (function() {
                 
                 if(event.keyCode == 27) {
                     Main.closeExpandedAreas();
+                    KeyBindings.hideOverlay();
                 }
                 
                 if(stop) {

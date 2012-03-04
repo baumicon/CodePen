@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 
+gem "daemons"
 gem "omniauth-twitter"
 gem "multi_json"
 gem "sinatra"
@@ -13,6 +14,9 @@ gem "haml"
 gem "sass"
 gem "compass"
 gem "activesupport"
+gem "foreman"
+gem "thin"
+
 group :test do
   gem "rspec"
   gem "rack-test"
@@ -20,4 +24,3 @@ group :test do
   gem 'spork', '~> 1.0rc'
   gem 'sinatra-sessionography'
 end
-#TODO: create groups for testing/development

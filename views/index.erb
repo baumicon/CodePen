@@ -47,7 +47,7 @@
               </div>
               <div class="last">
                 <input type="radio" class="hidden" id="haml" name="html-preprocessor" value="haml">
-                <label class="button" for="haml">HAML <a target="_blank" href="#">?</a></label>
+                <label class="button" for="haml">HAML <a target="_blank" href="http://haml-lang.com/">?</a></label>
               </div>
             </form>
 
@@ -84,30 +84,32 @@
               </div>
               <div>
                 <input type="radio" class="hidden" id="less" name="css-preprocessor" value="less">
-                <label class="button" for="less">LESS <a target="_blank" href="#">?</a></label>
+                <label class="button" for="less">LESS <a target="_blank" href="http://lesscss.org/">?</a></label>
               </div>
               <div class="last">
                 <input type="radio" class="hidden" id="stylus" name="css-preprocessor" value="stylus">
-                <label class="button" for="stylus">Stylus <a target="_blank" href="#">?</a></label>
+                <label class="button" for="stylus">Stylus <a target="_blank" href="http://learnboost.github.com/stylus/">?</a></label>
               </div>
               <div>
                 <input type="radio" class="hidden" id="scss" name="css-preprocessor" value="scss">
-                <label class="button" for="scss">SCSS <a target="_blank" href="#">?</a></label>
+                <label class="button" for="scss">SCSS <a target="_blank" href="http://sass-lang.com/">?</a></label>
               </div>
               <div class="double last">
                 <input type="radio" class="hidden" id="sass" name="css-preprocessor" value="sass">
-                <label class="button" for="sass">SASS with Compass <a target="_blank" href="#">?</a></label>
+                <label class="button" for="sass">SASS with Compass <a target="_blank" href="http://compass-style.org/">?</a></label>
               </div>
             </form>
 
             <form>
                 <input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
-                <label for="startercss-normalize" class="small-inline">Normalize</label>
+                <label for="startercss-normalize" class="small-inline">Normalize</label> 
+                <a href="http://necolas.github.com/normalize.css/">(?)<a>
 
                 &ensp;
               
                 <input type="radio" id="startercss-reset" name="startercss" value="reset">
-                <label for="startercss-reset" class="small-inline">Reset</label>
+                <label for="startercss-reset" class="small-inline">Reset</label> 
+                <a href="http://meyerweb.com/eric/tools/css/reset/">(?)</a>
 
                 &ensp;
 
@@ -118,6 +120,7 @@
             <form>
               <input type="checkbox" id="prefix-free" name="prefix-free">
               <label for="prefix-free" class="small-inline">Prefix free</label>
+              <a href="http://leaverou.github.com/prefixfree/">(?)</a>
             </form>
 
             <form>
@@ -153,17 +156,19 @@
               </div>
               <div class="double last">
                 <input type="radio" class="hidden" id="coffeescript" name="js-preprocessor" value="coffeescript">
-                <label class="button" for="coffeescript">CoffeeScript <a target="_blank" href="#">?</a></label>
+                <label class="button" for="coffeescript">CoffeeScript <a target="_blank" href="http://coffeescript.org/">?</a></label>
               </div>
             </form>
 
             <form>
-              <label class="small" for="js-select">Library</label>
+              <label class="small" for="js-select">Latest Version of...</label>
               <select data-placeholder="JavaScript Library" id="js-select">
                 <option value="">No Library</option>
-                <option value="jquery-latest">jQuery 1.7.1</option>
-                <option value="mootools">MooTools 1.4.1</option>
-                <option value="prototype">Prototype 1.7.0.0</option>
+                <option value="jquery">jQuery</option>
+                <option value="mootools">MooTools</option>
+                <option value="prototype">Prototype</option>
+                <!-- <option value="extjs">ExtJS</option>
+                <option value="dojo">Dojo</option> -->
               </select>
             </form>
 
@@ -197,6 +202,8 @@
 
   <div id="vert-resizer" class="vert-resizer"></div>
 
+  <!-- <div id="overlay"></div> -->
+
   <script>
     __c_data = <%= @c_data %>;
     __templates = <%= get_templates  %>;
@@ -207,15 +214,15 @@
       '/js/libs/codemirror.js',
       '/js/libs/tmpl.js',
       '/js/libs/chosen.jquery.min.js',
-      '/mode/javascript/javascript.js',
-      '/mode/css/css.js',
-      '/mode/xml/xml.js',
+      '/js/mode/javascript/javascript.js',
+      '/js/mode/css/css.js',
+      '/js/mode/xml/xml.js',
       '/js/util.js',
       '/js/c_data.js',
       '/js/key_bindings.js',
       '/js/code_renderer.js',
       '/js/main.js'
-      ])
+      ], 'index')
   %>
 
 </body>

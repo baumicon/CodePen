@@ -6,16 +6,25 @@ require 'mongo_mapper'
 require './services/gist_service'
 require './services/content_service'
 require './services/preprocessor_service'
-require './renderer'
-require './minify'
 require './lib/sessionator'
+require './services/renderer'
+require './lib/minify'
 
 class App < Sinatra::Base
-
+  # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
+
   include Sessionator
 
-  set :sessions, true
+  use Rack::Session::Cookie, :key => 'codepen'
+
+  @@minify = false
+
+  configure :production do
+    @@minify = true
+    disable :run, :reload, :show_exceptions
+  end
+
   use OmniAuth::Builder do
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
@@ -126,16 +135,16 @@ class App < Sinatra::Base
 
   post '/gist/' do
     data = JSON.parse(params[:data])
-    
+
     rend = Renderer.new()
     result = rend.render_full_page(data)
-    
+
     gs = GistService.new
     url_to_gist = gs.create_gist(data, result)
-    
+
     encode({ 'url' => url_to_gist })
   end
-  
+
   helpers do
     def get_templates
       {'result' => (erb :template)}.to_json.gsub('/', '\/')
@@ -146,13 +155,13 @@ class App < Sinatra::Base
     def logged_in
       return session[:user_id]
     end
-    def js_scripts(scripts)
-      minify = Minify.new()
-      minify.script_tags(scripts)
+    def js_scripts(scripts, prod_filename)
+      minify = Minify.new(@@minify, File.dirname(__FILE__))
+      minify.script_tags(scripts, prod_filename)
     end
     def close embedded_json
       embedded_json.gsub('</', '<\/')
     end
   end
-  
+
 end

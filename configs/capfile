@@ -1,0 +1,77 @@
+# Our capistrano file for deployment.
+require "bundler/capistrano"
+
+# Add RVM's lib directory to the load path.
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+# rvm capistrano plugin
+require "rvm/capistrano"
+# choose a ruby
+set :rvm_ruby_string, "1.9.3"
+
+set :domain, "codepen.io"
+set :application, "codepen"
+set :user, "root"
+set :use_sudo, false
+
+set :deploy_to, "/www/Tinkerbox"
+
+# version control related
+set :scm, :git
+set :scm_username, "quezo"
+set :branch, "master"
+# Use a local cache instead of doing a full clone
+set :deploy_via, :remote_cache
+set :repository, "git@github.com:chriscoyier/Tinkerbox.git"
+
+role :web, "50.57.181.132"
+
+namespace :deploy do
+  task :default, :roles => :web do
+    update
+    minify_js
+    restart
+  end
+
+  desc "Pull initial code into directory"
+  task :setup, :roles => :web do
+    run "sudo mkdir -p #{deploy_to}"
+    run "git clone #{repository} #{deploy_to}"
+  end
+  
+  desc "Update the deployed code."
+  task :update, :roles => :web, :except => { :no_release => true } do
+    run <<-CMD
+      cd #{deploy_to};
+      git pull origin #{branch}; git reset --hard #{branch}
+    CMD
+  end
+  
+  desc "Update the upstart files. Export to /etc/init. Restart after making this call."
+  task :update, :roles => :web, :except => { :no_release => true } do
+    run  <<-CMD
+      cd #{deploy_to};
+      foreman export upstart /etc/init -a codepen -f Procfile.production -u root
+    CMD
+  end
+  
+  desc "Minifies JS for production."
+  task :minify_js, :roles => :web do
+    run <<-CMD
+      cd #{deploy_to};
+      ruby lib/minify.rb #{deploy_to};
+    CMD
+  end
+  
+  task :start , :roles => :web do
+    run "start codepen"
+  end
+  
+  task :stop, :roles => :web do
+    run "stop codepen"
+  end
+  
+  task :restart, :roles => :web do
+    run "restart codepen"
+  end
+  
+end

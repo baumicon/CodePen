@@ -1,8 +1,26 @@
 <div class="sidebar">
 
   <div class="module tip">
-    <h2>Random Super Fact!</h2>
-    <p>CodePen uses <a href="http://ejohn.org/blog/javascript-micro-templating/">JavaScript Micro-Templating</a> by John Resig to build the live demo shown at the bottom of the page.</p>
+
+    <% randomNum = rand(5)+1 %>
+    
+    <% if randomNum == 1 %>
+      <h2>CodePen Fact</h2>
+      <p>We use <a href="http://ejohn.org/blog/javascript-micro-templating/">JavaScript Micro-Templating</a> by John Resig to build the live demo shown at the bottom of the page.</p>
+    <% elsif randomNum == 2 %>
+      <h2>Did You Know?</h2>
+      <p>You can press Command-G (or Control-G on PC) to save your current code to your GitHub account as a Gist.</p>
+    <% elsif randomNum == 3 %>
+      <h2>CodePen Fact</h2>
+      <p>We use <a href="http://jquery.com">jQuery</a> for the DOM manipulation, Ajax, keyboard commands, and all sorts of other stuff on the front end of CodePen.</p>
+    <% elsif randomNum == 4 %>
+      <h2>Net Karma</h2>
+      <p>CodePen is a great tool for creating <a href="http://css-tricks.com/reduced-test-cases/">reduced test cases</a> to clearly demonstrate browser bugs or bugs in other projects.</p>
+    <% elsif randomNum == 5 %>
+      <h2>CodePen Fact</h2>
+      <p>We use <a href="http://www.sinatrarb.com/">Sinatra</a> as the simple Ruby framework behind CodePen.</p>
+    <% end %>
+
   </div>
 
   <div class="module ad">

@@ -74,8 +74,8 @@
 }
 
 // TODO: move to theme?
-div.CodeMirror-selected { background: #BADA55; }
-.CodeMirror-focused div.CodeMirror-selected { background: #BADA55; }
+div.CodeMirror-selected { background: #ccc; }
+.CodeMirror-focused div.CodeMirror-selected { background: #ccc; }
 
 .CodeMirror-searching {
   background: #ffa;
