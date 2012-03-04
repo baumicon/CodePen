@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require './services/content_service'
+require './models/user_twitter'
 
 MongoMapper.database = 'integration_test'
 
@@ -12,34 +13,37 @@ describe ContentService do
     it "should save if user already owns slug" do
       clear_db
       Slug.new(:uid => '7', :name => 'testing').save
-      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
-
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
       service = ContentService.new
-      service.save_content('7', '{"slug":"testing", "version":"5"}')['success'].should == true
+      service.save_content(user, '{"slug":"testing", "version":"5"}')['success'].should == true
     end
 
     it "should save if slug is new and not already taken" do
       clear_db
-      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
       service = ContentService.new
-      result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"5"}')
       result['success'].should == true
     end
 
     it "should NOT save if slug is already taken by another user" do
       clear_db
-      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
       Slug.new(:name => 'new_slug', :uid => '5').save
       service = ContentService.new
-      result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"5"}')
       result['success'].should == false
     end
 
     it "should return the slug name on successful save" do
       clear_db
-      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
       service = ContentService.new
-      result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"5"}')
       result['success'].should == true
       result['payload']['slug'].should == 'new_slug'
     end
@@ -47,25 +51,29 @@ describe ContentService do
     it "should NOT allow invalid content" do
       clear_db
       service = ContentService.new
-      result = service.save_content('7', '{"slug":"new_slug", "version":"beef"}')
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
+      result = service.save_content(user, '{"slug":"new_slug", "version":"beef"}')
       result['success'].should == false
     end
 
     it "should accept a valid sequence" do
       clear_db
-      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
       service = ContentService.new
-      result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
-      result = service.save_content('7', '{"slug":"new_slug", "version":"6"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"5"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"6"}')
       result['success'].should == true
     end
 
     it "should reject an invalid sequence" do
       clear_db
-      TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger').save
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
       service = ContentService.new
-      result = service.save_content('7', '{"slug":"new_slug", "version":"8"}')
-      result = service.save_content('7', '{"slug":"new_slug", "version":"6"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"8"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"6"}')
       result['success'].should == false
     end
   end
@@ -75,9 +83,23 @@ describe ContentService do
     it "should retrieve the latest content" do
       clear_db
       service = ContentService.new
-      service.save_content('7', '{"slug":"testing", "version":"5"}')['success'].should == true
-      service.save_content('7', '{"slug":"testing", "version":"6"}')['success'].should == true
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
+      service.save_content(user, '{"slug":"testing", "version":"5"}')['success'].should == true
+      service.save_content(user, '{"slug":"testing", "version":"6"}')['success'].should == true
       content = service.latest "testing"
+      content['success'].should == true
+      content['payload']['version'].should equal 6
+    end
+
+    it "should retrieve the latest content by user" do
+      clear_db
+      service = ContentService.new
+      user = TwitterUser.new(:uid => '7', :name => 'user', :provider => 'twitter', :nickname => 'booger')
+      user.save
+      service.save_content(user, '{"slug":"testing", "version":"5"}')['success'].should == true
+      service.save_content(user, '{"slug":"testing", "version":"6"}')['success'].should == true
+      content = service.latest("testing", 7)
       content['success'].should == true
       content['payload']['version'].should equal 6
     end
@@ -95,11 +117,6 @@ describe ContentService do
 
     it "should successfully return content by slug and version" do
       clear_db
-      service = ContentService.new
-      service.save_content('7', '{"slug":"testing", "version":"6"}')['success'].should == true
-      content = service.retrieve(:slug => "testing", :version => "6", :uid => "7")
-      content['success'].should == true
-      content['payload']['version'].should equal 6
     end
 
   end
@@ -107,10 +124,13 @@ describe ContentService do
   describe "copying" do
 
     it "should change ownership of content and slugs" do
+      clear_db
       service = ContentService.new
-      result = service.save_content('7', '{"slug":"new_slug", "version":"5"}')
-      result = service.save_content('7', '{"slug":"new_slug", "version":"6"}')
-      service.copy_ownership(User.new(:uid => 7), 10)
+      user = User.new(:uid => 2)
+      user.save
+      result = service.save_content(user, '{"slug":"new_slug", "version":"5"}')
+      result = service.save_content(user, '{"slug":"new_slug", "version":"6"}')
+      service.copy_ownership(user, 10)
       content = Content.where(:uid => "10").all
       slugs = Slug.where(:uid => "10").all
 

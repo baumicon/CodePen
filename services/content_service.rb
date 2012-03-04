@@ -7,9 +7,8 @@ require './lib/ajax_util'
 class ContentService
   include AjaxUtil
 
-  def save_content(session_id, json)
+  def save_content(user, json)
     begin
-      user = TwitterUser.get_by_session_id(session_id)
       slugs = Slug.where(:uid => user.uid).all.map{|slug| slug.name}
       content = Content.new_from_json(json, user.uid, slugs)
 
@@ -34,9 +33,13 @@ class ContentService
     end
   end
 
-  def latest(slug)
+  def latest(slug, uid = nil)
     begin
-      content = Content.first(:order => :version.desc, :slug => slug)
+      if uid
+        content = Content.first(:order => :version.desc, :slug => slug, :uid => uid.to_s)
+      else
+        content = Content.first(:order => :version.desc, :slug => slug)
+      end
       return success(content.attributes) if content
       return errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
     rescue Exception => ex
@@ -45,13 +48,18 @@ class ContentService
   end
 
   def copy_ownership(user, new_uid)
-    Content.all(:uid => user.uid).each{|c|
-      c.uid = new_uid
-      Content.new(c).save
+    slugs = Slug.all(:uid => user.uid)
+    slugs.each{|s|
+      slug = Slug.new(s.attributes)
+      slug.uid = new_uid
+      slug.save
     }
-    Slug.all(:uid => user.uid).each{|s|
-      s.uid = new_uid
-      Slug.new(s).save
+    slug_arr = slugs.map{|slug| slug.name}
+    Content.all(:uid => user.uid).each{|c|
+      content = Content.new(c.attributes)
+      content.uid = new_uid
+      content.slugs = slug_arr
+      content.save
     }
   end
 

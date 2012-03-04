@@ -15,7 +15,7 @@ class Slug
   private
 
   def validate_available
-    errors.add(:slug_not_owned, "That slug is already taken.") if Slug.find_by_name(@name)
+    errors.add(:slug_not_owned, "That slug is already taken.") if Slug.find_by_name_and_uid(@name, @uid)
   end
 
 end

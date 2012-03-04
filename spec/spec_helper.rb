@@ -24,10 +24,17 @@ require 'rack/test'
 require 'mongo_mapper'
 require './spec/util_mongo'
 require 'awesome_print'
-require './spec/util_session'
+require 'sinatra/sessionography'
+require './app'
 
 include MongoUtil
 include Rack::Test::Methods
+
+def app
+  App
+end
+
+app.helpers Sinatra::Sessionography
 
 # http://bloggitation.appspot.com/entry/access-to-the-rack-session-from-rspec
 def session

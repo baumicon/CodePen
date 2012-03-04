@@ -22,10 +22,7 @@ class TwitterUser < User
   end
 
   def self.new_default_user
-    TwitterUser.new(:uid => "0",
-      :nickname => "default",
-      :name => "Senior Default",
-      :provider => "tinkerbox")
+    User.new(:uid => UUID.new.uid)
   end
 
   def self.new_by_auth(auth)

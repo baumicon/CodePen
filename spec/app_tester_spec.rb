@@ -8,14 +8,8 @@ require './spec/util_mongo'
 describe 'the fake app' do
 
   def app
+    AppTester.helpers Sinatra::Sessionography
     AppTester
-  end
-
-  def clear_session
-    get '/'
-    if session
-      session.clear
-    end
   end
 
   describe "routing" do
@@ -26,27 +20,21 @@ describe 'the fake app' do
       resp['slug'].should == "1"
       resp['version'].should == "2"
     end
-  # sanity
+
   end
 
   describe "basic session proof" do
 
     it "should augment the session" do
-      sesh = {}
-      get '/session/hi/there', {}, 'rack.session' => sesh
-      sesh['hi'] = 'there'
-    end
-
-    it "should allow you to create a session variable" do
-      get '/session/hell/world'
-      session['hell'].should == 'world'
+      get '/session/hi/there'
+      Sinatra::Sessionography.session['hi'].should == 'there'
     end
 
     it "should allow you to destroy a session variable" do
       get '/session/hell/world'
-      session['hell'].should == 'world'
-      session.clear
-      session['hell'].should_not == 'world'
+      Sinatra::Sessionography.session['hell'].should == 'world'
+      Sinatra::Sessionography.session.clear
+      Sinatra::Sessionography.session['hell'].should == nil
     end
 
   end
@@ -65,8 +53,8 @@ describe 'the fake app' do
       clear_db
       app.send(:set, :sessions, false)
       t = TwitterUser.new(:uid => 1, :nickname => 'timmy', :name => "tired dad"); t.save
-      sesh = {'uid' => t.uid}
-      get '/sessionator', {}, 'rack.session' => sesh
+      Sinatra::Sessionography.session['uid'] = t.uid
+      get '/sessionator'
       JSON.parse(last_response.body)['payload']['user']['uid'].should == '1'
     end
 

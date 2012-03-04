@@ -20,12 +20,21 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
-  get %r{/(\d)/(\d)} do |slug, version|
-    
+  # anon user
+  get %r{/(\d)} do |uid|
+    content = ContentService.new.latest(uid)
+    @c_data = content['payload'] or {}
+    erb :index
+  end
+
+  # anon user
+  get %r{/(\d)/(\d)} do |uid, version|
+    content = ContentService.new.latest(version, uid)
+    @c_data = content['payload'] or {}
+    erb :index
   end
 
   get '/' do
-    set_session
     @c_data = {}
     erb :index
   end
