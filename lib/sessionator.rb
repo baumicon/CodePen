@@ -11,8 +11,10 @@ module Sessionator
       @user = User.first(:uid => uid, :sort => :uid.desc)
     else
       @user = User.new(:uid => Incrementor.next_id('user'))
+      @user.save
     end
 
+    session['uid'] = @user.uid
   end
 
 end

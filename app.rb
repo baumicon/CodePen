@@ -29,20 +29,6 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
-  # anon user
-  get %r{/(\d)} do |uid|
-    content = ContentService.new.latest(uid)
-    @c_data = content['payload'] or {}
-    erb :index
-  end
-
-  # anon user
-  get %r{/(\d)/(\d)} do |uid, version|
-    content = ContentService.new.latest(version, uid)
-    @c_data = content['payload'] or {}
-    erb :index
-  end
-
   get '/' do
     @c_data = {}
     erb :index
@@ -51,24 +37,14 @@ class App < Sinatra::Base
   post '/save/content' do
     set_session
     service = ContentService.new
-    result = service.save_content(@user.uid, params[:content])
+    result = service.save_content(@user, params[:content])
     return result.to_json
   end
 
-  get '/slugs' do
-
-  end
-
-  get '/content/:slug_name' do |name|
-    set_session
-    service = ContentService.new
-    service.latest(name).to_json
-  end
-
   get '/auth/:name/callback' do
-    require 'awesome_print'
-    req = request.env['omniauth.auth']
-    ap req
+    set_session
+    LoginService.new.update_regular_user(@user, request.env['omniauth.auth'])
+    redirect request.cookies['last_visited'] or '/'
   end
 
   get '/auth/failure' do
@@ -76,8 +52,7 @@ class App < Sinatra::Base
   end
 
   get '/logout' do
-    session[:user_id] = false
-
+    session[:uid] = false
     redirect '/'
   end
 
@@ -109,6 +84,20 @@ class App < Sinatra::Base
     data = get_data_by_slug()
     rend = Renderer.new(data)
     rend.render_full_page()
+  end
+
+  # anon user
+  get %r{/(\d)} do |slug|
+    content = ContentService.new.latest(slug)
+    @c_data = content['payload'] or {}
+    erb :index
+  end
+
+  # anon user
+  get %r{/(\d)/(\d)} do |slug, version|
+    content = ContentService.new.latest(slug, version)
+    @c_data = content['payload'] or {}
+    erb :index
   end
 
   def get_data_by_slug

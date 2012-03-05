@@ -5,7 +5,7 @@ class LoginService
   def login(user, auth_info)
     if user['_type'] == 'User'
       new_user = convert_anon_user(user, auth_info)
-      ContentService.new.copy_ownership(user, new_user.uid)
+      Content.copy_ownership(user, new_user.uid)
       new_user
     else
       update_regular_user(user, auth_info)

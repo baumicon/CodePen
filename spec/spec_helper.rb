@@ -32,11 +32,7 @@ include Rack::Test::Methods
 
 def app
   App
+  App.helpers Sinatra::Sessionography
+  App
 end
 
-app.helpers Sinatra::Sessionography
-
-# http://bloggitation.appspot.com/entry/access-to-the-rack-session-from-rspec
-def session
-    last_request.env['rack.session']
-end
