@@ -38,7 +38,18 @@ class App < Sinatra::Base
   get '/' do
     set_session
     @c_data = {}
+    # alextodo, pull the port from environment, set for prod too
+    @iframe_src = 'http://secure.localhost.com:9292'
+    
     erb :index
+  end
+  
+  get '/secure_iframe' do
+    # Setting the x-frame-options headers allows the
+    # content to be properly loaded in this iframe
+    response.headers['X-Frame-Options'] = 'GOFORIT'
+    
+    erb :iframe
   end
 
   post '/save/content' do

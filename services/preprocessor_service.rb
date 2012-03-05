@@ -14,6 +14,20 @@ class PreProcessorService
     @errors = { }
   end
   
+  # Public: Process all three parts of content (html, css and js) at once.
+  #
+  # data - the hash with keys, html, css, js, and (html|css|js)_pre_processor
+  #
+  # Examples
+  # process_content({
+  #   'html' => 'h1 level one header',
+  #   'html_pre_processor' => 'jade',
+  #   'css' => '@color: blue; h1 { color: @color;}'
+  #   'css_pre_processor' => 'less'
+  # })
+  #
+  #  => {'html' => '<h1>level one header</h1>', 'css' => 'h1 { color: blue; }' }
+  #
   def process_content(data)
     results = { }
     
@@ -32,6 +46,16 @@ class PreProcessorService
     results
   end
   
+  # Public: Process HTML with preprocessors
+  #
+  # type - the preprocessor type (jade|haml)
+  # html - the content to process
+  #
+  # Examples
+  #
+  #   process_html('jade', 'h1 level one header')
+  #     => '<h1>level one header</h1>'
+  #
   def process_html(type, html)
     if type == 'jade'
       html = node_req('/jade/', 'html', html, 'Jade')
@@ -46,6 +70,15 @@ class PreProcessorService
     html
   end
 
+  # Public: Process CSS with preprocessors
+  #
+  # type - the preprocessor type (less|stylus|scss|sass)
+  # css  - the content to process
+  # 
+  # Examples
+  #
+  #   process_css('less', '@color: blue; h1 { color: @color;}')
+  #     => 'h1 { color: blue; }'
   def process_css(type, css)
     if type == 'less'
       # alextodo take a look at less errors
@@ -166,10 +199,10 @@ HERE
   def node_req(path, key, value, err_key)
     uri = URI(NODE_URL + path)
     res = Net::HTTP.post_form(uri, key => value)
-
+    
     obj = JSON.parse(res.body)
     record_errors(obj, err_key)
-
+    
     obj[key]
   end
 

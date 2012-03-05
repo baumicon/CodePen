@@ -190,7 +190,7 @@
 
       <div class="result">
 
-        <iframe src="" id="result"></iframe>
+        <iframe src="<%= @iframe_src %>/secure_iframe" id="result"></iframe>
 
       </div>
 
@@ -205,6 +205,8 @@
   <!-- <div id="overlay"></div> -->
 
   <script>
+    // alextodo, this should come from the server
+    __iframe_url = "<%= @iframe_src %>";
     __c_data = <%= @c_data %>;
     __templates = <%= get_templates  %>;
   </script>
