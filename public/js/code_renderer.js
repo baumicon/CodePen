@@ -17,9 +17,13 @@ var CodeRenderer = {
     
     errorHTML   : '',
     
+    processing  : false,
+    
     init: function() {
         // Defer the call to later so that the UI can fully render,
         // then make the call to render the iframe content
+        // This may be a long running process and we'd prefer the UI
+        // fully render since it's so dependent on JS
         $(this).delay(300).queue(function() {
             CodeRenderer.compileContent(true);
             $(this).dequeue();
@@ -30,7 +34,10 @@ var CodeRenderer = {
     compileContent: function(forceCompile) {
         if(forceCompile || this.compileInRealTime()) {
             var contentObj = CodeRenderer.getIFrameContentObj();
-            CodeRenderer.sendIFrameContentObj(contentObj);
+            
+            if(!CodeRenderer.processing) {
+                CodeRenderer.sendIFrameContentObj(contentObj);
+            }
         }
     },
     
@@ -64,7 +71,10 @@ var CodeRenderer = {
 
     getIFrameContentObj: function() {
         this.processContent();
-        
+        return this.getRenderedIFrameContentObj();
+    },
+    
+    getRenderedIFrameContentObj: function() {
         if(CodeRenderer.errorHTML) {
            // errors exist, show those as result
            return { 'error': CodeRenderer.errorHTML } ;
@@ -239,13 +249,14 @@ var CodeRenderer = {
         
         if(params['html'] || params['css'] || params['js']) {
             CodeRenderer.errorHTML = '';
-            // alextodo, make it so that if there is a send to server
-            // you don't fucking block! just fucking make the call
-            // finish up when u come back ass hole
+            
+            this.processing = true;
             this.sendContentToServer(params);
         }
-        
-        this.storeRefContent();
+        else {
+            this.processing = false;
+            this.storeRefContent();
+        }
     },
     
     storeRefContent: function() {
@@ -282,8 +293,18 @@ var CodeRenderer = {
                           CodeRenderer['postProcessed' + upKey] = obj[key];
                       }
                   }
+                  
+                  CodeRenderer.finishRendering();
               }
         });
+    },
+    
+    finishRendering: function() {
+        this.processing = false;
+        this.storeRefContent();
+        
+        var contentObj = this.getRenderedIFrameContentObj();
+        CodeRenderer.sendIFrameContentObj(contentObj);
     },
     
     // determine if what's in the editor is the same 
