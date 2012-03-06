@@ -18,6 +18,7 @@ gem "rack-test"
 gem "activesupport"
 gem "foreman"
 gem "thin"
+gem "slim"
 #TODO: create groups for testing/development
 gem 'awesome_print'
 gem 'spork', '~> 1.0rc'

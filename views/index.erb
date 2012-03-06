@@ -45,6 +45,10 @@
                 <input type="radio" class="hidden" id="jade" name="html-preprocessor" value="jade">
                 <label class="button" for="jade">Jade <a target="_blank" href="http://jade-lang.com/">?</a></label>
               </div>
+              <div>
+                <input type="radio" class="hidden" id="slim" name="html-preprocessor" value="slim">
+                <label class="button" for="slim">Slim <a target="_blank" href="http://slim-lang.com/">?</a></label>
+              </div>
               <div class="last">
                 <input type="radio" class="hidden" id="haml" name="html-preprocessor" value="haml">
                 <label class="button" for="haml">HAML <a target="_blank" href="http://haml-lang.com/">?</a></label>
@@ -190,7 +194,7 @@
 
       <div class="result">
 
-        <iframe src="" id="result"></iframe>
+        <iframe src="<%= @iframe_src %>/secure_iframe" id="result"></iframe>
 
       </div>
 
@@ -206,13 +210,11 @@
 
   <script>
     __c_data = <%= @c_data %>;
-    __templates = <%= get_templates  %>;
   </script>
 
   <%= js_scripts([
       '/js/libs/jquery.js',
       '/js/libs/codemirror.js',
-      '/js/libs/tmpl.js',
       '/js/libs/chosen.jquery.min.js',
       '/js/mode/javascript/javascript.js',
       '/js/mode/css/css.js',
