@@ -89,10 +89,8 @@ app.post('/coffeescript/', function(req, res) {
         resp['js'] = coffee.compile(req.body.js, { });
     }
     catch(e) {
-        console.log('err');
-        console.log(e);
         resp['error'] = e.message;
     }
-    console.log(resp);
+    
     res.send(JSON.stringify(resp));
 });
