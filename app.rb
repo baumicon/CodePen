@@ -49,10 +49,12 @@ class App < Sinatra::Base
   # This makes testing easier. On Production. we add a 'secure'
   # subdomain so that sneaky users can't XSS attack our home base.
   def get_iframe_url(request)
+    domain = request.env['SERVER_NAME'] + ':' + request.env['SERVER_PORT']
+    
     if Sinatra::Application.environment == :development
-      return 'http://' + request.env['HTTP_HOST']
+      return 'http://' + domain
     else
-      return 'http://secure.' + request.env['HTTP_HOST']
+      return 'http://secure.' + domain
     end
   end
   
