@@ -205,16 +205,12 @@
   <!-- <div id="overlay"></div> -->
 
   <script>
-    // alextodo, this should come from the server
-    __iframe_url = "<%= @iframe_src %>";
     __c_data = <%= @c_data %>;
-    __templates = <%= get_templates  %>;
   </script>
 
   <%= js_scripts([
       '/js/libs/jquery.js',
       '/js/libs/codemirror.js',
-      '/js/libs/tmpl.js',
       '/js/libs/chosen.jquery.min.js',
       '/js/mode/javascript/javascript.js',
       '/js/mode/css/css.js',

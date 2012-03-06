@@ -1,7 +1,4 @@
 var CodeRenderer = {
-        
-    // easyXDM socket
-    socket: '',
     
     // reference versions of data
     refHTML     : '',
@@ -32,9 +29,8 @@ var CodeRenderer = {
     // Main entry point to this module. Renders content to iframe.
     compileContent: function(forceCompile) {
         if(forceCompile || this.compileInRealTime()) {
-            var content = CodeRenderer.getIFrameContent();
-            CodeRenderer.writeContentToIFrame(content);
-            // CodeRenderer.executeIFrameJS();
+            var contentObj = CodeRenderer.getIFrameContentObj();
+            CodeRenderer.sendIFrameContentObj(contentObj);
         }
     },
     
@@ -56,42 +52,30 @@ var CodeRenderer = {
         }
     },
 
-    writeContentToIFrame: function(content) {
+    sendIFrameContentObj: function(contentObj) {
         var iframe = $('#result')[0];
         
-        iframe.contentWindow.postMessage(content, __iframe_url);
-        iframe.contentWindow.postMessage('__run__||' + this.postProcessedJS, __iframe_url);
-    },
-    
-    executeIFrameJS: function() {
-        // Only execute if no errors exist
-        // the iframe seems to cache the JS, even though we
-        // over write the content of the iframe. It will hold 
-        // onto the javascript and execute it. If it has nothing
-        // it seems to hold onto the cache as well.
-        if(!this.errorHTML && this.postProcessedJS) {
-            var contentWindow = $('#result')[0].contentWindow;
-
-            if(contentWindow.__run) {
-                contentWindow.__run();
-            }
+        // Send message to iframe if it supports postMessage
+        if(iframe.contentWindow.postMessage) {
+            var objAsJSON = JSON.stringify(contentObj);
+            iframe.contentWindow.postMessage(objAsJSON, iframe.src);
         }
     },
 
-    getIFrameContent: function() {
+    getIFrameContentObj: function() {
         this.processContent();
         
         if(CodeRenderer.errorHTML) {
            // errors exist, show those as result
-           return CodeRenderer.errorHTML;
+           return { 'error': CodeRenderer.errorHTML } ;
         }
         else {
-           return this.getIFrameHTML();
+           return this.getIFrameValues();
         }
     },
     
-    getIFrameHTML: function() {
-        var values = {
+    getIFrameValues: function() {
+        return {
               TITLE        : "Code Pen",
               HTML         : this.postProcessedHTML,
               HTML_CLASSES : CData.html_classes,
@@ -106,8 +90,6 @@ var CodeRenderer = {
               JS_MODERNIZR : this.getModernizr(),
               JS_EXTERNAL  : this.getJSExternal(),
         };
-
-        return tmpl(this.getTPL('result'), values);
     },
     
     // Get CSS Options
@@ -157,10 +139,11 @@ var CodeRenderer = {
     
     getJS: function() {
         if(this.postProcessedJS) {
+            // alextodo, what about errors? should we show a special 
             var js = 'function __run() { ';
             js += this.postProcessedJS + ' }';
             js += " try { __run(); }";
-            js += "catch(err) { console.log('Error: ' + err.message); }"
+            js += "catch(err) { if(console) { console.log('Error: ' + err.message); }} "
             
             return js;
         }
@@ -256,6 +239,9 @@ var CodeRenderer = {
         
         if(params['html'] || params['css'] || params['js']) {
             CodeRenderer.errorHTML = '';
+            // alextodo, make it so that if there is a send to server
+            // you don't fucking block! just fucking make the call
+            // finish up when u come back ass hole
             this.sendContentToServer(params);
         }
         
@@ -343,10 +329,6 @@ var CodeRenderer = {
     // All preprocessors are rendered server side
     needsPreProcessing: function(preProcessor) {
         return (preProcessor && preProcessor != 'none');
-    },
-
-    getTPL: function(name) {
-        return __templates[name];
     },
     
     // Send data to backend to create a gist on github.com

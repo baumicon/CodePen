@@ -9,6 +9,7 @@ require './services/content_service'
 require './services/preprocessor_service'
 require './services/renderer'
 require './lib/minify'
+require 'awesome_print'
 
 class App < Sinatra::Base
   # MongoMapper setup
@@ -37,11 +38,22 @@ class App < Sinatra::Base
 
   get '/' do
     set_session
-    @c_data = {}
-    # alextodo, pull the port from environment, set for prod too
-    @iframe_src = 'http://secure.localhost.com:9292'
+    @c_data = { }
+    @iframe_src = get_iframe_url request
     
     erb :index
+  end
+  
+  # Returns the URL for the iframe
+  # on localhost (for development) their is no subdomain.
+  # This makes testing easier. On Production. we add a 'secure'
+  # subdomain so that sneaky users can't XSS attack our home base.
+  def get_iframe_url(request)
+    if Sinatra::Application.environment == :development
+      return 'http://' + request.env['HTTP_HOST']
+    else
+      return 'http://secure.' + request.env['HTTP_HOST']
+    end
   end
   
   get '/secure_iframe' do
@@ -151,9 +163,6 @@ class App < Sinatra::Base
   end
   
   helpers do
-    def get_templates
-      {'result' => (erb :template)}.to_json.gsub('/', '\/')
-    end
     def partial template
       erb template, :layout => false
     end

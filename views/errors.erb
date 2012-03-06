@@ -1,26 +1,9 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="UTF-8">
-  <title>Preprocessor Error</title>
-  <link rel="stylesheet" href="/stylesheets/css/errors.css">
-</head>
-
-<body>
-
 <% @errors.each do |type, msg| %>
-
   <div class="<%= type %>">
 
     <h1><span>Preprocessing Error in:</span> <%= type %></h1>
 
     <pre><%= msg %></pre>
 
-  </div>    
-
+  </div>
 <% end %>
-
-</body>
-
-</html>
