@@ -164,6 +164,11 @@ header {
       content: " (Jade)";
     }
   }
+  &.slim {
+    h2:after {
+      content: " (Slim)";
+    }
+  }
   &.haml {
     h2:after {
       content: " (HAML)";

@@ -73,7 +73,7 @@
         },
         
         addClassBoxHTML: function(clazz) {
-            this.boxHTML.removeClass('none jade haml').addClass(clazz);
+            this.boxHTML.removeClass('none jade slim haml').addClass(clazz);
         },
         
         addClassBoxCSS: function(clazz) {

@@ -20,6 +20,14 @@ describe PreProcessorService do
     result.should == expected
   end
   
+  it "should return the processed slim." do
+    html = 'strong Words'
+    expected = '<strong>Words</strong>'
+    result = @pps.process_html('slim', html).strip
+    
+    result.should == expected
+  end
+  
   it "should return the processed haml." do
     expected = '<strong>Words</strong>'
     haml = '%strong Words'

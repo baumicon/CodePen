@@ -1,8 +1,9 @@
+require 'compass'
 require 'net/http'
 require 'haml'
-require 'sass'
-require 'compass'
 require 'json'
+require 'slim'
+require 'sass'
 
 NODE_URL = 'http://127.0.0.1:8124'
 
@@ -59,6 +60,13 @@ class PreProcessorService
   def process_html(type, html)
     if type == 'jade'
       html = node_req('/jade/', 'html', html, 'Jade')
+    elsif type == 'slim'
+      begin
+        slim_tmpl = Slim::Template.new { html }
+        html = slim_tmpl.render
+      rescue Exception => e
+        @errors['Slim'] = e.message
+      end
     elsif type == 'haml'
       begin
         html = Haml::Engine.new(html).render
