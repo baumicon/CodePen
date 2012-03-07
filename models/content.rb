@@ -1,4 +1,5 @@
 require 'mongo_mapper'
+require './models/incrementor'
 require './lib/ajax_util'
 
 class Content
@@ -8,14 +9,14 @@ class Content
   attr_accessible :uid, :slug, :version, :html, :css, :js, :html_pre_processor, :css_pre_processor, :js_pre_processor, :anon
   attr_accessor :slugs
 
-  validate :validate_slug_owned
-  #validate :validate_version_is_positive
+  before_validation :before_validation_on_create, :on => :create
+  validate :validate_slug_saveable
 
-  #Foreign Keys
+  # callback keys
   key :uid, String, :required => true
-  key :slug, String, :required => true
+  key :slug, String, :default => nil
+  key :version, Integer, :default => 0
 
-  key :version, Integer, :required => true
   key :anon, Boolean, :default => false
   key :html, String
   key :css, String
@@ -26,15 +27,11 @@ class Content
 
   timestamps!
 
-  def self.new_from_json(json, uid, slugs_by_user, anon = false)
-
+  def self.new_from_json(json, uid, anon = false)
     payload = JSON.parse(json)
     payload['uid'] = uid
     payload['anon'] = anon
-    content = Content.new(payload)
-    content.slugs = slugs_by_user
-    content.slug = uid if anon
-    content
+    Content.new(payload)
   end
 
   def self.latest(slug)
@@ -76,12 +73,23 @@ class Content
 
   private
 
+  def before_validation_on_create
+    anon_prevalidate if @anon
+  end
+
+  def anon_prevalidate
+    @version = 1 if @slug.nil?
+    @slug = Incrementor.next_count('anon_slug_integer') if @slug.nil?
+  end
+
   def validate_slug_saveable
-    errors.add(:slug_not_owned, "You must own a slug to save to it") if anon and Content.where(:slug => @slug, :uid.nin => @uid)
-
+    anon_validate       if @anon
+    errors.add(:version_not_positive, "Version must be positive") unless @version > -1
   end
 
-  def validate_version_is_positive
-    errors.add(:version_not_positive, "version must be positive") unless @version > -1
+  def anon_validate
+    opp = Content.first(:slug => @slug, :anon => true)
+    errors.add(:slug_taken, "That slug is already owned") if opp
   end
+
 end
