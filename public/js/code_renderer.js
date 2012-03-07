@@ -26,8 +26,23 @@ var CodeRenderer = {
         // fully render since it's so dependent on JS
         $(this).delay(300).queue(function() {
             CodeRenderer.compileContent(true);
+
+            Main.refreshEditors();
+            CodeRenderer.setCursorToEnd(HTMLeditor);
             $(this).dequeue();
         });
+    },
+
+    setCursorToEnd: function(editor) {
+        editor.focus();
+
+        var text = editor.getValue();
+        
+        // set the cursor to the end of the editor
+        // Make sure it's at the end by line num and char num to
+        // same value as the actual number of chars, CodeMirror will
+        // simply move the cursor to the end
+        editor.setCursor(text.length, text.length, true);
     },
     
     // Main entry point to this module. Renders content to iframe.

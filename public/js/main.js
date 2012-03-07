@@ -25,6 +25,7 @@
             
             // Run initial compile
             CodeRenderer.init();
+            this.refreshEditors();
         },
         
         syncUIWithDBO: function() {
@@ -263,6 +264,12 @@
                 tabSize      : 2,
                 onChange     : Main.compileContent
             });
+        },
+
+        refreshEditors: function() {
+            HTMLeditor.refresh();
+            CSSeditor.refresh();
+            JSeditor.refresh();
         },
         
         compileContent: function(editor, changes, forceCompile) {
