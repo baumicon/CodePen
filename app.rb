@@ -163,6 +163,10 @@ class App < Sinatra::Base
     
     encode({ 'url' => url_to_gist })
   end
+
+  get '/test/coderenderer' do
+    erb :test_code_renderer
+  end
   
   helpers do
     def partial template

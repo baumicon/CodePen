@@ -87,7 +87,6 @@
         
         bindUIActions: function() {
             // Resize all boxes when window resized
-
             this.win.resize(function() {
                 var space = Main.body.height();
                 Main.topBoxesCon.height(space / 2 - 20);
@@ -128,7 +127,16 @@
             // Opening and closing app settings
             $("#app-settings").on("click", function(e) {
                 e.preventDefault();
-                $("#app-settings-panel").toggle();
+
+                var pos = $(this).position();
+                var x = pos.top + $(this).outerHeight() + 2;
+
+                $("#app-settings-panel").css({
+                    position: "absolute",
+                    top: x + 'px',
+                    left: pos.left + 'px',
+                    height: '225px'
+                }).toggle(100);
             });
         },
         
