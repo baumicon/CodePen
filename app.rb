@@ -52,7 +52,9 @@ class App < Sinatra::Base
     if Sinatra::Application.environment == :development
       return request.scheme + '://' + request.host_with_port
     else
-      return request.scheme + '://secure.' + request.host_with_port
+      # Bug in request.host_with_port that does not return .io
+      # instead it returns codepen. We've hard coded the domain because of this
+      url = request.scheme + '://secure.codepen.io'
     end
   end
   
