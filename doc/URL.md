@@ -8,12 +8,14 @@ codepen.io/{{incremented-integer}}   <-   Unique, lasts forever
 
 -- Save button disappears --
 
+## Press New Button
+erase local storage
+
 ## Press Update Button (versions)
 codepen.io/{{incremented-integer}}/2/
 codepen.io/{{incremented-integer}}/3/
 codepen.io/{{incremented-integer}}/4/
 etc
-
 
 
 # Logged in
