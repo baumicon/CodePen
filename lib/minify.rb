@@ -226,7 +226,7 @@ class MinifyProject
     scripts_list = scripts.split(',')
     
     scripts_list.each do |script|
-      if !script.empty?
+      if !script.strip().empty?
         clean_script = script.gsub('"', '').gsub!("'", "").strip()
         cleaned_scripts.push(clean_script)
       end
