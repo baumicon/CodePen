@@ -1,6 +1,6 @@
 <footer>
 
-    <% randomNum = rand(5)+1 %>
+    <% randomNum = rand(6)+1 %>
     
     <% if randomNum == 1 %>
       <p><strong>CodePen Fact</strong>: We use <a href="http://ejohn.org/blog/javascript-micro-templating/">JavaScript Micro-Templating</a> by John Resig to build the live demo shown at the bottom of the page.</p>
@@ -12,6 +12,8 @@
       <p><strong>Net Karma</strong>: CodePen is a great tool for creating <a href="http://css-tricks.com/reduced-test-cases/">reduced test cases</a> to clearly demonstrate browser bugs or bugs in other projects.</p>
     <% elsif randomNum == 5 %>
       <p><strong>CodePen Fact</strong>: We use <a href="http://www.sinatrarb.com/">Sinatra</a> as the simple Ruby framework behind CodePen.</p>
+    <% elsif randomNum == 6 %>
+      <p><strong>Hot Tip</strong>: Need to link up a popular JavaScript resource? Get URL from <a href="http://www.cdnjs.com/">cdnjs.com</a></p>
     <% end %>
 
 </footer>
