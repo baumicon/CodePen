@@ -46,6 +46,15 @@
     top: -2px;
     margin-right: 4px;
   }
+  &.open {
+    background: $settingsPanelBG;;
+    @include border-radiuses(5px, 0, 0, 5px);
+    color: #333;
+    a {
+      color: #333;
+      text-shadow: none;
+    }
+  }
 }
 
 header button, header .button {
@@ -92,9 +101,6 @@ header button, header .button {
     background: #11b101;
   }
 }
-#app-settings {
-  margin-right: 10px;
-}
 .save-template {
   width: 100%;
 }
@@ -116,6 +122,6 @@ header button, header .button {
     background: #019AD2;
   }
 }
-#logout {
-  margin-left: 10px;
+#app-settings {
+  margin-right: 10px;
 }

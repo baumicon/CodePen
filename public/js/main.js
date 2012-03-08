@@ -85,8 +85,8 @@
         },
         
         bindUIActions: function() {
-            // Resize all boxes when window resized
 
+            // Resize all boxes when window resized
             this.win.resize(function() {
                 var space = Main.body.height();
                 Main.topBoxesCon.height(space / 2 - 20);
@@ -97,7 +97,7 @@
                 });
                 Main.boxes.height(Main.win.height());
                 Main.vertResizer.css({
-                    "top"    : ((space / 2) + Main.header.outerHeight()) + "px",
+                    "top"     : ((space / 2) + Main.header.outerHeight()) + "px",
                 });
             }).trigger("resize");
             
@@ -127,6 +127,7 @@
             // Opening and closing app settings
             $("#app-settings").on("click", function(e) {
                 e.preventDefault();
+                $(this).toggleClass("open");
                 $("#app-settings-panel").toggle();
             });
         },
