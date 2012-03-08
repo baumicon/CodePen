@@ -274,6 +274,11 @@ header {
         }
       }
     }
+    &.halfsies {
+      div {
+        width: 48.5%;
+      }
+    }
   }
   input[type=radio].hidden {
     display: none;
