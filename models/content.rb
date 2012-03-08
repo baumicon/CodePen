@@ -74,22 +74,43 @@ class Content
   private
 
   def before_validation_on_create
+    @version = 1 if @slug.nil?
     anon_prevalidate if @anon
+    authed_prevalidate if not @anon
+  end
+
+  def authed_prevalidate
+    @slug = Incrementor.next_count("slug_integer_authed_#{@uid}") if @slug.nil?
   end
 
   def anon_prevalidate
-    @version = 1 if @slug.nil?
-    @slug = Incrementor.next_count('anon_slug_integer') if @slug.nil?
+    @slug = Incrementor.next_count('slug_integer_anon') if @slug.nil?
   end
 
   def validate_slug_saveable
-    anon_validate       if @anon
-    errors.add(:version_not_positive, "Version must be positive") unless @version > -1
+    anon_validate if @anon
+    # TODO: Sequence Check
+    #check = sequence_check
+    #errors.add(:invalid_sequence, check[:message]) if not check[:is_sequential]
+    if not @version.to_s.match(/^\b\d+\b$/)
+      errors.add(:version_not_positive, "Version must be positive integer")
+    end
   end
 
   def anon_validate
-    opp = Content.first(:slug => @slug, :anon => true)
-    errors.add(:slug_taken, "That slug is already owned") if opp
+    if not @slug.to_s.match(/^\b\d+\b$/)
+      errors.add(:wrong_type, "Slugs must be integers when user type is Anon")
+      return
+    end
+    errors.add(:slug_taken, "That slug is already owned") if Content.first(:slug => @slug, :anon => true)
   end
+
+  def sequence_check
+    previous_content = Content.first(:order => :version.desc, :slug => @slug)
+    return {:is_sequential => true} if previous_content.nil?
+    return {:is_sequential => true} if @version - previous_content['version'] == 1
+    return {:is_sequential => false, :message => "Invalid Sequence.  Expected #{previous_content['version'] + 1}. Got #{content['version']}"}
+  end
+
 
 end
