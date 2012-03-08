@@ -12,21 +12,6 @@ var KeyBindings = {
         this.CSSeditor = CSSeditor;
         this.JSeditor = JSeditor;
     },
-    
-    giveEditorFocus: function(editor) {
-        editor.focus();
-        KeyBindings.setCursorToEnd(editor);
-    },
-    
-    setCursorToEnd: function(editor) {
-        var text = editor.getValue();
-        
-        // set the cursor to the end of the editor
-        // Make sure it's at the end by line num and char num to
-        // same value as the actual number of chars, CodeMirror will
-        // simply move the cursor to the end
-        editor.setCursor(text.length, text.length, true);
-    },
 
     showOverlay: function() {
         // $("#overlay").show();
@@ -49,21 +34,21 @@ var KeyBindings = {
                     Main.openExpandedArea('#box-html');
                     // alextodo, is this really the best place for it?
                     // have a wrapper around the editors? better place for it no?
-                    KeyBindings.giveEditorFocus(KeyBindings.HTMLeditor);
+                    CodeRenderer.setCursorToEnd(KeyBindings.HTMLeditor);
                     KeyBindings.showOverlay();
                 }
                 else if(event.keyCode == 50) {
                     // cmd + 2
                     stop = true;
                     Main.openExpandedArea('#box-css');
-                    KeyBindings.giveEditorFocus(KeyBindings.CSSeditor);
+                    CodeRenderer.setCursorToEnd(KeyBindings.CSSeditor);
                     KeyBindings.showOverlay();
                 }
                 else if(event.keyCode == 51) {
                     // cmd + 3
                     stop = true;
                     Main.openExpandedArea('#box-js');
-                    KeyBindings.giveEditorFocus(KeyBindings.JSeditor);
+                    CodeRenderer.setCursorToEnd(KeyBindings.JSeditor);
                     KeyBindings.showOverlay();
                 }
                 else if(event.keyCode == 13) {

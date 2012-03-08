@@ -50,9 +50,11 @@ class App < Sinatra::Base
   # subdomain so that sneaky users can't XSS attack our home base.
   def get_iframe_url(request)
     if Sinatra::Application.environment == :development
-      return 'http://' + request.env['HTTP_HOST']
+      return request.scheme + '://' + request.host_with_port
     else
-      return 'http://secure.codepen.io'
+      # Bug in request.host_with_port that does not return .io
+      # instead it returns codepen. We've hard coded the domain because of this
+      url = request.scheme + '://secure.codepen.io'
     end
   end
   
@@ -160,6 +162,10 @@ class App < Sinatra::Base
     url_to_gist = gs.create_gist(data, result)
     
     encode({ 'url' => url_to_gist })
+  end
+
+  get '/test/coderenderer' do
+    erb :test_code_renderer
   end
   
   helpers do

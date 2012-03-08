@@ -25,6 +25,7 @@
             
             // Run initial compile
             CodeRenderer.init();
+            this.refreshEditors();
         },
         
         syncUIWithDBO: function() {
@@ -85,7 +86,10 @@
         },
         
         bindUIActions: function() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 011c77d186a6cba5b2c5b879200ed6bbeea9c8c8
             // Resize all boxes when window resized
             this.win.resize(function() {
                 var space = Main.body.height();
@@ -127,8 +131,21 @@
             // Opening and closing app settings
             $("#app-settings").on("click", function(e) {
                 e.preventDefault();
+<<<<<<< HEAD
                 $(this).toggleClass("open");
                 $("#app-settings-panel").toggle();
+=======
+
+                var pos = $(this).position();
+                var x = pos.top + $(this).outerHeight() + 2;
+
+                $("#app-settings-panel").css({
+                    position: "absolute",
+                    top: x + 'px',
+                    left: pos.left + 'px',
+                    height: '225px'
+                }).toggle(100);
+>>>>>>> 011c77d186a6cba5b2c5b879200ed6bbeea9c8c8
             });
         },
         
@@ -264,6 +281,12 @@
                 tabSize      : 2,
                 onChange     : Main.compileContent
             });
+        },
+
+        refreshEditors: function() {
+            HTMLeditor.refresh();
+            CSSeditor.refresh();
+            JSeditor.refresh();
         },
         
         compileContent: function(editor, changes, forceCompile) {

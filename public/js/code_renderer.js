@@ -17,8 +17,6 @@ var CodeRenderer = {
     
     errorHTML   : '',
     
-    processing  : false,
-    
     init: function() {
         // Defer the call to later so that the UI can fully render,
         // then make the call to render the iframe content
@@ -26,18 +24,29 @@ var CodeRenderer = {
         // fully render since it's so dependent on JS
         $(this).delay(300).queue(function() {
             CodeRenderer.compileContent(true);
+
+            Main.refreshEditors();
+            CodeRenderer.setCursorToEnd(HTMLeditor);
             $(this).dequeue();
         });
+    },
+
+    setCursorToEnd: function(editor) {
+        editor.focus();
+
+        var text = editor.getValue();
+        
+        // set the cursor to the end of the editor
+        // Make sure it's at the end by line num and char num to
+        // same value as the actual number of chars, CodeMirror will
+        // simply move the cursor to the end
+        editor.setCursor(text.length, text.length, true);
     },
     
     // Main entry point to this module. Renders content to iframe.
     compileContent: function(forceCompile) {
         if(forceCompile || this.compileInRealTime()) {
-            var contentObj = CodeRenderer.getIFrameContentObj();
-            
-            if(!CodeRenderer.processing) {
-                CodeRenderer.sendIFrameContentObj(contentObj);
-            }
+            this.processContent();
         }
     },
     
@@ -59,6 +68,8 @@ var CodeRenderer = {
         }
     },
 
+    // We rely on postMessage to talk to the iframe. If no iframe.
+    // We'll execute a full iframe refresh. Data will simply load from server.
     sendIFrameContentObj: function(contentObj) {
         var iframe = $('#result')[0];
         
@@ -68,13 +79,8 @@ var CodeRenderer = {
             iframe.contentWindow.postMessage(objAsJSON, iframe.src);
         }
     },
-
-    getIFrameContentObj: function() {
-        this.processContent();
-        return this.getRenderedIFrameContentObj();
-    },
     
-    getRenderedIFrameContentObj: function() {
+    getIFrameContentObj: function() {
         if(CodeRenderer.errorHTML) {
            // errors exist, show those as result
            return { 'error': CodeRenderer.errorHTML } ;
@@ -149,12 +155,11 @@ var CodeRenderer = {
     
     getJS: function() {
         if(this.postProcessedJS) {
-            // alextodo, what about errors? should we show a special 
             var js = 'function __run() { ';
             js += this.postProcessedJS + ' }';
             js += " try { __run(); }";
             js += "catch(err) { if(console) { console.log('Error: ' + err.message); }} "
-            
+
             return js;
         }
         else {
@@ -247,27 +252,15 @@ var CodeRenderer = {
             }
         }
         
+        // If there is any data to process on the server. Send it off
+        // and render after it comes back. Otherwise render away.
         if(params['html'] || params['css'] || params['js']) {
             CodeRenderer.errorHTML = '';
-            
-            this.processing = true;
             this.sendContentToServer(params);
         }
         else {
-            this.processing = false;
-            this.storeRefContent();
+            CodeRenderer.finishRendering();
         }
-    },
-    
-    storeRefContent: function() {
-        this.refHTML   = CData.html;
-        this.refHTMLPP = CData.html_pre_processor;
-        
-        this.refCSS    = CData.css;
-        this.refCSSPP  = CData.css_pre_processor;
-        
-        this.refJS     = CData.js;
-        this.refJSPP   = CData.js_pre_processor;
     },
     
     // Send content to server for processing
@@ -275,7 +268,6 @@ var CodeRenderer = {
         $.ajax({
               url: '/process/',
               type: 'POST',
-              async: false,
               data: Util.getDataValues(params),
               success: function( result ) {
                   obj = $.parseJSON(result);
@@ -300,14 +292,24 @@ var CodeRenderer = {
     },
     
     finishRendering: function() {
-        this.processing = false;
         this.storeRefContent();
         
-        var contentObj = this.getRenderedIFrameContentObj();
+        var contentObj = this.getIFrameContentObj();
         CodeRenderer.sendIFrameContentObj(contentObj);
     },
+
+    storeRefContent: function() {
+        this.refHTML   = CData.html;
+        this.refHTMLPP = CData.html_pre_processor;
+        
+        this.refCSS    = CData.css;
+        this.refCSSPP  = CData.css_pre_processor;
+        
+        this.refJS     = CData.js;
+        this.refJSPP   = CData.js_pre_processor;
+    },
     
-    // determine if what's in the editor is the same 
+    // Determine if what's in the editor is the same 
     // as what's saved in reference (unprocessed content) cache. 
     // if so use cached version of content, e.g. postProcessedHTML, postProcessedCSS
     useCache: function(type) {
