@@ -70,7 +70,6 @@ var KeyBindings = {
             
             if(event.keyCode == 27) {
                 Main.closeExpandedAreas();
-                KeyBindings.hideOverlay();
             }
             
             if(stop) {
