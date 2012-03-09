@@ -16,21 +16,21 @@ var KeyBindings = {
                     stop = true;
                     Main.openExpandedArea('#box-html');
                     CodeRenderer.setCursorToEnd(HTMLeditor);
-                    HTMLeditor.refresh();
+                    Main.refreshEditors(200);
                 }
                 else if(event.keyCode == 50) {
                     // cmd + 2
                     stop = true;
                     Main.openExpandedArea('#box-css');
                     CodeRenderer.setCursorToEnd(CSSeditor);
-                    CSSeditor.refresh();
+                    Main.refreshEditors(200);
                 }
                 else if(event.keyCode == 51) {
                     // cmd + 3
                     stop = true;
                     Main.openExpandedArea('#box-js');
                     CodeRenderer.setCursorToEnd(JSeditor);
-                    JSeditor.refresh();
+                    Main.refreshEditors(200);
                 }
                 else if(event.keyCode == 13) {
                     // cmd + return
@@ -78,5 +78,5 @@ var KeyBindings = {
                 return false;
             }
         });
-    }
+    },
 };

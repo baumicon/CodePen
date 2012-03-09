@@ -267,10 +267,21 @@
             });
         },
 
-        refreshEditors: function() {
-            HTMLeditor.refresh();
-            CSSeditor.refresh();
-            JSeditor.refresh();
+        refreshEditors: function(delay) {
+            // Sometimes you have to wait a few milliseconds
+            // for a task to complete before updating the editor
+            // is effective. This delay makes sure the refresh actually
+            // works.
+            if(delay > 0) {
+                setTimeout(function() {
+                    Main.refreshEditors(0);
+                }, delay);
+            }
+            else {
+                HTMLeditor.refresh();
+                CSSeditor.refresh();
+                JSeditor.refresh();
+            }
         },
         
         compileContent: function(editor, changes, forceCompile) {
