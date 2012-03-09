@@ -230,7 +230,7 @@
              });
              
              // Bind keys
-             KeyBindings.init(HTMLeditor, CSSeditor, JSeditor);
+             KeyBindings.init();
         },
         
         updatePrefixFreeBox: function(css_pre_processor) {
