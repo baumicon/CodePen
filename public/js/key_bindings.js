@@ -1,24 +1,7 @@
 var KeyBindings = {
-        
-    HTMLeditor: '', 
-    CSSeditor: '', 
-    JSeditor: '',
     
-    // alextodo, map keys to strings for clarity
-
-    init: function(HTMLeditor, CSSeditor, JSeditor) {
+    init: function() {
         this.bindKeys();
-        this.HTMLeditor = HTMLeditor;
-        this.CSSeditor = CSSeditor;
-        this.JSeditor = JSeditor;
-    },
-
-    showOverlay: function() {
-        // $("#overlay").show();
-    },
-
-    hideOverlay: function() {
-        // $("#overlay").hide();
     },
     
     bindKeys: function() {
@@ -32,24 +15,22 @@ var KeyBindings = {
                     // cmd + 1
                     stop = true;
                     Main.openExpandedArea('#box-html');
-                    // alextodo, is this really the best place for it?
-                    // have a wrapper around the editors? better place for it no?
-                    CodeRenderer.setCursorToEnd(KeyBindings.HTMLeditor);
-                    KeyBindings.showOverlay();
+                    CodeRenderer.setCursorToEnd(HTMLeditor);
+                    Main.refreshEditors(200);
                 }
                 else if(event.keyCode == 50) {
                     // cmd + 2
                     stop = true;
                     Main.openExpandedArea('#box-css');
-                    CodeRenderer.setCursorToEnd(KeyBindings.CSSeditor);
-                    KeyBindings.showOverlay();
+                    CodeRenderer.setCursorToEnd(CSSeditor);
+                    Main.refreshEditors(200);
                 }
                 else if(event.keyCode == 51) {
                     // cmd + 3
                     stop = true;
                     Main.openExpandedArea('#box-js');
-                    CodeRenderer.setCursorToEnd(KeyBindings.JSeditor);
-                    KeyBindings.showOverlay();
+                    CodeRenderer.setCursorToEnd(JSeditor);
+                    Main.refreshEditors(200);
                 }
                 else if(event.keyCode == 13) {
                     // cmd + return
@@ -89,7 +70,6 @@ var KeyBindings = {
             
             if(event.keyCode == 27) {
                 Main.closeExpandedAreas();
-                KeyBindings.hideOverlay();
             }
             
             if(stop) {
@@ -97,5 +77,5 @@ var KeyBindings = {
                 return false;
             }
         });
-    }
+    },
 };
