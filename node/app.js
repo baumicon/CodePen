@@ -24,6 +24,12 @@ app.listen(8124);
 
 console.log('Server running at http://127.0.0.1:8124/');
 
+app.configure('production', function() {
+  // In production dump exceptions,
+  // not stack traces
+  app.use(express.errorHandler());
+});
+
 // Home page
 app.get('/', function(req, res) {
     var html = "h1 This server is running. You better catch it.";
