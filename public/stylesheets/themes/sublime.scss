@@ -5,9 +5,9 @@
 [data-theme="sublime"] .cm-s-default span.cm-keyword     { color: #ffed8c; } // e.g. var
 [data-theme="sublime"] .cm-s-default span.cm-atom        { color: #9a6e35; } // e.g. [#tag]
 [data-theme="sublime"] .cm-s-default span.cm-number      { color: #d0782a; } // e.g. 20px
-[data-theme="sublime"] .cm-s-default span.cm-def         { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-def         { color: #6d86a5; } // e.g. function([this])
 [data-theme="sublime"] .cm-s-default span.cm-variable    { color: #ddca7e; } // e.g. margin
-[data-theme="sublime"] .cm-s-default span.cm-variable-2  { color: blue; }
+[data-theme="sublime"] .cm-s-default span.cm-variable-2  { color: #6d86a5; } // e.g. for (key in [this])
 [data-theme="sublime"] .cm-s-default span.cm-variable-3  { color: blue; }
 [data-theme="sublime"] .cm-s-default span.cm-property    { color: #eee; } // e.g. getElementById
 [data-theme="sublime"] .cm-s-default span.cm-operator    { color: blue; }
