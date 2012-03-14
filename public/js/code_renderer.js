@@ -16,6 +16,7 @@ var CodeRenderer = {
     postProcessedJS    : '',
     
     errorHTML   : '',
+    processing: false,
     
     init: function() {
         // Defer the call to later so that the UI can fully render,
@@ -29,6 +30,18 @@ var CodeRenderer = {
             CodeRenderer.setCursorToEnd(HTMLeditor);
             $(this).dequeue();
         });
+
+        this.renderContinuously();
+    },
+
+    renderContinuously: function() {
+        setInterval(function() {
+            if( !CodeRenderer.processing          &&
+                !CodeRenderer.compileInRealTime() && 
+                CodeRenderer.contentHasChanged()) {
+                CodeRenderer.processContent();
+            }
+        }, 200);
     },
 
     setCursorToEnd: function(editor) {
@@ -265,11 +278,14 @@ var CodeRenderer = {
     
     // Send content to server for processing
     sendContentToServer: function(params) {
+        this.processing = true;
+
         $.ajax({
               url: '/process/',
               type: 'POST',
               data: Util.getDataValues(params),
               success: function( result ) {
+                  CodeRenderer.processing = false;
                   obj = $.parseJSON(result);
                   
                   if(obj['error_html']) {
@@ -307,6 +323,19 @@ var CodeRenderer = {
         
         this.refJS     = CData.js;
         this.refJSPP   = CData.js_pre_processor;
+    },
+
+    contentHasChanged: function() {
+        if(this.refHTML   != CData.html) return true;
+        if(this.refHTMLPP != CData.html_pre_processor) return true;
+        
+        if(this.refCSS    != CData.css) return true;
+        if(this.refCSSPP  != CData.css_pre_processor) return true;
+        
+        if(this.refJS     != CData.js) return true;
+        if(this.refJSPP   != CData.js_pre_processor) return true;
+
+        return false;
     },
     
     // Determine if what's in the editor is the same 
