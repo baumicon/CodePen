@@ -1,29 +1,40 @@
-[data-theme="sublime"] .CodeMirror                       { background: #222222; }
-[data-theme="sublime"] .CodeMirror pre                   { color: #FFFFFF; } // e.g. { }
-[data-theme="sublime"] .CodeMirror pre.CodeMirror-cursor { border-left-color: white; } // cursor
 
-[data-theme="sublime"] .cm-s-default span.cm-keyword     { color: #ffed8c; } // e.g. var
-[data-theme="sublime"] .cm-s-default span.cm-atom        { color: #9a6e35; } // e.g. [#tag]
-[data-theme="sublime"] .cm-s-default span.cm-number      { color: #d0782a; } // e.g. 20px
-[data-theme="sublime"] .cm-s-default span.cm-def         { color: #6d86a5; } // e.g. function([this])
-[data-theme="sublime"] .cm-s-default span.cm-variable    { color: #ddca7e; } // e.g. margin
-[data-theme="sublime"] .cm-s-default span.cm-variable-2  { color: #6d86a5; } // e.g. for (key in [this])
-[data-theme="sublime"] .cm-s-default span.cm-variable-3  { color: blue; }
-[data-theme="sublime"] .cm-s-default span.cm-property    { color: #eee; } // e.g. getElementById
-[data-theme="sublime"] .cm-s-default span.cm-operator    { color: blue; }
-[data-theme="sublime"] .cm-s-default span.cm-comment     { color: #666666; } // e.g. /* test */
-[data-theme="sublime"] .cm-s-default span.cm-string      { color: #96b38a; } // e.g. href=["val"]
-[data-theme="sublime"] .cm-s-default span.cm-string-2    { color: blue; }
-[data-theme="sublime"] .cm-s-default span.cm-meta        { color: #9a6e35; } // e.g. @font-face
-[data-theme="sublime"] .cm-s-default span.cm-error       { color: #ff0000; }
-[data-theme="sublime"] .cm-s-default span.cm-qualifier   { color: #555; }
-[data-theme="sublime"] .cm-s-default span.cm-builtin     { color: #30a; }
-[data-theme="sublime"] .cm-s-default span.cm-bracket     { color: #cc7; }
-[data-theme="sublime"] .cm-s-default span.cm-tag         { color: #9a6e35; } // e.g. body
-[data-theme="sublime"] .cm-s-default span.cm-attribute   { color: #ddca7e; } // e.g. href
-[data-theme="sublime"] .cm-s-default span.cm-header      { color: blue; }
-[data-theme="sublime"] .cm-s-default span.cm-quote       { color: blue; }
-[data-theme="sublime"] .cm-s-default span.cm-hr          { color: blue; }
-[data-theme="sublime"] .cm-s-default span.cm-link        { color: blue; }
 
-[data-theme="sublime"] .CodeMirror-gutter-text pre       { color: #666; }
+[data-theme="sublime"] {
+
+  .CodeMirror                       { background: #222222; }
+
+  .CodeMirror pre                   { color: #FFFFFF; } // e.g. { }
+  .CodeMirror pre.CodeMirror-cursor { border-left-color: white; } // cursor
+
+  .cm-s-default span.cm-keyword     { color: #ffed8c; } // e.g. var
+  .cm-s-default span.cm-atom        { color: #9a6e35; } // e.g. [#tag]
+  .cm-s-default span.cm-number      { color: #d0782a; } // e.g. 20px
+  .cm-s-default span.cm-def         { color: #6d86a5; } // e.g. function([this])
+  .cm-s-default span.cm-variable    { color: #ddca7e; } // e.g. margin
+  .cm-s-default span.cm-variable-2  { color: #6d86a5; } // e.g. for (key in [this])
+  .cm-s-default span.cm-variable-3  { color: blue; }
+  .cm-s-default span.cm-property    { color: #eee; } // e.g. getElementById
+  .cm-s-default span.cm-operator    { color: blue; }
+  .cm-s-default span.cm-comment     { color: #666666; } // e.g. /* test */
+  .cm-s-default span.cm-string      { color: #96b38a; } // e.g. href=["val"]
+  .cm-s-default span.cm-string-2    { color: blue; }
+  .cm-s-default span.cm-meta        { color: #9a6e35; } // e.g. @font-face
+  .cm-s-default span.cm-error       { color: #ff0000; }
+  .cm-s-default span.cm-qualifier   { color: #555; }
+  .cm-s-default span.cm-builtin     { color: #30a; }
+  .cm-s-default span.cm-bracket     { color: #cc7; }
+  .cm-s-default span.cm-tag         { color: #9a6e35; } // e.g. body
+  .cm-s-default span.cm-attribute   { color: #ddca7e; } // e.g. href
+  .cm-s-default span.cm-header      { color: blue; }
+  .cm-s-default span.cm-quote       { color: blue; }
+  .cm-s-default span.cm-hr          { color: blue; }
+  .cm-s-default span.cm-link        { color: blue; }
+
+  .CodeMirror-gutter-text pre       { color: #666; }
+
+  ::-webkit-scrollbar-thumb {
+    @include linear-gradient-m(black, (( top, rgba(255,255,255,0.0), rgba(255,255,255,0.1)) ));
+  }
+
+}
