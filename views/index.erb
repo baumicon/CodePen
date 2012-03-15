@@ -36,14 +36,18 @@
 
           <div class="settings">
 
-            <form>
+            <form class="halfsies settings-row-1">
               <div>
                 <input type="radio" class="hidden" id="html-none" checked name="html-preprocessor" value="none">
                 <label class="button" for="html-none">None</label>
               </div>
-              <div>
+              <div class="last">
                 <input type="radio" class="hidden" id="jade" name="html-preprocessor" value="jade">
                 <label class="button" for="jade">Jade <a target="_blank" href="http://jade-lang.com/">?</a></label>
+              </div>
+              <div>
+                <input type="radio" class="hidden" id="slim" name="html-preprocessor" value="slim">
+                <label class="button" for="slim">Slim <a target="_blank" href="http://slim-lang.com/">?</a></label>
               </div>
               <div class="last">
                 <input type="radio" class="hidden" id="haml" name="html-preprocessor" value="haml">
@@ -51,7 +55,7 @@
               </div>
             </form>
 
-            <form>
+            <form class="settings-row-2">
               <label for="html-classes" class="small">Add Class(es) to &lt;html></label>
               <input type="text" id="html-classes" name="html-classes" class="fullwidth" placeholder="e.g. single post post-1234">
             </form>
@@ -77,7 +81,7 @@
           </div>
 
           <div class="settings">
-            <form class="doublerow">
+            <form class="doublerow settings-row-1">
               <div>
                 <input type="radio" class="hidden" id="css-none" checked name="css-preprocessor" value="none">
                 <label class="button" for="css-none">None</label>
@@ -100,30 +104,30 @@
               </div>
             </form>
 
-            <form>
-                <input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
-                <label for="startercss-normalize" class="small-inline">Normalize</label> 
-                <a href="http://necolas.github.com/normalize.css/">(?)<a>
+            <form class="settings-row-2">
+              <input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
+              <label for="startercss-normalize" class="small-inline">Normalize</label> 
+              <a class="inline-q" href="http://necolas.github.com/normalize.css/">?<a>
 
-                &ensp;
-              
-                <input type="radio" id="startercss-reset" name="startercss" value="reset">
-                <label for="startercss-reset" class="small-inline">Reset</label> 
-                <a href="http://meyerweb.com/eric/tools/css/reset/">(?)</a>
+              &ensp;
+            
+              <input type="radio" id="startercss-reset" name="startercss" value="reset">
+              <label for="startercss-reset" class="small-inline">Reset</label> 
+              <a class="inline-q" href="http://meyerweb.com/eric/tools/css/reset/">?</a>
 
-                &ensp;
+              &ensp;
 
-                <input type="radio" id="startercss-neither" name="startercss" value="neither">
-                <label for="startercss-neither" class="small-inline">Neither</label>
+              <input type="radio" id="startercss-neither" name="startercss" value="neither">
+              <label for="startercss-neither" class="small-inline">Neither</label>
             </form>
 
-            <form>
+            <form class="settings-row-3">
               <input type="checkbox" id="prefix-free" name="prefix-free">
               <label for="prefix-free" class="small-inline">Prefix free</label>
-              <a href="http://leaverou.github.com/prefixfree/">(?)</a>
+              <a class="inline-q" href="http://leaverou.github.com/prefixfree/">?</a>
             </form>
 
-            <form>
+            <form class="settings-row-4">
               <label class="small" for="js-select">External CSS File</label>
               <input class="fullwidth" type="url" id="external-css" name="external-css" placeholder="http://yourwebsite.com/external.css">
             </form>
@@ -149,7 +153,8 @@
           </div>
 
           <div class="settings">
-            <form>
+
+            <form class="settings-row-1">
               <div>
                 <input type="radio" class="hidden" id="js-none" checked name="js-preprocessor" value="none">
                 <label class="button" for="js-none">None</label>
@@ -160,7 +165,7 @@
               </div>
             </form>
 
-            <form>
+            <form class="settings-row-2">
               <label class="small" for="js-select">Latest Version of...</label>
               <select data-placeholder="JavaScript Library" id="js-select">
                 <option value="">No Library</option>
@@ -172,12 +177,12 @@
               </select>
             </form>
 
-            <form>
+            <form class="settings-row-3">
               <label class="small" for="js-select">External JS File</label>
               <input class="fullwidth" type="url" id="external-js" name="external-js" placeholder="http://yourwebsite.com/external.js">
             </form>
 
-            <form>
+            <form class="settings-row-4">
               <input type="checkbox" id="modernizr" name="modernizr">
               <label for="modernizr" class="small-inline">Modernizr</label>
             </form>
@@ -190,7 +195,7 @@
 
       <div class="result">
 
-        <iframe src="" id="result"></iframe>
+        <iframe src="<%= @iframe_src %>/secure_iframe" id="result"></iframe>
 
       </div>
 
@@ -198,7 +203,7 @@
 
   </div><!-- END div.wrap -->
 
-  <%= partial :sidebar %>
+  <%= partial :footer %>
 
   <div id="vert-resizer" class="vert-resizer"></div>
 
@@ -206,13 +211,11 @@
 
   <script>
     __c_data = <%= @c_data %>;
-    __templates = <%= get_templates  %>;
   </script>
 
   <%= js_scripts([
       '/js/libs/jquery.js',
       '/js/libs/codemirror.js',
-      '/js/libs/tmpl.js',
       '/js/libs/chosen.jquery.min.js',
       '/js/mode/javascript/javascript.js',
       '/js/mode/css/css.js',

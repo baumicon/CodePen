@@ -1,14 +1,16 @@
 module AjaxUtil
 
-  def success(payload = false)
+  require 'json'
+
+  def json_success(payload = false)
     ret = {'success' => true}
     return ret unless payload
     ret['payload'] = payload
-    ret
+    ret.to_json
   end
 
-  def errors(errors)
-    {'success' => false, 'errors' => errors}
+  def json_errors(errors)
+    {'success' => false, 'errors' => errors}.to_json
   end
 
 end

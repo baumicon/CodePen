@@ -4,6 +4,7 @@ require './lib/ajax_util'
 
 class Content
   extend AjaxUtil
+  include AjaxUtil
   include MongoMapper::Document
 
   attr_accessible :uid, :slug, :version, :html, :css, :js, :html_pre_processor, :css_pre_processor, :js_pre_processor, :anon
@@ -31,26 +32,27 @@ class Content
     payload = JSON.parse(json)
     payload['uid'] = uid
     payload['anon'] = anon
+    payload['slug'] = nil if payload['slug'] == ''
     Content.new(payload)
   end
 
   def self.latest(slug)
     begin
       content = Content.first(:order => :version.desc, :slug => slug)
-      return success(content.attributes) if content
-      return errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
+      return self.json_success(content.attributes) if content
+      return self.json_errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
     rescue Exception => ex
-      return errors({:get_latest => "Error getting most recent content for '#{slug}'."})
+      return json_errors({:get_latest => "Error getting most recent content for '#{slug}'."})
     end
   end
 
   def self.version(slug, version)
     begin
       content = Content.first(:order => :version.desc, :slug => slug, :version => version)
-      return success(content.attributes) if content
-      return errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
+      return self.json_success(content.attributes) if content
+      return self.json_errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
     rescue Exception => ex
-      return errors({:get_latest => "Error getting most recent content for '#{slug}'."})
+      return json_errors({:get_latest => "Error getting most recent content for '#{slug}'."})
     end
   end
 
@@ -69,6 +71,16 @@ class Content
       content.slugs = slug_arr
       content.save
     }
+  end
+
+  def json_save
+    if self.valid?
+      self.save
+      ap self
+      #TODO: whitelist output
+      return json_success(self.attributes)
+    end
+    return json_errors(self.errors.messages)
   end
 
   private

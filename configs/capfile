@@ -44,10 +44,11 @@ namespace :deploy do
       cd #{deploy_to};
       git pull origin #{branch}; git reset --hard #{branch}
     CMD
+    # need to run bundle install
   end
   
   desc "Update the upstart files. Export to /etc/init. Restart after making this call."
-  task :update, :roles => :web, :except => { :no_release => true } do
+  task :update_upstart, :roles => :web, :except => { :no_release => true } do
     run  <<-CMD
       cd #{deploy_to};
       foreman export upstart /etc/init -a codepen -f Procfile.production -u root

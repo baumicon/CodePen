@@ -14,7 +14,7 @@ describe Content do
       clear_db
       Content.new(:uid => 1, :slug => 'testing', :version => 1).save
       Content.new(:uid => 1, :slug => 'testing', :version => 2).save
-      content = Content.latest("testing")
+      content = JSON.parse(Content.latest("testing"))
       content['success'].should == true
       content['payload']['version'].should equal 2
   end
@@ -23,14 +23,14 @@ describe Content do
       clear_db
       Content.new(:uid => 1, :slug => 'testing', :version => 1).save.should == true
       Content.new(:uid => 1, :slug => 'testing', :version => 2).save.should == true
-      content = Content.version("testing", 1)
+      content = JSON.parse(Content.version("testing", 1))
       content['success'].should == true
       content['payload']['version'].should equal 1
   end
 
   it "should return 'success' == false if no content exists for slug" do
     clear_db
-    content = Content.latest("testing")
+    content = JSON.parse(Content.latest("testing"))
     content['success'].should == false
   end
 

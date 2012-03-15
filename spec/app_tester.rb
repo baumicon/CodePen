@@ -18,7 +18,7 @@ class AppTester < Sinatra::Base
 
   get '/sessionator' do
     set_session
-    success('user' => @user).to_json
+    json_success('user' => @user)
   end
 
   get '/' do

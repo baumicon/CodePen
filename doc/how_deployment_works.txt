@@ -1,0 +1,27 @@
+My Slice of Heroku
+
+Code Pen is a Ruby/Node/Mongo DB application that runs on a cloud server hosted by rackspace.
+
+Their are two web servers. The first is a Sinatra web server. It runs on the Thin server that runs the rack Sinatra server. The Sinatra web server communicates with the node server that runs the Express web framework. Since the Express web framework is modeled after Sinatra the two code bases are very similar. Except for language, the app.js and app.rb files are structured very similarly.
+
+The node server itself isn't accessible from outside the network. It simply communicates with the Sinatra server to process the pre processors that are implemented in Javascript. For us this means Jade, Stylus, and Coffeescript.
+
+Mongo DB is the third leg of the Code Pen tripod. It's the Code Pen data store. 
+Deploying and running the Code Pen application is handled by Capistrano, Foreman, and Upstart.
+
+Capistrano talks to the cloud server over SSH and convinces it to do just a few simple tasks. The first task is to pull the latest code changes from the git repository. Then the Javascript is minifed for production. Finally the servers are start/restarted.
+
+Foreman is an application, created by David Dollar, to run multiple processes from a single script. This is very helpful during development, but Foreman doesn't stop their. Foreman understands how to create the init scripts that Upstart, the Linux monitoring service, runs. Using the 'export' feature of Foreman, we're able to create a script that Upstart can run and monitor. 
+
+Once exported to Upstart properly you'll be able to issue the commands 'start codepen', 'stop codepen' and 'restart codepen'.
+
+Unfortunately restarting Code Pen isn't a task for foreman because it restarts all three services including the database. A much quicker option is to restart only the web servers.
+
+To do this you'll have to edit the foreman exported scripts that live in the /etc/init directory.
+
+Make this part of a second partner article. That way it's more concise.
+
+Documented for the Sanity of it all.
+
+Problems and Solutions
+Keep track of the problem that I had with upstart and foreman using that to actually run the thin server. If the thin server died out, then everything stopped and you couldn't run 'foreman start'

@@ -24,3 +24,6 @@ group :test do
   gem 'spork', '~> 1.0rc'
   gem 'sinatra-sessionography'
 end
+
+gem "slim"
+gem "capistrano"

@@ -4,19 +4,18 @@ require 'omniauth'
 require 'omniauth-twitter'
 require 'mongo_mapper'
 require './services/gist_service'
-require './services/content_service'
 require './services/preprocessor_service'
 require './lib/sessionator'
 require './services/renderer'
 require './lib/minify'
+require 'awesome_print'
+require './models/content'
 
 class App < Sinatra::Base
   # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
-
-  include Sessionator
-
   use Rack::Session::Cookie, :key => 'codepen'
+  include Sessionator
 
   @@minify = false
 
@@ -31,14 +30,35 @@ class App < Sinatra::Base
 
   get '/' do
     @c_data = {}
+    @iframe_src = get_iframe_url(request)
     erb :index
+  end
+
+  # Returns the URL for the iframe
+  # on localhost (for development) their is no subdomain.
+  # This makes testing easier. On Production. we add a 'secure'
+  # subdomain so that sneaky users can't XSS attack our home base.
+  def get_iframe_url(request)
+    if Sinatra::Application.environment == :development
+      return request.scheme + '://' + request.host_with_port
+    else
+      # Bug in request.host_with_port that does not return .io
+      # instead it returns codepen. We've hard coded the domain because of this
+      url = request.scheme + '://secure.codepen.io'
+    end
+  end
+
+  get '/secure_iframe' do
+    # Setting the x-frame-options headers allows the
+    # content to be properly loaded in this iframe
+    response.headers['X-Frame-Options'] = 'GOFORIT'
+    erb :iframe
   end
 
   post '/save/content' do
     set_session
-    service = ContentService.new
-    result = service.save_content(@user, params[:content])
-    return result.to_json
+    content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
+    content.json_save
   end
 
   get '/auth/:name/callback' do
@@ -78,25 +98,27 @@ class App < Sinatra::Base
     obj.to_json.gsub('/', '\/')
   end
 
-  get '/:slug/fullpage/' do
-    # todo, will need to actually pull
-    # the right data for the url from data service
-    data = get_data_by_slug()
+  get '/:slug/fullpage/' do |slug|
+    data = Content.latest(slug)
     rend = Renderer.new(data)
     rend.render_full_page()
   end
 
   # anon user
   get %r{/(\d)} do |slug|
-    content = ContentService.new.latest(slug)
-    @c_data = content['payload'] or {}
+    # TODO: this is a hack.  we need to return a non-json version
+    # and deal with errors in flash.  Same with below.
+    content = JSON.parse(Content.latest(slug))
+    @iframe_src = get_iframe_url(request)
+    @c_data = encode(content['payload'].to_json) or {}.to_json
     erb :index
   end
 
   # anon user
   get %r{/(\d)/(\d)} do |slug, version|
-    content = ContentService.new.latest(slug, version)
-    @c_data = content['payload'] or {}
+    content = JSON.parse(Content.version(slug, version))
+    @iframe_src = get_iframe_url(request)
+    @c_data = encode(content['payload'].to_json) or {}.to_json
     erb :index
   end
 
@@ -134,10 +156,11 @@ class App < Sinatra::Base
     encode({ 'url' => url_to_gist })
   end
 
+  get '/test/coderenderer' do
+    erb :test_code_renderer
+  end
+
   helpers do
-    def get_templates
-      {'result' => (erb :template)}.to_json.gsub('/', '\/')
-    end
     def partial template
       erb template, :layout => false
     end

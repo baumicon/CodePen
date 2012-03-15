@@ -3,7 +3,7 @@ require "./models/user_twitter"
 class LoginService
 
   def login(user, auth_info)
-    if user['_type'] == 'User'
+    if user.anon?
       new_user = convert_anon_user(user, auth_info)
       Content.copy_ownership(user, new_user.uid)
       new_user

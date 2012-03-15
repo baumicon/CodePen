@@ -24,6 +24,12 @@ app.listen(8124);
 
 console.log('Server running at http://127.0.0.1:8124/');
 
+app.configure('production', function() {
+  // In production dump exceptions,
+  // not stack traces
+  app.use(express.errorHandler());
+});
+
 // Home page
 app.get('/', function(req, res) {
     var html = "h1 This server is running. You better catch it.";
@@ -89,10 +95,8 @@ app.post('/coffeescript/', function(req, res) {
         resp['js'] = coffee.compile(req.body.js, { });
     }
     catch(e) {
-        console.log('err');
-        console.log(e);
         resp['error'] = e.message;
     }
-    console.log(resp);
+    
     res.send(JSON.stringify(resp));
 });

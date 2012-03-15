@@ -11,4 +11,8 @@ class User
 
   #TODO: validations
 
+  def anon?
+    self['_type'] == 'User' || self['_type'].nil?
+  end
+
 end
