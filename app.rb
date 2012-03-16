@@ -55,6 +55,10 @@ class App < Sinatra::Base
     erb :iframe
   end
 
+  get '/about' do
+    erb :about
+  end
+  
   post '/save/content' do
     set_session
     content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
