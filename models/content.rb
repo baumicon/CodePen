@@ -1,5 +1,6 @@
 require 'mongo_mapper'
 require './models/incrementor'
+require './models/slug'
 require './lib/ajax_util'
 
 class Content
