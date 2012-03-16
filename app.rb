@@ -59,7 +59,7 @@ class App < Sinatra::Base
   post '/save/content' do
     if valid_auth_token?(params[:auth_token])
       set_session
-      
+
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
       content.json_save
     else
@@ -115,9 +115,12 @@ class App < Sinatra::Base
     # and deal with errors in flash.  Same with below.
     content = JSON.parse(Content.latest(slug))
     ap content
+
+    @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content['payload']
     @c_data['auth_token'] = set_auth_token
+    
     erb :index
   end
 
@@ -125,9 +128,12 @@ class App < Sinatra::Base
   get %r{/(\d+)/(\d+)} do |slug, version|
     set_auth_token
     content = JSON.parse(Content.version(slug, version))
+
+    @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content['payload']
     @c_data['auth_token'] = set_auth_token
+
     erb :index
   end
 
