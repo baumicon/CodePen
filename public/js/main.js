@@ -90,15 +90,14 @@
             // Resize all boxes when window resized
             this.win.resize(function() {
                 var space = Main.body.height();
-                Main.topBoxesCon.height(space / 2 - 20);
+                Main.topBoxesCon.height(space / 2 - 28);
                 Main.boxResult.height(space / 2);
                 Main.result.css({
-                    "height"  : space / 2,
                     "width"   : Main.win.width()
                 });
                 Main.boxes.height(Main.win.height());
                 Main.vertResizer.css({
-                    "top"     : ((space / 2) + Main.header.outerHeight()) + "px",
+                    "top"     : ((space / 2) + Main.header.outerHeight()) - 8 + "px",
                 });
             }).trigger("resize");
             
