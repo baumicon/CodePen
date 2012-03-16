@@ -55,13 +55,7 @@ var CData = {
         var data = { };
         
         if(__c_data['version']) {
-            // alextodo enable localstorage we start pulling from db
-            // data = __c_data;
-            // If you use tbdata, the version number 
-            // has to be incremented immediately to differentiate it
-            // on save, we should check version number doesn't already exist
-            // so that you can't overwrite someones data
-            // and make sure they are logged in
+            data = __c_data;
         }
         
         if(typeof(localStorage) != 'undefined') {
@@ -83,7 +77,10 @@ var CData = {
         
     	if(data['version']) {
     	    this.syncThisWithDataObj(data);
-    	}	    	
+    	}
+
+        this.version = this.version * 1;
+        this.auth_token = __c_data['auth_token'];
     },
     
     forkData: function() {
@@ -155,7 +152,8 @@ var CData = {
         $.ajax({
               url: '/save/content',
               type: 'POST',
-              data: Util.getDataValues({ 'content': JSON.stringify(CData) }),
+              data: Util.getDataValues(
+                { 'content': JSON.stringify(CData), 'auth_token': CData.auth_token }),
               success: function(result) {
                   var obj = $.parseJSON(result);
                   

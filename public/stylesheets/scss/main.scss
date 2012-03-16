@@ -492,18 +492,6 @@ footer {
 
 
 // Themes
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  position: relative;
-  right: 10px;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-}
-
 @import "../themes/codemirror";
 @import "../themes/sublime";
 

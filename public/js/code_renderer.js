@@ -58,7 +58,7 @@ var CodeRenderer = {
 
             this.timeOutID = setTimeout(function(value) {
                 CodeRenderer.processContent();
-            }, 1500);
+            }, 250);
         }
     },
     

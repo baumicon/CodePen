@@ -30,7 +30,8 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    @c_data = {}
+    @c_data = { }
+    @c_data['auth_token'] = set_auth_token
     @iframe_src = get_iframe_url(request)
     erb :index
   end
@@ -56,10 +57,18 @@ class App < Sinatra::Base
     erb :iframe
   end
 
+  get '/about' do
+    erb :about
+  end
+
   post '/save/content' do
-    set_session
-    content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
-    content.json_save
+    if valid_auth_token?(params[:auth_token])
+      set_session
+      content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
+      content.json_save
+    else
+      raise "Access Forbidden"
+    end
   end
 
   get '/auth/:name/callback' do
@@ -96,10 +105,6 @@ class App < Sinatra::Base
     encode(results)
   end
 
-  def encode(obj)
-    obj.to_json.gsub('/', '\/')
-  end
-
   get '/:slug/fullpage/' do |slug|
     data = Content.latest(slug)
     rend = Renderer.new(data)
@@ -108,42 +113,25 @@ class App < Sinatra::Base
 
   # anon user
   get %r{/(\d)} do |slug|
+    set_auth_token
+
     # TODO: this is a hack.  we need to return a non-json version
     # and deal with errors in flash.  Same with below.
     content = JSON.parse(Content.latest(slug))
     @iframe_src = get_iframe_url(request)
-    @c_data = encode(content['payload'].to_json) or {}.to_json
+    @c_data = content['payload']
+    @c_data['auth_token'] = set_auth_token
     erb :index
   end
 
   # anon user
   get %r{/(\d+)/(\d+)} do |slug, version|
+    set_auth_token
     content = JSON.parse(Content.version(slug, version))
     @iframe_src = get_iframe_url(request)
-    @c_data = encode(content['payload'].to_json) or {}.to_json
+    @c_data = content['payload']
+    @c_data['auth_token'] = set_auth_token
     erb :index
-  end
-
-  def get_data_by_slug
-    return {
-      'slug'       => 'CODE PEN',
-      'html'        => '<h1>holy guac batman!</h1>',
-      'css'         => 'body { background-color: blue; }',
-      'js'          => 'console.log("testing");',
-
-      'html_pre_processor' => 'none',
-      'html_classes'       => 'en',
-
-      'css_pre_processor' => 'none',
-      'css_prefix_free'   => '',
-      'css_starter'       => 'none',
-      'css_external'      => '',
-
-      'js_pre_processor' => 'none',
-      'js_library'       => 'jquery-latest',
-      'js_modernizr'     => '',
-      'js_external'      => ''
-    }
   end
 
   post '/gist/' do
@@ -162,6 +150,14 @@ class App < Sinatra::Base
     erb :test_code_renderer
   end
 
+  error do
+    'Unable to process request. ' + env['sinatra.error'].message
+  end
+
+  def encode(obj)
+    obj.to_json.gsub('/', '\/')
+  end
+
   helpers do
     def partial template
       erb template, :layout => false
@@ -173,8 +169,9 @@ class App < Sinatra::Base
       minify = Minify.new(@@minify, File.dirname(__FILE__))
       minify.script_tags(scripts, prod_filename)
     end
-    def close embedded_json
-      embedded_json.gsub('</', '<\/')
+    def stringify obj
+      json = obj.to_json or { }.to_json
+      json.gsub('/', '\/')
     end
   end
 
