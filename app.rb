@@ -56,6 +56,10 @@ class App < Sinatra::Base
     erb :iframe
   end
 
+  get '/about' do
+    erb :about
+  end
+  
   post '/save/content' do
     if valid_auth_token?(params[:auth_token])
       set_session
