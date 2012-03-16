@@ -28,20 +28,9 @@ var CodeRenderer = {
 
             Main.refreshEditors();
             CodeRenderer.setCursorToEnd(HTMLeditor);
+
             $(this).dequeue();
         });
-
-        this.renderContinuously();
-    },
-
-    renderContinuously: function() {
-        setInterval(function() {
-            if( !CodeRenderer.processing          &&
-                !CodeRenderer.compileInRealTime() && 
-                CodeRenderer.contentHasChanged()) {
-                CodeRenderer.processContent();
-            }
-        }, 200);
     },
 
     setCursorToEnd: function(editor) {
@@ -60,6 +49,16 @@ var CodeRenderer = {
     compileContent: function(forceCompile) {
         if(forceCompile || this.compileInRealTime()) {
             this.processContent();
+        }
+        else {
+            // Poll for changes every 2 seconds. Allow the user to keep typing
+            // without showing any changes. Once no changes happen for 2 seconds
+            // render the result
+            clearTimeout(this.timeOutID);
+
+            this.timeOutID = setTimeout(function(value) {
+                CodeRenderer.processContent();
+            }, 1500);
         }
     },
     
@@ -278,14 +277,11 @@ var CodeRenderer = {
     
     // Send content to server for processing
     sendContentToServer: function(params) {
-        this.processing = true;
-
         $.ajax({
               url: '/process/',
               type: 'POST',
               data: Util.getDataValues(params),
               success: function( result ) {
-                  CodeRenderer.processing = false;
                   obj = $.parseJSON(result);
                   
                   if(obj['error_html']) {
