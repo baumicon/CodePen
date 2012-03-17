@@ -61,7 +61,7 @@ var CData = {
         if(__c_data['version']) {
             data = __c_data;
         }
-<<<<<<< HEAD
+
         // turn off local storage for testing
         if(typeof(localStorage) == 'undefined') {
             if(localStorage['fork']) {
@@ -82,7 +82,8 @@ var CData = {
                     data = localData;
                     localStorage.useLocalStorage = false;
                 }
-=======
+            }
+        }
         
         if(typeof(localStorage) != 'undefined') {
             // If any data for local storage exist at this path
@@ -91,7 +92,6 @@ var CData = {
             // If you visit any other url we start keep track of that
             if(localStorage[document.location.pathname]) {
                 data = $.parseJSON(localStorage[document.location.pathname]);
->>>>>>> fd045c565150ca56651c49ca34232a69ee1e2acc
             }
         }
         
