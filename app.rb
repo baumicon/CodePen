@@ -69,9 +69,15 @@ class App < Sinatra::Base
   post '/save/content' do
     if valid_auth_token?(params[:auth_token])
       set_session
+      ap 'payload'
+      ap params[:content]
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
+      ap 'content as hash'
       ap content
-      content.json_save
+      content = content.json_save
+      ap 'content saved.'
+      ap content
+      content
     else
       raise "Access Forbidden"
     end
@@ -118,8 +124,11 @@ class App < Sinatra::Base
   end
 
   # anon user
-  get %r{/(\d)} do |slug|
+  get %r{/(\d+)} do |slug|
     set_auth_token
+
+    ap 'slug:'
+    ap slug
 
     # TODO: this is a hack.  we need to return a non-json version
     # and deal with errors in flash.  Same with below.
