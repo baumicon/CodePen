@@ -1,6 +1,6 @@
 <footer>
 
-    <% randomNum = rand(7)+1 %>
+    <% randomNum = rand(9)+1 %>
     
     <% if randomNum == 1 %>
       <p><strong>CodePen Fact</strong>: We use <a href="http://ejohn.org/blog/javascript-micro-templating/">JavaScript Micro-Templating</a> by John Resig to build the live demo shown at the bottom of the page.</p>
@@ -14,8 +14,14 @@
       <p><strong>CodePen Fact</strong>: We use <a href="http://www.sinatrarb.com/">Sinatra</a> as the simple Ruby framework behind CodePen.</p>
     <% elsif randomNum == 6 %>
       <p><strong>Hot Tip</strong>: Need to link up a popular JavaScript resource? Get URL from <a href="http://www.cdnjs.com/">cdnjs.com</a></p>
-    <% elsif randomNum == 6 %>
+    <% elsif randomNum == 7 %>
       <p>DEMO OR IT DIDN'T HAPPEN</p>
+    <% elsif randomNum == 8 %>
+      <p><strong>Hot Tip</strong>: <a href="https://developer.mozilla.org/en/DOM/event.metaKey">event.metaKey</a> maps to ⌘ on Mac and ALT on PC.</p>
+    <% elsif randomNum == 9 %>
+      <p><strong>CodePen Fact</strong>: We use the .scss varietal of <a href="http://sass-lang.com/">SASS</a> for our stylin' needs of CodePen.</p>
+    <% elsif randomNum == 10 %>
+      <p><strong>CodePen Fact</strong>: The code editors boxes on CodePen use the open source project <a href="http://codemirror.net/">CodeMirror</a>.</p>
     <% end %>
 
     <a href="/about" class="stuff">Stuff</a>
