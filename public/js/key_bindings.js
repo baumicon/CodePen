@@ -61,9 +61,13 @@ var KeyBindings = {
                 }
                 else if(event.keyCode == 76) {
                     // command + l
-                    // need to pull the actual slug once it's saved
-                    // what about unsaved accounts?
-                    // window.open('/slug/fullpage/');
+                    
+                    // If you've saved your code, you can open it in full page
+                    // mode. Otherwise this fails silently.
+                    if(document.location.pathname.match(/\/[\d]+(\/[\d]+)?/)) {
+                        window.open(document.location.pathname + '/full')
+                    }
+                    
                 }
             }
             
