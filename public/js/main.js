@@ -91,16 +91,20 @@
             // Resize all boxes when window resized
             this.win.resize(function() {
 
+                var headerHeight = Main.header.outerHeight();
+
+                // Window is in default state
                 if (!dontTreadOnMe) {
 
                     var space = Main.body.height();
                     Main.topBoxesCon.height(space / 2 - 28);
-                    Main.boxResult.height(space / 2);
+                    Main.boxResult.height(space / 2 - 96);
                     
                     Main.vertResizer.css({
-                        "top" : ((space / 2) + Main.header.outerHeight()) - 7 + "px"
+                        "top" : ((space / 2) + headerHeight) - 7 + "px"
                     });
 
+                // Window has been effed with already
                 } else {
 
                     Main.vertResizer.css({
@@ -110,11 +114,12 @@
                 }
 
                 // Always do
-                Main.boxes.height(Main.win.height());
+                Main.boxes.height(Main.win.height() - headerHeight - 40);
                 Main.result.css({
                     "width" : Main.win.width()
                 });
 
+               // kick it off once for page load layout
             }).trigger("resize");
             
             // Opening and closing settings panels
@@ -181,7 +186,8 @@
                     Main.boxResult.height((space + headerSpace) - ui.position.top);
                     Main.topBoxesCon.height(ui.position.top - 85);
                     Main.boxes.height(Main.win.height());
-                }
+                },
+                containment: Main.boxes
             });
 
         },
