@@ -48,7 +48,6 @@ var CData = {
                 // set the use localStorage to true
                 // so that if the user refreshes the page they won't 
                 // lose their data
-                CData.useLocalStorage = true;
                 localStorage['content'] = JSON.stringify(CData);
             }
         }
@@ -77,7 +76,7 @@ var CData = {
                 if((localData.slug == data.slug) && (locVersion > datVersion)) {
                     data = localData;
                 }
-                else if((localData.slug == data.slug) && (locVersion == datVersion) && localData.useLocalStorage) {
+                else if((localData.slug == data.slug) && (locVersion == datVersion)) {
                     data = localData;
                     localStorage.useLocalStorage = false;
                 }
