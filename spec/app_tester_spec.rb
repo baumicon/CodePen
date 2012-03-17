@@ -44,7 +44,7 @@ describe 'the fake app' do
     it "should return a base user type" do
       get '/sessionator'
       last_response.should be_ok
-      payload = JSON.parse(last_response.body)['payload']
+      payload = JSON.parse(last_response.body)
       payload['user']['uid'].should_not be ''
       payload['user']['_type'].should == "User"
     end
@@ -55,7 +55,7 @@ describe 'the fake app' do
       t = TwitterUser.new(:uid => 1, :nickname => 'timmy', :name => "tired dad"); t.save
       Sinatra::Sessionography.session['uid'] = t.uid
       get '/sessionator'
-      JSON.parse(last_response.body)['payload']['user']['uid'].should == '1'
+      JSON.parse(last_response.body)['user']['uid'].should == '1'
     end
 
   # session

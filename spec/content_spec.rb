@@ -16,7 +16,7 @@ describe Content do
       Content.new(:uid => 1, :slug => 'testing', :version => 2).save
       content = JSON.parse(Content.latest("testing"))
       content['success'].should == true
-      content['payload']['version'].should equal 2
+      content['version'].should equal 2
   end
 
   it "should retrieve the content by slug and version" do
@@ -25,7 +25,7 @@ describe Content do
       Content.new(:uid => 1, :slug => 'testing', :version => 2).save.should == true
       content = JSON.parse(Content.version("testing", 1))
       content['success'].should == true
-      content['payload']['version'].should equal 1
+      content['version'].should equal 1
   end
 
   it "should return 'success' == false if no content exists for slug" do
