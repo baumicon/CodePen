@@ -65,6 +65,7 @@ class App < Sinatra::Base
     if valid_auth_token?(params[:auth_token])
       set_session
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
+      ap content
       content.json_save
     else
       raise "Access Forbidden"

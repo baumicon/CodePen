@@ -77,7 +77,7 @@ class Content
   def json_save
     if self.valid?
       self.save
-      ap self
+      ap self.version
       #TODO: whitelist output
       return json_success(self.attributes)
     end
