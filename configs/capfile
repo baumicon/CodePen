@@ -14,6 +14,7 @@ set :user, "root"
 set :use_sudo, false
 
 set :deploy_to, "/www/Tinkerbox"
+set :config_dir, "/www/codepen/config"
 
 # version control related
 set :scm, :git
@@ -43,6 +44,7 @@ namespace :deploy do
     run <<-CMD
       cd #{deploy_to};
       git pull origin #{branch}; git reset --hard #{branch}
+      cp #{config_dir}/auth_keys.rb #{deploy_to}/auth_keys.rb
     CMD
     # need to run bundle install
   end
