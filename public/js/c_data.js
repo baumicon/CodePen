@@ -30,7 +30,6 @@ var CData = {
     init: function() {
         this.bindSaveToLocalStorage();
         this.loadStoredData();
-        this.saveLocalStorageData();
     },
     
     bindSaveToLocalStorage: function() {
@@ -50,13 +49,9 @@ var CData = {
                 // set the use localStorage to true
                 // so that if the user refreshes the page they won't 
                 // lose their data
-                localStorage[localStorage['pathname']] = JSON.stringify(CData);
+                localStorage[document.location.pathname] = JSON.stringify(CData);
             }
         }
-    },
-
-    saveLocalStorageData: function() {
-        localStorage['pathname'] = document.location.pathname;
     },
     
     // Use the most recent data, either localstorage or from db
