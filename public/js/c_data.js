@@ -74,12 +74,10 @@ var CData = {
                 locVersion = (localData['version']) ? localData['version'] : 0;
                 datVersion = (data['version']) ? data['version'] : 0;
 
-                // will actually have to adjust for the anon vs the logged in user
-
-                if((localStorage.slug == data.slug) && (locVersion > datVersion)) {
+                if((localData.slug == data.slug) && (locVersion > datVersion)) {
                     data = localData;
                 }
-                else if(locVersion == datVersion && localData.useLocalStorage) {
+                else if((localData.slug == data.slug) && (locVersion == datVersion) && localData.useLocalStorage) {
                     data = localData;
                     localStorage.useLocalStorage = false;
                 }
@@ -159,7 +157,7 @@ var CData = {
     
     save: function() {
         this.version += 1;
-        
+
         $.ajax({
               url: '/save/content',
               type: 'POST',
