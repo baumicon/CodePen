@@ -5,7 +5,7 @@ module AjaxUtil
   def json_success(payload = false)
     ret = {'success' => true}
     return ret unless payload
-    ret['payload'] = payload
+    ret = ret.merge(payload)
     ret.to_json
   end
 
