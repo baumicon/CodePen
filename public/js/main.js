@@ -8,6 +8,7 @@
         boxCSS      : $("#box-css"),
         boxJS       : $("#box-js"),
         boxResult   : $(".result"),
+        boxResPos   : $(".result").position(),
         result      : $("#result"),
         boxes       : $(".boxes"),
         topBoxesCon : $(".top-boxes"),
@@ -89,16 +90,31 @@
 
             // Resize all boxes when window resized
             this.win.resize(function() {
-                var space = Main.body.height();
-                Main.topBoxesCon.height(space / 2 - 28);
-                Main.boxResult.height(space / 2);
-                Main.result.css({
-                    "width"   : Main.win.width()
-                });
+
+                if (!dontTreadOnMe) {
+
+                    var space = Main.body.height();
+                    Main.topBoxesCon.height(space / 2 - 28);
+                    Main.boxResult.height(space / 2);
+                    
+                    Main.vertResizer.css({
+                        "top" : ((space / 2) + Main.header.outerHeight()) - 7 + "px"
+                    });
+
+                } else {
+
+                    Main.vertResizer.css({
+                        top: Main.boxResult.offset().top - 15
+                    });
+
+                }
+
+                // Always do
                 Main.boxes.height(Main.win.height());
-                Main.vertResizer.css({
-                    "top"     : ((space / 2) + Main.header.outerHeight()) - 7 + "px",
+                Main.result.css({
+                    "width" : Main.win.width()
                 });
+
             }).trigger("resize");
             
             // Opening and closing settings panels
@@ -133,13 +149,30 @@
 
             // Resizer
             var dragCover = $("#drag-cover");
+            var dontTreadOnMe = false;
             $("#vert-resizer").draggable({
                 // iframeFix: true,   // DOES NOT WORK AS GOOD
                 start: function() {
                     dragCover.show();
                 },
-                stop: function() {
+                stop: function(e, ui) {
                     dragCover.hide();
+
+                    var space = Main.body.height();
+                    var headerSpace = Main.header.outerHeight();
+
+                    // Adjust the parts
+                    Main.topBoxesCon.height(((ui.position.top - 85) / space) * 100 + "%");
+                    Main.boxResult.height(((space + headerSpace) - ui.position.top) / space * 100 + "%");
+                    Main.vertResizer.css({
+                        "top" : (ui.position.top / space * 100) + "%",
+                    });
+                    
+                    // Big daddy
+                    Main.boxes.height(Main.win.height());
+
+                    // Don't reset back to halfs anymore, this is the new jam
+                    dontTreadOnMe = true;
                 },
                 axis: "y",
                 drag: function(e, ui) {
@@ -147,9 +180,7 @@
                     var headerSpace = Main.header.outerHeight();
                     Main.boxResult.height((space + headerSpace) - ui.position.top);
                     Main.topBoxesCon.height(ui.position.top - 85);
-
-                    // TODO: Make this work proportionally
-
+                    Main.boxes.height(Main.win.height());
                 }
             });
 
