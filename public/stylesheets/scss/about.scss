@@ -1,0 +1,36 @@
+.wrap {
+  padding: 0 50px 0 20px;
+  max-width: 700px;
+  color: white;
+  p {
+    font-size: 13px;
+  }
+}
+
+h1 {
+  a {
+    color: white;
+  }
+}
+
+h2 {
+  margin: 25px 0 10px 0;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.authors {
+  list-style: none;
+  img {
+    display: block;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    margin: 0 0 5px 0;
+  }
+  li {
+    float: left;
+    margin: 0 20px 20px 0;
+    text-align: center;
+  }
+}
