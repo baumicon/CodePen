@@ -30,11 +30,11 @@ class Content
   timestamps!
 
   def self.new_from_json(json, uid, anon = false)
-    payload = JSON.parse(json)
-    payload['uid'] = uid
-    payload['anon'] = anon
-    payload['slug'] = nil if payload['slug'] == ''
-    Content.new(payload)
+    content = JSON.parse(json)
+    content['uid'] = uid
+    content['anon'] = anon
+    content['slug'] = nil if content['slug'] == ''
+    Content.new(content)
   end
 
   def self.latest(slug)

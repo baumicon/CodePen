@@ -132,8 +132,15 @@
             });
 
             // Resizer
+            var dragCover = $("#drag-cover");
             $("#vert-resizer").draggable({
-                iframeFix: true,
+                // iframeFix: true,   // DOES NOT WORK AS GOOD
+                start: function() {
+                    dragCover.show();
+                },
+                stop: function() {
+                    dragCover.hide();
+                },
                 axis: "y",
                 drag: function(e, ui) {
                     var space = Main.body.height();

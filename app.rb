@@ -34,7 +34,7 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    @c_data = { }
+    @c_data = {}
     @c_data['auth_token'] = set_auth_token
     @iframe_src = get_iframe_url(request)
     erb :index
