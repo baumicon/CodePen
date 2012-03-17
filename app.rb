@@ -116,22 +116,25 @@ class App < Sinatra::Base
     encode(results)
   end
 
-  get '/:slug/fullpage/' do |slug|
+  # show full page for slug and version
+  get %r{/([\d]+)/([\d]+)/full} do |slug, version|
     data = Content.latest(slug)
     rend = Renderer.new(data)
     rend.render_full_page()
   end
 
-  # anon user
-  get %r{/(\d+)} do |slug|
-    set_auth_token
-
-    ap 'slug:'
-    ap slug
-
-    # TODO: this is a hack.  we need to return a non-json version
-    # and deal with errors in flash.  Same with below.
+  # show the full page for latest version of slug
+  get %r{/([\d]+)/full} do |slug|
     content = JSON.parse(Content.latest(slug))
+    ap content
+    rend = Renderer.new
+    rend.render_full_page(content)
+  end
+
+  # anon user
+  get %r{/([\d]+)/([\d]+)} do |slug, version|
+    set_auth_token
+    content = JSON.parse(Content.version(slug, version))
     ap content
 
     @slug = true
@@ -143,9 +146,16 @@ class App < Sinatra::Base
   end
 
   # anon user
-  get %r{/(\d+)/(\d+)} do |slug, version|
+  get %r{/([\d]+)} do |slug|
     set_auth_token
-    content = JSON.parse(Content.version(slug, version))
+
+    ap 'slug:'
+    ap slug
+    puts 'slug only'
+    # TODO: this is a hack.  we need to return a non-json version
+    # and deal with errors in flash.  Same with below.
+    content = JSON.parse(Content.latest(slug))
+    ap content
 
     @slug = true
     @iframe_src = get_iframe_url(request)

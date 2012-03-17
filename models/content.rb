@@ -8,7 +8,11 @@ class Content
   include AjaxUtil
   include MongoMapper::Document
 
-  attr_accessible :uid, :slug, :version, :html, :css, :js, :html_pre_processor, :css_pre_processor, :js_pre_processor, :anon
+  attr_accessible :uid, :slug, :version, :html, :css, :js, 
+    :html_pre_processor, :css_pre_processor, :js_pre_processor, :anon,
+    :html_classes, :css_starter, :css_prefix_free, :css_prefix_free,
+    :css_external, :js_library, :js_modernizr, :js_external
+
   attr_accessor :slugs
 
   before_validation :before_validation_on_create, :on => :create

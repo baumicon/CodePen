@@ -30,6 +30,7 @@ var CData = {
     init: function() {
         this.bindSaveToLocalStorage();
         this.loadStoredData();
+        this.saveLocalStorageData();
     },
     
     bindSaveToLocalStorage: function() {
@@ -37,6 +38,7 @@ var CData = {
         
         $(window).unload( function () {
             CData.saveDataToLocalStorage();
+            return false;
         });
     },
     
@@ -48,9 +50,13 @@ var CData = {
                 // set the use localStorage to true
                 // so that if the user refreshes the page they won't 
                 // lose their data
-                localStorage['content'] = JSON.stringify(CData);
+                localStorage[localStorage['pathname']] = JSON.stringify(CData);
             }
         }
+    },
+
+    saveLocalStorageData: function() {
+        localStorage['pathname'] = document.location.pathname;
     },
     
     // Use the most recent data, either localstorage or from db
@@ -62,24 +68,12 @@ var CData = {
         }
         
         if(typeof(localStorage) != 'undefined') {
-            if(localStorage['fork']) {
-                localStorage['content'] = localStorage['fork'];
-                localStorage.removeItem('fork');
-            }
-            
-            if(localStorage['content']) {
-                localData = $.parseJSON(localStorage['content']);
-
-                locVersion = (localData['version']) ? localData['version'] : 0;
-                datVersion = (data['version']) ? data['version'] : 0;
-
-                if((localData.slug == data.slug) && (locVersion > datVersion)) {
-                    data = localData;
-                }
-                else if((localData.slug == data.slug) && (locVersion == datVersion)) {
-                    data = localData;
-                    localStorage.useLocalStorage = false;
-                }
+            // If any data for local storage exist at this path
+            // always use it because it's always the latest. Need to also
+            // determine if this is the latest data on the server
+            // If you visit any other url we start keep track of that
+            if(localStorage[document.location.pathname]) {
+                data = $.parseJSON(localStorage[document.location.pathname]);
             }
         }
         
@@ -177,8 +171,7 @@ var CData = {
     
     logout: function() {
         if(localStorage) {
-            localStorage.removeItem("fork");
-            localStorage.removeItem("content");
+            localStorage.clear();
             localStorage['logout'] = 'true';
         }
     }
