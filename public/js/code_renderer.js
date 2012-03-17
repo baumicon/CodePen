@@ -25,7 +25,7 @@ var CodeRenderer = {
         // fully render since it's so dependent on JS
         $(this).delay(300).queue(function() {
             CodeRenderer.compileContent(true);
-
+            Main.syncUIWithDBO();
             Main.refreshEditors();
             CodeRenderer.setCursorToEnd(HTMLeditor);
 

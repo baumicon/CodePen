@@ -280,6 +280,10 @@
                 tabSize      : 2,
                 onChange     : Main.compileContent
             });
+
+            HTMLeditor.setValue(CData.html);
+            CSSeditor.setValue(CData.css);
+            JSeditor.setValue(CData.js);
         },
 
         refreshEditors: function(delay) {
