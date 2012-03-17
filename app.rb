@@ -5,6 +5,7 @@ require 'omniauth-twitter'
 require 'mongo_mapper'
 require './services/gist_service'
 require './services/preprocessor_service'
+require './services/login_service'
 require './lib/sessionator'
 require './services/renderer'
 require './lib/minify'
@@ -25,7 +26,6 @@ class App < Sinatra::Base
   end
 
   use OmniAuth::Builder do
-    puts 'hello auth keys!'
     if ENV.has_key?('TWITTER_KEY') and ENV.has_key?('TWITTER_SECRET')
       provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
     else
@@ -64,12 +64,12 @@ class App < Sinatra::Base
   get '/about' do
     erb :about
   end
-  
+
   post '/save/content' do
     if valid_auth_token?(params[:auth_token])
       set_session
-
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
+      ap content
       content.json_save
     else
       raise "Access Forbidden"
@@ -77,9 +77,9 @@ class App < Sinatra::Base
   end
 
   get '/auth/:name/callback' do
+    puts 'here'
     set_session
-
-    LoginService.new.update_regular_user(@user, request.env['omniauth.auth'])
+    LoginService.new.login(@user, request.env['omniauth.auth'])
     redirect request.cookies['last_visited'] or '/'
   end
 
@@ -127,9 +127,9 @@ class App < Sinatra::Base
 
     @slug = true
     @iframe_src = get_iframe_url(request)
-    @c_data = content['payload']
+    @c_data = content
     @c_data['auth_token'] = set_auth_token
-    
+
     erb :index
   end
 

@@ -55,10 +55,9 @@ var KeyBindings = {
                 }
                 else if(event.keyCode == 83) {
                     // command + s
-                    console.log('save');
-                    // alextodo, i think the command key is captured wrong,
-                    // you can't type s
-                    // stop = true;
+                    CData.save();
+                    
+                    stop = true;
                 }
                 else if(event.keyCode == 76) {
                     // command + l

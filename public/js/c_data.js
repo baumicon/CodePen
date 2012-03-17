@@ -57,24 +57,24 @@ var CData = {
         if(__c_data['version']) {
             data = __c_data;
         }
-        
-        if(typeof(localStorage) != 'undefined') {
-            if(localStorage['fork']) {
-                localStorage['content'] = localStorage['fork'];
-                localStorage.removeItem('fork');
-            }
+        console.log(data);
+        // if(typeof(localStorage) != 'undefined') {
+        //     if(localStorage['fork']) {
+        //         localStorage['content'] = localStorage['fork'];
+        //         localStorage.removeItem('fork');
+        //     }
             
-            if(localStorage['content']) {
-                localData = $.parseJSON(localStorage['content']);
+        //     if(localStorage['content']) {
+        //         localData = $.parseJSON(localStorage['content']);
 
-                locVersion = (localData['version']) ? localData['version'] : 0;
-                datVersion = (data['version']) ? data['version'] : 0;
+        //         locVersion = (localData['version']) ? localData['version'] : 0;
+        //         datVersion = (data['version']) ? data['version'] : 0;
                 
-                if(locVersion > datVersion) {
-                   data = localData;
-                }
-            }
-        }
+        //         if(locVersion > datVersion) {
+        //            data = localData;
+        //         }
+        //     }
+        // }
         
     	if(data['version']) {
     	    this.syncThisWithDataObj(data);
@@ -82,6 +82,7 @@ var CData = {
         
         this.version = this.version * 1;
         this.auth_token = __c_data['auth_token'];
+        console.log(this);
     },
     
     forkData: function() {
@@ -149,7 +150,8 @@ var CData = {
     
     save: function() {
         this.version += 1;
-        
+        alert(JSON.stringify(CData));
+
         $.ajax({
               url: '/save/content',
               type: 'POST',
