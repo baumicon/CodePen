@@ -26,7 +26,6 @@ class App < Sinatra::Base
   end
 
   use OmniAuth::Builder do
-    puts 'hello auth keys!'
     if ENV.has_key?('TWITTER_KEY') and ENV.has_key?('TWITTER_SECRET')
       provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
     else
