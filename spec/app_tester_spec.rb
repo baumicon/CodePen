@@ -44,9 +44,9 @@ describe 'the fake app' do
     it "should return a base user type" do
       get '/sessionator'
       last_response.should be_ok
-      payload = JSON.parse(last_response.body)
-      payload['user']['uid'].should_not be ''
-      payload['user']['_type'].should == "User"
+      content = JSON.parse(last_response.body)
+      content['user']['uid'].should_not be ''
+      content['user']['_type'].should == "User"
     end
 
     it "should return the selected user" do

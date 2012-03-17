@@ -74,10 +74,10 @@ var CData = {
                 locVersion = (localData['version']) ? localData['version'] : 0;
                 datVersion = (data['version']) ? data['version'] : 0;
 
-                if(locVersion > datVersion) {
+                if((localData.slug == data.slug) && (locVersion > datVersion)) {
                     data = localData;
                 }
-                else if(locVersion == datVersion && localData.useLocalStorage) {
+                else if((localData.slug == data.slug) && (locVersion == datVersion) && localData.useLocalStorage) {
                     data = localData;
                     localStorage.useLocalStorage = false;
                 }
@@ -157,7 +157,7 @@ var CData = {
     
     save: function() {
         this.version += 1;
-        alert(JSON.stringify(CData));
+
         $.ajax({
               url: '/save/content',
               type: 'POST',
@@ -167,7 +167,7 @@ var CData = {
                   var obj = $.parseJSON(result);
                   
                   if(obj.success) {
-                      window.location = '/' + obj.payload.slug + '/';
+                      window.location = '/' + obj.slug + '/';
                   }
                   else {
                       // todo, what happens when saving goes wrong?
