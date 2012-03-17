@@ -60,8 +60,8 @@ var CData = {
         if(__c_data['version']) {
             data = __c_data;
         }
-        
-        if(typeof(localStorage) != 'undefined') {
+        // turn off local storage for testing
+        if(typeof(localStorage) == 'undefined') {
             if(localStorage['fork']) {
                 localStorage['content'] = localStorage['fork'];
                 localStorage.removeItem('fork');

@@ -26,11 +26,10 @@ class App < Sinatra::Base
   end
 
   use OmniAuth::Builder do
-    if ENV.has_key?('TWITTER_KEY') and ENV.has_key?('TWITTER_SECRET')
-      provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
-    else
-      raise 'Unable to find Twitter Auth keys. Make sure auth_keys.rb exist.'
+    if not (ENV.has_key?('TWITTER_KEY') and ENV.has_key?('TWITTER_SECRET'))
+      require './auth_keys.rb'
     end
+    provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
   get '/' do
@@ -123,17 +122,15 @@ class App < Sinatra::Base
   end
 
   # anon user
-  get %r{/(\d+)} do |slug|
-    set_auth_token
-
-    ap 'slug:'
+  get %r{/([\d]+)/([\d]+)} do |slug, version|
+    ap 'slug'
     ap slug
+    ap 'version'
+    ap version
+    set_auth_token
+    content = JSON.parse(Content.version(slug, version))
 
-    # TODO: this is a hack.  we need to return a non-json version
-    # and deal with errors in flash.  Same with below.
-    content = JSON.parse(Content.latest(slug))
     ap content
-
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
@@ -143,9 +140,16 @@ class App < Sinatra::Base
   end
 
   # anon user
-  get %r{/(\d+)/(\d+)} do |slug, version|
+  get %r{/([\d]+)} do |slug|
     set_auth_token
-    content = JSON.parse(Content.version(slug, version))
+
+    ap 'slug:'
+    ap slug
+
+    # TODO: this is a hack.  we need to return a non-json version
+    # and deal with errors in flash.  Same with below.
+    content = JSON.parse(Content.latest(slug))
+    ap content
 
     @slug = true
     @iframe_src = get_iframe_url(request)

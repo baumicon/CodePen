@@ -34,12 +34,12 @@ describe LoginService do
 
   it "should successfully log in a base User" do
     clear_db
-    Content.new(:uid => 40, :version => 5, :slug => 'pizza').save.should == true
+    Content.new(:uid => 40, :version => 1, :slug => 'pizza').save.should == true
     user = User.new(:uid => 40)
     user.save.should == true
     LoginService.new.login(user, get_auth_info)
     content = Content.first(:uid => 'twitter2')
-    content.version.should == 5
+    content.version.should == 1
     content.slug.should == 'pizza'
   end
 

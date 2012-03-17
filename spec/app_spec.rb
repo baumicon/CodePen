@@ -21,13 +21,14 @@ describe 'The App' do
 
       Sinatra::Sessionography.session.clear
 
-      post '/save/content', {:content => {'slug' => 'testing', 'version' => 1}.to_json}
+      post '/save/content', {:content => {'slug' => '1', 'version' => 1}.to_json}
+
       last_response.should be_ok
       Sinatra::Sessionography.session['uid'].should == "1"
 
       Sinatra::Sessionography.session.clear
 
-      post '/save/content', {:content => {'slug' => 'testing', 'version' => 1}.to_json}
+      post '/save/content', {:content => {'slug' => '1', 'version' => 1}.to_json}
       last_response.should be_ok
       Sinatra::Sessionography.session['uid'].should == "2"
     end

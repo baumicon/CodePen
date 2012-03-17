@@ -21,9 +21,11 @@ describe Content do
 
   it "should retrieve the content by slug and version" do
       clear_db
-      Content.new(:uid => 1, :slug => 'testing', :version => 1).save.should == true
-      Content.new(:uid => 1, :slug => 'testing', :version => 2).save.should == true
-      content = JSON.parse(Content.version("testing", 1))
+      Content.new(:uid => 1, :slug => '2', :version => 1).save.should == true
+      c2 = Content.new(:uid => 1, :slug => '2', :version => 2)
+      c2.save
+      content = JSON.parse(Content.version('2', 1))
+
       content['success'].should == true
       content['version'].should equal 1
   end
@@ -101,13 +103,6 @@ describe Content do
         c = Content.new_from_json('{}', nil, true)
         c.valid?.should be_false
         c.errors.should have_key :uid
-      end
-
-      it "should prevent saving negative version" do
-        c = Content.new(:uid => 1, :slug => 'blah', :version => -6)
-        c.save
-        c.valid?.should be_false
-        c.errors.should have_key :version_not_positive
       end
     end
 
