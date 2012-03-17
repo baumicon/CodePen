@@ -12,11 +12,11 @@
   .cm-s-default span.cm-variable    { color: #ddca7e; } // e.g. margin
   .cm-s-default span.cm-variable-2  { color: #6d86a5; } // e.g. for (key in [this])
   .cm-s-default span.cm-variable-3  { color: blue; }
-  .cm-s-default span.cm-property    { color: #eee; } // e.g. getElementById
+  .cm-s-default span.cm-property    { color: #eeeeee; } // e.g. getElementById
   .cm-s-default span.cm-operator    { color: blue; }
   .cm-s-default span.cm-comment     { color: #666666; } // e.g. /* test */
   .cm-s-default span.cm-string      { color: #96b38a; } // e.g. href=["val"]
-  .cm-s-default span.cm-string-2    { color: blue; }
+  .cm-s-default span.cm-string-2    { color: #ffffff; } // e.g. match([this])
   .cm-s-default span.cm-meta        { color: #9a6e35; } // e.g. @font-face
   .cm-s-default span.cm-error       { color: #ff0000; }
   .cm-s-default span.cm-qualifier   { color: #555; }

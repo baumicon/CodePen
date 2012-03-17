@@ -37,6 +37,7 @@ var CData = {
         
         $(window).unload( function () {
             CData.saveDataToLocalStorage();
+            return false;
         });
     },
     
@@ -48,7 +49,7 @@ var CData = {
                 // set the use localStorage to true
                 // so that if the user refreshes the page they won't 
                 // lose their data
-                localStorage['content'] = JSON.stringify(CData);
+                localStorage[document.location.pathname] = JSON.stringify(CData);
             }
         }
     },
@@ -60,6 +61,7 @@ var CData = {
         if(__c_data['version']) {
             data = __c_data;
         }
+<<<<<<< HEAD
         // turn off local storage for testing
         if(typeof(localStorage) == 'undefined') {
             if(localStorage['fork']) {
@@ -80,6 +82,16 @@ var CData = {
                     data = localData;
                     localStorage.useLocalStorage = false;
                 }
+=======
+        
+        if(typeof(localStorage) != 'undefined') {
+            // If any data for local storage exist at this path
+            // always use it because it's always the latest. Need to also
+            // determine if this is the latest data on the server
+            // If you visit any other url we start keep track of that
+            if(localStorage[document.location.pathname]) {
+                data = $.parseJSON(localStorage[document.location.pathname]);
+>>>>>>> fd045c565150ca56651c49ca34232a69ee1e2acc
             }
         }
         
@@ -177,8 +189,7 @@ var CData = {
     
     logout: function() {
         if(localStorage) {
-            localStorage.removeItem("fork");
-            localStorage.removeItem("content");
+            localStorage.clear();
             localStorage['logout'] = 'true';
         }
     }

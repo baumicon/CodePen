@@ -115,21 +115,27 @@ class App < Sinatra::Base
     encode(results)
   end
 
-  get '/:slug/fullpage/' do |slug|
-    data = Content.latest(slug)
-    rend = Renderer.new(data)
-    rend.render_full_page()
+  # show full page for slug and version
+  get %r{/([\d]+)/([\d]+)/full} do |slug, version|
+    # pulling the version doesn't seem to work right now
+    # use the latest version for now
+    # content = JSON.parse(Content.version(slug, version))
+    content = JSON.parse(Content.latest(slug))
+    rend = Renderer.new
+    rend.render_full_page(content)
+  end
+
+  # show the full page for latest version of slug
+  get %r{/([\d]+)/full} do |slug|
+    content = JSON.parse(Content.latest(slug))
+    rend = Renderer.new
+    rend.render_full_page(content)
   end
 
   # anon user
   get %r{/([\d]+)/([\d]+)} do |slug, version|
-    ap 'slug'
-    ap slug
-    ap 'version'
-    ap version
     set_auth_token
     content = JSON.parse(Content.version(slug, version))
-
     ap content
     @slug = true
     @iframe_src = get_iframe_url(request)
