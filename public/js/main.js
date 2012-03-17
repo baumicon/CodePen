@@ -97,7 +97,7 @@
                 });
                 Main.boxes.height(Main.win.height());
                 Main.vertResizer.css({
-                    "top"     : ((space / 2) + Main.header.outerHeight()) - 8 + "px",
+                    "top"     : ((space / 2) + Main.header.outerHeight()) - 7 + "px",
                 });
             }).trigger("resize");
             
@@ -130,6 +130,22 @@
                 $(this).toggleClass("open");
                 $("#app-settings-panel").toggle();
             });
+
+            // Resizer
+            $("#vert-resizer").draggable({
+                iframeFix: true,
+                axis: "y",
+                drag: function(e, ui) {
+                    var space = Main.body.height();
+                    var headerSpace = Main.header.outerHeight();
+                    Main.boxResult.height((space + headerSpace) - ui.position.top);
+                    Main.topBoxesCon.height(ui.position.top - 85);
+
+                    // TODO: Make this work proportionally
+
+                }
+            });
+
         },
         
         bindDataActions: function() {

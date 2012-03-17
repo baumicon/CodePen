@@ -207,14 +207,13 @@
 
   <div id="vert-resizer" class="vert-resizer"></div>
 
-  <!-- <div id="overlay"></div> -->
-
   <script>
     __c_data = <%= stringify(@c_data) %>;
   </script>
 
   <%= js_scripts([
       '/js/libs/jquery.js',
+      '/js/libs/jquery-ui-1.8.18.custom.min.js',
       '/js/libs/codemirror.js',
       '/js/libs/chosen.jquery.min.js',
       '/js/mode/javascript/javascript.js',
