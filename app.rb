@@ -124,16 +124,13 @@ class App < Sinatra::Base
     # TODO: this is a hack.  we need to return a non-json version
     # and deal with errors in flash.  Same with below.
     content = JSON.parse(Content.latest(slug))
-<<<<<<< HEAD
-=======
     ap content
 
     @slug = true
->>>>>>> 97f02888a2d1cdbf3eea31ca7dcbaa2b28175e73
     @iframe_src = get_iframe_url(request)
-    @c_data = content['payload']
+    @c_data = content
     @c_data['auth_token'] = set_auth_token
-    
+
     erb :index
   end
 
