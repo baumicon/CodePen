@@ -58,7 +58,7 @@ var CData = {
             data = __c_data;
         }
         
-        if(typeof(localStorage) != 'undefined') {
+        if(typeof(localStorage) == 'undefined') {
             if(localStorage['fork']) {
                 localStorage['content'] = localStorage['fork'];
                 localStorage.removeItem('fork');
