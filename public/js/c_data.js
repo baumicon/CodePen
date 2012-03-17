@@ -45,6 +45,10 @@ var CData = {
         // for more than one piece of content, use the name in the URL!
         if(typeof(localStorage) != 'undefined') {
             if(localStorage['logout'] != 'true') {
+                // set the use localStorage to true
+                // so that if the user refreshes the page they won't 
+                // lose their data
+                CData.useLocalStorage = true;
                 localStorage['content'] = JSON.stringify(CData);
             }
         }
@@ -54,34 +58,38 @@ var CData = {
     loadStoredData: function() {
         var data = { };
 
-        if(__c_data['payload']['version']) {
-            data = __c_data['payload'];
+        if(__c_data['version']) {
+            data = __c_data;
         }
         
-        // if(typeof(localStorage) == 'undefined') {
-        //     if(localStorage['fork']) {
-        //         localStorage['content'] = localStorage['fork'];
-        //         localStorage.removeItem('fork');
-        //     }
+        if(typeof(localStorage) != 'undefined') {
+            if(localStorage['fork']) {
+                localStorage['content'] = localStorage['fork'];
+                localStorage.removeItem('fork');
+            }
             
-        //     if(localStorage['content']) {
-        //         localData = $.parseJSON(localStorage['content']);
+            if(localStorage['content']) {
+                localData = $.parseJSON(localStorage['content']);
 
-        //         locVersion = (localData['version']) ? localData['version'] : 0;
-        //         datVersion = (data['version']) ? data['version'] : 0;
-                
-        //         if(locVersion > datVersion) {
-        //            data = localData;
-        //         }
-        //     }
-        // }
+                locVersion = (localData['version']) ? localData['version'] : 0;
+                datVersion = (data['version']) ? data['version'] : 0;
+
+                if(locVersion > datVersion) {
+                    data = localData;
+                }
+                else if(locVersion == datVersion && localData.useLocalStorage) {
+                    data = localData;
+                    localStorage.useLocalStorage = false;
+                }
+            }
+        }
         
     	if(data.version) {
     	    this.syncThisWithDataObj(data);
     	}
         
         this.version = (isNaN(this.version)) ? 1 : this.version * 1;
-        this.auth_token = __c_data['payload']['auth_token'];
+        this.auth_token = __c_data['auth_token'];
     },
     
     forkData: function() {
