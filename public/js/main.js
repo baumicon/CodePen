@@ -210,7 +210,7 @@
              });
              
              // save this code pen
-             $("#save").on('click', function() {
+             $("#save,#update").on('click', function() {
                 // validate save
                 CData.save();
                 

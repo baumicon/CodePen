@@ -66,6 +66,7 @@ var CData = {
             
             if(localStorage['content']) {
                 localData = $.parseJSON(localStorage['content']);
+
                 locVersion = (localData['version']) ? localData['version'] : 0;
                 datVersion = (data['version']) ? data['version'] : 0;
                 
@@ -78,7 +79,7 @@ var CData = {
     	if(data['version']) {
     	    this.syncThisWithDataObj(data);
     	}
-
+        
         this.version = this.version * 1;
         this.auth_token = __c_data['auth_token'];
     },
