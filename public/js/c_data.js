@@ -53,36 +53,35 @@ var CData = {
     // Use the most recent data, either localstorage or from db
     loadStoredData: function() {
         var data = { };
-        
-        if(__c_data['version']) {
-            data = __c_data;
-        }
-        
-        if(typeof(localStorage) == 'undefined') {
-            if(localStorage['fork']) {
-                localStorage['content'] = localStorage['fork'];
-                localStorage.removeItem('fork');
-            }
-            
-            if(localStorage['content']) {
-                localData = $.parseJSON(localStorage['content']);
 
-                locVersion = (localData['version']) ? localData['version'] : 0;
-                datVersion = (data['version']) ? data['version'] : 0;
-                
-                if(locVersion > datVersion) {
-                   data = localData;
-                }
-            }
+        if(__c_data['payload']['version']) {
+            data = __c_data['payload'];
         }
         
-    	if(data['version']) {
+        // if(typeof(localStorage) == 'undefined') {
+        //     if(localStorage['fork']) {
+        //         localStorage['content'] = localStorage['fork'];
+        //         localStorage.removeItem('fork');
+        //     }
+            
+        //     if(localStorage['content']) {
+        //         localData = $.parseJSON(localStorage['content']);
+
+        //         locVersion = (localData['version']) ? localData['version'] : 0;
+        //         datVersion = (data['version']) ? data['version'] : 0;
+                
+        //         if(locVersion > datVersion) {
+        //            data = localData;
+        //         }
+        //     }
+        // }
+        
+    	if(data.version) {
     	    this.syncThisWithDataObj(data);
     	}
         
         this.version = (isNaN(this.version)) ? 1 : this.version * 1;
-        this.auth_token = __c_data['auth_token'];
-        console.log(this.html);
+        this.auth_token = __c_data['payload']['auth_token'];
     },
     
     forkData: function() {
@@ -150,7 +149,7 @@ var CData = {
     
     save: function() {
         this.version += 1;
-
+        alert(JSON.stringify(CData));
         $.ajax({
               url: '/save/content',
               type: 'POST',
