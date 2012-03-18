@@ -53,6 +53,9 @@
             // Sync library with correct data as well
             $('#js-select').val(CData.js_library);
 
+            // select current theme
+            $('#theme').val(CData.theme);
+
             // Better select box for chosing JS library
             $("#js-select, #theme").chosen();
 
@@ -64,8 +67,6 @@
             if(CData.css_external) $('#external-css').val(CData.css_external);
             if(CData.js_external) $('#external-js').val(CData.js_external);
             
-            // select current theme
-            $('#theme').val(CData.theme);
             // show a specific theme
             this.body.attr("data-theme", CData.theme);
         },
@@ -327,8 +328,8 @@
         },
 
         // Code Mirror natively indents the entire line. We wanted it to work like
-        // a standard editor where a tab (for us 2 spaces), 
-        // right where the user's cursor current is.
+        // a standard editor where a tab (for us 2 spaces) is inserted into the 
+        // current cursor position
         handleTabKey: function(editor, key) {
             // Initially have code mirror not ignore the key
             // if we decide to handle it then set this to true
