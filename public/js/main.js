@@ -272,6 +272,18 @@
                 
                 return false;
              });
+
+             $("#new").on('click', function() {
+                CData.new();
+                window.location = '/';
+                
+                return false;
+             });
+             
+             $('#fork').on('click', function() {
+                CData.fork();
+                return false;
+             });
              
              $('#logout').on('click', function() {
                 CData.logout();
