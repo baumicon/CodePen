@@ -178,7 +178,7 @@ var CData = {
                   var obj = $.parseJSON(result);
                   
                   if(obj.success) {
-                      window.location = '/' + obj.slug + '/';
+                      window.location = '/' + obj.slug + '/' + obj.version;
                   }
                   else {
                       // todo, what happens when saving goes wrong?

@@ -31,10 +31,6 @@
         
         syncUIWithDBO: function() {
             // Sync UI with data values
-            $('#slug').val(CData.name);
-            $('#html').html(CData.html);
-            $('#css').html(CData.css);
-            $('#js').html(CData.js);
             
             // Sync preprocessors with correct data
             var selector = function(prefix, value) {
@@ -87,12 +83,11 @@
         },
         
         bindUIActions: function() {
-
             // Resize all boxes when window resized
             this.win.resize(function() {
 
                 var headerHeight = Main.header.outerHeight();
-
+                
                 // Window is in default state
                 if (!dontTreadOnMe) {
 
@@ -307,6 +302,7 @@
                 mode         : "xml",
                 tabSize      : 2,
                 onChange     : Main.compileContent,
+                onKeyEvent   : Main.handleTabKey
             });
 
             window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
@@ -328,6 +324,47 @@
             HTMLeditor.setValue(CData.html);
             CSSeditor.setValue(CData.css);
             JSeditor.setValue(CData.js);
+        },
+
+        // Code Mirror natively indents the entire line. We wanted it to work like
+        // a standard editor where a tab (for us 2 spaces), 
+        // right where the user's cursor current is.
+        handleTabKey: function(editor, key) {
+            // Initially have code mirror not ignore the key
+            // if we decide to handle it then set this to true
+            var cmIgnoreKey = false;
+
+            if(key.keyCode == 9) {
+
+                if(!editor.getSelection()) {
+                    key = $.Event(key);
+
+                    if(key.type == 'keydown') {
+                        var from = editor.getCursor();
+                        var line = editor.getLine(from.line);
+                        var to = {'line': from.line, 'ch': line.length};
+                        var range = editor.getRange(from, to);
+                        var tab = '';
+
+                        for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
+                            tab += ' ';
+                        }
+                        
+                        editor.replaceRange(tab + range, from, to);
+
+                        var endCursor = from.ch + tab.length;
+                        editor.setCursor({'line': from.line, 'ch': endCursor});
+                    }
+
+                    // Stop the keydown and keypress both
+                    key.stopPropagation();
+                    key.preventDefault();
+
+                    cmIgnoreKey = true;
+                }
+            }
+            
+            return cmIgnoreKey;
         },
 
         refreshEditors: function(delay) {
