@@ -10,10 +10,12 @@ describe Content do
     c.valid?.should be_true
   end
 
-  it "should retrieve the latest content by slug" do
+  it "should retrieve the latest content by only slug" do
       clear_db
-      Content.new(:uid => 1, :slug => 'testing', :version => 1).save
-      Content.new(:uid => 1, :slug => 'testing', :version => 2).save
+      content = Content.new(:uid => 1, :slug => 'testing', :version => 1)
+      content.save
+      content = Content.new(:uid => 1, :slug => 'testing', :version => 2)
+      content.save
       content = JSON.parse(Content.latest("testing"))
       content['success'].should == true
       content['version'].should equal 2
@@ -104,6 +106,20 @@ describe Content do
         c.valid?.should be_false
         c.errors.should have_key :uid
       end
+    end
+
+    describe "forks" do
+      it "should fork content" do
+        clear_db
+        content = Content.new(:uid => '1', :slug => '1')
+        content.save.should == true
+        user = User.new(:uid => 2)
+        new_content = content.fork(user)
+        JSON.parse(new_content)['success'].should == true
+        original_content = Content.first(:uid => '1').should_not be nil
+        new_content = Content.first(:uid => '2').should_not be nil
+      end
+
     end
 
   end
