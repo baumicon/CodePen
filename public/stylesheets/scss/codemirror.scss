@@ -10,7 +10,7 @@
   right: 0;
   width: 100%;
   height: 100%;
-  @include border-radius(8px);
+  @include border-radius(9px); // One pixel higher than bar to prevent white leakage
   @include box-shadow((0 1px 0 #3f3f3f));
 }
 
@@ -21,6 +21,16 @@
   width: 100%;
   height: 100%;
   overflow: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    position: relative;
+    right: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+  }
 }
 
 .CodeMirror-gutter {

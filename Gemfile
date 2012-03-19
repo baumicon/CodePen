@@ -13,13 +13,17 @@ gem "bson_ext"
 gem "haml"
 gem "sass"
 gem "compass"
-gem "rspec"
-gem "rack-test"
 gem "activesupport"
 gem "foreman"
 gem "thin"
+gem "sinatra-sessionography"
+
+group :test do
+  gem "rspec"
+  gem "rack-test"
+  gem 'awesome_print'
+  gem 'spork', '~> 1.0rc'
+end
+
 gem "slim"
 gem "capistrano"
-#TODO: create groups for testing/development
-gem 'awesome_print'
-gem 'spork', '~> 1.0rc'

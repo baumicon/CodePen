@@ -8,7 +8,6 @@ var CData = {
 
 	// Code Pen data
 	slug               : '',
-	url                : '',
 	html               : '',
 	css                : '',
 	js                 : '',
@@ -28,8 +27,19 @@ var CData = {
 	js_external        : '',
 
     init: function() {
+        this.shimLocalStorage();
         this.bindSaveToLocalStorage();
         this.loadStoredData();
+    },
+
+    shimLocalStorage: function() {
+        // make sure a localStorage object exist
+        if(typeof(localStorage) == 'undefined') {
+            window.localStorage = {
+                removeItem: function() { },
+                clear: function() { }
+            };
+        }
     },
     
     bindSaveToLocalStorage: function() {
@@ -37,69 +47,53 @@ var CData = {
         
         $(window).unload( function () {
             CData.saveDataToLocalStorage();
+            return false;
         });
     },
     
     saveDataToLocalStorage: function() {
-        // alextodo, future feature, allow you to save data
-        // for more than one piece of content, use the name in the URL!
-        if(typeof(localStorage) != 'undefined') {
-            if(localStorage['logout'] != 'true') {
-                localStorage['content'] = JSON.stringify(CData);
-            }
+        if(localStorage['logout'] != 'true' && localStorage['new'] != 'true') {
+            // only save the data for the current url path
+            localStorage[document.location.pathname] = JSON.stringify(CData);
         }
     },
     
     // Use the most recent data, either localstorage or from db
     loadStoredData: function() {
         var data = { };
-        
+
         if(__c_data['version']) {
-            // alextodo enable localstorage we start pulling from db
-            // data = __c_data;
-            // If you use tbdata, the version number 
-            // has to be incremented immediately to differentiate it
-            // on save, we should check version number doesn't already exist
-            // so that you can't overwrite someones data
-            // and make sure they are logged in
+            data = __c_data;
         }
         
-        if(typeof(localStorage) != 'undefined') {
-            if(localStorage['fork']) {
-                localStorage['content'] = localStorage['fork'];
-                localStorage.removeItem('fork');
-            }
-            
-            if(localStorage['content']) {
-                localData = $.parseJSON(localStorage['content']);
-                locVersion = (localData['version']) ? localData['version'] : 0;
-                datVersion = (data['version']) ? data['version'] : 0;
-                
-                if(locVersion > datVersion) {
-                   data = localData;
-                }
+        // If any data for local storage exist at this path
+        // always use it because it's always the latest. Need to also
+        // determine if this is the latest data on the server
+        // If you visit any other url we start keep track of that
+        if(localStorage[document.location.pathname]) {
+            data = $.parseJSON(localStorage[document.location.pathname]);
+        }
+        
+        // Always clear localStorage
+        localStorage.clear();
+        
+        if(data.version) {
+            for(var key in data) {
+                this[key] = data[key];
             }
         }
         
-    	if(data['version']) {
-    	    this.syncThisWithDataObj(data);
-    	}	    	
+        this.version = (isNaN(this.version)) ? 1 : this.version * 1;
+        this.auth_token = __c_data['auth_token'];
     },
     
-    forkData: function() {
-        // save fork to content store
-        // reset version number
-        // alextodo, reset any values that id this box
-        // alextodo, what doesn't have localStorage? which browsers
-        this.name = '';
+    fork: function() {
+        // alextodo, will need a different fork path if the user is logged in
+        // will actually have to save to localStorage and redirect to new box
+        this.slug = '';
         this.version = 1;
-        localStorage['fork'] = JSON.stringify(CData);
-    },
-
-    syncThisWithDataObj: function(data) {
-        for(var key in data) {
-            this[key] = data[key];
-        }
+        
+        this.save();
     },
 
     setSlug: function(value) {
@@ -149,21 +143,26 @@ var CData = {
         this[mode] = value;
     },
     
+    new: function() {
+        localStorage['new'] = 'true';
+    },
+
     save: function() {
         this.version += 1;
         
         $.ajax({
               url: '/save/content',
               type: 'POST',
-              data: Util.getDataValues({ 'content': JSON.stringify(CData) }),
+              data: Util.getDataValues(
+                { 'content': JSON.stringify(CData), 'auth_token': CData.auth_token }),
               success: function(result) {
                   var obj = $.parseJSON(result);
                   
                   if(obj.success) {
-                      window.location = '/' + obj.payload.slug + '/';
+                      window.location = '/' + obj.slug + '/' + obj.version;
                   }
                   else {
-                      // todo, what happens when saving goes wrong?
+                        alert(result);
                   }
               }
         });
@@ -171,8 +170,7 @@ var CData = {
     
     logout: function() {
         if(localStorage) {
-            localStorage.removeItem("fork");
-            localStorage.removeItem("content");
+            localStorage.clear();
             localStorage['logout'] = 'true';
         }
     }

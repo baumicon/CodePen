@@ -4,46 +4,43 @@ require 'omniauth'
 require 'omniauth-twitter'
 require 'mongo_mapper'
 require './services/gist_service'
-require './models/user'
-require './services/content_service'
 require './services/preprocessor_service'
+require './services/login_service'
+require './lib/sessionator'
 require './services/renderer'
 require './lib/minify'
 require 'awesome_print'
+require './models/content'
 
 class App < Sinatra::Base
   # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
-  use Rack::Session::Cookie, :key => 'codepen'
-  
+  use Rack::Session::Cookie, 
+    :key => 'codepen', 
+    :expire_after => 2592000 # 30 days, make easy pacheesy on our user to not have to login.
+  include Sessionator
+
   @@minify = false
-  
+
   configure :production do
     @@minify = true
     disable :run, :reload, :show_exceptions
   end
-  
+
   use OmniAuth::Builder do
+    if not (ENV.has_key?('TWITTER_KEY') and ENV.has_key?('TWITTER_SECRET'))
+      require './auth_keys.rb'
+    end
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
-  def set_session
-    @user = User.get_by_session_id(session[:user_id])
-    session[:user_id] = @user.uid
-  end
-
-  get '/sanity' do
-    "working"
-  end
-
   get '/' do
-    set_session
-    @c_data = { }
-    @iframe_src = get_iframe_url request
-    
+    @c_data = {}
+    @c_data['auth_token'] = set_auth_token
+    @iframe_src = get_iframe_url(request)
     erb :index
   end
-  
+
   # Returns the URL for the iframe
   # on localhost (for development) their is no subdomain.
   # This makes testing easier. On Production. we add a 'secure'
@@ -57,117 +54,143 @@ class App < Sinatra::Base
       url = request.scheme + '://secure.codepen.io'
     end
   end
-  
+
   get '/secure_iframe' do
     # Setting the x-frame-options headers allows the
     # content to be properly loaded in this iframe
     response.headers['X-Frame-Options'] = 'GOFORIT'
-    
     erb :iframe
   end
 
+  get '/about' do
+    erb :about
+  end
+
   post '/save/content' do
-    set_session
-    service = ContentService.new
-    result = service.save_content(@user.uid, params[:content])
-    return result.to_json
-  end
-
-  get '/slugs' do
-
-  end
-
-  get '/content/:slug_name' do |name|
-    set_session
-    service = ContentService.new
-    service.latest(name).to_json
+    if valid_auth_token?(params[:auth_token])
+      set_session
+      ap 'payload'
+      ap params[:content]
+      content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
+      ap 'content as hash'
+      ap content
+      content = content.json_save
+      ap 'content saved.'
+      ap content
+      content
+    else
+      raise "Access Forbidden"
+    end
   end
 
   get '/auth/:name/callback' do
-    user_service = UserService.new
-    user = user_service.first_or_new(request.env['omniauth.auth'])
-    session[:user_id] = user._id
-    redirect '/'
+    puts 'here'
+    set_session
+    LoginService.new.login(@user, request.env['omniauth.auth'])
+    redirect request.cookies['last_visited'] or '/'
   end
 
   get '/auth/failure' do
     'Authentication Failed'
   end
-  
+
   get '/logout' do
-    session[:user_id] = false
-    
+    session[:uid] = false
     redirect '/'
   end
-  
+
   get '/list/' do
     @pens = [ ]
-    
+
     erb :list
   end
 
   post '/process/' do
     pps = PreProcessorService.new
     results = pps.process_content(params)
-    
+
     if pps.errors.length > 0
       @errors = pps.errors
       results['error_html'] = erb :errors
     end
-    
+
     encode(results)
   end
 
-  def encode(obj)
-    obj.to_json.gsub('/', '\/')
+  # show full page for slug and version
+  get %r{/([\d]+)/([\d]+)/full} do |slug, version|
+    # pulling the version doesn't seem to work right now
+    # use the latest version for now
+    # content = JSON.parse(Content.version(slug, version))
+    content = JSON.parse(Content.latest(slug))
+    rend = Renderer.new
+    rend.render_full_page(content)
   end
 
-  get '/:slug/fullpage/' do
-    # todo, will need to actually pull
-    # the right data for the url from data service
-    data = get_data_by_slug()
-    rend = Renderer.new(data)
-    rend.render_full_page()
+  # show the full page for latest version of slug
+  get %r{/([\d]+)/full} do |slug|
+    content = JSON.parse(Content.latest(slug))
+    rend = Renderer.new
+    rend.render_full_page(content)
   end
 
-  def get_data_by_slug
-    return {
-      'slug'       => 'CODE PEN',
-      'html'        => '<h1>holy guac batman!</h1>',
-      'css'         => 'body { background-color: blue; }',
-      'js'          => 'console.log("testing");',
+  # anon user
+  get %r{/([\d]+)/([\d]+)} do |slug, version|
+    set_auth_token
+    content = JSON.parse(Content.version(slug, version))
+    ap content
+    @slug = true
+    @iframe_src = get_iframe_url(request)
+    @c_data = content
+    @c_data['auth_token'] = set_auth_token
 
-      'html_pre_processor' => 'none',
-      'html_classes'       => 'en',
+    erb :index
+  end
 
-      'css_pre_processor' => 'none',
-      'css_prefix_free'   => '',
-      'css_starter'       => 'none',
-      'css_external'      => '',
+  # anon user
+  get %r{/([\d]+)} do |slug|
+    set_auth_token
 
-      'js_pre_processor' => 'none',
-      'js_library'       => 'jquery-latest',
-      'js_modernizr'     => '',
-      'js_external'      => ''
-    }
+    ap 'slug:'
+    ap slug
+
+    # TODO: this is a hack.  we need to return a non-json version
+    # and deal with errors in flash.  Same with below.
+    content = JSON.parse(Content.latest(slug))
+    ap content
+
+    @slug = true
+    @iframe_src = get_iframe_url(request)
+    @c_data = content
+    @c_data['auth_token'] = set_auth_token
+
+    erb :index
   end
 
   post '/gist/' do
     data = JSON.parse(params[:data])
-    
+
     rend = Renderer.new()
     result = rend.render_full_page(data)
-    
+
     gs = GistService.new
     url_to_gist = gs.create_gist(data, result)
-    
+
     encode({ 'url' => url_to_gist })
   end
 
   get '/test/coderenderer' do
     erb :test_code_renderer
   end
-  
+
+  error do
+    'Unable to process request. ' + env['sinatra.error'].message
+  end
+
+  def encode(obj)
+    obj.to_json.gsub('/', '\/')
+  end
+
   helpers do
     def partial template
       erb template, :layout => false
@@ -179,9 +202,10 @@ class App < Sinatra::Base
       minify = Minify.new(@@minify, File.dirname(__FILE__))
       minify.script_tags(scripts, prod_filename)
     end
-    def close embedded_json
-      embedded_json.gsub('</', '<\/')
+    def stringify obj
+      json = obj.to_json or { }.to_json
+      json.gsub('/', '\/')
     end
   end
-  
+
 end

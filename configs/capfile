@@ -13,7 +13,8 @@ set :application, "codepen"
 set :user, "root"
 set :use_sudo, false
 
-set :deploy_to, "/www/Tinkerbox"
+set :deploy_to, "/www/CodePen"
+set :config_dir, "/www/codepen/config"
 
 # version control related
 set :scm, :git
@@ -21,7 +22,7 @@ set :scm_username, "quezo"
 set :branch, "master"
 # Use a local cache instead of doing a full clone
 set :deploy_via, :remote_cache
-set :repository, "git@github.com:chriscoyier/Tinkerbox.git"
+set :repository, "git@github.com:CodePen/CodePen.git"
 
 role :web, "50.57.181.132"
 
@@ -42,7 +43,9 @@ namespace :deploy do
   task :update, :roles => :web, :except => { :no_release => true } do
     run <<-CMD
       cd #{deploy_to};
-      git pull origin #{branch}; git reset --hard #{branch}
+      git pull origin #{branch}; git reset --hard #{branch};
+      bundle install;
+      cp #{config_dir}/auth_keys.rb #{deploy_to}/auth_keys.rb;
     CMD
     # need to run bundle install
   end

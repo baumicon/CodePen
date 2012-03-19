@@ -8,6 +8,7 @@
         boxCSS      : $("#box-css"),
         boxJS       : $("#box-js"),
         boxResult   : $(".result"),
+        boxResPos   : $(".result").position(),
         result      : $("#result"),
         boxes       : $(".boxes"),
         topBoxesCon : $(".top-boxes"),
@@ -30,10 +31,6 @@
         
         syncUIWithDBO: function() {
             // Sync UI with data values
-            $('#slug').val(CData.name);
-            $('#html').html(CData.html);
-            $('#css').html(CData.css);
-            $('#js').html(CData.js);
             
             // Sync preprocessors with correct data
             var selector = function(prefix, value) {
@@ -56,6 +53,9 @@
             // Sync library with correct data as well
             $('#js-select').val(CData.js_library);
 
+            // select current theme
+            $('#theme').val(CData.theme);
+
             // Better select box for chosing JS library
             $("#js-select, #theme").chosen();
 
@@ -67,8 +67,6 @@
             if(CData.css_external) $('#external-css').val(CData.css_external);
             if(CData.js_external) $('#external-js').val(CData.js_external);
             
-            // select current theme
-            $('#theme').val(CData.theme);
             // show a specific theme
             this.body.attr("data-theme", CData.theme);
         },
@@ -86,20 +84,38 @@
         },
         
         bindUIActions: function() {
-
             // Resize all boxes when window resized
             this.win.resize(function() {
-                var space = Main.body.height();
-                Main.topBoxesCon.height(space / 2 - 20);
-                Main.boxResult.height(space / 2);
+
+                var headerHeight = Main.header.outerHeight();
+                
+                // Window is in default state
+                if (!dontTreadOnMe) {
+
+                    var space = Main.body.height();
+                    Main.topBoxesCon.height(space / 2 - 28);
+                    Main.boxResult.height(space / 2 - 96);
+                    
+                    Main.vertResizer.css({
+                        "top" : ((space / 2) + headerHeight) - 7 + "px"
+                    });
+
+                // Window has been effed with already
+                } else {
+
+                    Main.vertResizer.css({
+                        top: Main.boxResult.offset().top - 15
+                    });
+
+                }
+
+                // Always do
+                Main.boxes.height(Main.win.height() - headerHeight - 40);
                 Main.result.css({
-                    "height"  : space / 2,
-                    "width"   : Main.win.width()
+                    "width" : Main.win.width()
                 });
-                Main.boxes.height(Main.win.height());
-                Main.vertResizer.css({
-                    "top"     : ((space / 2) + Main.header.outerHeight()) + "px",
-                });
+
+               // kick it off once for page load layout
             }).trigger("resize");
             
             // Opening and closing settings panels
@@ -131,6 +147,45 @@
                 $(this).toggleClass("open");
                 $("#app-settings-panel").toggle();
             });
+
+            // Resizer
+            var dragCover = $("#drag-cover");
+            var dontTreadOnMe = false;
+            $("#vert-resizer").draggable({
+                // iframeFix: true,   // DOES NOT WORK AS GOOD
+                start: function() {
+                    dragCover.show();
+                },
+                stop: function(e, ui) {
+                    dragCover.hide();
+
+                    var space = Main.body.height();
+                    var headerSpace = Main.header.outerHeight();
+
+                    // Adjust the parts
+                    Main.topBoxesCon.height(((ui.position.top - 85) / space) * 100 + "%");
+                    Main.boxResult.height(((space + headerSpace) - ui.position.top) / space * 100 + "%");
+                    Main.vertResizer.css({
+                        "top" : (ui.position.top / space * 100) + "%",
+                    });
+                    
+                    // Big daddy
+                    Main.boxes.height(Main.win.height());
+
+                    // Don't reset back to halfs anymore, this is the new jam
+                    dontTreadOnMe = true;
+                },
+                axis: "y",
+                drag: function(e, ui) {
+                    var space = Main.body.height();
+                    var headerSpace = Main.header.outerHeight();
+                    Main.boxResult.height((space + headerSpace) - ui.position.top);
+                    Main.topBoxesCon.height(ui.position.top - 85);
+                    Main.boxes.height(Main.win.height());
+                },
+                containment: Main.boxes
+            });
+
         },
         
         bindDataActions: function() {
@@ -165,6 +220,7 @@
              $('#prefix-free').on('click', function() {
                  if(CData.css_pre_processor != 'sass') {
                     CData.setCSSOption('css_prefix_free', $(this).is(":checked"));
+                    Main.compileContent(CSSeditor, '', true);
                  }
              });
              
@@ -183,10 +239,12 @@
 
              $('#js-select').on('change', function(index, select) {
                  CData.setJSOption('js_library', this.value);
+                 Main.compileContent(CSSeditor, '', true);
              });
              
              $('#modernizr').on('click', function() {
                  CData.setJSOption('js_modernizr', $(this).is(":checked"));
+                 Main.compileContent(CSSeditor, '', true);
              });
              
              $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
@@ -211,10 +269,22 @@
              });
              
              // save this code pen
-             $("#save").on('click', function() {
+             $("#save,#update").on('click', function() {
                 // validate save
                 CData.save();
                 
+                return false;
+             });
+
+             $("#new").on('click', function() {
+                CData.new();
+                window.location = '/';
+                
+                return false;
+             });
+             
+             $('#fork').on('click', function() {
+                CData.fork();
                 return false;
              });
              
@@ -248,6 +318,7 @@
                 mode         : "xml",
                 tabSize      : 2,
                 onChange     : Main.compileContent,
+                onKeyEvent   : Main.handleTabKey
             });
 
             window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
@@ -265,6 +336,51 @@
                 tabSize      : 2,
                 onChange     : Main.compileContent
             });
+
+            HTMLeditor.setValue(CData.html);
+            CSSeditor.setValue(CData.css);
+            JSeditor.setValue(CData.js);
+        },
+
+        // Code Mirror natively indents the entire line. We wanted it to work like
+        // a standard editor where a tab (for us 2 spaces) is inserted into the 
+        // current cursor position
+        handleTabKey: function(editor, key) {
+            // Initially have code mirror not ignore the key
+            // if we decide to handle it then set this to true
+            var cmIgnoreKey = false;
+
+            if(key.keyCode == 9) {
+
+                if(!editor.getSelection()) {
+                    key = $.Event(key);
+
+                    if(key.type == 'keydown') {
+                        var from = editor.getCursor();
+                        var line = editor.getLine(from.line);
+                        var to = {'line': from.line, 'ch': line.length};
+                        var range = editor.getRange(from, to);
+                        var tab = '';
+
+                        for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
+                            tab += ' ';
+                        }
+                        
+                        editor.replaceRange(tab + range, from, to);
+
+                        var endCursor = from.ch + tab.length;
+                        editor.setCursor({'line': from.line, 'ch': endCursor});
+                    }
+
+                    // Stop the keydown and keypress both
+                    key.stopPropagation();
+                    key.preventDefault();
+
+                    cmIgnoreKey = true;
+                }
+            }
+            
+            return cmIgnoreKey;
         },
 
         refreshEditors: function(delay) {

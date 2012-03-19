@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>CodePen</title>
   <link rel="stylesheet" href="/stylesheets/css/main.css">
+  <link rel="shortcut icon" href="/favicon.png">
 </head>
 
 <body data-theme="sublime">
@@ -197,6 +198,8 @@
 
         <iframe src="<%= @iframe_src %>/secure_iframe" id="result"></iframe>
 
+        <div id="drag-cover"></div>
+
       </div>
 
     </div><!--END div.boxes -->
@@ -205,16 +208,15 @@
 
   <%= partial :footer %>
 
-  <div id="vert-resizer" class="vert-resizer"></div>
-
-  <!-- <div id="overlay"></div> -->
+  <div id="vert-resizer" class="vert-resizer"><span></span></div>
 
   <script>
-    __c_data = <%= @c_data %>;
+    __c_data = <%= stringify(@c_data) %>;
   </script>
 
   <%= js_scripts([
       '/js/libs/jquery.js',
+      '/js/libs/jquery-ui-1.8.18.custom.min.js',
       '/js/libs/codemirror.js',
       '/js/libs/chosen.jquery.min.js',
       '/js/mode/javascript/javascript.js',

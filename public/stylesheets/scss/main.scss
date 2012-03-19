@@ -430,6 +430,12 @@ header {
   top: 50%;
   width: 100%; 
   height: 18px;
+  cursor: row-resize;
+  span { // lazily putting a span here cuz I'd rather not deal with multiple backgrounds
+    display: block;
+    height: 100%;
+    background: url(/images/handle.png) center center no-repeat;
+  }
 }
 
 .result {
@@ -443,8 +449,18 @@ header {
     border: 0;
     background: white;
     width: 100%;
-    height: 80%; // todo: fix
+    height: 100%;
   }
+}
+
+#drag-cover {
+  position: absolute;
+  z-index: 201;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: none;
 }
 
 
@@ -475,35 +491,15 @@ footer {
     text-decoration: underline;
   }
 }
-
-
-
-#overlay {  // Unused
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  background: rgba(0,0,0,0.75);
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.stuff {
+  position: absolute;
+  top: 0px;
+  right: 10px;
 }
 
 
 
 // Themes
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  position: relative;
-  right: 10px;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-}
-
 @import "../themes/codemirror";
 @import "../themes/sublime";
 

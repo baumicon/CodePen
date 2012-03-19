@@ -25,7 +25,7 @@ var CodeRenderer = {
         // fully render since it's so dependent on JS
         $(this).delay(300).queue(function() {
             CodeRenderer.compileContent(true);
-
+            Main.syncUIWithDBO();
             Main.refreshEditors();
             CodeRenderer.setCursorToEnd(HTMLeditor);
 
@@ -58,7 +58,7 @@ var CodeRenderer = {
 
             this.timeOutID = setTimeout(function(value) {
                 CodeRenderer.processContent();
-            }, 1500);
+            }, 250);
         }
     },
     
@@ -167,10 +167,10 @@ var CodeRenderer = {
     
     getJS: function() {
         if(this.postProcessedJS) {
-            var js = 'function __run() { ';
-            js += this.postProcessedJS + ' }';
-            js += " try { __run(); }";
-            js += "catch(err) { if(console) { console.log('Error: ' + err.message); }} "
+            var js = '(function() {';
+            js += " try { " + this.postProcessedJS + " }";
+            js += "catch(err) { if(console) { console.log('Error: ' + err.message); }}";
+            js += "})();";
 
             return js;
         }

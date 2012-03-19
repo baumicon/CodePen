@@ -67,13 +67,16 @@ header button, header .button {
 #fork:before {
   top: 1px;
 }
+#update {
+  margin: 0 10px;
+}
 #update:before {
   top: 1px;
 }
 #save {
   margin-left: -1px;
-  @include border-radiuses(5px, 5px, 0, 0);
-  @include box-shadow((inset 1px 1px 0 #3c3c3c));
+  // @include border-radiuses(5px, 5px, 0, 0);
+  // @include box-shadow((inset 1px 1px 0 #3c3c3c));
 }
 #save:before {
   top: 1px;
@@ -121,7 +124,4 @@ header button, header .button {
   &:focus, &:hover {
     background: #019AD2;
   }
-}
-#app-settings {
-  margin-right: 10px;
 }
