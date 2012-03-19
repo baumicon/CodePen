@@ -15,7 +15,9 @@ require './models/content'
 class App < Sinatra::Base
   # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
-  use Rack::Session::Cookie, :key => 'codepen'
+  use Rack::Session::Cookie, 
+    :key => 'codepen', 
+    :expire_after => 2592000 # 30 days, make easy pacheesy on our user to not have to login.
   include Sessionator
 
   @@minify = false

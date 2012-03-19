@@ -220,6 +220,7 @@
              $('#prefix-free').on('click', function() {
                  if(CData.css_pre_processor != 'sass') {
                     CData.setCSSOption('css_prefix_free', $(this).is(":checked"));
+                    Main.compileContent(CSSeditor, '', true);
                  }
              });
              
@@ -238,10 +239,12 @@
 
              $('#js-select').on('change', function(index, select) {
                  CData.setJSOption('js_library', this.value);
+                 Main.compileContent(CSSeditor, '', true);
              });
              
              $('#modernizr').on('click', function() {
                  CData.setJSOption('js_modernizr', $(this).is(":checked"));
+                 Main.compileContent(CSSeditor, '', true);
              });
              
              $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
