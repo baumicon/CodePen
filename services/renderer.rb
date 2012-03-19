@@ -82,20 +82,21 @@ class Renderer
   
   def get_js(data)
     js = @pps.process_js(data['js_pre_processor'], data['js'])
+    script = '<!-- no js -->'
     
     if js != ''
       script = "(function() {\n\n"
       script+= "// Your Code!\n"
       script+= js + "\n\n"
       script+= "})();"
-    else
-      script = '<!-- no js -->'
     end
     
     script
   end
   
   def get_js_library(js_library)
+    href = ''
+    
     if js_library == 'jquery'
       href = '//code.jquery.com/jquery-latest.js'
     elsif js_library == 'mootools'
