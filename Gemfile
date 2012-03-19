@@ -16,13 +16,13 @@ gem "compass"
 gem "activesupport"
 gem "foreman"
 gem "thin"
+gem "sinatra-sessionography"
 
 group :test do
   gem "rspec"
   gem "rack-test"
   gem 'awesome_print'
   gem 'spork', '~> 1.0rc'
-  gem 'sinatra-sessionography'
 end
 
 gem "slim"
