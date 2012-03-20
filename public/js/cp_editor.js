@@ -60,12 +60,7 @@ CPEditor.prototype.buildEditor = function(type, value) {
             }
             else if(key.keyCode == 18) {
                 if(editor.getSelection()) {
-                    for(var x in this) {
-                        console.log('variable: ' + x);
-                    }
-                    // we would be able to allow users to move up and down with pixels or
-                    // an actual color picker right here if we wanted to.
-                    // console.log('founda selection ' + editor.getSelection());
+                    // to be continued for the awesome editor
                 }
             }
 
