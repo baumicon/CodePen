@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>CodePen</title>
   <link rel="stylesheet" href="/stylesheets/css/main.css">
+  <link type="text/css" rel="stylesheet" href="/stylesheets/css/colorpicker.css" />
   <link rel="shortcut icon" href="/favicon.png">
 </head>
 
@@ -33,6 +34,7 @@
 
           <div class="code-wrap">
             <textarea id="html" class="code-box"></textarea>
+            <input style="position: fixed; top: 500px; right: 500px;" id="tcolor" type="hidden"></input>
           </div>
 
           <div class="settings">
@@ -219,6 +221,7 @@
       '/js/libs/jquery-ui-1.8.18.custom.min.js',
       '/js/libs/codemirror.js',
       '/js/libs/chosen.jquery.min.js',
+      '/js/libs/colorpicker.js',
       '/js/mode/javascript/javascript.js',
       '/js/mode/css/css.js',
       '/js/mode/xml/xml.js',

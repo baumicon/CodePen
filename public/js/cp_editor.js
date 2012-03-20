@@ -58,14 +58,54 @@ CPEditor.prototype.buildEditor = function(type, value) {
                     cmIgnoreKey = true;
                 }
             }
+            // If the User selects the alt key and text is selected
+            // stupidly replace the text with a color value
             else if(key.keyCode == 18) {
                 if(editor.getSelection()) {
-                    for(var x in this) {
-                        console.log('variable: ' + x);
-                    }
+                    
                     // we would be able to allow users to move up and down with pixels or
                     // an actual color picker right here if we wanted to.
                     // console.log('founda selection ' + editor.getSelection());
+                    
+                    
+                     var from = editor.getCursor();
+                     var coordinates = editor.charCoords({'line':from.line, 'ch':0}, 'page');
+                     console.log(coordinates);
+                     console.log('top: ' + (coordinates.y + 100) + 'px');
+
+                     // var cursors = $(".CodeMirror-cursor");
+                     // var cursor = cursors[cursors.length -1];
+                     // 
+                     //cursor.innerHTML = '<input style="position: fixed; top: 30px; right: 30px; " id="tcolor" type="hidden"></input>';
+                     var color = $('#tcolor');
+                     
+                     color.offset = function() {
+                         console.log('callin my version of coords');
+                         console.log(coordinates);
+                         
+                         return coordinates;
+                     }
+                     //
+                    color.ColorPicker({
+                    	onShow: function (colpkr) {
+                    	    console.log(coordinates);
+                    	    $(colpkr).css({position: 'absolute', left: coordinates.x + 'px', top: (coordinates.y + 15) + 'px'});
+                    		$(colpkr).fadeIn(500);
+                    		return false;
+                    	},
+                    	
+                    	onHide: function (colpkr) {
+                    		$(colpkr).fadeOut(500);
+                    		return false;
+                    	},
+                    	
+                    	onChange: function (hsb, hex, rgb) {
+                    		console.log('hsb: ' +hsb);
+                    		// make a call to change the selectionr ight here
+                    	}
+                    });
+                         
+                    $('#tcolor').click();
                 }
             }
 
