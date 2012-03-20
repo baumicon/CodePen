@@ -13,7 +13,33 @@ function CPEditor(type, value) {
     this.getValue = function() {
         return this.editor.getValue();
     };
+    
+    
 };
+
+var EUtil = {
+    editor: '',
+    from: '',
+    // Have EUtil hold onto the latest cursor coordinates
+    // so that they are accessible from anonymous functions
+    coordinates: '',
+    
+    showColorPicker: function(editor) {
+        var showColorPicker = false;
+
+        // figure out if we should insert a color here
+        // figure out if the context is right
+        var from = editor.getCursor();
+        var line = editor.getLine(from.line);
+        var textToLeft = line.substring(0, from.ch);
+        
+        if(textToLeft.match(/color:\s{0,}/i)) {
+            showColorPicker = true;
+        }
+        
+        return showColorPicker;
+    }
+}
 
 CPEditor.prototype.buildEditor = function(type, value) {
     var standardConfig = {
@@ -28,81 +54,69 @@ CPEditor.prototype.buildEditor = function(type, value) {
             // Initially have code mirror not ignore the key
             // if we decide to handle it then set this to true
             var cmIgnoreKey = false;
-
-            if(key.keyCode == 9) {
-
+            
+            if(key.keyCode == 9 && key.type == 'keydown') {
                 if(!editor.getSelection()) {
-                    key = $.Event(key);
-
-                    if(key.type == 'keydown') {
-                        var from = editor.getCursor();
-                        var line = editor.getLine(from.line);
-                        var to = {'line': from.line, 'ch': line.length};
-                        var range = editor.getRange(from, to);
-                        var tab = '';
-
-                        for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
-                            tab += ' ';
-                        }
-
-                        editor.replaceRange(tab + range, from, to);
-
-                        var endCursor = from.ch + tab.length;
-                        editor.setCursor({'line': from.line, 'ch': endCursor});
+                    var from = editor.getCursor();
+                    var line = editor.getLine(from.line);
+                    var to = {'line': from.line, 'ch': line.length};
+                    var range = editor.getRange(from, to);
+                    var tab = '';
+                    
+                    for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
+                        tab += ' ';
                     }
-
+                    
+                    editor.replaceRange(tab + range, from, to);
+                    
+                    var endCursor = from.ch + tab.length;
+                    editor.setCursor({'line': from.line, 'ch': endCursor});
+                    
                     // Stop the keydown and keypress both
+                    key = $.Event(key);
                     key.stopPropagation();
                     key.preventDefault();
-
+                    
                     cmIgnoreKey = true;
                 }
             }
             // If the User selects the alt key and text is selected
             // stupidly replace the text with a color value
-            else if(key.keyCode == 18) {
-                if(editor.getSelection()) {
+            else if(key.keyCode == 18 && key.type == 'keydown') {
+                if(EUtil.showColorPicker(editor)) {
+                    EUtil.editor = editor;
+                    EUtil.from = editor.getCursor();
+                    EUtil.coordinates = editor.charCoords({'line': EUtil.from.line, 'ch':0}, 'page');
                     
-                    // we would be able to allow users to move up and down with pixels or
-                    // an actual color picker right here if we wanted to.
-                    // console.log('founda selection ' + editor.getSelection());
-                    
-                    
-                     var from = editor.getCursor();
-                     var coordinates = editor.charCoords({'line':from.line, 'ch':0}, 'page');
-                     console.log(coordinates);
-                     console.log('top: ' + (coordinates.y + 100) + 'px');
-
-                     // var cursors = $(".CodeMirror-cursor");
-                     // var cursor = cursors[cursors.length -1];
-                     // 
-                     //cursor.innerHTML = '<input style="position: fixed; top: 30px; right: 30px; " id="tcolor" type="hidden"></input>';
-                     var color = $('#tcolor');
-                     
-                     color.offset = function() {
-                         console.log('callin my version of coords');
-                         console.log(coordinates);
-                         
-                         return coordinates;
-                     }
-                     //
-                    color.ColorPicker({
-                    	onShow: function (colpkr) {
-                    	    console.log(coordinates);
-                    	    $(colpkr).css({position: 'absolute', left: coordinates.x + 'px', top: (coordinates.y + 15) + 'px'});
-                    		$(colpkr).fadeIn(500);
-                    		return false;
-                    	},
-                    	
-                    	onHide: function (colpkr) {
-                    		$(colpkr).fadeOut(500);
-                    		return false;
-                    	},
-                    	
-                    	onChange: function (hsb, hex, rgb) {
-                    		console.log('hsb: ' +hsb);
-                    		// make a call to change the selectionr ight here
-                    	}
+                    // alextodo, need to set the proper start value
+                    $('#tcolor').ColorPicker({
+                        onShow: function (colpkr) {
+                            var coordinates = EUtil.coordinates;
+                            
+                            $(colpkr).css({
+                                position: 'absolute', 
+                                left: Math.ceil(coordinates.x) + 'px', 
+                                top:  Math.ceil((coordinates.y + 15)) + 'px',
+                            });
+                            
+                            $(colpkr).fadeIn(300);
+                            
+                            return false;
+                        },
+                        
+                        onHide: function (colpkr) {
+                            $(colpkr).fadeOut(300);
+                            
+                            return false;
+                        },
+                        
+                        onChange: function (hsb, hex, rgb) {
+                            var from = EUtil.editor.getCursor();
+                            var line = EUtil.editor.getLine(from.line);
+                            var newLine = line.replace(/(color:\s{0,})(#[\w\d]+|)/, "$1#" + hex);
+                            
+                            EUtil.editor.setLine(from.line, newLine);
+                        }
                     });
                          
                     $('#tcolor').click();
