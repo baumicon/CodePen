@@ -69,18 +69,26 @@ class App < Sinatra::Base
   post '/save/content' do
     if valid_auth_token?(params[:auth_token])
       set_session
-      ap 'payload'
-      ap params[:content]
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
-      ap 'content as hash'
-      ap content
       content = content.json_save
-      ap 'content saved.'
-      ap content
-      content
     else
       raise "Access Forbidden"
     end
+  end
+
+  post '/fork/:slug' do |slug|
+    set_session
+    content = Content.latest(slug)
+    new_content = content.fork(@user) if content
+    redirect "/#{@user.id}/#{new_content.slug}"
+    #TODO: flash for errors
+  end
+
+  post '/fork/:slug/:version' do |slug, version|
+    set_session
+    content = Content.version(slug, version)
+    conent.fork(@user) if content
+    redirect "/#{@user.id}/#{new_content.slug}"
   end
 
   get '/auth/:name/callback' do
