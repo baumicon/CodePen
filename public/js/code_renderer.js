@@ -167,10 +167,10 @@ var CodeRenderer = {
     
     getJS: function() {
         if(this.postProcessedJS) {
-            var js = 'function __run() { ';
-            js += this.postProcessedJS + ' }';
-            js += " try { __run(); }";
-            js += "catch(err) { if(console) { console.log('Error: ' + err.message); }} "
+            var js = '(function() {';
+            js += " try { " + this.postProcessedJS + " }";
+            js += "catch(err) { if(console) { console.log('Error: ' + err.message); }}";
+            js += "})();";
 
             return js;
         }
