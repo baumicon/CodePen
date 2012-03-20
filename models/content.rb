@@ -111,15 +111,11 @@ class Content
   end
 
   def authed_prevalidate
-    set_slug("auth_next")
+    @slug = Incrementor.next_count("slug_next_#{@uid}") if @slug.nil? || "#{@slug}".match(/^$/)
   end
 
   def anon_prevalidate
-    set_slug("anon_next")
-  end
-
-  def set_slug(incrementor_name)
-    @slug = Incrementor.next_count("#{incrementor_name}_#{@uid}") if @slug.nil? || "#{@slug}".match(/^$/)
+    @slug = Incrementor.next_count("slug_next_anon") if @slug.nil? || "#{@slug}".match(/^$/)
   end
 
   def validate_slug_saveable
