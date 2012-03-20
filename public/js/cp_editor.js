@@ -55,6 +55,7 @@ CPEditor.prototype.buildEditor = function(type, value) {
             // if we decide to handle it then set this to true
             var cmIgnoreKey = false;
             
+            
             if(key.keyCode == 9 && key.type == 'keydown') {
                 if(!editor.getSelection()) {
                     var from = editor.getCursor();
