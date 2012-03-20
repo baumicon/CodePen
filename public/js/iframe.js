@@ -37,13 +37,17 @@ var __renderIFrame = function(event) {
                 $j(contentObj['JSLIBRARY']).appendTo("head");
             }
         }
-        else if(contentObj['PREFIX']) {
+        
+        if(contentObj['PREFIX']) {
             $j(contentObj['PREFIX']).appendTo("head");
+            StyleFix.process();
         }
-        else if(contentObj['JS_MODERNIZR']) {
+        
+        if(contentObj['JS_MODERNIZR']) {
             $j(contentObj['JS_MODERNIZR']).appendTo("head");
         }
-        else if(contentObj['JS_EXTERNAL']) {
+        
+        if(contentObj['JS_EXTERNAL']) {
             $j(contentObj['JS_EXTERNAL']).appendTo("head");
         }
 
