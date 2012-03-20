@@ -27,23 +27,13 @@ var CodeRenderer = {
             CodeRenderer.compileContent(true);
             Main.syncUIWithDBO();
             Main.refreshEditors();
-            CodeRenderer.setCursorToEnd(HTMLeditor);
+            HTMLEditor.setCursorToEnd();
 
             $(this).dequeue();
         });
     },
 
-    setCursorToEnd: function(editor) {
-        editor.focus();
 
-        var text = editor.getValue();
-        
-        // set the cursor to the end of the editor
-        // Make sure it's at the end by line num and char num to
-        // same value as the actual number of chars, CodeMirror will
-        // simply move the cursor to the end
-        editor.setCursor(text.length, text.length, true);
-    },
     
     // Main entry point to this module. Renders content to iframe.
     compileContent: function(forceCompile) {

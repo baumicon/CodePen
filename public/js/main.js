@@ -204,14 +204,14 @@
              // HTML related
              $('input[name="html-preprocessor"]').on('click', function() {
                  CData.setHTMLOption('preprocessor', this.value);
-                 Main.compileContent(HTMLeditor, '', true);
+                 Main.compileContent(HTMLEditor, '', true);
                  Main.addClassBoxHTML(this.value);
              });
 
              // CSS related
              $('input[name="css-preprocessor"]').on('click', function() {
                    CData.setCSSOption('css_pre_processor', this.value);
-                   Main.compileContent(CSSeditor, '', true);
+                   Main.compileContent(CSSEditor, '', true);
                    Main.addClassBoxCSS(this.value);
                    Main.updatePrefixFreeBox(this.value);
              });
@@ -220,33 +220,35 @@
              $('#prefix-free').on('click', function() {
                  if(CData.css_pre_processor != 'sass') {
                     CData.setCSSOption('css_prefix_free', $(this).is(":checked"));
-                    Main.compileContent(CSSeditor, '', true);
+                    Main.compileContent(CSSEditor, '', true);
                  }
              });
              
              // CSS Resests
              $('input[name="startercss"]').on('click', function() {
                  CData.setCSSOption('css_starter', this.value);
-                 Main.compileContent(CSSeditor, '', true);
+                 Main.compileContent(CSSEditor, '', true);
              });
 
              // JS related
              $('input[name="js-preprocessor"]').on('click', function() {
                  CData.setJSOption('js_pre_processor', this.value);
-                 Main.compileContent(JSeditor, '', true);
+                 Main.compileContent(JSEditor, '', true);
                  Main.addClassBoxJS(this.value);
              });
 
              $('#js-select').on('change', function(index, select) {
                  CData.setJSOption('js_library', this.value);
-                 Main.compileContent(CSSeditor, '', true);
+                 Main.compileContent(CSSEditor, '', true);
              });
              
              $('#modernizr').on('click', function() {
                  CData.setJSOption('js_modernizr', $(this).is(":checked"));
-                 Main.compileContent(CSSeditor, '', true);
+                 Main.compileContent(CSSEditor, '', true);
              });
              
+             // alextodo, figure out how long before you start typing again.
+             // may need to put these settings into a settings.js file
              $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
                  if(this.id == 'html-classes') CData.setHTMLClass(this.value);
                  else if(this.id == 'external-css') CData.setCSSOption('css_external', this.value);
@@ -309,80 +311,11 @@
         },
         
         buildEditors: function() {
-            // 
-            // INITIALIZE EDITORS
-            //
-            window.HTMLeditor = CodeMirror.fromTextArea(document.getElementById("html"), {
-                lineNumbers  : true,
-                value        : CData.html,
-                mode         : "xml",
-                tabSize      : 2,
-                onChange     : Main.compileContent,
-                onKeyEvent   : Main.handleTabKey
-            });
-
-            window.CSSeditor = CodeMirror.fromTextArea(document.getElementById("css"), {
-                lineNumbers  : true,
-                value        : CData.css,
-                mode         : "css",
-                tabSize      : 2,
-                onChange     : Main.compileContent
-            });
-
-            window.JSeditor = CodeMirror.fromTextArea(document.getElementById("js"), {
-                lineNumbers  : true,
-                value        : CData.js,
-                mode         : "javascript",
-                tabSize      : 2,
-                onChange     : Main.compileContent
-            });
-
-            HTMLeditor.setValue(CData.html);
-            CSSeditor.setValue(CData.css);
-            JSeditor.setValue(CData.js);
+            window.HTMLEditor = new CPEditor('html', CData.html);
+            window.CSSEditor = new CPEditor('css', CData.css);
+            window.JSEditor = new CPEditor('js', CData.js);
         },
-
-        // Code Mirror natively indents the entire line. We wanted it to work like
-        // a standard editor where a tab (for us 2 spaces) is inserted into the 
-        // current cursor position
-        handleTabKey: function(editor, key) {
-            // Initially have code mirror not ignore the key
-            // if we decide to handle it then set this to true
-            var cmIgnoreKey = false;
-
-            if(key.keyCode == 9) {
-
-                if(!editor.getSelection()) {
-                    key = $.Event(key);
-
-                    if(key.type == 'keydown') {
-                        var from = editor.getCursor();
-                        var line = editor.getLine(from.line);
-                        var to = {'line': from.line, 'ch': line.length};
-                        var range = editor.getRange(from, to);
-                        var tab = '';
-
-                        for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
-                            tab += ' ';
-                        }
-                        
-                        editor.replaceRange(tab + range, from, to);
-
-                        var endCursor = from.ch + tab.length;
-                        editor.setCursor({'line': from.line, 'ch': endCursor});
-                    }
-
-                    // Stop the keydown and keypress both
-                    key.stopPropagation();
-                    key.preventDefault();
-
-                    cmIgnoreKey = true;
-                }
-            }
-            
-            return cmIgnoreKey;
-        },
-
+        
         refreshEditors: function(delay) {
             // Sometimes you have to wait a few milliseconds
             // for a task to complete before updating the editor
@@ -394,9 +327,9 @@
                 }, delay);
             }
             else {
-                HTMLeditor.refresh();
-                CSSeditor.refresh();
-                JSeditor.refresh();
+                HTMLEditor.refresh();
+                CSSEditor.refresh();
+                JSEditor.refresh();
             }
         },
         
