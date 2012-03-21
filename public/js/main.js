@@ -94,7 +94,7 @@
 
                     var space = Main.body.height();
                     Main.topBoxesCon.height(space / 2 - 28);
-                    Main.boxResult.height(space / 2 - 96);
+                    Main.boxResult.height(space / 2 - 103);
                     
                     Main.vertResizer.css({
                         "top" : ((space / 2) + headerHeight) - 7 + "px"
@@ -179,7 +179,7 @@
                 drag: function(e, ui) {
                     var space = Main.body.height();
                     var headerSpace = Main.header.outerHeight();
-                    Main.boxResult.height((space + headerSpace) - ui.position.top);
+                    Main.boxResult.height((space + headerSpace) - ui.position.top - 8);
                     Main.topBoxesCon.height(ui.position.top - 85);
                     Main.boxes.height(Main.win.height());
                 },
