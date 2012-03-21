@@ -38,10 +38,9 @@ var __renderIFrame = function(event) {
             }
         }
         if(contentObj['PREFIX']) {
-            //console.log($j(contentObj['PREFIX']));
-            //$j(contentObj['PREFIX']).appendTo("head");
+            // TODO: Make others use getScript instead of appending to head
             $j.getScript('/box-libs/prefixfree.min.js', function() {
-                // callback works
+                StyleFix.process();
             });
         }
         if(contentObj['JS_MODERNIZR']) {
