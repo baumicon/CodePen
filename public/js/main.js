@@ -185,7 +185,8 @@
                 },
                 containment: Main.boxes
             });
-
+            
+            this.hideSettingsAndPanelsOnblur();
         },
         
         bindDataActions: function() {
@@ -351,6 +352,29 @@
                     .parent()
                     .parent()
                     .removeClass('expanded');
+            });
+        },
+        
+        hideSettingsAndPanelsOnblur: function() {
+            $('body').bind('click', function(e) {
+                var elements = $(e.target).closest('.settings,.settings-nub');
+                
+                if(elements.length == 0) {
+                    $('.settings,.settings-nub').removeClass('open');
+                    
+                    Main.refreshEditors();
+                }
+                
+                // If the user clicks outside of the element, hide them
+                elements = $(e.target).
+                    closest('#app-settings-button,#app-settings,.app-settings-panel');
+                
+                if(elements.length == 0) {
+                    $('#app-settings').removeClass('open');
+                    $("#app-settings-panel").hide();
+                    
+                    Main.refreshEditors();
+                }
             });
         }
     };

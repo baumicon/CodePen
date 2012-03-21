@@ -186,7 +186,8 @@ CPEditor.prototype.buildEditor = function(type, value) {
                     // started because it will change after we replace text
                     ColorUtil.initialCh = ColorUtil.from.ch;
                     ColorUtil.coordinates = editor.charCoords({'line': ColorUtil.from.line, 'ch':0}, 'page');
-                    ColorUtil.startColor = ColorUtil.getStartColor(editor.getLine(ColorUtil.from.line), ColorUtil.from.ch);
+                    ColorUtil.startColor =
+                     ColorUtil.getStartColor(editor.getLine(ColorUtil.from.line), ColorUtil.from.ch);
                     
                     $('#tcolor').ColorPicker({
                         color: ColorUtil.startColor,
