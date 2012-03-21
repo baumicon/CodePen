@@ -80,7 +80,8 @@
 	text-align: right;
 	margin: 0;
 	padding: 0;
-	height: 11px;
+	width: 32px;
+	height: 13px;
 }
 .colorpicker_hex {
 	position: absolute;
@@ -92,6 +93,7 @@
 }
 .colorpicker_hex input {
 	right: 6px;
+	width: 48px;
 }
 .colorpicker_field {
 	height: 22px;
@@ -110,6 +112,8 @@
 }
 .colorpicker_rgb_r {
 	background-image: url(/images/colorpicker_rgb_r.png);
+	z-index: 5px;
+	position: absolute;
 	top: 52px;
 	left: 212px;
 }
@@ -122,6 +126,7 @@
 	background-image: url(/images/colorpicker_rgb_b.png);
 	top: 112px;
 	left: 212px;
+	position: absolute;
 }
 .colorpicker_hsb_h {
 	background-image: url(/images/colorpicker_hsb_h.png);

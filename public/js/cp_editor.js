@@ -51,16 +51,26 @@ var ColorUtil = {
     },
     
     colorRegexReplace: function(line, hex) {
-        return line.replace(/(color:\s{0,})(#[\w\d]+|)/, "$1#" + hex);
+        if(hex.indexOf('NaN') > -1) {
+            return line;
+        }
+        else {
+            return line.replace(/(color:\s{0,})(#[\w\d]+|)/, "$1#" + hex);
+        }
     },
     
     poundRegexReplace: function(line, hex) {
-        var start = this.findClosestPound(line, this.initialCh);
-        var beginOfLine = line.substring(0, start);
-        var endOfLine = line.substring(start, line.length);
-        endOfLine = endOfLine.replace(/(\s){0,}(#[0-9a-fA-F]{0,6})/i, "$1#" + hex);
-        
-        return beginOfLine + endOfLine;
+        if(hex.indexOf('NaN') > -1) {
+            return line;
+        }
+        else {
+            var start = this.findClosestPound(line, this.initialCh);
+            var beginOfLine = line.substring(0, start);
+            var endOfLine = line.substring(start, line.length);
+            endOfLine = endOfLine.replace(/(\s){0,}(#[0-9a-fA-F]{0,6})/i, "$1#" + hex);
+            
+            return beginOfLine + endOfLine;
+        }
     },
     
     // helps up figure out which hex color to replace for situations where
@@ -185,9 +195,10 @@ CPEditor.prototype.buildEditor = function(type, value) {
                     // ColorUtil needs to hold onto the initial ch where the cursor
                     // started because it will change after we replace text
                     ColorUtil.initialCh = ColorUtil.from.ch;
-                    ColorUtil.coordinates = editor.charCoords({'line': ColorUtil.from.line, 'ch':0}, 'page');
-                    ColorUtil.startColor =
-                     ColorUtil.getStartColor(editor.getLine(ColorUtil.from.line), ColorUtil.from.ch);
+                    ColorUtil.coordinates = editor.
+                        charCoords({'line': ColorUtil.from.line, 'ch':0}, 'page');
+                    ColorUtil.startColor = ColorUtil.
+                        getStartColor(editor.getLine(ColorUtil.from.line), ColorUtil.from.ch);
                     
                     $('#tcolor').ColorPicker({
                         color: ColorUtil.startColor,
@@ -197,6 +208,7 @@ CPEditor.prototype.buildEditor = function(type, value) {
                             
                             $(colpkr).css({
                                 // index has to be more than the editors when expanded
+                                // editors z-index values is 1001
                                 'z-index': 1002,
                                 position: 'absolute',
                                 left: Math.ceil(coordinates.x) + 'px', 
