@@ -24,7 +24,7 @@ var __renderIFrame = function(event) {
             $j(contentObj['CSS_EXTERNAL']).appendTo("head");
         }
 
-        var style = "<style type='text/css'>\n";
+        var style = "<style>\n";
         style += contentObj['CSS'] + "</style>";
         $j(style).appendTo("head");
 
@@ -39,19 +39,19 @@ var __renderIFrame = function(event) {
         }
         
         if(contentObj['PREFIX']) {
-            $j(contentObj['PREFIX']).appendTo("head");
-            StyleFix.process();
+            $j.getScript('/box-libs/prefixfree.min.js', function() {
+                StyleFix.process();
+            });
         }
-        
         if(contentObj['JS_MODERNIZR']) {
             $j(contentObj['JS_MODERNIZR']).appendTo("head");
         }
-        
+
         if(contentObj['JS_EXTERNAL']) {
             $j(contentObj['JS_EXTERNAL']).appendTo("head");
         }
 
-        var js = "<script type='text/javascript'>\n";
+        var js = "<script>\n";
         js += contentObj['JS'] + "</script>";
         $j(js).appendTo("head");
     }

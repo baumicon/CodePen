@@ -64,19 +64,32 @@ class Content
     end
   end
 
+  def fork(user)
+    begin
+      content = Content.new(self.attributes)
+      content.uid = user.uid
+      content.anon = user.anon?
+      if user.anon?
+        content.slug = Incrementor.next_count("anon_next_#{user.uid}")
+      else
+        if Content.first(:uid => uid, :slug => @slug)
+          content.slug = Incrementor.next_count("auth_next_#{user.uid}")
+        end
+      end
+      return json_success(content.attributes) if content.save
+      return json_errors(content.errors.messages)
+    rescue Exception => ex
+      ap ex
+      ap ex.backtrace
+      return json_errors({:get_latest => "Error forking. Slug:#{@slug} Version:#{@version}"})
+    end
+  end
+
   def self.copy_ownership(user, new_uid)
-    slugs = Slug.all(:uid => user.uid)
-    slugs.each{|s|
-      slug = Slug.new(s.attributes)
-      slug.uid = new_uid
-      slug.save
-    }
-    slug_arr = slugs.map{|slug| slug.name}
     Content.all(:uid => user.uid).each{|c|
       content = Content.new(c.attributes)
       content.uid = new_uid
       content.anon = false
-      content.slugs = slug_arr
       content.save
     }
   end
@@ -98,15 +111,11 @@ class Content
   end
 
   def authed_prevalidate
-    set_slug("auth_next")
+    @slug = Incrementor.next_count("slug_next_#{@uid}") if @slug.nil? || "#{@slug}".match(/^$/)
   end
 
   def anon_prevalidate
-    set_slug("anon_next")
-  end
-
-  def set_slug(incrementor_name)
-    @slug = Incrementor.next_count("#{incrementor_name}_#{@uid}") if @slug.nil? || "#{@slug}".match(/^$/)
+    @slug = Incrementor.next_count("slug_next_anon") if @slug.nil? || "#{@slug}".match(/^$/)
   end
 
   def validate_slug_saveable
