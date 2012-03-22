@@ -70,10 +70,6 @@ class App < Sinatra::Base
     erb :about
   end
 
-  get '/four' do
-    erb :four
-  end
-
   post '/save/content' do
     if valid_auth_token?(params[:auth_token])
       set_session
