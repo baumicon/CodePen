@@ -2,8 +2,17 @@
   padding: 0 50px 0 20px;
   max-width: 700px;
   color: white;
-  p {
+  p, li {
     font-size: 13px;
+  }
+  ul {
+    margin: 0 0 20px 20px;
+  }
+  p {
+    margin: 0 0 10px 0;
+  }
+  a {
+    color: #77fff7;
   }
 }
 

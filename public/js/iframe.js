@@ -24,7 +24,7 @@ var __renderIFrame = function(event) {
             $j(contentObj['CSS_EXTERNAL']).appendTo("head");
         }
 
-        var style = "<style type='text/css'>\n";
+        var style = "<style>\n";
         style += contentObj['CSS'] + "</style>";
         $j(style).appendTo("head");
 
@@ -37,17 +37,22 @@ var __renderIFrame = function(event) {
                 $j(contentObj['JSLIBRARY']).appendTo("head");
             }
         }
-        else if(contentObj['PREFIX']) {
-            $j(contentObj['PREFIX']).appendTo("head");
+        
+        if(contentObj['PREFIX']) {
+            // TODO: Make others use getScript instead of appending to head
+            $j.getScript('/box-libs/prefixfree.min.js', function() {
+                StyleFix.process();
+            });
         }
-        else if(contentObj['JS_MODERNIZR']) {
+        if(contentObj['JS_MODERNIZR']) {
             $j(contentObj['JS_MODERNIZR']).appendTo("head");
         }
-        else if(contentObj['JS_EXTERNAL']) {
+
+        if(contentObj['JS_EXTERNAL']) {
             $j(contentObj['JS_EXTERNAL']).appendTo("head");
         }
 
-        var js = "<script type='text/javascript'>\n";
+        var js = "<script>\n";
         js += contentObj['JS'] + "</script>";
         $j(js).appendTo("head");
     }
