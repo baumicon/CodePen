@@ -19,7 +19,6 @@ $glowSize: 12px;
 html, body {
   height: 100%;
   overflow: hidden;
-
 }
 
 html {
@@ -55,10 +54,13 @@ header {
   }
 }
 .logo {
-  font: 0/0 a;
-  background: url(/images/logo.png);
-  width: 127px;
-  height: 17px;
+  a {
+    font: 0/0 a;
+    background: url(/images/logo.png) no-repeat;
+    width: 127px;
+    height: 18px;
+    display: block;
+  }
 }
 
 .box-actions {
