@@ -89,6 +89,7 @@ class App < Sinatra::Base
       redirect "/#{new_content.slug}"
     end
     flash[:error] = 'Problem forking that content'
+    ap 'problem forking that content'
     redirect request.referrer
   end
 
@@ -97,7 +98,7 @@ class App < Sinatra::Base
     content = Content.version(slug, version)
     conent.fork(@user) if content
     ap @user
-    redirect "/#{new_content.slug}/1"
+    redirect "/#{new_content.slug}"
   end
 
   get '/auth/:name/callback' do
@@ -168,16 +169,23 @@ class App < Sinatra::Base
   # anon user
   get %r{/([\d]+)} do |slug|
     set_auth_token
-
-    ap 'slug:'
-    ap slug
     #TODO: show errors in template
     content = Content.latest(slug)
+    ap content
+    raise NotFound if not content['success']
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
     @c_data['auth_token'] = set_auth_token
     erb :index
+  end
+
+  get '/error' do
+    raise Sinatra::NotFound
+  end
+
+  not_found do
+    erb :'404'
   end
 
   post '/gist/' do
