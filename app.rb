@@ -88,8 +88,6 @@ class App < Sinatra::Base
       new_content = content.fork(@user) 
       redirect "/#{new_content.slug}"
     end
-    flash[:error] = 'Problem forking that content'
-    ap 'problem forking that content'
     redirect request.referrer
   end
 
@@ -188,6 +186,10 @@ class App < Sinatra::Base
 
   not_found do
     erb :'404'
+  end
+
+  error do
+    erb :'500'
   end
 
   post '/gist/' do
