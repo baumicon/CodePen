@@ -9,9 +9,9 @@
 
 <body>
 
-  <nav>
+  <nav class="group">
     <!-- These should say preprocessor if there is one -->
-    <a>HTML</a>
+    <a class="active">HTML</a>
     <a>CSS</a>
     <a>JS</a>
     <a>Result</a>
@@ -19,7 +19,25 @@
 
   <div id="output">
 
+    <div id="html">
+    </div>
+
+    <div id="css">
+    </div>
+
+    <div id="js">
+    </div>
+
+    <div id="result">
+    </div>
+
   </div>
+
+  <%= js_scripts([
+      '/js/libs/jquery.js',
+      '/js/embed.js'
+      ], 'embed')
+  %>
 
 </body>
 

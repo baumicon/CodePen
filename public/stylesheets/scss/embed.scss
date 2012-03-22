@@ -1,0 +1,41 @@
+@import "functions";
+@import "colors";
+@import "typography";
+@import "toolbox";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  @include gradient(#3d3d3e, #2a2a2a);
+  @include box-shadow((
+    0 1px 0 #3d3d3d,
+    inset 0 1px 0 #5a5a5a
+  ));
+  a {
+    color: white;
+    float: left;
+    position: relative;
+    padding: 6px 20px;
+    @include font-stack-bold;
+    border-right: 1px solid #666;
+    border-left: 1px solid #333;
+    &.active {
+      box-shadow: inset 0 0 10px black;
+      &:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        border-top: 8px solid black;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        margin-left: -8px;
+      }
+    }
+  }
+}
