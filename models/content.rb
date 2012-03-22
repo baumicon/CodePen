@@ -8,12 +8,14 @@ class Content
   include AjaxUtil
   include MongoMapper::Document
 
+  @owned_by_current_user = false
+
   attr_accessible :uid, :slug, :version, :html, :css, :js, 
     :html_pre_processor, :css_pre_processor, :js_pre_processor, :anon,
     :html_classes, :css_starter, :css_prefix_free, :css_prefix_free,
     :css_external, :js_library, :js_modernizr, :js_external
 
-  attr_accessor :slugs
+  attr_accessor :owned_by_current_user
 
   before_validation :before_validation_on_create, :on => :create
   validate :validate_slug_saveable
@@ -43,24 +45,22 @@ class Content
 
   def self.latest(slug)
     begin
-      #convert to string
       content = Content.first(:order => :version.desc, :slug => "#{slug}")
-      return self.json_success(content.attributes) if content
-      return self.json_errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
+      return hash_success(content.attributes) if content
+      return hash_errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
     rescue Exception => ex
-      return json_errors({:get_latest => "Error getting most recent content for '#{slug}'."})
+      return hash_errors({:get_latest => "Error getting most recent content for '#{slug}'."})
     end
   end
 
   def self.version(slug, version)
     begin
-      #convert to string
       return json_errors({:version_must_be_int => "Version must be an int"}) if not /^\d+$/.match("#{version}")
       content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version))
-      return self.json_success(content.attributes) if content
-      return self.json_errors({:no_conent_for_slug => "Can't find content. Slug:#{slug} Version:#{version}"})
+      return self.hash_success(content.attributes) if content
+      return self.hash_errors({:no_conent_for_slug => "Can't find content. Slug:#{slug} Version:#{version}"})
     rescue Exception => ex
-      return json_errors({:get_latest => "Error getting most recent content. Slug:#{slug} Version:#{version}"})
+      return self.hash_errors({:get_latest => "Error getting most recent content. Slug:#{slug} Version:#{version}"})
     end
   end
 
@@ -79,8 +79,6 @@ class Content
       return json_success(content.attributes) if content.save
       return json_errors(content.errors.messages)
     rescue Exception => ex
-      ap ex
-      ap ex.backtrace
       return json_errors({:get_latest => "Error forking. Slug:#{@slug} Version:#{@version}"})
     end
   end
