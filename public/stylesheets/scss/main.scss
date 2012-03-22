@@ -48,12 +48,19 @@ header {
   form {
     position: absolute;
     top: 10px;
-    left: 20px;
+    left: 5px;
     * {
       vertical-align: middle;
     }
   }
 }
+.logo {
+  font: 0/0 a;
+  background: url(/images/logo.png);
+  width: 127px;
+  height: 17px;
+}
+
 .box-actions {
   display: inline-block;
   margin-left: 20px;
@@ -258,8 +265,11 @@ header {
 }
 .settings {
   display: none;
-  position: relative;
+  position: absolute;
+  right: 0;
+  top: 30px;
   border-left: 1px solid #111;
+  max-width: 400px;
   &.open {
     display: block;
   }
@@ -502,10 +512,3 @@ footer {
 // Themes
 @import "../themes/codemirror";
 @import "../themes/sublime";
-
-@media (max-width: 900px) {
-  @import "mq-900";
-}
-@media (max-width: 770px) {
-  @import "mq-770";
-}
