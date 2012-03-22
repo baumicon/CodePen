@@ -99,22 +99,6 @@ class App < Sinatra::Base
     redirect "/#{new_content.slug}"
   end
 
-  get '/auth/:name/callback' do
-    puts 'here'
-    set_session
-    LoginService.new.login(@user, request.env['omniauth.auth'])
-    redirect request.cookies['last_visited'] or '/'
-  end
-
-  get '/auth/failure' do
-    'Authentication Failed'
-  end
-
-  get '/logout' do
-    session[:uid] = false
-    redirect '/'
-  end
-
   get '/list/' do
     @pens = [ ]
 
@@ -133,65 +117,51 @@ class App < Sinatra::Base
     encode(results)
   end
 
-  # show full page for slug and version
+  ############
+  # Full Page
+  # ##########
   get %r{/([\d]+)/([\d]+)/full} do |slug, version|
-    content = Content.latest(slug)
-    rend = Renderer.new
-    rend.render_full_page(content)
+    render_full_page Content.version(slug, version)
   end
 
-  # show the full page for latest version of slug
   get %r{/([\d]+)/full} do |slug|
-    content = Content.latest(slug)
+    render_full_page Content.latest(slug)
+  end
+
+  def render_full_page(content)
+    show_404 if not content
     rend = Renderer.new
     rend.render_full_page(content)
   end
 
-  # anon user
+  #############
+  # Anon User
+  # ##########
   get %r{/([\d]+)/([\d]+)} do |slug, version|
-    set_auth_token
-    content = Content.version(slug, version)
-    show_404 if not content['success']
-    @slug = true
-    @iframe_src = get_iframe_url(request)
-    @c_data = content
-    @c_data['auth_token'] = set_auth_token
+    set_content Content.version(slug, version)
     erb :index
   end
 
-  def set_owned_flag(content)
-    ap 'here comes content!'
-    ap content
-    @owned = content['uid'] == @user.uid
-  end
-
-  # anon user
   get %r{/([\d]+)} do |slug|
     set_auth_token
-    #TODO: show errors in template
-    content = Content.latest(slug)
-    ap content
+    set_content Content.latest(slug)
+    erb :index
+  end
+
+  def set_content(content)
+    set_auth_token
     show_404 if not content['success']
+    set_session
+    @owned = (content['uid'] == @user.uid)
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
     @c_data['auth_token'] = set_auth_token
-    erb :index
   end
 
-  def show_404(reason=false)
-    flash[:error] = reason if reason
-    raise Sinatra::NotFound
-  end
-
-  not_found do
-    erb :'404'
-  end
-
-  error do
-    erb :'500'
-  end
-
+  #############
+  # Gist
+  ###########
   post '/gist/' do
     data = JSON.parse(params[:data])
 
@@ -202,10 +172,6 @@ class App < Sinatra::Base
     url_to_gist = gs.create_gist(data, result)
 
     encode({ 'url' => url_to_gist })
-  end
-
-  get '/test/coderenderer' do
-    erb :test_code_renderer
   end
 
   error do
@@ -231,6 +197,39 @@ class App < Sinatra::Base
       json = obj.to_json or { }.to_json
       json.gsub('/', '\/')
     end
+  end
+
+  not_found do
+    erb :'404'
+  end
+
+  error do
+    erb :'500'
+  end
+
+  def show_404(reason=false)
+    flash[:error] = reason if reason
+    raise Sinatra::NotFound
+  end
+
+  get '/auth/:name/callback' do
+    puts 'here'
+    set_session
+    LoginService.new.login(@user, request.env['omniauth.auth'])
+    redirect request.cookies['last_visited'] or '/'
+  end
+
+  get '/auth/failure' do
+    'Authentication Failed'
+  end
+
+  get '/logout' do
+    session[:uid] = false
+    redirect '/'
+  end
+
+  get '/test/coderenderer' do
+    erb :test_code_renderer
   end
 
 end
