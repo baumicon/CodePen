@@ -94,7 +94,7 @@
 
                     var space = Main.body.height();
                     Main.topBoxesCon.height(space / 2 - 28);
-                    Main.boxResult.height(space / 2 - 96);
+                    Main.boxResult.height(space / 2 - 102);
                     
                     Main.vertResizer.css({
                         "top" : ((space / 2) + headerHeight) - 7 + "px"
@@ -164,7 +164,7 @@
 
                     // Adjust the parts
                     Main.topBoxesCon.height(((ui.position.top - 85) / space) * 100 + "%");
-                    Main.boxResult.height(((space + headerSpace) - ui.position.top) / space * 100 + "%");
+                    Main.boxResult.height(((space + headerSpace) - ui.position.top - 8) / space * 100 + "%");
                     Main.vertResizer.css({
                         "top" : (ui.position.top / space * 100) + "%",
                     });
@@ -179,7 +179,7 @@
                 drag: function(e, ui) {
                     var space = Main.body.height();
                     var headerSpace = Main.header.outerHeight();
-                    Main.boxResult.height((space + headerSpace) - ui.position.top);
+                    Main.boxResult.height((space + headerSpace) - ui.position.top - 8);
                     Main.topBoxesCon.height(ui.position.top - 85);
                     Main.boxes.height(Main.win.height());
                 },

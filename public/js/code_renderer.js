@@ -33,8 +33,6 @@ var CodeRenderer = {
         });
     },
 
-
-    
     // Main entry point to this module. Renders content to iframe.
     compileContent: function(forceCompile) {
         if(forceCompile || this.compileInRealTime()) {
@@ -48,7 +46,7 @@ var CodeRenderer = {
 
             this.timeOutID = setTimeout(function(value) {
                 CodeRenderer.processContent();
-            }, 250);
+            }, 500);
         }
     },
     
