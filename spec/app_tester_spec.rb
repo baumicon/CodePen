@@ -23,6 +23,16 @@ describe 'the fake app' do
 
   end
 
+  describe "flash" do
+
+    it "should show up" do
+      get '/flash/dance'
+      get '/flash/retrieve'
+      last_response.body.should == 'dance'
+    end
+
+  end
+
   describe "basic session proof" do
 
     it "should augment the session" do

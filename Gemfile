@@ -16,9 +16,10 @@ gem "compass"
 gem "activesupport"
 gem "foreman"
 gem "thin"
-gem "sinatra-sessionography"
+gem "sinatra-flash"
 
 group :test do
+  gem "sinatra-sessionography"
   gem "rspec"
   gem "rack-test"
   gem 'awesome_print'

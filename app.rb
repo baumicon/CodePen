@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/flash'
 require 'json'
 require 'omniauth'
 require 'omniauth-twitter'
@@ -19,6 +20,9 @@ class App < Sinatra::Base
     :key => 'codepen', 
     :expire_after => 2592000 # 30 days, make easy pacheesy on our user to not have to login.
   include Sessionator
+
+  #https://github.com/nakajima/rack-flash
+  register Sinatra::Flash
 
   @@minify = false
 
@@ -66,29 +70,37 @@ class App < Sinatra::Base
     erb :about
   end
 
+  get '/embed' do
+    erb :embed
+  end
+
   post '/save/content' do
     if valid_auth_token?(params[:auth_token])
       set_session
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
       content = content.json_save
     else
-      raise "Access Forbidden"
+      #TODO: log these
+      ap 'illigal access'
     end
   end
 
   post '/fork/:slug' do |slug|
     set_session
     content = Content.latest(slug)
-    new_content = content.fork(@user) if content
-    redirect "/#{@user.id}/#{new_content.slug}"
-    #TODO: flash for errors
+    if content['success']
+      new_content = content.fork(@user) 
+      redirect "/#{new_content.slug}"
+    end
+    redirect request.referrer
   end
 
   post '/fork/:slug/:version' do |slug, version|
     set_session
     content = Content.version(slug, version)
     conent.fork(@user) if content
-    redirect "/#{@user.id}/#{new_content.slug}"
+    ap @user
+    redirect "/#{new_content.slug}"
   end
 
   get '/auth/:name/callback' do
@@ -128,48 +140,64 @@ class App < Sinatra::Base
   # show full page for slug and version
   get %r{/([\d]+)/([\d]+)/full} do |slug, version|
     iframe_url = get_iframe_url(request) + request.env['REQUEST_URI']
-    content = JSON.parse(Content.version(slug, version))
+    content = Content.version(slug, version)
     rend = Renderer.new
     rend.render_full_page(content, iframe_url)
   end
 
   # show the full page for latest version of slug
   get %r{/([\d]+)/full} do |slug|
-    content = JSON.parse(Content.latest(slug))
+    content = Content.latest(slug)
+    iframe_url = get_iframe_url(request) + request.env['REQUEST_URI']
     rend = Renderer.new
-    rend.render_full_page(content)
+    rend.render_full_page(content, iframe_url)
   end
 
   # anon user
   get %r{/([\d]+)/([\d]+)} do |slug, version|
     set_auth_token
-    content = JSON.parse(Content.version(slug, version))
+    
+    content = Content.version(slug, version)
+    show_404 if not content['success']
+    
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
     @c_data['auth_token'] = set_auth_token
-
     erb :index
+  end
+
+  def set_owned_flag(content)
+    ap 'here comes content!'
+    ap content
+    @owned = content['uid'] == @user.uid
   end
 
   # anon user
   get %r{/([\d]+)} do |slug|
     set_auth_token
-
-    ap 'slug:'
-    ap slug
-
-    # TODO: this is a hack.  we need to return a non-json version
-    # and deal with errors in flash.  Same with below.
-    content = JSON.parse(Content.latest(slug))
+    #TODO: show errors in template
+    content = Content.latest(slug)
     ap content
-
+    show_404 if not content['success']
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
     @c_data['auth_token'] = set_auth_token
-
     erb :index
+  end
+
+  def show_404(reason=false)
+    flash[:error] = reason if reason
+    raise Sinatra::NotFound
+  end
+
+  not_found do
+    erb :'404'
+  end
+
+  error do
+    erb :'500'
   end
 
   post '/gist/' do
