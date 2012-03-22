@@ -153,6 +153,7 @@ class App < Sinatra::Base
   get %r{/([\d]+)/([\d]+)} do |slug, version|
     set_auth_token
     content = Content.version(slug, version)
+    show_404 if not content['success']
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
@@ -172,7 +173,7 @@ class App < Sinatra::Base
     #TODO: show errors in template
     content = Content.latest(slug)
     ap content
-    raise NotFound if not content['success']
+    show_404 if not content['success']
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
@@ -180,7 +181,8 @@ class App < Sinatra::Base
     erb :index
   end
 
-  get '/error' do
+  def show_404(reason=false)
+    flash[:error] = reason if reason
     raise Sinatra::NotFound
   end
 
