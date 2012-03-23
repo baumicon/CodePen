@@ -38,7 +38,7 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
-  get '/' do
+  get '/?' do
     @c_data = {}
     @c_data['auth_token'] = set_auth_token
     @iframe_src = get_iframe_url(request)
@@ -59,22 +59,22 @@ class App < Sinatra::Base
     end
   end
 
-  get '/secure_iframe' do
+  get '/secure_iframe/?' do
     # Setting the x-frame-options headers allows the
     # content to be properly loaded in this iframe
     response.headers['X-Frame-Options'] = 'GOFORIT'
     erb :iframe
   end
 
-  get '/about' do
+  get '/about/?' do
     erb :about
   end
 
-  get '/embed' do
+  get '/embed/?' do
     erb :embed
   end
 
-  post '/save/content' do
+  post '/save/content/?' do
     if valid_auth_token?(params[:auth_token])
       set_session
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
@@ -85,7 +85,7 @@ class App < Sinatra::Base
     end
   end
 
-  post '/fork/:slug' do |slug|
+  post '/fork/:slug/?' do |slug|
     set_session
     content = Content.latest(slug)
     if content['success']
@@ -95,7 +95,7 @@ class App < Sinatra::Base
     redirect request.referrer
   end
 
-  post '/fork/:slug/:version' do |slug, version|
+  post '/fork/:slug/:version/?' do |slug, version|
     set_session
     content = Content.version(slug, version)
     conent.fork(@user) if content
@@ -103,29 +103,29 @@ class App < Sinatra::Base
     redirect "/#{new_content.slug}"
   end
 
-  get '/auth/:name/callback' do
+  get '/auth/:name/callback/?' do
     puts 'here'
     set_session
     LoginService.new.login(@user, request.env['omniauth.auth'])
     redirect request.cookies['last_visited'] or '/'
   end
 
-  get '/auth/failure' do
+  get '/auth/failure/?' do
     'Authentication Failed'
   end
 
-  get '/logout' do
+  get '/logout/?' do
     session[:uid] = false
     redirect '/'
   end
 
-  get '/list/' do
+  get '/list/?' do
     @pens = [ ]
 
     erb :list
   end
 
-  post '/process/' do
+  post '/process/?' do
     pps = PreProcessorService.new
     results = pps.process_content(params)
 
@@ -200,7 +200,7 @@ class App < Sinatra::Base
     erb :'500'
   end
 
-  post '/gist/' do
+  post '/gist/?' do
     data = JSON.parse(params[:data])
 
     rend = Renderer.new()
@@ -212,7 +212,7 @@ class App < Sinatra::Base
     encode({ 'url' => url_to_gist })
   end
 
-  get '/test/coderenderer' do
+  get '/test/coderenderer/?' do
     erb :test_code_renderer
   end
 
