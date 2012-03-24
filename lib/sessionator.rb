@@ -15,7 +15,6 @@ module Sessionator
         set_session
       end
     else
-      puts 'using this session'
       @user = User.new(:uid => Incrementor.next_count('user'))
       @user.save
     end

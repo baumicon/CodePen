@@ -61,6 +61,11 @@ var __renderIFrame = function(event) {
         if(contentObj['PREFIX']) {
             $j.getScript('/box-libs/prefixfree.min.js', function() {
                 StyleFix.process();
+
+                // TO DO:
+                // Lea Verou says:
+                // "that's kinda inefficient. Just use PrefixFree.prefixCSS() directly"
+
             });
         }
         if(contentObj['JS_MODERNIZR']) {

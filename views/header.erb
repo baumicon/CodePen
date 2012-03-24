@@ -2,20 +2,18 @@
 
 			<form>
 
-				<h1 class="logo"><a>CodePen.io</a>
-
-					<!--
+        <h1 class="logo"><a>CodePen.io</a>
+				<!--
 					<% if logged_in %><span class="slash">/</span><% end %>
-					-->
-
+        -->
 				</h1>
-
-				<!-- 
+                
+        <!--
 				<% if logged_in %>
 					<input type="text" id="slug" name="slug">
         <% end %>
-        --> 
-                
+        -->
+
 				<div class="box-actions">
 
 					<% if @slug %>
@@ -24,9 +22,13 @@
 							<strong>⌘F</strong> Fork
 						</button>
 
-						<button id="update">
-							<strong>⌘U</strong> Update
-						</button>
+          <% if @owned %>
+
+            <button id="update">
+                <strong>⌘U</strong> Update
+            </button>
+
+          <% end %>
 
 						<button id="new">
 					 		<strong>⌘N</strong> Brand New Pen
@@ -44,7 +46,7 @@
 
 			<div class="app-actions">
 
-				<!--
+        <!--
 				<% if not logged_in %>
 					<a id="login" href="auth/twitter" class="button">
 						Twitter Login
@@ -54,13 +56,13 @@
 						Logout
 					</a>
         <% end %>
-       	-->
-				
+			  -->	
+        
         <span class="button" id="app-settings" class="app-settings">
 					<a id="app-settings-button" href="#app-settings-panel">
 						Settings
 					</a>
-				</span> 
+				</span>
 
 				<section id="app-settings-panel" class="app-settings-panel">
 

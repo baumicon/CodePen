@@ -70,16 +70,15 @@ class Content
       content.uid = user.uid
       content.anon = user.anon?
       if user.anon?
-        content.slug = Incrementor.next_count("anon_next_#{user.uid}")
+        content.slug = Incrementor.next_count("slug_next_anon")
       else
         if Content.first(:uid => uid, :slug => @slug)
-          content.slug = Incrementor.next_count("auth_next_#{user.uid}")
+          content.slug = Incrementor.next_count("slug_next_#{user.uid}")
         end
       end
-      return json_success(content.attributes) if content.save
-      return json_errors(content.errors.messages)
-    rescue Exception => ex
-      return json_errors({:get_latest => "Error forking. Slug:#{@slug} Version:#{@version}"})
+      content.version = 1
+      content.save
+      return content
     end
   end
 
