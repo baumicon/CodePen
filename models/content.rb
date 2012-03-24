@@ -76,6 +76,7 @@ class Content
           content.slug = Incrementor.next_count("slug_next_#{user.uid}")
         end
       end
+      content.version = 1
       content.save
       return content
     end

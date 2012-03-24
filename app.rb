@@ -16,8 +16,8 @@ require './models/content'
 class App < Sinatra::Base
   # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
-  use Rack::Session::Cookie, 
-    :key => 'codepen', 
+  use Rack::Session::Cookie,
+    :key => 'codepen',
     :expire_after => 2592000 # 30 days, make easy pacheesy on our user to not have to login.
   include Sessionator
 
@@ -88,14 +88,14 @@ class App < Sinatra::Base
   #######
   # Fork
   # #####
-  post '/fork/:slug' do |slug|
+  post '/fork/:slug/?' do |slug|
     set_session
-    fork_redirect Content.first(:order => :version.desc, :slug => "#{slug}")
+    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
   end
 
-  post '/fork/:slug/:version/' do |slug, version|
+  post '/fork/:slug/:version/?' do |slug, version|
     set_session
-    fork_redirect Content.first(:order => :version.desc, :slug => "#{slug}")
+    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
   end
 
   def fork_redirect(content)
@@ -104,6 +104,7 @@ class App < Sinatra::Base
       redirect "/#{new_content.slug}"
     end
     redirect request.referrer
+  end
 
   get '/list/?' do
     @pens = [ ]
@@ -167,7 +168,7 @@ class App < Sinatra::Base
   #############
   # Gist
   ###########
-  post '/gist/' do
+  post '/gist/?' do
     data = JSON.parse(params[:data])
 
     rend = Renderer.new()
@@ -217,23 +218,23 @@ class App < Sinatra::Base
     raise Sinatra::NotFound
   end
 
-  get '/auth/:name/callback' do
+  get '/auth/:name/callback/?' do
     puts 'here'
     set_session
     LoginService.new.login(@user, request.env['omniauth.auth'])
     redirect request.cookies['last_visited'] or '/'
   end
 
-  get '/auth/failure' do
+  get '/auth/failure/?' do
     'Authentication Failed'
   end
 
-  get '/logout' do
+  get '/logout/?' do
     session[:uid] = false
     redirect '/'
   end
 
-  get '/test/coderenderer' do
+  get '/test/coderenderer/?' do
     erb :test_code_renderer
   end
 
