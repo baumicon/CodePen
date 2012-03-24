@@ -74,6 +74,10 @@ class App < Sinatra::Base
     erb :embed
   end
 
+  get '/user/?' do
+    erb :user
+  end
+
   post '/save/content/?' do
     if valid_auth_token?(params[:auth_token])
       set_session
