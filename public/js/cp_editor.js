@@ -2,7 +2,9 @@
 // Simplifies interactions with the editor for the rest of the application
 // Encapsulates behaviors not native for our editors
 function CPEditor(type, value) {
+    this.type = '';
     this.editor = '';
+    this.readOnly = false;
     
     this.buildEditor(type, value);
     
@@ -148,11 +150,12 @@ ACSnippets = {
 }
 
 CPEditor.prototype.buildEditor = function(type, value) {
+    this.type = type;
+    
     var standardConfig = {
         lineNumbers  : true,
         value        : value,
         tabSize      : 2,
-        onChange     : Main.compileContent,
         // Code Mirror natively indents the entire line. We wanted it to work like
         // a standard editor where a tab (for us 2 spaces) is inserted into the 
         // current cursor position
@@ -265,6 +268,9 @@ CPEditor.prototype.buildEditor = function(type, value) {
         this.editor = CodeMirror.fromTextArea($('#js')[0], standardConfig);
         this.editor.setValue(value);
     }
+    
+    // Start registering onchange events after initial call to setValue
+    this.editor.setOption('onChange', Main.compileContent);
 };
 
 CPEditor.prototype.refresh = function() {
@@ -281,4 +287,38 @@ CPEditor.prototype.setCursorToEnd = function() {
     // same value as the actual number of chars, CodeMirror will
     // simply move the cursor to the end
     this.editor.setCursor(text.length, text.length, true);
+};
+
+CPEditor.prototype.toggleReadOnly = function() {
+    this.readOnly = (this.readOnly) ? false : true;
+    
+    if(this.readOnly) {
+        this.editor.setOption('onChange', function() { });
+        
+        if(this.type == 'html') {
+            this.editor.setValue(CodeRenderer.postProcessedHTML);
+        }
+        else if(this.type == 'css') {
+            this.editor.setValue(CodeRenderer.postProcessedCSS);
+        }
+        else if(this.type == 'js') {
+            this.editor.setValue(CodeRenderer.postProcessedJS);
+        }
+    }
+    else {
+        if(this.type == 'html') {
+            this.editor.setValue(CodeRenderer.refHTML);
+        }
+        else if(this.type == 'css') {
+            this.editor.setValue(CodeRenderer.refCSS);
+        }
+        else if(this.type == 'js') {
+            this.editor.setValue(CodeRenderer.refJS);
+        }
+        
+        // Start registering onchange events like normal again
+        this.editor.setOption('onChange', Main.compileContent);
+    }
+    
+    this.editor.setOption('readOnly', this.readOnly);
 };

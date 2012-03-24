@@ -151,6 +151,7 @@
             // Resizer
             var dragCover = $("#drag-cover");
             var dontTreadOnMe = false;
+            
             $("#vert-resizer").draggable({
                 // iframeFix: true,   // DOES NOT WORK AS GOOD
                 start: function() {
@@ -184,6 +185,14 @@
                     Main.boxes.height(Main.win.height());
                 },
                 containment: Main.boxes
+            });
+            
+            $('#viewsource-html,#viewsource-css,#viewsource-js').on('click', function() {
+                if(this.id == 'viewsource-html') HTMLEditor.toggleReadOnly();
+                else if(this.id == 'viewsource-css') CSSEditor.toggleReadOnly();
+                else if(this.id == 'viewsource-js') JSEditor.toggleReadOnly();
+                
+                return false;
             });
             
             this.hideSettingsAndPanelsOnblur();
