@@ -244,10 +244,11 @@ var CodeRenderer = {
             }
         }
         
+        CodeRenderer.errorHTML = '';
+        
         // If there is any data to process on the server. Send it off
         // and render after it comes back. Otherwise render away.
         if(params['html'] || params['css'] || params['js']) {
-            CodeRenderer.errorHTML = '';
             this.sendContentToServer(params);
         }
         else {
