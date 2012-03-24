@@ -167,7 +167,27 @@ var CData = {
               }
         });
     },
-    
+
+    fork: function() {
+        var getLocation = function(href) {
+            var l = document.createElement("a");
+            l.href = href;
+            return l
+        }
+        var l = getLocation(location.href);
+        var form = document.createElement('form');
+        form.setAttribute('method', 'post');
+        path = '/fork' + l.pathname;
+        form.setAttribute('action', path);
+        var hiddenField = document.createElement('input');
+        hiddenField.setAttribute('type', 'hidden');
+        hiddenField.setAttribute('name', 'auth_token');
+        hiddenField.setAttribute('value', 'hi');
+        form.appendChild(hiddenField);
+        document.body.appendChild(form);
+        form.submit();
+    },
+
     logout: function() {
         if(localStorage) {
             localStorage.clear();

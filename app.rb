@@ -16,8 +16,8 @@ require './models/content'
 class App < Sinatra::Base
   # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
-  use Rack::Session::Cookie, 
-    :key => 'codepen', 
+  use Rack::Session::Cookie,
+    :key => 'codepen',
     :expire_after => 2592000 # 30 days, make easy pacheesy on our user to not have to login.
   include Sessionator
 
@@ -89,38 +89,25 @@ class App < Sinatra::Base
     end
   end
 
+  #######
+  # Fork
+  # #####
   post '/fork/:slug/?' do |slug|
     set_session
-    content = Content.latest(slug)
-    if content['success']
-      new_content = content.fork(@user) 
-      redirect "/#{new_content.slug}"
-    end
-    redirect request.referrer
+    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
   end
 
   post '/fork/:slug/:version/?' do |slug, version|
     set_session
-    content = Content.version(slug, version)
-    conent.fork(@user) if content
-    ap @user
-    redirect "/#{new_content.slug}"
+    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
   end
 
-  get '/auth/:name/callback/?' do
-    puts 'here'
-    set_session
-    LoginService.new.login(@user, request.env['omniauth.auth'])
-    redirect request.cookies['last_visited'] or '/'
-  end
-
-  get '/auth/failure/?' do
-    'Authentication Failed'
-  end
-
-  get '/logout/?' do
-    session[:uid] = false
-    redirect '/'
+  def fork_redirect(content)
+    if content
+      new_content = content.fork(@user)
+      redirect "/#{new_content.slug}"
+    end
+    redirect request.referrer
   end
 
   get '/list/?' do
@@ -141,69 +128,50 @@ class App < Sinatra::Base
     encode(results)
   end
 
-  # show full page for slug and version
+  ############
+  # Full Page
+  # ##########
   get %r{/([\d]+)/([\d]+)/full} do |slug, version|
-    iframe_url = get_iframe_url(request) + request.env['REQUEST_URI']
-    content = Content.version(slug, version)
-    rend = Renderer.new
-    rend.render_full_page(content, iframe_url)
+    render_full_page Content.version(slug, version)
   end
 
-  # show the full page for latest version of slug
   get %r{/([\d]+)/full} do |slug|
-    content = Content.latest(slug)
-    iframe_url = get_iframe_url(request) + request.env['REQUEST_URI']
+    render_full_page Content.latest(slug)
+  end
+
+  def render_full_page(content)
+    show_404 if not content
     rend = Renderer.new
     rend.render_full_page(content, iframe_url)
   end
 
-  # anon user
+  #############
+  # Anon User
+  # ##########
   get %r{/([\d]+)/([\d]+)} do |slug, version|
-    set_auth_token
-    
-    content = Content.version(slug, version)
-    show_404 if not content['success']
-    
-    @slug = true
-    @iframe_src = get_iframe_url(request)
-    @c_data = content
-    @c_data['auth_token'] = set_auth_token
+    set_content Content.version(slug, version)
     erb :index
   end
 
-  def set_owned_flag(content)
-    ap 'here comes content!'
-    ap content
-    @owned = content['uid'] == @user.uid
-  end
-
-  # anon user
   get %r{/([\d]+)} do |slug|
+    set_content Content.latest(slug)
+    erb :index
+  end
+
+  def set_content(content)
     set_auth_token
-    #TODO: show errors in template
-    content = Content.latest(slug)
-    ap content
     show_404 if not content['success']
+    set_session
+    @owned = (content['uid'] == @user.uid)
     @slug = true
     @iframe_src = get_iframe_url(request)
     @c_data = content
     @c_data['auth_token'] = set_auth_token
-    erb :index
   end
 
-  def show_404(reason=false)
-    flash[:error] = reason if reason
-    raise Sinatra::NotFound
-  end
-
-  not_found do
-    erb :'404'
-  end
-
-  error do
-    erb :'500'
-  end
-
+  #############
+  # Gist
+  ###########
   post '/gist/?' do
     data = JSON.parse(params[:data])
 
@@ -218,10 +186,6 @@ class App < Sinatra::Base
 
   get '/test/coderenderer/?' do
     erb :test_code_renderer
-  end
-
-  error do
-    'Unable to process request. ' + env['sinatra.error'].message
   end
 
   def encode(obj)
@@ -243,6 +207,39 @@ class App < Sinatra::Base
       json = obj.to_json or { }.to_json
       json.gsub('/', '\/')
     end
+  end
+
+  not_found do
+    erb :'404'
+  end
+
+  error do
+    erb :'500'
+  end
+
+  def show_404(reason=false)
+    flash[:error] = reason if reason
+    raise Sinatra::NotFound
+  end
+
+  get '/auth/:name/callback/?' do
+    puts 'here'
+    set_session
+    LoginService.new.login(@user, request.env['omniauth.auth'])
+    redirect request.cookies['last_visited'] or '/'
+  end
+
+  get '/auth/failure/?' do
+    'Authentication Failed'
+  end
+
+  get '/logout/?' do
+    session[:uid] = false
+    redirect '/'
+  end
+
+  get '/test/coderenderer/?' do
+    erb :test_code_renderer
   end
 
 end
