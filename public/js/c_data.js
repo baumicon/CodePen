@@ -182,7 +182,7 @@ var CData = {
         var hiddenField = document.createElement('input');
         hiddenField.setAttribute('type', 'hidden');
         hiddenField.setAttribute('name', 'auth_token');
-        hiddenField.setAttribute('value', 'hi');
+        hiddenField.setAttribute('value', CData.auth_token);
         form.appendChild(hiddenField);
         document.body.appendChild(form);
         form.submit();
