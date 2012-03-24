@@ -1,6 +1,6 @@
 <footer>
 
-    <% randomNum = rand(10)+1 %>
+    <% randomNum = rand(11)+1 %>
     
     <% if randomNum == 1 %>
       <p><strong>CodePen Fact</strong>: We use <a href="http://ejohn.org/blog/javascript-micro-templating/">JavaScript Micro-Templating</a> by John Resig to build the live demo shown at the bottom of the page.</p>
@@ -24,6 +24,8 @@
       <p><strong>CodePen Fact</strong>: The code editors boxes on CodePen use the open source project <a href="http://codemirror.net/">CodeMirror</a>.</p>
     <% elsif randomNum == 11 %>
       <p><strong>Hot Tip</strong>: You can append /full/ to the URL to get the full page result with no CodePen UI.</p>
+    <% elsif randomNum == 12 %>
+      <p><strong>Hot Tip</strong>: You can press the alt/option key when your cursor is over a HEX color to get a color picker.</p>
     <% end %>
 
     <a href="/about" class="stuff">Stuff</a>

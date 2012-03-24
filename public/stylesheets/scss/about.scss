@@ -1,3 +1,8 @@
+html, body {
+  height: 100%;
+  overflow: auto;
+}
+
 .wrap {
   padding: 0 50px 0 20px;
   max-width: 700px;
@@ -8,17 +13,35 @@
   ul {
     margin: 0 0 20px 20px;
   }
+  li {
+    margin: 0 0 5px 0;
+  }
   p {
     margin: 0 0 10px 0;
   }
   a {
     color: #77fff7;
+    border-bottom: 1px dotted rgba(255,255,255,0.3);
+    &:hover {
+      border-bottom: 1px solid white;
+    }
   }
-}
-
-h1 {
-  a {
-    color: white;
+  .authors {
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    img {
+      display: block;
+      padding: 10px;
+      background: rgba(0,0,0,0.2);
+      margin: 0 0 5px 0;
+    }
+    li {
+      float: left;
+      margin: 0 20px 20px 0;
+      padding: 0;
+      text-align: center;
+    }
   }
 }
 
@@ -29,17 +52,3 @@ h2 {
   letter-spacing: 2px;
 }
 
-.authors {
-  list-style: none;
-  img {
-    display: block;
-    padding: 10px;
-    background: rgba(0,0,0,0.2);
-    margin: 0 0 5px 0;
-  }
-  li {
-    float: left;
-    margin: 0 20px 20px 0;
-    text-align: center;
-  }
-}

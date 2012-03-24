@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <title>CodePen</title>
   <link rel="stylesheet" href="/stylesheets/css/main.css">
-  <link type="text/css" rel="stylesheet" href="/stylesheets/css/colorpicker.css" />
   <link rel="shortcut icon" href="/favicon.png">
 </head>
 
@@ -25,7 +24,7 @@
             <h2>HTML</h2>
             <a href="#" class="settings-nub" title="Open Settings">
               <span aria-hidden="true">⬇</span>
-              </a>
+            </a>
             
             <a href="#" class="expander" title="Expand">
               <strong>⌘1</strong>
@@ -110,13 +109,13 @@
             <form class="settings-row-2">
               <input type="radio" id="startercss-normalize" name="startercss" checked value="normalize">
               <label for="startercss-normalize" class="small-inline">Normalize</label> 
-              <a class="inline-q" href="http://necolas.github.com/normalize.css/">?<a>
+              <a class="inline-q" target="_blank" href="http://necolas.github.com/normalize.css/">?<a>
 
               &ensp;
             
               <input type="radio" id="startercss-reset" name="startercss" value="reset">
               <label for="startercss-reset" class="small-inline">Reset</label> 
-              <a class="inline-q" href="http://meyerweb.com/eric/tools/css/reset/">?</a>
+              <a class="inline-q" target="_blank" href="http://meyerweb.com/eric/tools/css/reset/">?</a>
 
               &ensp;
 
@@ -127,7 +126,7 @@
             <form class="settings-row-3">
               <input type="checkbox" id="prefix-free" name="prefix-free">
               <label for="prefix-free" class="small-inline">Prefix free</label>
-              <a class="inline-q" href="http://leaverou.github.com/prefixfree/">?</a>
+              <a class="inline-q" target="_blank" href="http://leaverou.github.com/prefixfree/">?</a>
             </form>
 
             <form class="settings-row-4">
@@ -175,8 +174,6 @@
                 <option value="jquery">jQuery</option>
                 <option value="mootools">MooTools</option>
                 <option value="prototype">Prototype</option>
-                <!-- <option value="extjs">ExtJS</option>
-                <option value="dojo">Dojo</option> -->
               </select>
             </form>
 
@@ -233,6 +230,8 @@
       '/js/main.js'
       ], 'index')
   %>
+
+  <!-- removed color picker from above -->
 
 </body>
 

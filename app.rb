@@ -38,7 +38,7 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
-  get '/' do
+  get '/?' do
     @c_data = {}
     @c_data['auth_token'] = set_auth_token
     @iframe_src = get_iframe_url(request)
@@ -59,18 +59,22 @@ class App < Sinatra::Base
     end
   end
 
-  get '/secure_iframe' do
+  get '/secure_iframe/?' do
     # Setting the x-frame-options headers allows the
     # content to be properly loaded in this iframe
     response.headers['X-Frame-Options'] = 'GOFORIT'
     erb :iframe
   end
 
-  get '/about' do
+  get '/about/?' do
     erb :about
   end
 
-  post '/save/content' do
+  get '/embed/?' do
+    erb :embed
+  end
+
+  post '/save/content/?' do
     if valid_auth_token?(params[:auth_token])
       set_session
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
@@ -89,7 +93,7 @@ class App < Sinatra::Base
     fork_redirect Content.first(:order => :version.desc, :slug => "#{slug}")
   end
 
-  post '/fork/:slug/:version' do |slug, version|
+  post '/fork/:slug/:version/' do |slug, version|
     set_session
     fork_redirect Content.first(:order => :version.desc, :slug => "#{slug}")
   end
@@ -100,15 +104,14 @@ class App < Sinatra::Base
       redirect "/#{new_content.slug}"
     end
     redirect request.referrer
-  end
 
-  get '/list/' do
+  get '/list/?' do
     @pens = [ ]
 
     erb :list
   end
 
-  post '/process/' do
+  post '/process/?' do
     pps = PreProcessorService.new
     results = pps.process_content(params)
 
@@ -134,7 +137,7 @@ class App < Sinatra::Base
   def render_full_page(content)
     show_404 if not content
     rend = Renderer.new
-    rend.render_full_page(content)
+    rend.render_full_page(content, iframe_url)
   end
 
   #############
@@ -146,7 +149,6 @@ class App < Sinatra::Base
   end
 
   get %r{/([\d]+)} do |slug|
-    set_auth_token
     set_content Content.latest(slug)
     erb :index
   end
@@ -177,8 +179,8 @@ class App < Sinatra::Base
     encode({ 'url' => url_to_gist })
   end
 
-  error do
-    'Unable to process request. ' + env['sinatra.error'].message
+  get '/test/coderenderer/?' do
+    erb :test_code_renderer
   end
 
   def encode(obj)

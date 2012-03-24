@@ -112,7 +112,7 @@ var CodeRenderer = {
     
     getPrefixFree: function() {
         if(CData.css_prefix_free) {
-            return '<script src="/box-libs/prefixfree.min.js"></script>';
+            return '/box-libs/prefixfree.min.js';
         }
         else {
             return '';
@@ -121,12 +121,10 @@ var CodeRenderer = {
     
     getCSSStarter: function() {
         if(CData.css_starter == 'normalize') {
-            href = '/stylesheets/css/normalize.css';
-            return '<link rel="stylesheet" href="'+ href + '">';
+            return '/stylesheets/css/normalize.css';
         }
         else if(CData.css_starter == 'reset') {
-            href = '/stylesheets/css/reset.css';
-            return '<link rel="stylesheet" href="'+ href + '">';
+            return '/stylesheets/css/reset.css';
         }
         else {
             return '';
@@ -134,21 +132,15 @@ var CodeRenderer = {
     },
     
     getCSSExternal: function() {
-        stylesheet = '';
-        
         if(CData.css_external) {
             // Make sure the url is a valid URL and ends with css
             if(this.isValidExternal(CData.css_external, -3, 3, 'css')) {
-                stylesheet = '<link rel="stylesheet" href="';
-                stylesheet+= CData.css_external + '">';
+                return CData.css_external;
             }
             else {
-                stylesheet = '<!-- invalid external stylesheet: ';
-                stylesheet+= CData.css_external + ' -->';
+                return '<!-- invalid external stylesheet: ' + CData.css_external + ' -->';
             }
         }
-        
-        return stylesheet;
     },
     
     // Get JS Options
@@ -170,13 +162,13 @@ var CodeRenderer = {
     getJSLibrary: function() {
         if(CData.js_library) {
             var jsLibs = {
-                'jquery': '//code.jquery.com/jquery-latest.js',
-                'mootools'     : '//ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
-                'prototype'    : '//ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'
-                // ,'extjs'        : '//ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js'
-                // ,'dojo'         : '//ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js'
+                'jquery': '/code.jquery.com/jquery-latest.js',
+                'mootools'     : '/ajax.googleapis.com/ajax/libs/mootools/1/mootools-yui-compressed.js',
+                'prototype'    : '/ajax.googleapis.com/ajax/libs/prototype/1/prototype.js'
+                // ,'extjs'        : '/ajax.googleapis.com/ajax/libs/ext-core/3/ext-core.js'
+                // ,'dojo'         : '/ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js'
             }
-            return '<script src="' + jsLibs[CData.js_library] + '"></script>';
+            return jsLibs[CData.js_library];
         }
         else {
             return '';
@@ -184,7 +176,7 @@ var CodeRenderer = {
     },
     
     getModernizr: function() {
-        return (CData.js_modernizr) ? '<script src="/js/libs/modernizr.js"></script>' : '';
+        return (CData.js_modernizr) ? '/js/libs/modernizr.js' : '';
     },
     
     getJSExternal: function() {
@@ -193,7 +185,7 @@ var CodeRenderer = {
         if(CData.js_external) {
             // Make sure the url is a valid URL and ends with js
             if(this.isValidExternal(CData.js_external, -2, 2, 'js')) {
-                script = '<script src="' + CData.js_external + '"></script>';
+                script = CData.js_external;
             }
             else {
                 script = '<!-- invalid external javascript file: ';
@@ -252,10 +244,11 @@ var CodeRenderer = {
             }
         }
         
+        CodeRenderer.errorHTML = '';
+        
         // If there is any data to process on the server. Send it off
         // and render after it comes back. Otherwise render away.
         if(params['html'] || params['css'] || params['js']) {
-            CodeRenderer.errorHTML = '';
             this.sendContentToServer(params);
         }
         else {

@@ -14,13 +14,25 @@
 
     <form>
 
-      <h1><a href="/">CodePen.io</a></h1>
+      <h1 class="logo"><a href="/">CodePen.io</a></h1>
+
+      <div class="box-actions">
+
+        <a href="/" class="button">
+          Brand New Pen
+        </a> 
+
+      </div> <!-- div.box-actions -->
 
     </form>
       
   </header>
 
   <div class="wrap">
+
+    <h2>About CodePen</h2>
+
+    <p>CodePen is little one-page app for playing around with front end code. Enter HTML, CSS, and JavaScript and the combined result is displayed below. This is extremely useful for showing off demos, troubleshooting, demonstrating bugs, or anything else you can think of.</p>
 
     <h2>CodePen is Open Source</h2>
 
@@ -32,30 +44,38 @@
       <li>Pretty much do whatever you want with it, including install it on your own server.</li>
     </ul>
 
-    <h2>About CodePen</h2>
-
-    <p>CodePen is little one-page app for playing around with front end code. Enter HTML, CSS, and JavaScript and the combined result is displayed below. This is extremely useful for showing off demos, troubleshooting, demonstrating bugs, or anything else you can think of.</p>
-
     <h2>Authors</h2>
     <ul class="authors">
       <li>
         <img src="/images/author-alex.jpg" alt="Picture of Alex Vazquez">
-        Alex Vazquez
+        <a href="http://almostpolished.com/">Alex Vazquez</a>
       </li>
       <li>
         <img src="/images/author-tim.jpg" alt="Picture of Tim Sabat">
-        Tim Sabat
+        <a href="http://boomboomboom.biz/">Tim Sabat</a>
       </li>
       <li>
         <img src="/images/author-chris.jpg" alt="Picture of Chris Coyier">
-        Chris Coyier
+        <a href="http://chriscoyier.net">Chris Coyier</a>
       </li>
     </ul>
 
     <p>Special thanks to <a href="http://dribbble.com/joshpuckett">Josh Puckett</a> for the UI help.</p>
 
-  </div>
+    <h2>Official Browser Support List</h2>
 
-  <%= partial :footer %>
+    <ul>
+      <li>Chrome (Any Version)</li>
+      <li>Firefox 4+</li>
+      <li>Safari 4+</li>
+      <li>Opera 11+</li>
+      <li>IE 8+</li>
+    </ul>
+
+    <p>We'll go deeper if we can, but no promises (in fact this list might not be totally working just yet). We realize you might be using CodePen to troubleshoot things in older browsers. If that's the case, you can append /full to the end of any CodePen demo URL to get the full page result to test in older browsers.</p>
+
+    <p>Also, no mobile support quite yet, but we'd love to get there.</p>
+
+  </div>
 
 </body>
