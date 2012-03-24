@@ -81,22 +81,25 @@ class App < Sinatra::Base
     end
   end
 
+  #######
+  # Fork
+  # #####
   post '/fork/:slug' do |slug|
     set_session
-    content = Content.latest(slug)
-    if content['success']
-      new_content = content.fork(@user) 
-      redirect "/#{new_content.slug}"
-    end
-    redirect request.referrer
+    fork_redirect Content.first(:order => :version.desc, :slug => "#{slug}")
   end
 
   post '/fork/:slug/:version' do |slug, version|
     set_session
-    content = Content.version(slug, version)
-    conent.fork(@user) if content
-    ap @user
-    redirect "/#{new_content.slug}"
+    fork_redirect Content.first(:order => :version.desc, :slug => "#{slug}")
+  end
+
+  def fork_redirect(content)
+    if content
+      new_content = content.fork(@user)
+      redirect "/#{new_content.slug}"
+    end
+    redirect request.referrer
   end
 
   get '/list/' do
