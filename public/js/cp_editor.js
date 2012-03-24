@@ -291,29 +291,35 @@ CPEditor.prototype.setCursorToEnd = function() {
 
 CPEditor.prototype.toggleReadOnly = function() {
     this.readOnly = (this.readOnly) ? false : true;
-    
+
     if(this.readOnly) {
         this.editor.setOption('onChange', function() { });
         
         if(this.type == 'html') {
             this.editor.setValue(CodeRenderer.postProcessedHTML);
+            $("#box-html").toggleClass("view-compiled");
         }
         else if(this.type == 'css') {
             this.editor.setValue(CodeRenderer.postProcessedCSS);
+            $("#box-css").toggleClass("view-compiled");
         }
         else if(this.type == 'js') {
             this.editor.setValue(CodeRenderer.postProcessedJS);
+            $("#box-js").toggleClass("view-compiled");
         }
     }
     else {
         if(this.type == 'html') {
             this.editor.setValue(CodeRenderer.refHTML);
+            $("#box-html").toggleClass("view-compiled");
         }
         else if(this.type == 'css') {
             this.editor.setValue(CodeRenderer.refCSS);
+            $("#box-css").toggleClass("view-compiled");
         }
         else if(this.type == 'js') {
             this.editor.setValue(CodeRenderer.refJS);
+            $("#box-js").toggleClass("view-compiled");
         }
         
         // Start registering onchange events like normal again

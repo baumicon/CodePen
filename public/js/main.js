@@ -187,7 +187,7 @@
                 containment: Main.boxes
             });
             
-            $('#viewsource-html,#viewsource-css,#viewsource-js').on('click', function() {
+            $('#viewsource-html, #viewsource-css, #viewsource-js').on('click', function() {
                 if(this.id == 'viewsource-html') HTMLEditor.toggleReadOnly();
                 else if(this.id == 'viewsource-css') CSSEditor.toggleReadOnly();
                 else if(this.id == 'viewsource-js') JSEditor.toggleReadOnly();

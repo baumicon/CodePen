@@ -61,9 +61,6 @@ header button, header .button {
   line-height: 0.8;
 }
 
-#fork {
-  @include border-radiuses(0, 0, 5px, 5px);
-}
 #fork:before {
   top: 1px;
 }
