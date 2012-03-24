@@ -1,6 +1,27 @@
 // reassign the $ to $j so that jquery doesn't conflict with other libraries
 var $j = jQuery.noConflict();
 
+$j.getCSS = function(url) {
+    $j(document.createElement('link')).attr({
+        href: url,
+        media: 'screen',
+        type: 'text/css',
+        rel: 'stylesheet'
+    }).appendTo('head');
+};
+
+$j.addCSS = function(css) {
+    var style = "<style>\n";
+    style += css + "</style>";
+    $j(style).appendTo("head");
+}
+
+$j.addJS = function(code) {
+    var js = "<script>\n";
+    js += code + "</script>";
+    $j(js).appendTo("head");
+}
+
 var __renderIFrame = function(event) {
     var contentObj = JSON.parse(event.data);
     
@@ -8,7 +29,7 @@ var __renderIFrame = function(event) {
         // errors exist. show those
         var html = $j('html')[0];
         html.innerHTML = contentObj['error'];
-        $j('<link rel="stylesheet" href="/stylesheets/css/errors.css">').appendTo("head");
+        $j.getCSS('/stylesheets/css/errors.css');
     }
     else {
         // HTML related
@@ -18,43 +39,39 @@ var __renderIFrame = function(event) {
 
         // CSS related
         if(contentObj['CSS_STARTER']) {
-            $j(contentObj['CSS_STARTER']).appendTo("head");
+            $j.getCSS(contentObj['CSS_STARTER']);
         }
         else if(contentObj['CSS_EXTERNAL']) {
-            $j(contentObj['CSS_EXTERNAL']).appendTo("head");
+            $j.getCSS(contentObj['CSS_EXTERNAL']);
         }
-
-        var style = "<style>\n";
-        style += contentObj['CSS'] + "</style>";
-        $j(style).appendTo("head");
-
+        
+        $j.addCSS(contentObj['CSS']);
+        
         // JS related
         if(contentObj['JSLIBRARY']) {
-            if(contentObj['JSLIBRARY'].indexOf('jquery') > 1) {
+            // Since we already load jquery, give users access to $, instead of $j
+            if(contentObj['JSLIBRARY'].indexOf('jquery') > -1) {
                 $ = $j;
             }
             else {
-                $j(contentObj['JSLIBRARY']).appendTo("head");
+                $j.getScript(contentObj['JSLIBRARY']);
             }
         }
         
         if(contentObj['PREFIX']) {
-            // TODO: Make others use getScript instead of appending to head
             $j.getScript('/box-libs/prefixfree.min.js', function() {
                 StyleFix.process();
             });
         }
         if(contentObj['JS_MODERNIZR']) {
-            $j(contentObj['JS_MODERNIZR']).appendTo("head");
+            $j.getScript(contentObj['JS_MODERNIZR']);
         }
-
+        
         if(contentObj['JS_EXTERNAL']) {
-            $j(contentObj['JS_EXTERNAL']).appendTo("head");
+            $j.getScript(contentObj['JS_EXTERNAL']);
         }
-
-        var js = "<script>\n";
-        js += contentObj['JS'] + "</script>";
-        $j(js).appendTo("head");
+        
+        $j.addJS(contentObj['JS']);
     }
 }
 
