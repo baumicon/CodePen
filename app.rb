@@ -159,7 +159,6 @@ class App < Sinatra::Base
   end
 
   def set_content(content)
-    set_auth_token
     show_404 if not content['success']
     set_session
     @owned = (content['uid'] == @user.uid)
