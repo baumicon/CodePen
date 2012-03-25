@@ -1,23 +1,252 @@
 // A Wrapper around the Code Mirror Editor
 // Simplifies interactions with the editor for the rest of the application
 // Encapsulates behaviors not native for our editors
-function CPEditor(type, value) {
-    this.type = '';
-    this.editor = '';
-    this.readOnly = false;
+var CPEditor = Class.extend({
+    type    : '',
+    value   : '',
+    readOnly: false,
+    editor  : '',
     
-    this.buildEditor(type, value);
+    init: function(type, value) {
+        this.type     = type;
+        this.value    = value;
+        
+        this.buildEditor(type, value);
+    },
     
-    this.getOption = function(option) {
+    getOption: function(option) {
         return this.editor.getOption(option);
-    };
-
-    this.getValue = function() {
+    },
+    
+    getValue: function() {
         return this.editor.getValue();
-    };
+    },
     
+    buildEditor: function(type, value) {
+        var standardConfig = {
+            lineNumbers  : true,
+            value        : value,
+            tabSize      : 2,
+            onChange     : function() { },
+            // Code Mirror natively indents the entire line. We wanted it to work like
+            // a standard editor where a tab (for us 2 spaces) is inserted into the 
+            // current cursor position
+            onKeyEvent   : function(editor, key) {
+                // Initially have code mirror not ignore the key
+                // if we decide to handle it then set this to true
+                var cmIgnoreKey = false;
+
+                if(key.keyCode == 9 && key.type == 'keydown') {
+                    if(!editor.somethingSelected()) {
+                        var snippet = ACSnippets.findSnippet(editor);
+                        var from = editor.getCursor();
+
+                        if(snippet) {
+                            editor.setLine(from.line, snippet);
+                        }
+                        else {
+                            var line = editor.getLine(from.line);
+                            var to = {'line': from.line, 'ch': line.length};
+                            var range = editor.getRange(from, to);
+                            var tab = '';
+
+                            for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
+                                tab += ' ';
+                            }
+
+                            editor.replaceRange(tab + range, from, to);
+
+                            var endCursor = from.ch + tab.length;
+                            editor.setCursor({'line': from.line, 'ch': endCursor});
+                        }
+
+                        // Stop the keydown and keypress both
+                        key = $.Event(key);
+                        key.stopPropagation();
+                        key.preventDefault();
+
+                        cmIgnoreKey = true;
+                    }
+                }
+                // If the User selects the alt key and text is selected
+                // replace the text with a color value from the color picker
+                else if(key.keyCode == 18 && key.type == 'keydown') {
+                    if(ColorUtil.showColorPicker(editor)) {
+                        ColorUtil.editor = editor;
+                        ColorUtil.from = editor.getCursor();
+                        // ColorUtil needs to hold onto the initial ch where the cursor
+                        // started because it will change after we replace text
+                        ColorUtil.initialCh = ColorUtil.from.ch;
+                        ColorUtil.coordinates = editor.
+                            charCoords({'line': ColorUtil.from.line, 'ch':0}, 'page');
+                        ColorUtil.startColor = ColorUtil.
+                            getStartColor(editor.getLine(ColorUtil.from.line), ColorUtil.from.ch);
+
+                        $('#tcolor').ColorPicker({
+                            color: ColorUtil.startColor,
+                            onShow: function (colpkr) {
+                                var coordinates = ColorUtil.coordinates;
+                                $(this).ColorPickerSetColor(ColorUtil.startColor);
+
+                                $(colpkr).css({
+                                    // index has to be more than the editors when expanded
+                                    // editors z-index values is 1001
+                                    'z-index': 1002,
+                                    position: 'absolute',
+                                    left: Math.ceil(coordinates.x) + 'px', 
+                                    top:  Math.ceil((coordinates.y + 15)) + 'px',
+                                });
+
+                                $(colpkr).fadeIn(300);
+
+                                return false;
+                            },
+
+                            onHide: function (colpkr) {
+                                $(colpkr).fadeOut(300);
+
+                                return false;
+                            },
+
+                            onChange: function (hsb, hex, rgb) {
+                                var from = ColorUtil.editor.getCursor();
+                                var line = ColorUtil.editor.getLine(from.line);
+                                var newLine = ColorUtil.regexReplace(line, hex);
+
+                                ColorUtil.editor.setLine(from.line, newLine);
+                            }
+                        });
+
+                        $('#tcolor').click();
+                    }
+                }
+
+                return cmIgnoreKey;
+            },
+        }
+
+        standardConfig['mode'] = this.getMode();
+        this.editor = CodeMirror.fromTextArea($(this.getTextAreaID())[0], standardConfig);
+        this.editor.setValue(value);
+
+        // Start registering onchange events after initial call to setValue
+        this.editor.setOption('onChange', Main.compileContent);
+    },
     
-};
+    refresh: function() {
+        this.editor.refresh();
+    },
+
+    setCursorToEnd: function() {
+        this.editor.focus();
+        
+        var text = this.editor.getValue();
+        
+        // set the cursor to the end of the editor
+        // Make sure it's at the end by line num and char num to
+        // same value as the actual number of chars, CodeMirror will
+        // simply move the cursor to the end
+        this.editor.setCursor(text.length, text.length, true);
+    },
+    
+    toggleReadOnly: function() {
+        if(this.allowViewSource()) {
+            this.readOnly = (this.readOnly) ? false : 'nocursor';
+            
+            if(this.readOnly) {
+                // Don't register any change events while in readonly mode
+                this.editor.setOption('onChange', function() { });
+                this.makeReadOnly();
+            }
+            else {
+                this.makeEditable();
+                // Start registering onchange events like normal again
+                this.editor.setOption('onChange', Main.compileContent);
+            }
+            
+            this.editor.setOption('readOnly', this.readOnly);
+        }
+      },
+
+     updateCompiledCode: function() {
+         if(this.readOnly) {
+             this.toggleReadOnly();
+         }
+     }
+});
+// End of CPEditor class
+
+var HTMLEditor = CPEditor.extend({
+    getMode: function() {
+        return 'xml';
+    },
+    
+    getTextAreaID: function() {
+        return '#html';
+    },
+    
+    allowViewSource: function() {
+        return CData.html_pre_processor != 'none';
+    },
+    
+    makeReadOnly: function() {
+        this.editor.setValue(CodeRenderer.postProcessedHTML);
+        $("#box-html").toggleClass("view-compiled");
+    },
+    
+    makeEditable: function() {
+        this.editor.setValue(CodeRenderer.refHTML);
+        $("#box-html").toggleClass("view-compiled");
+    }
+});
+
+var CSSEditor = CPEditor.extend({
+    getMode: function() {
+        return 'css';
+    },
+    
+    getTextAreaID: function() {
+        return '#css';
+    },
+    
+    allowViewSource: function() {
+        return CData.css_pre_processor != 'none';
+    },
+    
+    makeReadOnly: function() {
+        this.editor.setValue(CodeRenderer.postProcessedCSS);
+        $("#box-css").toggleClass("view-compiled");
+    },
+    
+    makeEditable: function() {
+        this.editor.setValue(CodeRenderer.refCSS);
+        $("#box-css").toggleClass("view-compiled");
+    }
+});
+
+var JSEditor = CPEditor.extend({
+    getMode: function() {
+        return 'javascript';
+    },
+    
+    getTextAreaID: function() {
+        return '#js';
+    },
+    
+    allowViewSource: function() {
+        return CData.js_pre_processor != 'none';
+    },
+    
+    makeReadOnly: function() {
+        this.editor.setValue(CodeRenderer.postProcessedJS);
+        $("#box-js").toggleClass("view-compiled");
+    },
+    
+    makeEditable: function() {
+        this.editor.setValue(CodeRenderer.refJS);
+        $("#box-js").toggleClass("view-compiled");
+    }
+});
 
 var ColorUtil = {
     editor: '',
@@ -148,183 +377,3 @@ ACSnippets = {
         return snippetExist;
     }
 }
-
-CPEditor.prototype.buildEditor = function(type, value) {
-    this.type = type;
-    
-    var standardConfig = {
-        lineNumbers  : true,
-        value        : value,
-        tabSize      : 2,
-        // Code Mirror natively indents the entire line. We wanted it to work like
-        // a standard editor where a tab (for us 2 spaces) is inserted into the 
-        // current cursor position
-        onKeyEvent   : function(editor, key) {
-            // Initially have code mirror not ignore the key
-            // if we decide to handle it then set this to true
-            var cmIgnoreKey = false;
-            
-            if(key.keyCode == 9 && key.type == 'keydown') {
-                if(!editor.somethingSelected()) {
-                    var snippet = ACSnippets.findSnippet(editor);
-                    var from = editor.getCursor();
-                    
-                    if(snippet) {
-                        editor.setLine(from.line, snippet);
-                    }
-                    else {
-                        var line = editor.getLine(from.line);
-                        var to = {'line': from.line, 'ch': line.length};
-                        var range = editor.getRange(from, to);
-                        var tab = '';
-                        
-                        for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
-                            tab += ' ';
-                        }
-                        
-                        editor.replaceRange(tab + range, from, to);
-                        
-                        var endCursor = from.ch + tab.length;
-                        editor.setCursor({'line': from.line, 'ch': endCursor});
-                    }
-                    
-                    // Stop the keydown and keypress both
-                    key = $.Event(key);
-                    key.stopPropagation();
-                    key.preventDefault();
-                    
-                    cmIgnoreKey = true;
-                }
-            }
-            // If the User selects the alt key and text is selected
-            // replace the text with a color value from the color picker
-            else if(key.keyCode == 18 && key.type == 'keydown') {
-                if(ColorUtil.showColorPicker(editor)) {
-                    ColorUtil.editor = editor;
-                    ColorUtil.from = editor.getCursor();
-                    // ColorUtil needs to hold onto the initial ch where the cursor
-                    // started because it will change after we replace text
-                    ColorUtil.initialCh = ColorUtil.from.ch;
-                    ColorUtil.coordinates = editor.
-                        charCoords({'line': ColorUtil.from.line, 'ch':0}, 'page');
-                    ColorUtil.startColor = ColorUtil.
-                        getStartColor(editor.getLine(ColorUtil.from.line), ColorUtil.from.ch);
-                    
-                    $('#tcolor').ColorPicker({
-                        color: ColorUtil.startColor,
-                        onShow: function (colpkr) {
-                            var coordinates = ColorUtil.coordinates;
-                            $(this).ColorPickerSetColor(ColorUtil.startColor);
-                            
-                            $(colpkr).css({
-                                // index has to be more than the editors when expanded
-                                // editors z-index values is 1001
-                                'z-index': 1002,
-                                position: 'absolute',
-                                left: Math.ceil(coordinates.x) + 'px', 
-                                top:  Math.ceil((coordinates.y + 15)) + 'px',
-                            });
-                            
-                            $(colpkr).fadeIn(300);
-                            
-                            return false;
-                        },
-                        
-                        onHide: function (colpkr) {
-                            $(colpkr).fadeOut(300);
-                            
-                            return false;
-                        },
-                        
-                        onChange: function (hsb, hex, rgb) {
-                            var from = ColorUtil.editor.getCursor();
-                            var line = ColorUtil.editor.getLine(from.line);
-                            var newLine = ColorUtil.regexReplace(line, hex);
-                            
-                            ColorUtil.editor.setLine(from.line, newLine);
-                        }
-                    });
-                         
-                    $('#tcolor').click();
-                }
-            }
-
-            return cmIgnoreKey;
-        },
-    }
-
-    if(type == 'html') {
-        standardConfig['mode'] = 'xml';
-        this.editor = CodeMirror.fromTextArea($('#html')[0], standardConfig);
-        this.editor.setValue(value);
-    }
-    else if(type == 'css') {
-        standardConfig['mode'] = 'css';
-        this.editor = CodeMirror.fromTextArea($('#css')[0], standardConfig);
-        this.editor.setValue(value);
-    }
-    else if(type == 'js') {
-        standardConfig['mode'] = 'javascript';
-        this.editor = CodeMirror.fromTextArea($('#js')[0], standardConfig);
-        this.editor.setValue(value);
-    }
-    
-    // Start registering onchange events after initial call to setValue
-    this.editor.setOption('onChange', Main.compileContent);
-};
-
-CPEditor.prototype.refresh = function() {
-    this.editor.refresh();
-};
-
-CPEditor.prototype.setCursorToEnd = function() {
-    this.editor.focus();
-
-    var text = this.editor.getValue();
-    
-    // set the cursor to the end of the editor
-    // Make sure it's at the end by line num and char num to
-    // same value as the actual number of chars, CodeMirror will
-    // simply move the cursor to the end
-    this.editor.setCursor(text.length, text.length, true);
-};
-
-CPEditor.prototype.toggleReadOnly = function() {
-    this.readOnly = (this.readOnly) ? false : true;
-
-    if(this.readOnly) {
-        this.editor.setOption('onChange', function() { });
-        
-        if(this.type == 'html') {
-            this.editor.setValue(CodeRenderer.postProcessedHTML);
-            $("#box-html").toggleClass("view-compiled");
-        }
-        else if(this.type == 'css') {
-            this.editor.setValue(CodeRenderer.postProcessedCSS);
-            $("#box-css").toggleClass("view-compiled");
-        }
-        else if(this.type == 'js') {
-            this.editor.setValue(CodeRenderer.postProcessedJS);
-            $("#box-js").toggleClass("view-compiled");
-        }
-    }
-    else {
-        if(this.type == 'html') {
-            this.editor.setValue(CodeRenderer.refHTML);
-            $("#box-html").toggleClass("view-compiled");
-        }
-        else if(this.type == 'css') {
-            this.editor.setValue(CodeRenderer.refCSS);
-            $("#box-css").toggleClass("view-compiled");
-        }
-        else if(this.type == 'js') {
-            this.editor.setValue(CodeRenderer.refJS);
-            $("#box-js").toggleClass("view-compiled");
-        }
-        
-        // Start registering onchange events like normal again
-        this.editor.setOption('onChange', Main.compileContent);
-    }
-    
-    this.editor.setOption('readOnly', this.readOnly);
-};
