@@ -7,10 +7,12 @@ var KeyBindings = {
     bindKeys: function() {
         $(document).on('keydown', function(event) {
 
+            console.log(event);
+
             stop = false;
             
             // Process all the altKey pressed events
-            if(event.metaKey) {
+            if(event.altKey) {
                 if(event.keyCode == 49) {
                     // cmd + 1
                     stop = true;
