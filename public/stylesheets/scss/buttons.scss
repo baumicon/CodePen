@@ -111,7 +111,8 @@ header button, header .button {
   }
 }
 #login {
-  @include gradient(#33BCEF,#019AD2);
+  padding-left: 43px;
+  background: #444 url(/images/octocat.png) 5px 5px no-repeat;
   color: white;
   &:before {
     top: 1px;
@@ -119,7 +120,10 @@ header button, header .button {
     font-weight: normal;
   }
   &:focus, &:hover {
-    background: #019AD2;
+    background-color: #ccc;
+    background-position: 5px -55px;
+    color: #333;
+    text-shadow: none;
   }
 }
 #sharing-button {

@@ -99,6 +99,7 @@ header {
 //------------------------------- SHARING
 .sharing-panel {
   position: absolute;
+  display: none;
   padding: 10px;
   background: black;
   @include border-radius(10px);
