@@ -74,7 +74,8 @@
             if(CData.js_external) $('#external-js').val(CData.js_external);
             
             // show a specific theme
-            this.body.attr("data-theme", CData.theme);
+            // [Chris]: turned this off since settings moving
+            // this.body.attr("data-theme", CData.theme);
         },
         
         addClassBoxHTML: function(clazz) {
@@ -121,7 +122,7 @@
                     "width" : Main.win.width()
                 });
 
-               // kick it off once for page load layout
+               // Kick it off once for page load layout
             }).trigger("resize");
             
             // Opening and closing settings panels
@@ -278,21 +279,15 @@
              
              // Theme related
 
-             $('#theme').on('change', function(index, select) {
-                 CData.setTheme(this.value);
-                 // Update current theme
-                 Main.body.attr("data-theme", this.value);
-             });
+             // [Chris]: Turned this off because settings moving
+             // $('#theme').on('change', function(index, select) {
+             //     CData.setTheme(this.value);
+             //     // Update current theme
+             //     Main.body.attr("data-theme", this.value);
+             // });
              
-             $("#save-template").on('click', function() {
-                  // alextodo, save as template to user settings
-                  // will you need anything else beyond that? will u have to give ur template a name?
-                  // will it be an overlay, where will the user select an existing template 
-                  $("#app-settings-panel").toggle();
-             });
-             
-             // save this code pen
-             $("#save,#update").on('click', function() {
+             // Save this code pen
+             $("#save, #update").on('click', function() {
                 // validate save
                 CData.save();
                 
