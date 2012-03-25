@@ -26,6 +26,10 @@
     top: 1px;
     @include drop-shadow(0, 0, 0, 0, 0);
   }
+  &.active {
+    background: black;
+    @include border-radiuses(5px, 0, 0, 5px);
+  }
   a {
     color: white;
   }

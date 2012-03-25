@@ -197,6 +197,7 @@
             });
 
             $("#sharing-button").on("click", function() {
+                $(this).toggleClass("active");
                 Main.sharingPan.toggle();
             });
             
