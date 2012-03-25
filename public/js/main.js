@@ -28,6 +28,11 @@
             // Run initial compile
             CodeRenderer.init();
             this.refreshEditors();
+
+            Main.win.load(function() {
+                Main.body.removeClass("preload")
+            });
+
         },
         
         syncUIWithDBO: function() {

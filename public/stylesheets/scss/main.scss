@@ -21,6 +21,10 @@ html, body {
   overflow: hidden;
 }
 
+.preload * {
+  -webkit-transition: none !important;
+}
+
 html {
   background: #333333;
 }
