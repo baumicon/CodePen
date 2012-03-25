@@ -39,6 +39,10 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
+  ###########
+  # HOME
+  ###########
+  
   get '/?' do
     @c_data = {}
     @c_data['auth_token'] = set_auth_token
@@ -69,10 +73,6 @@ class App < Sinatra::Base
 
   get '/about/?' do
     erb :about
-  end
-
-  get '/embed/?' do
-    erb :embed
   end
 
   get '/user/?' do
@@ -153,16 +153,24 @@ class App < Sinatra::Base
     set_content Content.version(slug, version)
     erb :index
   end
+  
+  # alextodo, need to start pulling the embed right here too
 
   get %r{/([\d]+)} do |slug|
     set_content Content.latest(slug)
     erb :index
   end
+  
+  get %r{/embed/([\d]+)} do |slug|
+    set_content Content.latest(slug)
+    
+    erb :embed
+  end
 
   def set_content(content)
-    set_auth_token
     show_404 if not content['success']
     set_session
+    
     @owned = (content['uid'] == @user.uid)
     @slug = true
     @iframe_src = get_iframe_url(request)

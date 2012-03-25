@@ -44,7 +44,7 @@ var KeyBindings = {
                     // alextodo, what does fork this project mean?
                     // start with another, save to local storage?
                     // then start using that? yea
-                    CData.forkData();
+                    Data.forkData();
                     window.open('/');
                 }
                 else if(event.keyCode == 71) {
@@ -55,7 +55,7 @@ var KeyBindings = {
                 }
                 else if(event.keyCode == 83) {
                     // command + s
-                    CData.save();
+                    Data.save();
                     
                     stop = true;
                 }

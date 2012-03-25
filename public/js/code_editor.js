@@ -156,6 +156,7 @@ var CPEditor = Class.extend({
             if(this.readOnly) {
                 // Don't register any change events while in readonly mode
                 this.editor.setOption('onChange', function() { });
+                this.showPostProcessedText();
                 this.makeReadOnly();
             }
             else {
@@ -167,6 +168,12 @@ var CPEditor = Class.extend({
             this.editor.setOption('readOnly', this.readOnly);
         }
       },
+      
+     updateReadOnly: function() {
+         if(this.readOnly) {
+            this.showPostProcessedText();
+         }
+     },
 
      updateCompiledCode: function() {
          if(this.readOnly) {
@@ -186,12 +193,15 @@ var HTMLEditor = CPEditor.extend({
     },
     
     allowViewSource: function() {
-        return CData.html_pre_processor != 'none';
+        return Data.html_pre_processor != 'none';
     },
     
     makeReadOnly: function() {
-        this.editor.setValue(CodeRenderer.postProcessedHTML);
         $("#box-html").toggleClass("view-compiled");
+    },
+    
+    showPostProcessedText: function() {
+        this.editor.setValue(CodeRenderer.postProcessedHTML);
     },
     
     makeEditable: function() {
@@ -210,12 +220,15 @@ var CSSEditor = CPEditor.extend({
     },
     
     allowViewSource: function() {
-        return CData.css_pre_processor != 'none';
+        return Data.css_pre_processor != 'none';
     },
     
     makeReadOnly: function() {
-        this.editor.setValue(CodeRenderer.postProcessedCSS);
         $("#box-css").toggleClass("view-compiled");
+    },
+    
+    showPostProcessedText: function() {
+        this.editor.setValue(CodeRenderer.postProcessedCSS);
     },
     
     makeEditable: function() {
@@ -234,12 +247,15 @@ var JSEditor = CPEditor.extend({
     },
     
     allowViewSource: function() {
-        return CData.js_pre_processor != 'none';
+        return Data.js_pre_processor != 'none';
     },
     
     makeReadOnly: function() {
-        this.editor.setValue(CodeRenderer.postProcessedJS);
         $("#box-js").toggleClass("view-compiled");
+    },
+    
+    showPostProcessedText: function() {
+        this.editor.setValue(CodeRenderer.postProcessedJS);
     },
     
     makeEditable: function() {

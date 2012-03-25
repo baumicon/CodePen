@@ -16,65 +16,66 @@
         
         init: function() {
             // Initialize the data backing object first
-            CData.init();
+            window.Data = new Data();
             
-            this.syncUIWithDBO();
+            this.syncUIWithData();
             this.buildEditors();
-            
             this.bindUIActions();
             this.bindDataActions();
             
-            // Run initial compile
-            CodeRenderer.init();
-            this.refreshEditors();
-
-            Main.win.load(function() {
-                Main.body.removeClass("preload")
-            });
-
+            window.CodeRenderer = new CodeRenderer();
+            
+            this.afterPageLoad();
         },
         
-        syncUIWithDBO: function() {
+        syncUIWithData: function() {
             // Sync UI with data values
+            this.selectPreProcessors();
             
-            // Sync preprocessors with correct data
-            var selector = function(prefix, value) {
-                return ':input[name="' + prefix + '-preprocessor"][value="' + value + '"]';
-            }
+            $('input[value="' + Data.css_starter + '"]').prop('checked', true);
             
-            $(selector('html', CData.html_pre_processor)).prop('checked', true);
-            $(selector('css', CData.css_pre_processor)).prop('checked', true);
-            $(selector('js', CData.js_pre_processor)).prop('checked', true);
-            
-            $('input[value="' + CData.css_starter + '"]').prop('checked', true);
-            
-            Main.updatePrefixFreeBox(CData.css_pre_processor);
+            Main.updatePrefixFreeBox(Data.css_pre_processor);
             
             // Set the header type indicator for editors
-            this.addClassBoxHTML(CData.html_pre_processor);
-            this.addClassBoxCSS(CData.css_pre_processor);
-            this.addClassBoxJS(CData.js_pre_processor);
+            this.addClassBoxHTML(Data.html_pre_processor);
+            this.addClassBoxCSS(Data.css_pre_processor);
+            this.addClassBoxJS(Data.js_pre_processor);
             
             // Sync library with correct data as well
-            $('#js-select').val(CData.js_library);
+            $('#js-select').val(Data.js_library);
 
             // select current theme
-            $('#theme').val(CData.theme);
+            $('#theme').val(Data.theme);
 
             // Better select box for chosing JS library
+            // Chosen selection has to happen after the value's been selected
             $("#js-select, #theme").chosen();
 
-            if(CData.css_prefix_free) $('#prefix-free').prop('checked', true);
-            if(CData.js_modernizr) $('#modernizr').prop('checked', true);
+            if(Data.css_prefix_free) $('#prefix-free').prop('checked', true);
+            if(Data.js_modernizr) $('#modernizr').prop('checked', true);
             
             // externals
-            if(CData.html_classes) $('#html-classes').val(CData.html_classes);
-            if(CData.css_external) $('#external-css').val(CData.css_external);
-            if(CData.js_external) $('#external-js').val(CData.js_external);
+            if(Data.html_classes) $('#html-classes').val(Data.html_classes);
+            if(Data.css_external) $('#external-css').val(Data.css_external);
+            if(Data.js_external) $('#external-js').val(Data.js_external);
             
             // show a specific theme
             // [Chris]: turned this off since settings moving
-            // this.body.attr("data-theme", CData.theme);
+            // this.body.attr("data-theme", Data.theme);
+        },
+        
+        selectPreProcessors: function() {
+            // Sync preprocessors with correct data
+            var selectPreProcessor = function(type) {
+                var value = Data[type + '_pre_processor'];
+                s = ':input[name="' + type + '-preprocessor"][value="' + value + '"]';
+                
+                $(s).prop('checked', true);
+            }
+            
+            $.each(['html', 'css', 'js'], function(index, type) {
+                selectPreProcessor(type);
+            });
         },
         
         addClassBoxHTML: function(clazz) {
@@ -89,10 +90,11 @@
             this.boxJS.removeClass("coffeescript").addClass(clazz);
         },
         
+        /* End of syncUIWithData functions */
+        
         bindUIActions: function() {
             // Resize all boxes when window resized
             this.win.resize(function() {
-
                 var headerHeight = Main.header.outerHeight();
                 
                 // Window is in default state
@@ -138,20 +140,12 @@
             // Opening and closing the editor
             $(".expander").on("click", function(e) {
                 e.preventDefault();
+                
                 Main.body.toggleClass("focus");
                 $(this)
                     .parent()
                     .parent()
                     .toggleClass("expanded");
-            });
-
-            $("#app-settings-panel").hide();
-
-            // Opening and closing app settings
-            $("#app-settings").on("click", function(e) {
-                e.preventDefault();
-                $(this).toggleClass("open");
-                $("#app-settings-panel").toggle();
             });
 
             // Resizer
@@ -193,11 +187,20 @@
                 containment: Main.boxes
             });
             
-            // alextodo, need to make sure the code has been rendered check on js side
             $('#viewsource-html, #viewsource-css, #viewsource-js').on('click', function() {
-                if(this.id == 'viewsource-html') HTMLEditor.toggleReadOnly();
-                else if(this.id == 'viewsource-css') CSSEditor.toggleReadOnly();
-                else if(this.id == 'viewsource-js') JSEditor.toggleReadOnly();
+                if(this.id == 'viewsource-html') {
+                    HTMLEditor.toggleReadOnly();
+                    // Compile the content then execute the callback after processing is done
+                    CodeRenderer.compileContent(true, Main.updateReadOnly);
+                }
+                else if(this.id == 'viewsource-css') {
+                    CSSEditor.toggleReadOnly();
+                    CodeRenderer.compileContent(true, Main.updateReadOnly);
+                }
+                else if(this.id == 'viewsource-js') {
+                    JSEditor.toggleReadOnly();
+                    CodeRenderer.compileContent(true, Main.updateReadOnly);
+                }
                 
                 return false;
             });
@@ -211,25 +214,56 @@
                 $("#keycommands").toggle();
             });
             
-            this.hideSettingsAndPanelsOnblur();
+            this.hideSettingModalsOnblur();
         },
         
+        updateReadOnly: function() {
+            var s = '#box-html.view-compiled,';
+            s += '#box-css.view-compiled,';
+            s += '#box-js.view-compiled';
+            
+            $(s).each(function(index, el) {
+                if(this.id == 'box-html') HTMLEditor.updateReadOnly();
+                else if(this.id == 'box-css') CSSEditor.updateReadOnly();
+                else if(this.id == 'box-js') JSEditor.updateReadOnly();
+            })
+        },
+        
+        // Hide anything that gets set on top of the rest of the UI
+        // for examples settings boxes or share boxe, when the user clicks
+        // away from the intended targets.
+        hideSettingModalsOnblur: function() {
+            $('body').bind('click', function(e) {
+                var elements = $(e.target).closest('.settings,.settings-nub');
+                
+                if(elements.length == 0) {
+                    $('.settings,.settings-nub').removeClass('open');
+                }
+                
+                // If the user clicks outside of the element, hide them
+                elements = $(e.target).closest('#sharing-panel,#sharing-button');
+                
+                if(elements.length == 0) {
+                    $('#sharing-button').removeClass('active');
+                    $("#sharing-panel").hide();
+                }
+                
+                Main.refreshEditors();
+            });
+        },
+        
+        /* End of bindUIActions functions */
+        
         bindDataActions: function() {
-            // Bind events
-             $('#run').on('click', function() {
-                 CodeRenderer.compileContent(true);
-             });
-             
-             // todo
              // once the slug is set, you can't edit it
              // you can only fork it and create a second slug
              $('#slug').on('keydown', function() {
-                 CData.setSlug(this.value);
+                 Data.setSlug(this.value);
              });
              
              // HTML related
              $('input[name="html-preprocessor"]').on('click', function() {
-                 CData.setHTMLOption('preprocessor', this.value);
+                 Data.setHTMLOption('preprocessor', this.value);
                  HTMLEditor.updateCompiledCode();
                  
                  Main.compileContent(HTMLEditor, '', true);
@@ -238,7 +272,7 @@
 
              // CSS related
              $('input[name="css-preprocessor"]').on('click', function() {
-                   CData.setCSSOption('css_pre_processor', this.value);
+                   Data.setCSSOption('css_pre_processor', this.value);
                    CSSEditor.updateCompiledCode();
                    
                    Main.compileContent(CSSEditor, '', true);
@@ -248,8 +282,8 @@
 
              // prefix free checkbox
              $('#prefix-free').on('click', function() {
-                 if(CData.css_pre_processor != 'sass') {
-                    CData.setCSSOption('css_prefix_free', $(this).is(":checked"));
+                 if(Data.css_pre_processor != 'sass') {
+                    Data.setCSSOption('css_prefix_free', $(this).is(":checked"));
                     
                     Main.compileContent(CSSEditor, '', true);
                  }
@@ -257,14 +291,14 @@
              
              // CSS Resests
              $('input[name="startercss"]').on('click', function() {
-                 CData.setCSSOption('css_starter', this.value);
+                 Data.setCSSOption('css_starter', this.value);
                  
                  Main.compileContent(CSSEditor, '', true);
              });
 
              // JS related
              $('input[name="js-preprocessor"]').on('click', function() {
-                 CData.setJSOption('js_pre_processor', this.value);
+                 Data.setJSOption('js_pre_processor', this.value);
                  JSEditor.updateCompiledCode();
                  
                  Main.compileContent(JSEditor, '', true);
@@ -273,13 +307,13 @@
 
              $('#js-select').on('change', function(index, select) {
                  // alextodo, may need to move to an observe model, backbone? too complicated right now
-                 CData.setJSOption('js_library', this.value);
+                 Data.setJSOption('js_library', this.value);
                  
                  Main.compileContent(JSEditor, '', true);
              });
              
              $('#modernizr').on('click', function() {
-                 CData.setJSOption('js_modernizr', $(this).is(":checked"));
+                 Data.setJSOption('js_modernizr', $(this).is(":checked"));
                  
                  Main.compileContent(CSSEditor, '', true);
              });
@@ -287,16 +321,16 @@
              // alextodo, figure out how long before you start typing again.
              // may need to put these settings into a settings.js file
              $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
-                 if(this.id == 'html-classes') CData.setHTMLClass(this.value);
-                 else if(this.id == 'external-css') CData.setCSSOption('css_external', this.value);
-                 else if(this.id == 'external-js') CData.setJSOption('js_external', this.value);
+                 if(this.id == 'html-classes') Data.setHTMLClass(this.value);
+                 else if(this.id == 'external-css') Data.setCSSOption('css_external', this.value);
+                 else if(this.id == 'external-js') Data.setJSOption('js_external', this.value);
              });
              
              // Theme related
 
              // [Chris]: Turned this off because settings moving
              // $('#theme').on('change', function(index, select) {
-             //     CData.setTheme(this.value);
+             //     Data.setTheme(this.value);
              //     // Update current theme
              //     Main.body.attr("data-theme", this.value);
              // });
@@ -304,25 +338,25 @@
              // Save this code pen
              $("#save, #update").on('click', function() {
                 // validate save
-                CData.save();
+                Data.save();
                 
                 return false;
              });
 
              $("#new").on('click', function() {
-                CData.new();
+                Data.new();
                 window.location = '/';
                 
                 return false;
              });
              
              $('#fork').on('click', function() {
-                CData.fork();
+                Data.fork();
                 return false;
              });
              
              $('#logout').on('click', function() {
-                CData.logout();
+                Data.logout();
              });
              
              // Bind keys
@@ -332,7 +366,7 @@
         updatePrefixFreeBox: function(css_pre_processor) {
             if(css_pre_processor == 'sass') {
                    // turn off prefix free
-                   CData.setCSSOption('css_prefix_free', false);
+                   Data.setCSSOption('css_prefix_free', false);
                    $('#prefix-free').prop('checked', false);
                    $('#prefix-free').prop('disabled', true);
                }
@@ -342,16 +376,16 @@
         },
         
         buildEditors: function() {
-            window.HTMLEditor = new HTMLEditor('html', CData.html);
-            window.CSSEditor = new CSSEditor('css', CData.css);
-            window.JSEditor = new JSEditor('js', CData.js);
+            window.HTMLEditor = new HTMLEditor('html', Data.html);
+            window.CSSEditor = new CSSEditor('css', Data.css);
+            window.JSEditor = new JSEditor('js', Data.js);
         },
         
         refreshEditors: function(delay) {
             // Sometimes you have to wait a few milliseconds
             // for a task to complete before updating the editor
-            // is effective. This delay makes sure the refresh actually
-            // works.
+            // is effective (like a css transition). This delay makes 
+            // sure the refresh is called after the transition
             if(delay > 0) {
                 setTimeout(function() {
                     Main.refreshEditors(0);
@@ -365,7 +399,7 @@
         },
         
         compileContent: function(editor, changes, forceCompile) {
-            CData.setEditorValue(editor.getOption('mode'), editor.getValue());
+            Data.setEditorValue(editor.getOption('mode'), editor.getValue());
             CodeRenderer.compileContent(forceCompile);
         },
         
@@ -375,7 +409,7 @@
         },
         
         closeExpandedAreas: function() {
-            $.each($(".expander"), function(index, el) {
+            $(".expander").each(function() {
                 Main.body.toggleClass("focus");
 
                 $(this)
@@ -385,26 +419,11 @@
             });
         },
         
-        hideSettingsAndPanelsOnblur: function() {
-            $('body').bind('click', function(e) {
-                var elements = $(e.target).closest('.settings,.settings-nub');
-                
-                if(elements.length == 0) {
-                    $('.settings,.settings-nub').removeClass('open');
-                    
-                    Main.refreshEditors();
-                }
-                
-                // If the user clicks outside of the element, hide them
-                elements = $(e.target).
-                    closest('#app-settings-button,#app-settings,.app-settings-panel');
-                
-                if(elements.length == 0) {
-                    $('#app-settings').removeClass('open');
-                    $("#app-settings-panel").hide();
-                    
-                    Main.refreshEditors();
-                }
+        afterPageLoad: function() {
+            this.refreshEditors();
+            
+            Main.win.load(function() {
+                Main.body.removeClass("preload")
             });
         }
     };

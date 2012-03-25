@@ -1,4 +1,4 @@
-var CData = {
+var Data = Class.extend({
 
 	/***********************
 	* Keeps the app's state.
@@ -46,7 +46,7 @@ var CData = {
         localStorage.removeItem("logout");
         
         $(window).unload( function () {
-            CData.saveDataToLocalStorage();
+            Data.saveDataToLocalStorage();
             return false;
         });
     },
@@ -54,7 +54,7 @@ var CData = {
     saveDataToLocalStorage: function() {
         if(localStorage['logout'] != 'true' && localStorage['new'] != 'true') {
             // only save the data for the current url path
-            localStorage[document.location.pathname] = JSON.stringify(CData);
+            localStorage[document.location.pathname] = JSON.stringify(Data);
         }
     },
     
@@ -154,7 +154,7 @@ var CData = {
               url: '/save/content',
               type: 'POST',
               data: Util.getDataValues(
-                { 'content': JSON.stringify(CData), 'auth_token': CData.auth_token }),
+                { 'content': JSON.stringify(Data), 'auth_token': Data.auth_token }),
               success: function(result) {
                   var obj = $.parseJSON(result);
                   
@@ -182,7 +182,7 @@ var CData = {
         var hiddenField = document.createElement('input');
         hiddenField.setAttribute('type', 'hidden');
         hiddenField.setAttribute('name', 'auth_token');
-        hiddenField.setAttribute('value', CData.auth_token);
+        hiddenField.setAttribute('value', Data.auth_token);
         form.appendChild(hiddenField);
         document.body.appendChild(form);
         form.submit();
@@ -194,4 +194,4 @@ var CData = {
             localStorage['logout'] = 'true';
         }
     }
-};
+});

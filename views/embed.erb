@@ -20,6 +20,7 @@
   <div id="output">
 
     <div id="html">
+        <textarea id="html" class="code-box"></textarea>
     </div>
 
     <div id="css">
@@ -35,6 +36,10 @@
 
   <%= js_scripts([
       '/js/libs/jquery.js',
+      '/js/libs/codemirror.js',
+      '/js/mode/javascript/javascript.js',
+      '/js/mode/css/css.js',
+      '/js/mode/xml/xml.js',
       '/js/embed.js'
       ], 'embed')
   %>

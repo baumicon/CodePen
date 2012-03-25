@@ -1,4 +1,6 @@
 // Handles Auto Complete Snippets
+
+// alextodo, tab snippets should be specific to the pre processors. this is not good enough!
 TabSnippets = {
     snippets: {
         'html': {
