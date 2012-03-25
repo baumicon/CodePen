@@ -188,6 +188,7 @@
                 containment: Main.boxes
             });
             
+            // alextodo, need to make sure the code has been rendered check on js side
             $('#viewsource-html, #viewsource-css, #viewsource-js').on('click', function() {
                 if(this.id == 'viewsource-html') HTMLEditor.toggleReadOnly();
                 else if(this.id == 'viewsource-css') CSSEditor.toggleReadOnly();

@@ -27,6 +27,7 @@ var CPEditor = Class.extend({
             lineNumbers  : true,
             value        : value,
             tabSize      : 2,
+            onChange     : function() { },
             // Code Mirror natively indents the entire line. We wanted it to work like
             // a standard editor where a tab (for us 2 spaces) is inserted into the 
             // current cursor position
@@ -138,9 +139,9 @@ var CPEditor = Class.extend({
 
     setCursorToEnd: function() {
         this.editor.focus();
-
+        
         var text = this.editor.getValue();
-
+        
         // set the cursor to the end of the editor
         // Make sure it's at the end by line num and char num to
         // same value as the actual number of chars, CodeMirror will
@@ -149,20 +150,22 @@ var CPEditor = Class.extend({
     },
     
     toggleReadOnly: function() {
-          this.readOnly = (this.readOnly) ? false : 'nocursor';
-
-          if(this.readOnly) {
-              // Don't register any change events while in readonly mode
-              this.editor.setOption('onChange', function() { });
-              this.makeReadOnly();
-          }
-          else {
-              this.makeEditable();
-              // Start registering onchange events like normal again
-              this.editor.setOption('onChange', Main.compileContent);
-          }
-
-          this.editor.setOption('readOnly', this.readOnly);
+        if(this.allowViewSource()) {
+            this.readOnly = (this.readOnly) ? false : 'nocursor';
+            
+            if(this.readOnly) {
+                // Don't register any change events while in readonly mode
+                this.editor.setOption('onChange', function() { });
+                this.makeReadOnly();
+            }
+            else {
+                this.makeEditable();
+                // Start registering onchange events like normal again
+                this.editor.setOption('onChange', Main.compileContent);
+            }
+            
+            this.editor.setOption('readOnly', this.readOnly);
+        }
       },
 
      updateCompiledCode: function() {
@@ -175,11 +178,15 @@ var CPEditor = Class.extend({
 
 var HTMLEditor = CPEditor.extend({
     getMode: function() {
-        return '#html';
+        return 'xml';
     },
     
     getTextAreaID: function() {
         return '#html';
+    },
+    
+    allowViewSource: function() {
+        return CData.html_pre_processor != 'none';
     },
     
     makeReadOnly: function() {
@@ -202,13 +209,17 @@ var CSSEditor = CPEditor.extend({
         return '#css';
     },
     
+    allowViewSource: function() {
+        return CData.css_pre_processor != 'none';
+    },
+    
     makeReadOnly: function() {
         this.editor.setValue(CodeRenderer.postProcessedCSS);
         $("#box-css").toggleClass("view-compiled");
     },
     
     makeEditable: function() {
-        this.editor.setValue(CodeRenderer.refHTML);
+        this.editor.setValue(CodeRenderer.refCSS);
         $("#box-css").toggleClass("view-compiled");
     }
 });
@@ -220,6 +231,10 @@ var JSEditor = CPEditor.extend({
     
     getTextAreaID: function() {
         return '#js';
+    },
+    
+    allowViewSource: function() {
+        return CData.js_pre_processor != 'none';
     },
     
     makeReadOnly: function() {
