@@ -13,6 +13,7 @@
         boxes       : $(".boxes"),
         topBoxesCon : $(".top-boxes"),
         vertResizer : $("#vert-resizer"),
+        sharingPan  : $(".sharing-panel"),
         
         init: function() {
             // Initialize the data backing object first
@@ -193,6 +194,10 @@
                 else if(this.id == 'viewsource-js') JSEditor.toggleReadOnly();
                 
                 return false;
+            });
+
+            $("#sharing-button").on("click", function() {
+                Main.sharingPan.toggle();
             });
             
             this.hideSettingsAndPanelsOnblur();

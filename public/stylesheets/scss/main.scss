@@ -88,34 +88,53 @@ header {
 }
 .app-actions {
   float: right;
-  min-width: 196px;
+  min-width: 250px;
   position: relative;
   .button, button {
     float: right;
   }
 }
-.app-settings-panel {
-  padding: 10px;
+
+
+//------------------------------- SHARING
+.sharing-panel {
   position: absolute;
-  top: 39px;
-  left: 1px;
-  width: 200px;
-  z-index: 1500;
-  background: $settingsPanelBG;
-  button {
+  display: none;
+  padding: 10px;
+  background: black;
+  @include border-radius(10px);
+  @include box-shadow((0 0 10px black));
+  top: 40px;
+  right: 100px;
+  z-index: 200;
+  width: 300px;
+  label {
+    color: white;
+    font-size: 11px;
     display: block;
-    float: none;
+    float: left;
+    width: 20%;
+  }
+  input, textarea {
+    width: 80%;
+    border: 0;
+    resize: none;
+    overflow: hidden;
+  }
+  > div {
+    margin: 0 0 8px 0;
+  }
+  .buttons {
     text-align: center;
-    margin: 0 0 15px 0;
+    padding-top: 5px;
+  }
+  .button {
+    font-size: 13px;
+    padding: 4px 10px;
+    float: none;
   }
 }
-.app-auth {
-  float: right; 
-  width: 20%;
-  .button, button {
-    float: right;
-  }
-}
+
 
 //------------------------------- LAYOUT
 .wrap {
@@ -519,5 +538,5 @@ footer {
 
 
 // Themes
-@import "../themes/codemirror";
+// @import "../themes/codemirror";
 @import "../themes/sublime";
