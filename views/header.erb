@@ -35,6 +35,14 @@
 	</form>
 
 	<div class="app-actions">
+
+		<% if not logged_in %>
+
+			<a id="login" href="#" class="button">
+				Github Auth
+			</a>
+
+		<% end %>
     
 		<a id="sharing-button" class="button" href="#sharing-panel">
 			Share
@@ -68,13 +76,7 @@ code here
 
 		</section>
 
-		<% if not logged_in %>
-
-			<a id="login" href="#" class="button">
-				Github Auth
-			</a>
-
-		<% else # not logged in %>
+		<% if logged_in %>
 
 			<div class="user-stuff">
         <img src="/images/avatars/000001-chriscoyier.jpg">
@@ -86,7 +88,7 @@ code here
 				Logout
 			</a>
 
-    <% end # login logic %>
+    <% end %>
 
 	</div><!-- div.app-actions -->
 
