@@ -31,4 +31,11 @@
 
   .CodeMirror-gutter-text pre       { color: #666; }
 
+  .CodeMirror-scroll::-webkit-scrollbar-thumb {
+    @include linear-gradient-m(white, (( 
+      top, rgba(255,255,255,0), rgba(255,255,255,0.1) 
+    )));
+    // @include box-shadow((0 0 10px black));
+  }
+
 }

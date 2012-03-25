@@ -28,6 +28,11 @@
             // Run initial compile
             CodeRenderer.init();
             this.refreshEditors();
+
+            Main.win.load(function() {
+                Main.body.removeClass("preload")
+            });
+
         },
         
         syncUIWithDBO: function() {
@@ -198,6 +203,7 @@
             });
 
             $("#sharing-button").on("click", function() {
+                $(this).toggleClass("active");
                 Main.sharingPan.toggle();
             });
             
