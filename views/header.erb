@@ -1,83 +1,93 @@
-		<header class="group">
+<header class="group">
 
-			<form>
+	<form>
 
-        <h1 class="logo"><a>CodePen.io</a></h1>
+    <h1 class="logo"><a>CodePen.io</a></h1>
 
-				<div class="box-actions">
+		<div class="box-actions">
 
-					<% if @slug %>
+			<% if @slug %>
 
-						<button id="fork">
-							<strong>⌥K</strong> Fork
-						</button>
+				<button id="fork">
+					<strong>⌥K</strong> Fork
+				</button>
 
-          <% if @owned %>
+      <% if @owned %>
 
-            <button id="update">
-                <strong>⌥U</strong> Update
-            </button>
+        <button id="update">
+            <strong>⌥U</strong> Update
+        </button>
 
-          <% end %>
+      <% end %>
 
-						<button id="new">
-					 		<strong>⌥N</strong> Brand New Pen
-					 	</button>	
+				<button id="new">
+			 		<strong>⌥N</strong> Brand New Pen
+			 	</button>	
 
-					<% else %>
-						<button id="save">
-							<strong>⌥S</strong> Save
-						</button>
-					<% end %>
+			<% else %>
+				<button id="save">
+					<strong>⌥S</strong> Save
+				</button>
+			<% end %>
 
-				</div> <!-- div.box-actions -->
+		</div> <!-- div.box-actions -->
 
-			</form>
+	</form>
 
-			<div class="app-actions">
+	<div class="app-actions">
+    
+		<a id="sharing-button" class="button" href="#sharing-panel">
+			Share
+		</a>
 
-				<% if not logged_in %>
-					<a id="login" href="#" class="button">
-						Github Auth
-					</a>
-				<% else %>
-					<a id="logout" href="/logout" class="button">
-						Logout
-					</a>
-        <% end %>
-        
-				<a id="sharing-button" class="button" href="#sharing-panel">
-					Share
-				</a>
+		<section id="sharing-panel" class="sharing-panel">
+			
+			<div>
+				<label>URL</label>
+				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/">
+			</div>
 
-				<section id="sharing-panel" class="sharing-panel">
-					
-					<div>
-						<label>URL</label>
-						<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/">
-					</div>
+			<div>
+				<label>Result</label>
+				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/full/">
+			</div>
 
-					<div>
-						<label>Result</label>
-						<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/full/">
-					</div>
-
-					<div>
-						<label>Embed</label>
-						<textarea onclick="this.focus();this.select()" readonly="readonly" id="embed-code">&lt;pre id="cp-embed>&lt;code>
-	code here
-	&lt;/code>&lt;/pre>
+			<div>
+				<label>Embed</label>
+				<textarea onclick="this.focus();this.select()" readonly="readonly" id="embed-code">&lt;pre id="cp-embed>&lt;code>
+code here
+&lt;/code>&lt;/pre>
 &lt;script src="//codepen.io/embed.js?id=abc">&lt;/script></textarea>
-					</div>
+			</div>
 
-					<div class="buttons">
-						<a class="button">Save as Gist</a>
-						<a class="button">Tweet</a>
-						<a class="button">Export .zip</a>
-					</div>
+			<div class="buttons">
+				<a class="button">Save as Gist</a>
+				<a class="button">Tweet</a>
+				<a class="button">Export .zip</a>
+			</div>
 
-				</section>
+		</section>
 
-			</div><!-- div.app-actions -->
+		<% if not logged_in %>
 
-		</header>
+			<a id="login" href="#" class="button">
+				Github Auth
+			</a>
+
+		<% else # not logged in %>
+
+			<div class="user-stuff">
+        <img src="/images/avatars/000001-chriscoyier.jpg">
+        <a href="/user/">chriscoyier</a>
+        <a class="logout-link">log out</a>  
+      </div>
+
+			<a id="logout" href="/logout" class="button">
+				Logout
+			</a>
+
+    <% end # login logic %>
+
+	</div><!-- div.app-actions -->
+
+</header>

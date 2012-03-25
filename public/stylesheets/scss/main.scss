@@ -92,10 +92,34 @@ header {
 }
 .app-actions {
   float: right;
-  min-width: 250px;
+  min-width: 1000px;
   position: relative;
   .button, button {
     float: right;
+  }
+}
+.user-stuff {
+  float: right;
+  width: 200px;
+  height: 38px;
+  text-align: right;
+  margin-right: 10px;
+  @include font-stack-bold;
+  img {
+    height: 38px;
+    vertical-align: middle;
+    @include border-radius(5px);
+    float: right;
+    margin: 0 0 0 5px;
+  }
+  a {
+    color: #ccc;
+    display: block;
+    font-size: 18px;
+    &.logout-link {
+      font-size: 12px;
+      color: #999;
+    }
   }
 }
 
