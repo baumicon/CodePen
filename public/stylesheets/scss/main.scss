@@ -48,7 +48,7 @@ header {
   form {
     position: absolute;
     top: 10px;
-    left: 5px;
+    left: 20px;
     * {
       vertical-align: middle;
     }
@@ -58,8 +58,8 @@ header {
   a {
     font: 0/0 a;
     background: url(/images/logo.png) no-repeat;
-    width: 127px;
-    height: 18px;
+    width: 134px;
+    height: 24px;
     display: block;
   }
 }
@@ -164,6 +164,11 @@ header {
     position: relative;
     bottom: 1px;
     text-shadow: 0 -1px 0 black;
+  }
+  &.view-compiled {
+    .CodeMirror-lines pre, .CodeMirror-lines pre span {
+      color: #999 !important;
+    }
   }
 }
 .box-html {
