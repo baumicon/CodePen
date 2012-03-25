@@ -154,7 +154,8 @@ header {
   position: absolute;
   @include transition(( // don't transition z-index
     width 0.4s ease,
-    left 0.4s ease
+    left 0.4s ease,
+    box-shadow 0.4s ease
   ));
   @include border-radius(8px);
   > pre {
@@ -172,6 +173,9 @@ header {
   &.expanded {
     z-index: 1001;
     left: 0;
+    &.box-js {
+      left: auto;
+    }
     width: 100%;
   }
   h2:after {
@@ -250,7 +254,8 @@ header {
   }
 }
 .box-js {
-  left: 67.6%;
+  left: auto;
+  right: 0;
   &.coffeescript {
     h2:after {
       content: " (CoffeeScript)";

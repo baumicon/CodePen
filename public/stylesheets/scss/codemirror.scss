@@ -88,8 +88,11 @@
 }
 
 // TODO: move to theme?
-div.CodeMirror-selected { background: #ccc; }
-.CodeMirror-focused div.CodeMirror-selected { background: #ccc; }
+div.CodeMirror-selected { 
+  background: rgba(0,0,0,0.5); }
+.CodeMirror-focused div.CodeMirror-selected { 
+  background: #444;
+}
 
 .CodeMirror-searching {
   background: #ffa;
