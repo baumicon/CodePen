@@ -22,7 +22,7 @@ html, body {
   p {
     margin: 0 0 10px 0;
   }
-  a {
+  a:not(.button) {
     color: #77fff7;
     border-bottom: 1px dotted rgba(255,255,255,0.3);
     &:hover {
@@ -75,6 +75,16 @@ h2 {
   max-width: 190px;
   img {
     max-width: 100%;
+    margin: 0 0 8px 0;
+  }
+  .button {
+    width: 100%;
+    text-align: center;
+    color: white;
+    @include gradient(#669d2c, #4e7623);
+    &.following {
+      background: #444;
+    }
   }
 }
 .location {
@@ -105,17 +115,53 @@ h2 {
     color: #555;
   }
 }
+.minibox {
+  display: inline-block;
+  background: black;
+  margin-right: 10px;
+  width: 100px;
+  text-align: center;
+  @include border-radius(10px);
+  @include font-stack-bold;
+  @extend .emboss-lower;
+  strong {
+    display: block;
+    padding: 5px 0;
+    font-size: 32px;
+  }
+  span {
+    display: block;
+    background: #444;
+    text-transform: uppercase;
+    padding: 5px 0;
+    @include border-radiuses(0, 10px, 10px, 0);
+  }
+}
 
+.emboss-lower {
+  @include box-shadow((
+    0 1px 0 rgba(255,255,255,0.2),
+    inset 0 1px 0 black
+  ));
+}
 .owned-pens {
   width: 50%;
   float: right;
   padding: 20px;
   background: #222;
   @include border-radius(10px);
-  @include box-shadow((
-    0 1px 0 rgba(255,255,255,0.2),
-    inset 0 1px 0 black
-  ));
+  @extend .emboss-lower;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  iframe {
+    border: 0;
+    width: 100%;
+    height: 125px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
 }
 
 @media (max-width: 700px) {
