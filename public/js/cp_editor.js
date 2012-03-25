@@ -290,7 +290,7 @@ CPEditor.prototype.setCursorToEnd = function() {
 };
 
 CPEditor.prototype.toggleReadOnly = function() {
-    this.readOnly = (this.readOnly) ? false : true;
+    this.readOnly = (this.readOnly) ? false : 'nocursor';
 
     if(this.readOnly) {
         this.editor.setOption('onChange', function() { });
@@ -328,3 +328,9 @@ CPEditor.prototype.toggleReadOnly = function() {
     
     this.editor.setOption('readOnly', this.readOnly);
 };
+
+CPEditor.prototype.changePreProcessor = function() {
+    if(this.readOnly) {
+        this.toggleReadOnly();
+    }
+}

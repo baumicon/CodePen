@@ -214,6 +214,8 @@
              // HTML related
              $('input[name="html-preprocessor"]').on('click', function() {
                  CData.setHTMLOption('preprocessor', this.value);
+                 HTMLEditor.changePreProcessor();
+                 
                  Main.compileContent(HTMLEditor, '', true);
                  Main.addClassBoxHTML(this.value);
              });
@@ -221,6 +223,8 @@
              // CSS related
              $('input[name="css-preprocessor"]').on('click', function() {
                    CData.setCSSOption('css_pre_processor', this.value);
+                   CSSEditor.changePreProcessor();
+                   
                    Main.compileContent(CSSEditor, '', true);
                    Main.addClassBoxCSS(this.value);
                    Main.updatePrefixFreeBox(this.value);
@@ -243,6 +247,8 @@
              // JS related
              $('input[name="js-preprocessor"]').on('click', function() {
                  CData.setJSOption('js_pre_processor', this.value);
+                 JSEditor.changePreProcessor();
+                 
                  Main.compileContent(JSEditor, '', true);
                  Main.addClassBoxJS(this.value);
              });
