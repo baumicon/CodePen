@@ -13,7 +13,6 @@
         boxes       : $(".boxes"),
         topBoxesCon : $(".top-boxes"),
         vertResizer : $("#vert-resizer"),
-        sharingPan  : $(".sharing-panel"),
         
         init: function() {
             // Initialize the data backing object first
@@ -205,7 +204,11 @@
 
             $("#sharing-button").on("click", function() {
                 $(this).toggleClass("active");
-                Main.sharingPan.toggle();
+                $(".sharing-panel").toggle();
+            });
+
+            $("#keyboard-commands-button").on("click", function() {
+                $("#keycommands").toggle();
             });
             
             this.hideSettingsAndPanelsOnblur();
