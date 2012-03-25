@@ -214,7 +214,7 @@
              // HTML related
              $('input[name="html-preprocessor"]').on('click', function() {
                  CData.setHTMLOption('preprocessor', this.value);
-                 HTMLEditor.changePreProcessor();
+                 HTMLEditor.updateCompiledCode();
                  
                  Main.compileContent(HTMLEditor, '', true);
                  Main.addClassBoxHTML(this.value);
@@ -223,7 +223,7 @@
              // CSS related
              $('input[name="css-preprocessor"]').on('click', function() {
                    CData.setCSSOption('css_pre_processor', this.value);
-                   CSSEditor.changePreProcessor();
+                   CSSEditor.updateCompiledCode();
                    
                    Main.compileContent(CSSEditor, '', true);
                    Main.addClassBoxCSS(this.value);
@@ -234,6 +234,7 @@
              $('#prefix-free').on('click', function() {
                  if(CData.css_pre_processor != 'sass') {
                     CData.setCSSOption('css_prefix_free', $(this).is(":checked"));
+                    
                     Main.compileContent(CSSEditor, '', true);
                  }
              });
@@ -241,25 +242,29 @@
              // CSS Resests
              $('input[name="startercss"]').on('click', function() {
                  CData.setCSSOption('css_starter', this.value);
+                 
                  Main.compileContent(CSSEditor, '', true);
              });
 
              // JS related
              $('input[name="js-preprocessor"]').on('click', function() {
                  CData.setJSOption('js_pre_processor', this.value);
-                 JSEditor.changePreProcessor();
+                 JSEditor.updateCompiledCode();
                  
                  Main.compileContent(JSEditor, '', true);
                  Main.addClassBoxJS(this.value);
              });
 
              $('#js-select').on('change', function(index, select) {
+                 // alextodo, may need to move to an observe model, backbone? too complicated right now
                  CData.setJSOption('js_library', this.value);
-                 Main.compileContent(CSSEditor, '', true);
+                 
+                 Main.compileContent(JSEditor, '', true);
              });
              
              $('#modernizr').on('click', function() {
                  CData.setJSOption('js_modernizr', $(this).is(":checked"));
+                 
                  Main.compileContent(CSSEditor, '', true);
              });
              
@@ -327,9 +332,9 @@
         },
         
         buildEditors: function() {
-            window.HTMLEditor = new CPEditor('html', CData.html);
-            window.CSSEditor = new CPEditor('css', CData.css);
-            window.JSEditor = new CPEditor('js', CData.js);
+            window.HTMLEditor = new HTMLEditor('html', CData.html);
+            window.CSSEditor = new CSSEditor('css', CData.css);
+            window.JSEditor = new JSEditor('js', CData.js);
         },
         
         refreshEditors: function(delay) {
