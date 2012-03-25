@@ -68,7 +68,6 @@ h2 {
     display: block;
   }
 }
-
 .avatar {
   float: left;
   margin: 0 20px 0 0;
@@ -76,6 +75,34 @@ h2 {
   max-width: 190px;
   img {
     max-width: 100%;
+  }
+}
+.location {
+  color: #999;
+}
+.social-links {
+  a {
+    color: #999;
+    border: 0;
+    &:last-child:after {
+      content: "";
+    }
+    &:hover, &:active {
+      border: 0;
+      color: white;
+    }
+  }
+  a[href^="http://twitter"]:before {
+    content: url(/images/icons/twitter.png);
+    position: relative;
+    top: 1px;
+    opacity: 0.5;
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+  span {
+    margin: 0 2px;
+    color: #555;
   }
 }
 
