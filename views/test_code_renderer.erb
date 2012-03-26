@@ -18,12 +18,12 @@
   $(document).ready(function() {
   
   // seed c_data
-  CData.html               = 'h1 testing';
-  CData.html_pre_processor = 'jade';
-  CData.css                = 'h1 { color: blue; }';
-  CData.css_pre_processor  = 'scss';
-  CData.js                 = 'console.log("test");';
-  CData.js_pre_processor   = 'none';
+  Data.html               = 'h1 testing';
+  Data.html_pre_processor = 'jade';
+  Data.css                = 'h1 { color: blue; }';
+  Data.css_pre_processor  = 'scss';
+  Data.js                 = 'console.log("test");';
+  Data.js_pre_processor   = 'none';
 
   clearCodeRendererRefData = function() {
       CodeRenderer.refHTML   = '';
@@ -45,15 +45,15 @@
 
     CodeRenderer.storeRefContent();
 
-    equal(CodeRenderer.useCache('html'), true, "After call to storeRefContent CData and Code Render should be in sync");
+    equal(CodeRenderer.useCache('html'), true, "After call to storeRefContent Data and Code Render should be in sync");
 
-    CData.html = 'h2 break cache';
+    Data.html = 'h2 break cache';
     equal(CodeRenderer.useCache('html'), false, "Should fail after html is changed.");
 
     // get back in sync
     CodeRenderer.storeRefContent();
 
-    CData.html_pre_processor = 'haml';
+    Data.html_pre_processor = 'haml';
     equal(CodeRenderer.useCache('html'), false, "Should fail after html pre processor is changed.");
   });
 
@@ -64,15 +64,15 @@
 
     CodeRenderer.storeRefContent();
 
-    equal(CodeRenderer.useCache('css'), true, "After call to storeRefContent CData and Code Render should be in sync");
+    equal(CodeRenderer.useCache('css'), true, "After call to storeRefContent Data and Code Render should be in sync");
 
-    CData.css = '* { color: green; }';
+    Data.css = '* { color: green; }';
     equal(CodeRenderer.useCache('css'), false, "Should fail after css is changed.");
 
     // get back in sync
     CodeRenderer.storeRefContent();
 
-    CData.css_pre_processor = 'sass';
+    Data.css_pre_processor = 'sass';
     equal(CodeRenderer.useCache('css'), false, "Should fail after css pre processor is changed.");
   });
 

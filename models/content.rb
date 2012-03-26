@@ -2,6 +2,7 @@ require 'mongo_mapper'
 require './models/incrementor'
 require './models/slug'
 require './lib/ajax_util'
+require 'awesome_print'
 
 class Content
   extend AjaxUtil
@@ -45,6 +46,8 @@ class Content
 
   def self.latest(slug)
     begin
+      # content = load_from_cache(slug)
+      # content = Content.first(:order => :version.desc, :slug => "#{slug}") if content.nil?
       content = Content.first(:order => :version.desc, :slug => "#{slug}")
       return hash_success(content.attributes) if content
       return hash_errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
@@ -56,7 +59,10 @@ class Content
   def self.version(slug, version)
     begin
       return json_errors({:version_must_be_int => "Version must be an int"}) if not /^\d+$/.match("#{version}")
+      # content = load_from_cache(slug, version)
+      # content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version)) if content.nil?
       content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version))
+      
       return self.hash_success(content.attributes) if content
       return self.hash_errors({:no_conent_for_slug => "Can't find content. Slug:#{slug} Version:#{version}"})
     rescue Exception => ex
@@ -69,6 +75,7 @@ class Content
       content = Content.new(self.attributes)
       content.uid = user.uid
       content.anon = user.anon?
+      
       if user.anon?
         content.slug = Incrementor.next_count("slug_next_anon")
       else
@@ -76,9 +83,14 @@ class Content
           content.slug = Incrementor.next_count("slug_next_#{user.uid}")
         end
       end
+      
       content.version = 1
       content.save
-      return content
+      # alextodo, see if we can cache
+      # see why this doesn't work
+      # self.class.cache content
+      
+      content
     end
   end
 
@@ -88,19 +100,49 @@ class Content
       content.uid = new_uid
       content.anon = false
       content.save
+      cache content
     }
   end
 
   def json_save
     if self.valid?
       self.save
+      self.class.cache self
+      
       #TODO: whitelist output
       return json_success(self.attributes)
     end
-    return json_errors(self.errors.messages)
+    
+    json_errors(self.errors.messages)
   end
 
   private
+  
+  def self.load_from_cache(slug, version=0)
+    key = 'slug:' + slug.to_s
+    
+    if version.to_i > 0
+      key += ':version:' + version.to_s
+    end
+    
+    content = $redis.get(key)
+    content = JSON.parse(content) if !content.nil?
+    
+    content
+  end
+  
+  # Cache the content with the $redis global value
+  # Save content under slug and version and slug only. 
+  # Because we know the last version of a slug saved is always the 
+  # latest (because we don't do any overwrites). We can always look up
+  # the latest by slug only as well as by slug and version.
+  def self.cache(content)
+    # key = 'slug:' + content.slug.to_s + ':version:' + content.version.to_s
+    # $redis.set(key, content.to_json)
+    # 
+    # key = 'slug:' + content.slug.to_s
+    # $redis.set(key, content.to_json)
+  end
 
   def before_validation_on_create
     anon_prevalidate if @anon

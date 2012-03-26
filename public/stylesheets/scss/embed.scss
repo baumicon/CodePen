@@ -2,6 +2,8 @@
 @import "colors";
 @import "typography";
 @import "toolbox";
+/* I don't know if this works or if we'll need a custom one for the embed look. */
+/* @import "codemirror"; */
 
 * {
   margin: 0;
@@ -38,4 +40,24 @@ nav {
       }
     }
   }
+}
+
+#html-box,#css-box,#js-box,#result-box {
+    display: none;
+}
+
+#html-box.active {
+    display: block;
+}
+
+#css-box.active {
+    display: block;
+}
+
+#js-box.active {
+    display: block;
+}
+
+#result-box.active {
+    display: block;
 }

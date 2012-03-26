@@ -8,7 +8,7 @@
   <link rel="shortcut icon" href="/favicon.png">
 </head>
 
-<body data-theme="sublime">
+<body data-theme="sublime" class="preload">
 
   <%= partial :header %>
 
@@ -21,19 +21,18 @@
         <div id="box-html" class="box-html">
 
           <div class="powers">
-            <h2>HTML</h2>
+            <h2 id="viewsource-html">HTML</h2>
             <a href="#" class="settings-nub" title="Open Settings">
               <span aria-hidden="true">⬇</span>
             </a>
             
             <a href="#" class="expander" title="Expand">
-              <strong>⌘1</strong>
+              <strong>⌥1</strong>
             </a>
           </div>
 
           <div class="code-wrap">
             <textarea id="html" class="code-box"></textarea>
-            <input style="position: fixed; top: 500px; right: 500px;" id="tcolor" type="hidden"></input>
           </div>
 
           <div class="settings">
@@ -60,6 +59,8 @@
             <form class="settings-row-2">
               <label for="html-classes" class="small">Add Class(es) to &lt;html></label>
               <input type="text" id="html-classes" name="html-classes" class="fullwidth" placeholder="e.g. single post post-1234">
+              <!-- Used for the color picker -->
+              <input style="position: fixed; top: 500px; right: 500px;" id="tcolor" type="hidden"></input>
             </form>
 
           </div>
@@ -69,12 +70,12 @@
         <div class="box-css" id="box-css">
 
           <div class="powers">
-            <h2>CSS</h2>
+            <h2 id="viewsource-css">CSS</h2>
             <a href="#" class="settings-nub" aria-hidden="true" data-icon="d">
               <span>⬇</span>
             </a>
             <a href="#" class="expander" title="Expand">
-              <strong>⌘2</strong>
+              <strong>⌥2</strong>
             </a>
           </div>
 
@@ -141,12 +142,12 @@
         <div id="box-js" class="box-js last">
 
           <div class="powers">
-            <h2>JS</h2>
+            <h2 id="viewsource-js">JS</h2>
             <a href="#" class="settings-nub" aria-hidden="true" data-icon="d">
               <span>⬇</span>
             </a>
             <a href="#" class="expander" title="Expand">
-              <strong>⌘3</strong>
+              <strong>⌥3</strong>
             </a>
           </div>
 
@@ -209,6 +210,8 @@
 
   <div id="vert-resizer" class="vert-resizer"><span></span></div>
 
+  <%= partial :keycommands %>
+
   <script>
     __c_data = <%= stringify(@c_data) %>;
   </script>
@@ -223,15 +226,14 @@
       '/js/mode/css/css.js',
       '/js/mode/xml/xml.js',
       '/js/util.js',
-      '/js/c_data.js',
+      '/js/tab_snippets.js',
+      '/js/data.js',
       '/js/key_bindings.js',
       '/js/code_renderer.js',
-      '/js/cp_editor.js',
+      '/js/code_editor.js',
       '/js/main.js'
       ], 'index')
   %>
-
-  <!-- removed color picker from above -->
 
 </body>
 

@@ -26,6 +26,10 @@
     top: 1px;
     @include drop-shadow(0, 0, 0, 0, 0);
   }
+  &.active {
+    background: black;
+    @include border-radiuses(5px, 0, 0, 5px);
+  }
   a {
     color: white;
   }
@@ -61,9 +65,6 @@ header button, header .button {
   line-height: 0.8;
 }
 
-#fork {
-  @include border-radiuses(0, 0, 5px, 5px);
-}
 #fork:before {
   top: 1px;
 }
@@ -114,7 +115,8 @@ header button, header .button {
   }
 }
 #login {
-  @include gradient(#33BCEF,#019AD2);
+  padding-left: 43px;
+  background: #444 url(/images/octocat.png) 5px 5px no-repeat;
   color: white;
   &:before {
     top: 1px;
@@ -122,6 +124,12 @@ header button, header .button {
     font-weight: normal;
   }
   &:focus, &:hover {
-    background: #019AD2;
+    background-color: #ccc;
+    background-position: 5px -55px;
+    color: #333;
+    text-shadow: none;
   }
+}
+#sharing-button {
+  margin-right: 10px;
 }

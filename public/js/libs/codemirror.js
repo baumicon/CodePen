@@ -1041,8 +1041,9 @@ var CodeMirror = (function() {
       gutter.style.display = "none";
       gutterText.innerHTML = html.join("");
       var minwidth = String(doc.size).length, firstNode = gutterText.firstChild, val = eltText(firstNode), pad = "";
-      while (val.length + pad.length < minwidth) pad += "\u00a0";
-      if (pad) firstNode.insertBefore(targetDocument.createTextNode(pad), firstNode.firstChild);
+      // todo, these lines commented out because of error with first line
+      //while (val.length + pad.length < minwidth) pad += "\u00a0";
+      //if (pad) firstNode.insertBefore(targetDocument.createTextNode(pad), firstNode.firstChild);
       gutter.style.display = "";
       lineSpace.style.marginLeft = gutter.offsetWidth + "px";
       gutterDirty = false;

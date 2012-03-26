@@ -10,7 +10,7 @@ var KeyBindings = {
             stop = false;
             
             // Process all the altKey pressed events
-            if(event.metaKey) {
+            if(event.altKey) {
                 if(event.keyCode == 49) {
                     // cmd + 1
                     stop = true;
@@ -44,7 +44,7 @@ var KeyBindings = {
                     // alextodo, what does fork this project mean?
                     // start with another, save to local storage?
                     // then start using that? yea
-                    CData.forkData();
+                    Data.forkData();
                     window.open('/');
                 }
                 else if(event.keyCode == 71) {
@@ -55,7 +55,7 @@ var KeyBindings = {
                 }
                 else if(event.keyCode == 83) {
                     // command + s
-                    CData.save();
+                    Data.save();
                     
                     stop = true;
                 }

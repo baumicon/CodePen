@@ -17,6 +17,7 @@ gem "activesupport"
 gem "foreman"
 gem "thin"
 gem "sinatra-flash"
+gem "redis"
 
 group :test do
   gem "sinatra-sessionography"

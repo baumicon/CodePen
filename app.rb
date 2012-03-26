@@ -12,10 +12,12 @@ require './services/renderer'
 require './lib/minify'
 require 'awesome_print'
 require './models/content'
+require 'redis'
 
 class App < Sinatra::Base
   # MongoMapper setup
   MongoMapper.database = 'tinkerbox'
+  
   use Rack::Session::Cookie,
     :key => 'codepen',
     :expire_after => 2592000 # 30 days, make easy pacheesy on our user to not have to login.
@@ -26,6 +28,10 @@ class App < Sinatra::Base
 
   @@minify = false
 
+  # redis connection for now
+  # $redis = Redis.new
+  # $redis.set(:cached, "")
+  
   configure :production do
     @@minify = true
     disable :run, :reload, :show_exceptions
@@ -38,6 +44,10 @@ class App < Sinatra::Base
     provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
   end
 
+  ###########
+  # HOME
+  ###########
+  
   get '/?' do
     @c_data = {}
     @c_data['auth_token'] = set_auth_token
@@ -70,10 +80,6 @@ class App < Sinatra::Base
     erb :about
   end
 
-  get '/embed/?' do
-    erb :embed
-  end
-
   get '/user/?' do
     erb :user
   end
@@ -86,6 +92,8 @@ class App < Sinatra::Base
     else
       #TODO: log these
       ap 'illigal access'
+      
+      '{"success":false, "error":"illegal access."}'
     end
   end
 
@@ -142,12 +150,24 @@ class App < Sinatra::Base
   def render_full_page(content)
     show_404 if not content
     rend = Renderer.new
-    rend.render_full_page(content, iframe_url)
+    rend.render_full_page(content)
   end
 
   #############
   # Anon User
   # ##########
+  get %r{/embed/([\d]+)} do |slug|
+    @c_data = Content.latest(slug)
+    @iframe_src = get_iframe_url(request) + '/embed_secure/' + slug
+    
+    erb :embed
+  end
+  
+  # load the result only for the slug
+  get %r{/embed_secure/([\d]+)} do |slug|
+    render_full_page Content.latest(slug)
+  end
+  
   get %r{/([\d]+)/([\d]+)} do |slug, version|
     set_content Content.version(slug, version)
     erb :index
@@ -161,6 +181,7 @@ class App < Sinatra::Base
   def set_content(content)
     show_404 if not content['success']
     set_session
+    
     @owned = (content['uid'] == @user.uid)
     @slug = true
     @iframe_src = get_iframe_url(request)

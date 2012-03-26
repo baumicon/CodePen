@@ -22,6 +22,12 @@ $j.addJS = function(code) {
     $j(js).appendTo("head");
 }
 
+var __user_js = '';
+var __jslib_loaded = true;
+var __jsprefix_loaded = true;
+var __jsmodernizr_loaded = true;
+var __jsexternal_loaded = true;
+
 var __renderIFrame = function(event) {
     var contentObj = JSON.parse(event.data);
     
@@ -48,35 +54,74 @@ var __renderIFrame = function(event) {
         $j.addCSS(contentObj['CSS']);
         
         // JS related
+        __user_js = '';
+        __jslib_loaded = true;
+        __jsprefix_loaded = true;
+        __jsmodernizr_loaded = true;
+        __jsexternal_loaded = true;
+        
         if(contentObj['JSLIBRARY']) {
+            __jslib_loaded = false;
+            
             // Since we already load jquery, give users access to $, instead of $j
             if(contentObj['JSLIBRARY'].indexOf('jquery') > -1) {
                 $ = $j;
+                __jslib_loaded = true;
             }
             else {
-                $j.getScript(contentObj['JSLIBRARY']);
+                $j.getScript(contentObj['JSLIBRARY'], function() {
+                    __jslib_loaded = true;
+                });
             }
         }
         
         if(contentObj['PREFIX']) {
+            __jsprefix_loaded = false;
+            
             $j.getScript('/box-libs/prefixfree.min.js', function() {
-                StyleFix.process();
-
-                // TO DO:
-                // Lea Verou says:
-                // "that's kinda inefficient. Just use PrefixFree.prefixCSS() directly"
-
+                __jsprefix_loaded = true;
+                PrefixFree.prefixCSS()
             });
         }
+        
         if(contentObj['JS_MODERNIZR']) {
-            $j.getScript(contentObj['JS_MODERNIZR']);
+            __jsmodernizr_loaded = false;
+            
+            $j.getScript(contentObj['JS_MODERNIZR'], function() {
+                __jsmodernizr_loaded = true;
+            });
         }
         
         if(contentObj['JS_EXTERNAL']) {
-            $j.getScript(contentObj['JS_EXTERNAL']);
+            __jsexternal_loaded = false;
+            
+            $j.getScript(contentObj['JS_EXTERNAL'], function() {
+                __jsexternal_loaded = true;
+            });
         }
         
-        $j.addJS(contentObj['JS']);
+        __user_js = contentObj['JS'];
+        __executeJS();
+    }
+}
+
+var __loop_count = 0;
+var __last_timeout = 0;
+
+// Make sure to execute the user js after all the scripts have loaded
+// If one of them fails to load, most likely user script, load it after 5 tries
+var __executeJS = function() {
+    if ((__jslib_loaded      && 
+        __jsprefix_loaded    && 
+        __jsmodernizr_loaded && 
+        __jsexternal_loaded  ) || __loop_count > 5) {
+        __loop_count = 0;
+        
+        $j.addJS(__user_js);
+    }
+    else {
+        __loop_count += 1;
+        setTimeout(__executeJS, 50);
     }
 }
 
