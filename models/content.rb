@@ -137,11 +137,11 @@ class Content
   # latest (because we don't do any overwrites). We can always look up
   # the latest by slug only as well as by slug and version.
   def self.cache(content)
-    key = 'slug:' + content.slug.to_s + ':version:' + content.version.to_s
-    $redis.set(key, content.to_json)
-    
-    key = 'slug:' + content.slug.to_s
-    $redis.set(key, content.to_json)
+    # key = 'slug:' + content.slug.to_s + ':version:' + content.version.to_s
+    # $redis.set(key, content.to_json)
+    # 
+    # key = 'slug:' + content.slug.to_s
+    # $redis.set(key, content.to_json)
   end
 
   def before_validation_on_create

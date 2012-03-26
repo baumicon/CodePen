@@ -29,8 +29,9 @@ class App < Sinatra::Base
   @@minify = false
 
   # redis connection for now
-  $redis = Redis.new
-  $redis.set(:cached, "")
+  # $redis = Redis.new
+  # $redis.set(:cached, "")
+  
   configure :production do
     @@minify = true
     disable :run, :reload, :show_exceptions

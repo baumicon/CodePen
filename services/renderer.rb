@@ -84,7 +84,7 @@ class Renderer
     js = @pps.process_js(data['js_pre_processor'], data['js'])
     script = '<!-- no js -->'
     
-    if js != ''
+    if !js.nil? and js != ''
       script = "(function() {\n\n"
       script+= "// Your Code!\n"
       script+= js + "\n\n"

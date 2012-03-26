@@ -9,9 +9,9 @@ var CPEditor = Class.extend({
     
     init: function(type, value) {
         this.type     = type;
-        this.value    = value;
+        this.value    = value || '';
         
-        this.buildEditor(type, value);
+        this.buildEditor(type, this.value);
     },
     
     getOption: function(option) {
