@@ -16,7 +16,7 @@ describe Content do
       content.save
       content = Content.new(:uid => 1, :slug => 'testing', :version => 2)
       content.save
-      content = Content.latest("testing", '1')
+      content = Content.latest("testing")
       content['success'].should == true
       content['version'].should equal 2
   end
@@ -26,7 +26,7 @@ describe Content do
       Content.new(:uid => 1, :slug => '2', :version => 1).save.should == true
       c2 = Content.new(:uid => 1, :slug => '2', :version => 2)
       c2.save
-      content = Content.version('2', 1, '4')
+      content = Content.version('2', 1)
 
       content['success'].should == true
       content['version'].should equal 1
@@ -34,7 +34,7 @@ describe Content do
 
   it "should return 'success' == false if no content exists for slug" do
     clear_db
-    content = Content.latest("testing", '1')
+    content = Content.latest("testing")
     content['success'].should == false
   end
 
