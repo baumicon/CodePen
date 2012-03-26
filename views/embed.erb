@@ -11,35 +11,44 @@
 
   <nav class="group">
     <!-- These should say preprocessor if there is one -->
-    <a class="active">HTML</a>
-    <a>CSS</a>
-    <a>JS</a>
-    <a>Result</a>
+    <a id="html-link" class="active">HTML</a>
+    <a id="css-link" >CSS</a>
+    <a id="js-link" >JS</a>
+    <a id="result-link" >Result</a>
   </nav>
 
   <div id="output">
 
-    <div id="html">
-        <textarea id="html" class="code-box"></textarea>
+    <div id="html-box" class="active">
+        <textarea id="html" class="code-box"><%= @c_data['html'] %></textarea>
+    </div>
+    
+    <div id="css-box">
+        <textarea id="css" class="code-box"><%= @c_data['css'] %></textarea>
     </div>
 
-    <div id="css">
+    <div id="js-box">
+        <textarea id="js" class="code-box"><%= @c_data['js'] %></textarea>
     </div>
-
-    <div id="js">
-    </div>
-
-    <div id="result">
+    
+    <div id="result-box">
+        <iframe allowTransparency="true" frameborder="0" scrolling="no" style="width:100%;border:none"  src="<%= @iframe_src %>" id="result"></iframe>
     </div>
 
   </div>
 
+  <script>
+    Data = <%= stringify(@c_data) %>;
+  </script>
+  
   <%= js_scripts([
       '/js/libs/jquery.js',
       '/js/libs/codemirror.js',
       '/js/mode/javascript/javascript.js',
       '/js/mode/css/css.js',
       '/js/mode/xml/xml.js',
+      '/js/util.js',
+      '/js/code_editor.js',
       '/js/embed.js'
       ], 'embed')
   %>

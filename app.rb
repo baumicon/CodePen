@@ -87,6 +87,8 @@ class App < Sinatra::Base
     else
       #TODO: log these
       ap 'illigal access'
+      
+      '{"success":false, "error":"illegal access."}'
     end
   end
 
@@ -143,12 +145,24 @@ class App < Sinatra::Base
   def render_full_page(content)
     show_404 if not content
     rend = Renderer.new
-    rend.render_full_page(content, iframe_url)
+    rend.render_full_page(content)
   end
 
   #############
   # Anon User
   # ##########
+  get %r{/embed/([\d]+)} do |slug|
+    @c_data = Content.latest(slug)
+    @iframe_src = get_iframe_url(request) + '/embed_secure/' + slug
+    
+    erb :embed
+  end
+  
+  # load the result only for the slug
+  get %r{/embed_secure/([\d]+)} do |slug|
+    render_full_page Content.latest(slug)
+  end
+  
   get %r{/([\d]+)/([\d]+)} do |slug, version|
     set_content Content.version(slug, version)
     erb :index
@@ -159,12 +173,6 @@ class App < Sinatra::Base
   get %r{/([\d]+)} do |slug|
     set_content Content.latest(slug)
     erb :index
-  end
-  
-  get %r{/embed/([\d]+)} do |slug|
-    set_content Content.latest(slug)
-    
-    erb :embed
   end
 
   def set_content(content)

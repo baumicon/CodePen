@@ -1,344 +1,40 @@
 (function($) {
     
     Main = {
-        win         : $(window),
-        body        : $('body'),
-        header      : $('body > header'),
-        boxHTML     : $("#box-html"),
-        boxCSS      : $("#box-css"),
-        boxJS       : $("#box-js"),
-        boxResult   : $(".result"),
-        boxResPos   : $(".result").position(),
-        result      : $("#result"),
-        boxes       : $(".boxes"),
-        topBoxesCon : $(".top-boxes"),
-        vertResizer : $("#vert-resizer"),
-        
         init: function() {
             // Initialize the data backing object first
-            Data.init();
             
-            this.syncUIWithDBO();
             this.buildEditors();
-            
             this.bindUIActions();
-            this.bindDataActions();
-            
-            // Run initial compile
-            CodeRenderer.init();
-            this.refreshEditors();
-
-            Main.win.load(function() {
-                Main.body.removeClass("preload")
-            });
         },
         
-        syncUIWithDBO: function() {
-            // Sync UI with data values
-            
-            // Sync preprocessors with correct data
-            var selector = function(prefix, value) {
-                return ':input[name="' + prefix + '-preprocessor"][value="' + value + '"]';
-            }
-            
-            $(selector('html', Data.html_pre_processor)).prop('checked', true);
-            $(selector('css', Data.css_pre_processor)).prop('checked', true);
-            $(selector('js', Data.js_pre_processor)).prop('checked', true);
-            
-            $('input[value="' + Data.css_starter + '"]').prop('checked', true);
-            
-            Main.updatePrefixFreeBox(Data.css_pre_processor);
-            
-            // Set the header type indicator for editors
-            this.addClassBoxHTML(Data.html_pre_processor);
-            this.addClassBoxCSS(Data.css_pre_processor);
-            this.addClassBoxJS(Data.js_pre_processor);
-            
-            // Sync library with correct data as well
-            $('#js-select').val(Data.js_library);
-
-            // select current theme
-            $('#theme').val(Data.theme);
-
-            // Better select box for chosing JS library
-            $("#js-select, #theme").chosen();
-
-            if(Data.css_prefix_free) $('#prefix-free').prop('checked', true);
-            if(Data.js_modernizr) $('#modernizr').prop('checked', true);
-            
-            // externals
-            if(Data.html_classes) $('#html-classes').val(Data.html_classes);
-            if(Data.css_external) $('#external-css').val(Data.css_external);
-            if(Data.js_external) $('#external-js').val(Data.js_external);
-            
-            // show a specific theme
-            // [Chris]: turned this off since settings moving
-            // this.body.attr("data-theme", Data.theme);
-        },
-        
-        addClassBoxHTML: function(clazz) {
-            this.boxHTML.removeClass('none jade slim haml').addClass(clazz);
-        },
-        
-        addClassBoxCSS: function(clazz) {
-            this.boxCSS.removeClass("scss sass stylus less").addClass(clazz);
-        },
-        
-        addClassBoxJS: function(clazz) {
-            this.boxJS.removeClass("coffeescript").addClass(clazz);
-        },
+        /* End of syncUIWithData functions */
         
         bindUIActions: function() {
-            // Resize all boxes when window resized
-            this.win.resize(function() {
-
-                var headerHeight = Main.header.outerHeight();
+            $('nav a').on('click', function() {
+                $('nav a').removeClass('active');
+                $(this).addClass('active');
                 
-                // Window is in default state
-                if (!dontTreadOnMe) {
-
-                    var space = Main.body.height();
-                    Main.topBoxesCon.height(space / 2 - 28);
-                    Main.boxResult.height(space / 2 - 102);
-                    
-                    Main.vertResizer.css({
-                        "top" : ((space / 2) + headerHeight) - 7 + "px"
-                    });
-
-                // Window has been effed with already
-                } else {
-
-                    Main.vertResizer.css({
-                        top: Main.boxResult.offset().top - 15
-                    });
-
-                }
-
-                // Always do
-                Main.boxes.height(Main.win.height() - headerHeight - 40);
-                Main.result.css({
-                    "width" : Main.win.width()
-                });
-
-               // Kick it off once for page load layout
-            }).trigger("resize");
-            
-            // Opening and closing settings panels
-            $(".settings-nub").on("click", function(e) {
-                e.preventDefault();
-                $(this)
-                    .toggleClass("open")
-                    .parent()
-                    .parent()
-                    .find(".settings")
-                    .toggleClass("open");
+                $('#output div').removeClass('active');
+                $('#' + this.id.replace('link', 'box')).addClass('active');
             });
             
-            // Opening and closing the editor
-            $(".expander").on("click", function(e) {
-                e.preventDefault();
-                Main.body.toggleClass("focus");
-                $(this)
-                    .parent()
-                    .parent()
-                    .toggleClass("expanded");
-            });
-
-            $("#app-settings-panel").hide();
-
-            // Opening and closing app settings
-            $("#app-settings").on("click", function(e) {
-                e.preventDefault();
-                $(this).toggleClass("open");
-                $("#app-settings-panel").toggle();
-            });
-
-            // Resizer
-            var dragCover = $("#drag-cover");
-            var dontTreadOnMe = false;
-            
-            $("#vert-resizer").draggable({
-                // iframeFix: true,   // DOES NOT WORK AS GOOD
-                start: function() {
-                    dragCover.show();
-                },
-                stop: function(e, ui) {
-                    dragCover.hide();
-
-                    var space = Main.body.height();
-                    var headerSpace = Main.header.outerHeight();
-
-                    // Adjust the parts
-                    Main.topBoxesCon.height(((ui.position.top - 85) / space) * 100 + "%");
-                    Main.boxResult.height(((space + headerSpace) - ui.position.top - 8) / space * 100 + "%");
-                    Main.vertResizer.css({
-                        "top" : (ui.position.top / space * 100) + "%",
-                    });
-                    
-                    // Big daddy
-                    Main.boxes.height(Main.win.height());
-
-                    // Don't reset back to halfs anymore, this is the new jam
-                    dontTreadOnMe = true;
-                },
-                axis: "y",
-                drag: function(e, ui) {
-                    var space = Main.body.height();
-                    var headerSpace = Main.header.outerHeight();
-                    Main.boxResult.height((space + headerSpace) - ui.position.top - 8);
-                    Main.topBoxesCon.height(ui.position.top - 85);
-                    Main.boxes.height(Main.win.height());
-                },
-                containment: Main.boxes
-            });
-            
-            // alextodo, need to make sure the code has been rendered check on js side
             $('#viewsource-html, #viewsource-css, #viewsource-js').on('click', function() {
-                if(this.id == 'viewsource-html') HTMLEditor.toggleReadOnly();
-                else if(this.id == 'viewsource-css') CSSEditor.toggleReadOnly();
-                else if(this.id == 'viewsource-js') JSEditor.toggleReadOnly();
+                if(this.id == 'viewsource-html') {
+                    HTMLEditor.toggleReadOnly();
+                }
+                else if(this.id == 'viewsource-css') {
+                    CSSEditor.toggleReadOnly();
+                }
+                else if(this.id == 'viewsource-js') {
+                    JSEditor.toggleReadOnly();
+                }
                 
                 return false;
             });
-
-            $("#sharing-button").on("click", function() {
-                $(this).toggleClass("active");
-                $(".sharing-panel").toggle();
-            });
-
-            $("#keyboard-commands-button").on("click", function() {
-                $("#keycommands").toggle();
-            });
-            
-            this.hideSettingsAndPanelsOnblur();
         },
         
-        bindDataActions: function() {
-            // Bind events
-             $('#run').on('click', function() {
-                 CodeRenderer.compileContent(true);
-             });
-             
-             // todo
-             // once the slug is set, you can't edit it
-             // you can only fork it and create a second slug
-             $('#slug').on('keydown', function() {
-                 Data.setSlug(this.value);
-             });
-             
-             // HTML related
-             $('input[name="html-preprocessor"]').on('click', function() {
-                 Data.setHTMLOption('preprocessor', this.value);
-                 HTMLEditor.updateCompiledCode();
-                 
-                 Main.compileContent(HTMLEditor, '', true);
-                 Main.addClassBoxHTML(this.value);
-             });
-
-             // CSS related
-             $('input[name="css-preprocessor"]').on('click', function() {
-                   Data.setCSSOption('css_pre_processor', this.value);
-                   CSSEditor.updateCompiledCode();
-                   
-                   Main.compileContent(CSSEditor, '', true);
-                   Main.addClassBoxCSS(this.value);
-                   Main.updatePrefixFreeBox(this.value);
-             });
-
-             // prefix free checkbox
-             $('#prefix-free').on('click', function() {
-                 if(Data.css_pre_processor != 'sass') {
-                    Data.setCSSOption('css_prefix_free', $(this).is(":checked"));
-                    
-                    Main.compileContent(CSSEditor, '', true);
-                 }
-             });
-             
-             // CSS Resests
-             $('input[name="startercss"]').on('click', function() {
-                 Data.setCSSOption('css_starter', this.value);
-                 
-                 Main.compileContent(CSSEditor, '', true);
-             });
-
-             // JS related
-             $('input[name="js-preprocessor"]').on('click', function() {
-                 Data.setJSOption('js_pre_processor', this.value);
-                 JSEditor.updateCompiledCode();
-                 
-                 Main.compileContent(JSEditor, '', true);
-                 Main.addClassBoxJS(this.value);
-             });
-
-             $('#js-select').on('change', function(index, select) {
-                 // alextodo, may need to move to an observe model, backbone? too complicated right now
-                 Data.setJSOption('js_library', this.value);
-                 
-                 Main.compileContent(JSEditor, '', true);
-             });
-             
-             $('#modernizr').on('click', function() {
-                 Data.setJSOption('js_modernizr', $(this).is(":checked"));
-                 
-                 Main.compileContent(CSSEditor, '', true);
-             });
-             
-             // alextodo, figure out how long before you start typing again.
-             // may need to put these settings into a settings.js file
-             $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
-                 if(this.id == 'html-classes') Data.setHTMLClass(this.value);
-                 else if(this.id == 'external-css') Data.setCSSOption('css_external', this.value);
-                 else if(this.id == 'external-js') Data.setJSOption('js_external', this.value);
-             });
-             
-             // Theme related
-
-             // [Chris]: Turned this off because settings moving
-             // $('#theme').on('change', function(index, select) {
-             //     Data.setTheme(this.value);
-             //     // Update current theme
-             //     Main.body.attr("data-theme", this.value);
-             // });
-             
-             // Save this code pen
-             $("#save, #update").on('click', function() {
-                // validate save
-                Data.save();
-                
-                return false;
-             });
-
-             $("#new").on('click', function() {
-                Data.new();
-                window.location = '/';
-                
-                return false;
-             });
-             
-             $('#fork').on('click', function() {
-                Data.fork();
-                return false;
-             });
-             
-             $('#logout').on('click', function() {
-                Data.logout();
-             });
-             
-             // Bind keys
-             KeyBindings.init();
-        },
-        
-        updatePrefixFreeBox: function(css_pre_processor) {
-            if(css_pre_processor == 'sass') {
-                   // turn off prefix free
-                   Data.setCSSOption('css_prefix_free', false);
-                   $('#prefix-free').prop('checked', false);
-                   $('#prefix-free').prop('disabled', true);
-               }
-               else {
-                   $('#prefix-free').prop('disabled', false);
-               }
-        },
+        /* End of bindUIActions functions */
         
         buildEditors: function() {
             window.HTMLEditor = new HTMLEditor('html', Data.html);
@@ -349,8 +45,8 @@
         refreshEditors: function(delay) {
             // Sometimes you have to wait a few milliseconds
             // for a task to complete before updating the editor
-            // is effective. This delay makes sure the refresh actually
-            // works.
+            // is effective (like a css transition). This delay makes 
+            // sure the refresh is called after the transition
             if(delay > 0) {
                 setTimeout(function() {
                     Main.refreshEditors(0);
@@ -361,50 +57,6 @@
                 CSSEditor.refresh();
                 JSEditor.refresh();
             }
-        },
-        
-        compileContent: function(editor, changes, forceCompile) {
-            Data.setEditorValue(editor.getOption('mode'), editor.getValue());
-            CodeRenderer.compileContent(forceCompile);
-        },
-        
-        openExpandedArea: function(areaID) {
-            Main.closeExpandedAreas();
-            $(areaID).addClass('expanded');
-        },
-        
-        closeExpandedAreas: function() {
-            $.each($(".expander"), function(index, el) {
-                Main.body.toggleClass("focus");
-
-                $(this)
-                    .parent()
-                    .parent()
-                    .removeClass('expanded');
-            });
-        },
-        
-        hideSettingsAndPanelsOnblur: function() {
-            $('body').bind('click', function(e) {
-                var elements = $(e.target).closest('.settings,.settings-nub');
-                
-                if(elements.length == 0) {
-                    $('.settings,.settings-nub').removeClass('open');
-                    
-                    Main.refreshEditors();
-                }
-                
-                // If the user clicks outside of the element, hide them
-                elements = $(e.target).
-                    closest('#app-settings-button,#app-settings,.app-settings-panel');
-                
-                if(elements.length == 0) {
-                    $('#app-settings').removeClass('open');
-                    $("#app-settings-panel").hide();
-                    
-                    Main.refreshEditors();
-                }
-            });
         }
     };
     

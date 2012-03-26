@@ -11,7 +11,7 @@ class Renderer
     @pps = PreProcessorService.new
   end
   
-  def render_full_page(data, iframe_url)
+  def render_full_page(data)
     @TITLE       = data['slug']
 
     # html related
