@@ -318,8 +318,6 @@
                  Main.compileContent(CSSEditor, '', true);
              });
              
-             // alextodo, figure out how long before you start typing again.
-             // may need to put these settings into a settings.js file
              $('#html-classes,#external-css,#external-js').on('keyup', function(e) {
                  if(this.id == 'html-classes') {
                      Data.setHTMLClass(this.value);
@@ -329,8 +327,9 @@
                  }
                  else if(this.id == 'external-js') {
                      Data.setJSOption('js_external', this.value);
-                     Main.compileContent(JSEditor, '', true);
                  }
+                 
+                 Main.compileContent(JSEditor, '', true);
              });
              
              // Theme related
