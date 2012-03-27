@@ -8,10 +8,23 @@
   height: 80%;
   padding: 20px;
   background: rgba(0,0,0,0.9);
-  z-index: 500;
+  z-index: 6000;
   top: 100px;
   left: 10%;
   top: 10%;
   @include border-radius(10px);
   @include box-shadow((0 0 20px black));
+
+  table {
+    color: white;
+    margin: 0 auto;
+    td {
+      padding: 3px;
+    }
+    .command {
+      color: yellow;
+      font-weight: 700;
+      text-align: right;
+    }
+  }
 }
