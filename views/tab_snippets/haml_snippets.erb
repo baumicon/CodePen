@@ -1,0 +1,15 @@
+{
+    "mode": "html",
+    "type":"haml",
+    "snippets": {
+    "lorem": "%p Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.",
+    
+    "nav":"%nav\n\t%ul\n\t\t%li\n\t\t\t%a{:href => '#'} Home\n\t\t%li\n\t\t\t%a{:href => '#'} About\n\t\t%li\n\t\t\t%a{:href => '#'} Clients\n\t\t%li\n\t\t\t%a{:href => '#'} Contact Us\n",
+    
+    "ul":"%ul\n\t%li Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n\t%li Aliquam tincidunt mauris eu risus.\n\t%li Vestibulum auctor dapibus neque.\n",
+    
+    "ol":"%ol\n\t%li Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n\t%li Aliquam tincidunt mauris eu risus.\n\t%li Vestibulum auctor dapibus neque.\n",
+    
+    "form":"%form{:action => \"#\", :method => \"post\"}\n\t%div\n\t\t%label{:for => \"name\"} Text Input:\n\t\t%input{:type => \"text\", :name => \"name\", :id => \"name\", :value => \"\", :tabindex => \"1\"}\n\t\t\n\t%div\n\t\t%h4 Radio Button Choice\n\t\t\n\t\t%label{:for => \"radio-choice-1\"} Choice 1\n\t\t%input{:type => \"radio\", :name => \"radio-choice-1\", :id => \"radio-choice-1\", :tabindex => \"2\", :value => \"choice-1\"}\n\n\t\t%label{:for => \"radio-choice-2\"} Choice 2\n\t\t%input{:type => \"radio\", :name => \"radio-choice-2\", :id => \"radio-choice-2\", :tabindex => \"3\", :value => \"choice-2\"}\n\n\t%div\n\t\t%label{:for => \"select-choice\"} Select Dropdown Choice:\n\t\t%select{:name => \"select-choice\", :id => \"select-choice\"}\n\t\t\t%option{:value => \"Choice 1\"} Choice 1\n\t\t\t%option{:value => \"Choice 2\"} Choice 2\n\t\t\t%option{:value => \"Choice 3\"} Choice 3\n\t\t\n\t%div\n\t\t%label{:for => \"textarea\"} Textarea:\n\t\t%textarea{:cols => \"40\", :rows => \"8\", :name => \"textarea\", :id => \"textarea\"}\n\t\n\t%div\n\t\t%label{:for => \"checkbox\"} Checkbox:\n\t\t%input{:type => \"checkbox\", :name => \"checkbox\", :id => \"checkbox\"}\n\t\n\t%div\n\t\t%input{:type => \"submit\", :value => \"Submit\"}\n"
+    }
+}

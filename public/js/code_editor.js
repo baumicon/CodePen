@@ -11,7 +11,13 @@ var CPEditor = Class.extend({
         this.type     = type;
         this.value    = value || '';
         
-        this.buildEditor(type, this.value);
+        this.buildEditor(this.type, this.value);
+        
+        // Only load the snippets that pertain to the current pre processor
+        // for the specific editor
+        setTimeout(function() {
+            TabSnippets.loadSnippet(type);
+        }, 500);
     },
     
     getOption: function(option) {
@@ -175,7 +181,14 @@ var CPEditor = Class.extend({
          }
      },
 
-     updateCompiledCode: function() {
+     preProcessorChanged: function() {
+         this.turnOffReadOnlyView();
+         TabSnippets.loadSnippet(this.type);
+     },
+     
+     // If the user is viewing the compiled result and changes
+     // the selected pre processor, go back to standard editor view
+     turnOffReadOnlyView: function() {
          if(this.readOnly) {
              this.toggleReadOnly();
          }

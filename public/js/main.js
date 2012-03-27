@@ -264,20 +264,20 @@
              // HTML related
              $('input[name="html-preprocessor"]').on('click', function() {
                  Data.setHTMLOption('preprocessor', this.value);
-                 HTMLEditor.updateCompiledCode();
+                 HTMLEditor.preProcessorChanged();
                  
-                 Main.compileContent(HTMLEditor, '', true);
                  Main.addClassBoxHTML(this.value);
+                 Main.compileContent(HTMLEditor, '', true);
              });
 
              // CSS related
              $('input[name="css-preprocessor"]').on('click', function() {
                    Data.setCSSOption('css_pre_processor', this.value);
-                   CSSEditor.updateCompiledCode();
+                   CSSEditor.preProcessorChanged();
                    
-                   Main.compileContent(CSSEditor, '', true);
                    Main.addClassBoxCSS(this.value);
                    Main.updatePrefixFreeBox(this.value);
+                   Main.compileContent(CSSEditor, '', true);
              });
 
              // prefix free checkbox
@@ -299,10 +299,10 @@
              // JS related
              $('input[name="js-preprocessor"]').on('click', function() {
                  Data.setJSOption('js_pre_processor', this.value);
-                 JSEditor.updateCompiledCode();
+                 JSEditor.preProcessorChanged();
                  
-                 Main.compileContent(JSEditor, '', true);
                  Main.addClassBoxJS(this.value);
+                 Main.compileContent(JSEditor, '', true);
              });
 
              $('#js-select').on('change', function(index, select) {

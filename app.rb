@@ -204,6 +204,16 @@ class App < Sinatra::Base
     encode({ 'url' => url_to_gist })
   end
 
+  ###############
+  # Load the snippet by type
+  ###############
+  get %r{/load_snippets/([\d\w]+)} do |type|
+    snip = 'tab_snippets/' + type + '_snippets'
+    snip = snip.to_sym
+    
+    erb snip
+  end
+  
   get '/test/coderenderer/?' do
     erb :test_code_renderer
   end

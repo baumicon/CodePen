@@ -77,7 +77,7 @@ class PreProcessorService
       end
     end
     
-    html.strip()
+    html = (html) ? html.strip() : ''
   end
 
   # Public: Process CSS with preprocessors
