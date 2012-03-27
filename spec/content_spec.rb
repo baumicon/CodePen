@@ -115,9 +115,8 @@ describe Content do
         content.save.should == true
         user = User.new(:uid => 2)
         new_content = content.fork(user)
-        JSON.parse(new_content)['success'].should == true
-        original_content = Content.first(:uid => '1').should_not be nil
-        new_content = Content.first(:uid => '2').should_not be nil
+        Content.first(:uid => '1').should_not be nil
+        Content.first(:uid => '2').should_not be nil
       end
     end
 
