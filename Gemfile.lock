@@ -33,6 +33,9 @@ GEM
     haml (3.1.4)
     hashie (1.2.0)
     highline (1.6.9)
+    httparty (0.8.1)
+      multi_json
+      multi_xml
     i18n (0.6.0)
     jsmin (1.0.1)
     json (1.6.5)
@@ -43,6 +46,7 @@ GEM
       activesupport (~> 3.0)
       plucky (~> 0.4.0)
     multi_json (1.0.4)
+    multi_xml (0.4.1)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -111,6 +115,7 @@ DEPENDENCIES
   daemons
   foreman
   haml
+  httparty
   jsmin
   json
   mongo_mapper

@@ -13,6 +13,7 @@ require './lib/minify'
 require 'awesome_print'
 require './models/content'
 require 'redis'
+require './lib/github_oauth'
 
 class App < Sinatra::Base
   # MongoMapper setup
@@ -242,15 +243,10 @@ class App < Sinatra::Base
     raise Sinatra::NotFound
   end
 
-  get '/auth/:name/callback/?' do
-    puts 'here'
-    set_session
-    LoginService.new.login(@user, request.env['omniauth.auth'])
-    redirect request.cookies['last_visited'] or '/'
-  end
-
-  get '/auth/failure/?' do
-    'Authentication Failed'
+  def oauth_class
+    GithubOAuth.new('8f5eddf0aa46eed2c78f',
+                     '38b07ca22a4bd2578b417a8597d93b7346f66002',
+                     'http://localhost:9292')
   end
 
   get '/logout/?' do
@@ -260,6 +256,22 @@ class App < Sinatra::Base
 
   get '/test/coderenderer/?' do
     erb :test_code_renderer
+  end
+
+  get '/login/?' do
+    #TODO: set cookie on client side before you get here
+    redirect oauth_class.url_auth
+  end
+
+  get '/auth/github/callback/?' do
+    user_hash = oauth_class.authorize(params[:code])
+    set_session
+    LoginService.new.login(@user, user_hash)
+    redirect '/'
+  end
+
+  get '/auth/failure/?' do
+    'Authentication Failed'
   end
 
 end

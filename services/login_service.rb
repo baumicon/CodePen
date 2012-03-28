@@ -1,22 +1,15 @@
-require "./models/user_twitter"
+require "./models/user_github"
 
 class LoginService
 
   def login(user, auth_info)
     if user.anon?
-      new_user = convert_anon_user(user, auth_info)
+      new_user = GithubUser.new(auth_info)
       Content.copy_ownership(user, new_user.uid)
       new_user
     else
       update_regular_user(user, auth_info)
     end
-  end
-
-  def convert_anon_user(user, auth_info)
-    new_user = Kernel.const_get(auth_info['provider'].capitalize + "User").new(auth_info)
-    new_user.uid = auth_info['provider'] + auth_info['uid'].to_s
-    new_user.save
-    new_user
   end
 
   def update_regular_user(user, auth_info)

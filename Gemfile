@@ -18,6 +18,7 @@ gem "foreman"
 gem "thin"
 gem "sinatra-flash"
 gem "redis"
+gem "httparty"
 
 group :test do
   gem "sinatra-sessionography"
