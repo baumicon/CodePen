@@ -204,17 +204,64 @@
                 
                 return false;
             });
-
+            
+            // Sharing related
             $("#sharing-button").on("click", function() {
-                $(this).toggleClass("active");
-                $(".sharing-panel").toggle();
+                Main.showShare(this);
+                
+                return false;
             });
-
+            
+            $('#embed-panels a').on('click', function() {
+                $('#embed-panels a').removeClass('selected');
+                $(this).addClass('selected');
+                Main.updateEmbedCode();
+                
+                return false;
+            });
+            
             $("#keyboard-commands-button").on("click", function() {
                 $("#keycommands").toggle();
             });
             
             this.hideSettingModalsOnblur();
+        },
+        
+        showShare: function(btn) {
+            if(!$(btn).hasClass('active')) {
+                var href = document.location.href;
+                
+                $('#sharing-url').val(href);
+                
+                var full = href + '/full';
+                full = full.replace(/\/\//g, "/");
+                
+                $('#sharing-result').val(full);
+                
+                this.updateEmbedCode();
+            }
+            
+            $(btn).toggleClass("active");
+            $(".sharing-panel").toggle();
+        },
+        
+        // Update the embeddable code. Give user useable code to copy paste
+        // into a blog that doesn't allow JS either. Degrades nicely.
+        updateEmbedCode: function() {
+            var link = $('#embed-panels a.selected')[0];
+            var attr = $(link).attr('data-type');
+            var editorCode = (attr == 'result') ? 
+                '<!-- see result in iframe -->' : this.htmlEntities(Data[attr]);
+            
+            var code = '<pre class="codepen" data-id="' + Data.slug + '"><code>';
+            code += editorCode + "</code></pre>\n";
+            code += '<script async src="' + document.location.origin + '/js/ei.js"></script>';
+            
+            $('#embed-code').val(code);
+        },
+        
+        htmlEntities: function(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         },
         
         updateReadOnly: function() {
@@ -306,7 +353,6 @@
              });
 
              $('#js-select').on('change', function(index, select) {
-                 // alextodo, may need to move to an observe model, backbone? too complicated right now
                  Data.setJSOption('js_library', this.value);
                  
                  Main.compileContent(JSEditor, '', true);

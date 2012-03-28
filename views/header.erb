@@ -52,26 +52,23 @@
 			
 			<div>
 				<label>URL</label>
-				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/">
+				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="">
 			</div>
 
 			<div>
 				<label>Result</label>
-				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/full/">
+				<input type="url" onclick="this.focus();this.select()" id="sharing-result" readonly="readonly" value="">
 			</div>
 
 			<div>
 				<label>Embed</label>
-				<textarea onclick="this.focus();this.select()" readonly="readonly" id="embed-code">&lt;pre id="cp-embed>&lt;code>
-code here
-&lt;/code>&lt;/pre>
-&lt;script src="//codepen.io/share.js?id=abc">&lt;/script></textarea>
+				<textarea onclick="this.focus();this.select()" readonly="readonly" id="embed-code"></textarea>
 				<label>&nbsp;</label>
-				<p>Default panel: 
-					<a class="selected">HTML</a>
-					<a>CSS</a>
-					<a>JS</a>
-					<a>Result</a>
+				<p id="embed-panels">Default panel: 
+					<a data-type="html" href="#" class="selected">HTML</a>
+					<a data-type="css" href="#" >CSS</a>
+					<a data-type="js" href="#" >JS</a>
+					<a data-type="result" href="#" >Result</a>
 				</p>
 			</div>
 
