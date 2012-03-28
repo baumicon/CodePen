@@ -289,6 +289,8 @@ var ColorUtil = {
     coordinates: '',
     
     showColorPicker: function(editor) {
+        if(editor.getOption('mode') != 'css') return false;
+        
         var showColorPicker = false;
 
         // Context for showing the color picker is right if
