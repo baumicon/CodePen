@@ -124,7 +124,7 @@ header {
   @include box-shadow((0 0 10px black));
   top: 40px;
   right: 100px;
-  z-index: 200;
+  z-index: 1005;
   width: 300px;
   label {
     color: white;

@@ -14,6 +14,10 @@ textarea:focus, textarea:active {
   clear: both;
 }
 
+.hide {
+  display: none;
+}
+
 // Clearfix
 .group:before,
 .group:after {
