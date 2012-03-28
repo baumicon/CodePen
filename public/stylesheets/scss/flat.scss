@@ -61,12 +61,16 @@ h2 {
   }
 }
 
-.user-info {
+.user-and-settings {
   width: 50%;
   float: left;
+  padding-right: 20px;
   h1 {
     display: block;
   }
+}
+.user-info {
+  margin: 0 0 20px 0;
 }
 .avatar {
   float: left;
@@ -93,7 +97,7 @@ h2 {
 .social-links {
   a {
     color: #999;
-    border: 0;
+    border: 0 !important;
     &:last-child:after {
       content: "";
     }
@@ -119,21 +123,22 @@ h2 {
   display: inline-block;
   background: black;
   margin-right: 10px;
-  width: 100px;
+  width: 88px;
   text-align: center;
   @include border-radius(10px);
   @include font-stack-bold;
   @extend .emboss-lower;
   strong {
     display: block;
-    padding: 5px 0;
+    padding: 3px 0;
     font-size: 32px;
   }
   span {
     display: block;
     background: #444;
     text-transform: uppercase;
-    padding: 5px 0;
+    padding: 4px 0;
+    font-size: 14px;
     @include border-radiuses(0, 10px, 10px, 0);
   }
 }
@@ -147,10 +152,6 @@ h2 {
 .owned-pens {
   width: 50%;
   float: right;
-  padding: 20px;
-  background: #222;
-  @include border-radius(10px);
-  @extend .emboss-lower;
   ul {
     list-style: none;
     margin: 0;
@@ -164,11 +165,20 @@ h2 {
   }
 }
 
-@media (max-width: 700px) {
-  .user-info,
+.module {
+  padding: 20px;
+  background: #222;
+  margin: 0 0 20px 0;
+  @include border-radius(10px);
+  @extend .emboss-lower;
+}
+
+@media (max-width: 800px) {
+  .user-and-settings,
   .owned-pens {
     width: 100%;
     float: none;
     margin: 0 0 20px 0;
+    padding-right: 0;
   }
 }

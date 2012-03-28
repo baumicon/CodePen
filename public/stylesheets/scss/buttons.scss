@@ -59,17 +59,25 @@
       text-shadow: none;
     }
   }
+  &.double-line {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    line-height: 0.9;
+  }
 }
 
 header button, header .button {
   line-height: 0.8;
 }
 
+#fork {
+  margin: 0 10px 0 0;
+}
 #fork:before {
   top: 1px;
 }
 #update {
-  margin: 0 10px;
+  margin: 0 10px 0 0;
 }
 #update:before {
   top: 1px;
