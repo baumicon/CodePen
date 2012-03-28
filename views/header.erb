@@ -43,7 +43,7 @@
 			</a>
 
 		<% end %>
-    
+        <% if @slug %>
 		<a id="sharing-button" class="button" href="#sharing-panel">
 			Share
 		</a>
@@ -79,7 +79,7 @@
 			</div>
 
 		</section>
-
+        <% end %>
 		<% if logged_in %>
 
 			<div class="user-stuff">
