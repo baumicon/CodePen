@@ -98,8 +98,9 @@ class PreProcessorService
       css = node_req('/stylus/', 'css', css, 'Stylus')
     elsif type == 'scss'
       begin
-        # simple scss
-        engine = get_scss_engine(css)
+        # scss with compass
+        imports_and_css = '@import "compass";' + "\n" + css
+        engine = get_sass_scss_engine(imports_and_css, :scss)
         css = engine.render
       rescue Sass::SyntaxError => e
         @errors['SCSS'] = e.message
@@ -108,7 +109,7 @@ class PreProcessorService
       begin
         # sass with compass
         imports_and_css = "@import \"compass\"\n" + css
-        engine = get_sass_compass_engine(imports_and_css)
+        engine = get_sass_scss_engine(imports_and_css, :sass)
         css = engine.render
       rescue Sass::SyntaxError => e
         @errors['SASS with Compass'] = e.message
@@ -118,32 +119,13 @@ class PreProcessorService
     css
   end
   
-  def get_scss_engine(content)
-    opts = { }
-    opts[:style]  = :expanded
-    opts[:syntax] = :scss
-    opts[:line_numbers] = false
-    opts[:line_comments] = false
-    # set the full exception to false so that Sass engine throws
-    # a ruby exception instead of adding error to CSS
-    opts[:full_exception] = false
-    
-    Sass::Engine.new(content, opts)
-  end
-  
-  # A sass engine for compiling sass content with compass
-  # Read this file 
+  # A sass engine for compiling sass/scss content with compass
+  # Read this file for options we can change
   # http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html#syntax
-  # alextodo, would be really cool to detect the mixins like
-  # @include border-radius, and tell the user they need to
-  # add this import, @import "compass/css3/border-radius"
-  # otherwise, you get this error
-  #   (sass):4:in `border-radius': Undefined mixin 'border-radius'.
-  # we can tell them that we added it for them, or tell them how to fix it
-  def get_sass_compass_engine(content)
+  def get_sass_scss_engine(content, syntax)
     opts = Compass.sass_engine_options
     opts[:style]  = :expanded
-    opts[:syntax] = :sass
+    opts[:syntax] = syntax
     opts[:line_numbers] = false
     opts[:line_comments] = false
     # set the full exception to false so that Sass engine throws
