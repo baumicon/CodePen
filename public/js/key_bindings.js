@@ -32,21 +32,13 @@ var KeyBindings = {
                     JSEditor.setCursorToEnd();
                     Main.refreshEditors(200);
                 }
-                //
-                // Not using this one anymore
-                //
-                // else if(event.keyCode == 13) {
-                //     // return
-                //     // compile and run code
-                //     stop = true;
-                //     CodeRenderer.compileContent(true);
-                // }
-                //
-                else if(event.keyCode == 75) {
-                    // command + K
+            }
+
+            if(event.metaKey) {
+                if(event.keyCode == 75) {
+                    // k
                     // fork this project
-                    // Does this work?
-                    Data.forkData();
+                    Data.fork();
                     window.open('/');
                 }
                 else if(event.keyCode == 71) {
@@ -60,6 +52,14 @@ var KeyBindings = {
                     Data.save();
                     stop = true;
                 }
+                else if(event.keyCode == 91) {
+                    // n
+                    // TODO: Call function for BRAND NEW BOX
+                }
+                else if(event.keyCode == 85) {
+                    // u
+                    // TODO: Call function for UPDATE
+                }
                 else if(event.keyCode == 76) {
                     // l
                     // If you've saved your code, you can open it in full page
@@ -72,6 +72,7 @@ var KeyBindings = {
             
             if(event.keyCode == 27) {
                 Main.closeExpandedAreas();
+                $("#keycommands").hide();
             }
             
             if(stop) {
