@@ -64,9 +64,8 @@ class GistService
     css = data['css']
     
     if data['css_pre_processor'] == 'sass'
-      # add imports we pulled from compass
       pps = PreProcessorService.new
-      css = pps.get_compass_imports(css) + "\n" + css
+      css = "@import \"compass\"\n" + css
     end
     
     css
