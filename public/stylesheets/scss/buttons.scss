@@ -59,6 +59,11 @@
       text-shadow: none;
     }
   }
+  &.double-line {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    line-height: 0.9;
+  }
 }
 
 header button, header .button {

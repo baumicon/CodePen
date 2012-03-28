@@ -2,6 +2,10 @@
 	margin-right: 0 !important;
 }
 
+.center {
+  text-align: center;
+}
+
 textarea:focus, textarea:active {
 	outline: 0;
 }
@@ -14,7 +18,4 @@ textarea:focus, textarea:active {
 }
 .group:after {
     clear: both;
-}
-.group {
-    zoom: 1; // For IE 6/7 (trigger hasLayout)
 }
