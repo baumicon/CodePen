@@ -90,9 +90,7 @@ class App < Sinatra::Base
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
       content = content.json_save
     else
-      #TODO: log these
-      ap 'illigal access'
-      
+      #TODO: log these to a file
       '{"success":false, "error":"illegal access."}'
     end
   end
@@ -102,20 +100,24 @@ class App < Sinatra::Base
   # #####
   post '/fork/:slug/?' do |slug|
     set_session
-    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
+    
+    fork_content(slug)
   end
-
+  
+  # alextodo, i think fork should give u something different
+  # its really just a save, with tracking of where it started
   post '/fork/:slug/:version/?' do |slug, version|
     set_session
-    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
+    
+    fork_content(slug)
   end
-
-  def fork_redirect(content)
-    if content
-      new_content = content.fork(@user)
-      redirect "/#{new_content.slug}"
-    end
-    redirect request.referrer
+  
+  def fork_content(slug)
+    content = Content.first(:order => :version.desc, :slug => "#{slug}")
+    forked_content = content.fork(@user)
+    
+    forked_content['success'] = 'true'
+    forked_content.to_json
   end
 
   get '/list/?' do

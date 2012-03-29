@@ -86,15 +86,6 @@ var Data = Class.extend({
         this.version = (isNaN(this.version)) ? 1 : this.version * 1;
         this.auth_token = __c_data['auth_token'];
     },
-    
-    fork: function() {
-        // alextodo, will need a different fork path if the user is logged in
-        // will actually have to save to localStorage and redirect to new box
-        this.slug = '';
-        this.version = 1;
-        
-        this.save();
-    },
 
     setSlug: function(value) {
         this.slug = value;
@@ -148,44 +139,98 @@ var Data = Class.extend({
     },
 
     save: function() {
-        this.version += 1;
-        
-        $.ajax({
-              url: '/save/content',
-              type: 'POST',
-              data: Util.getDataValues(
-                { 'content': JSON.stringify(Data), 'auth_token': Data.auth_token }),
-              success: function(result) {
-                  var obj = $.parseJSON(result);
-                  
-                  if(obj.success) {
-                      window.location = '/' + obj.slug + '/' + obj.version;
+        if(this.canSave()) {
+            this.version += 1;
+            
+            $.ajax({
+                  url: '/save/content',
+                  type: 'POST',
+                  data: Util.getDataValues(
+                    { 'content': JSON.stringify(Data), 'auth_token': Data.auth_token }),
+                  success: function(result) {
+                      var obj = $.parseJSON(result);
+                      
+                      if(obj.success) {
+                          var href = '/' + obj.slug + '/' + obj.version;
+                          
+                          // If current URL is blank, send to new location
+                          // If it's brand new, refresh to the new
+                          if(document.location.pathname == '/' || !window.history.pushState) {
+                              window.location = href;
+                          }
+                          else {
+                              var desc = "New Code Pen " + obj.slug;
+                              window.history.pushState('', desc, href);
+                          }
+                      }
+                      else {
+                            alert(result);
+                      }
                   }
-                  else {
-                        alert(result);
-                  }
-              }
-        });
-    },
-
-    fork: function() {
-        var getLocation = function(href) {
-            var l = document.createElement("a");
-            l.href = href;
-            return l
+            });
         }
-        var l = getLocation(location.href);
-        var form = document.createElement('form');
-        form.setAttribute('method', 'post');
-        path = '/fork' + l.pathname;
-        form.setAttribute('action', path);
-        var hiddenField = document.createElement('input');
-        hiddenField.setAttribute('type', 'hidden');
-        hiddenField.setAttribute('name', 'auth_token');
-        hiddenField.setAttribute('value', Data.auth_token);
-        form.appendChild(hiddenField);
-        document.body.appendChild(form);
-        form.submit();
+    },
+    
+    canSave: function() {
+    	var canSave = true;
+    	
+        if(this.html == '' && this.css == '' && this.js == '') {
+            canSave = false;
+        }
+        
+        return canSave;
+    },
+    
+    fork: function() {
+        if(this.canFork()) {
+            this.version += 1;
+            
+            $.ajax({
+                  url: '/fork' + location.pathname,
+                  type: 'POST',
+                  data: Util.getDataValues(
+                    { 'content': JSON.stringify(Data), 'auth_token': Data.auth_token }),
+                  success: function(result) {
+                      var obj = $.parseJSON(result);
+                      
+                      if(obj.success) {
+                          Data.updateThisValues(obj);
+                          
+                          var href = '/' + obj.slug + '/' + obj.version;
+                          Data.updateURL(href);
+                      }
+                      else {
+                            alert(result);
+                      }
+                  }
+            });
+        }
+    },
+    
+    canFork: function() {
+        return true;
+    },
+    
+    updateThisValues: function(obj) {
+        for(var attr in Data) {
+            if(typeof(Data[attr]) != 'function') {
+                if(obj[attr]) {
+                    Data[attr] = obj[attr];
+                }
+            }
+        }
+    },
+    
+    // Attempts to update the pushState so we don't have to reload
+    // otherwise, update the window.location
+    updateURL: function(href) {
+        if(window.history.pushState) {
+            var desc = "moving to " + href;
+            window.history.pushState('', desc, href);
+        }
+        else {
+            window.location = href;
+        }
     },
 
     logout: function() {

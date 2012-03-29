@@ -72,7 +72,7 @@ class GistService
   end
   
   def get_ext(type, default)
-    if type == 'none' or type == ''
+    if type == 'none' or type == '' or type.nil?
       return default
     else
       return type
