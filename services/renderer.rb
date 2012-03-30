@@ -126,8 +126,7 @@ class Renderer
     elsif js_library == 'dojo'
       href = '//ajax.googleapis.com/ajax/libs/dojo/1/dojo/dojo.xd.js'
     end
-    puts 'href ' + js_library
-    puts href
+    
     if href.nil? or href == ''
       return ''
     else
