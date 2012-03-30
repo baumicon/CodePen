@@ -6,6 +6,7 @@
   <title>User on CodePen</title>
   <link rel="stylesheet" href="/stylesheets/css/main.css">
   <link rel="stylesheet" href="/stylesheets/css/flat.css">
+  <link rel="shortcut icon" href="/favicon.png">
 </head>
 
 <body class="user">
@@ -35,14 +36,19 @@
       <div class="user-info group">
 
         <div class="avatar">
+
           <img src="/images/avatars/000001-chriscoyier.jpg">
+
           <a class="button" id="follow-this-user">
             Follow Chris
           </a>
+
           <!-- Conditional Logic -->
+
           <!-- <a class="button following" id="follow-this-user">
             ✔ Following
           </a> -->
+
         </div>
 
         <h1>Chris Coyier</h1>
@@ -71,8 +77,28 @@
 
       </div> <!-- div.user-info -->
 
-      <div class="clear module">
+      <div class="clear module group">
         <h2>Settings</h2>
+
+        <form>
+        <ul class="theme-choice">
+          <li class="selected">
+            <label for="theme-twilight">
+              <img src="/images/themes/theme-twilight.png" alt="">
+              <strong>Twilight</strong>
+              <input type="radio" id="theme-twilight" name="theme-choice" checked>
+            <label>
+          </li>
+          <li>
+            <label for="theme-classic">
+              <img src="/images/themes/theme-classic.png" alt="">
+              <strong>Classic</strong>
+              <input type="radio" id="theme-classic" name="theme-choice">
+            </label>
+          </li>
+        </ul>
+        </form>
+
       </div>
 
       <div class="clear module">

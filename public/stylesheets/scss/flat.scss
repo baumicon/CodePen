@@ -13,9 +13,6 @@ html, body {
   p, li {
     font-size: 13px;
   }
-  ul {
-    margin: 0 0 20px 20px;
-  }
   li {
     margin: 0 0 5px 0;
   }
@@ -58,6 +55,12 @@ h2 {
   letter-spacing: 2px;
   &:first-child {
     margin-top: 0;
+  }
+}
+
+.text {
+  ul {
+    margin: 0 0 20px 20px;
   }
 }
 
@@ -171,6 +174,30 @@ h2 {
   margin: 0 0 20px 0;
   @include border-radius(10px);
   @extend .emboss-lower;
+}
+
+.theme-choice {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  li {
+    text-align: center;
+    float: left;
+    padding: 10px;
+    background: $gray-7;
+    @include border-radius(10px);
+    @extend .emboss-lower;
+    margin: 0 20px 0 0;
+    img, strong {
+      display: block;
+    }
+    strong {
+      margin: 5px 0;
+    }
+    &.selected {
+      background: $gray-6;
+    }
+  }
 }
 
 @media (max-width: 800px) {
