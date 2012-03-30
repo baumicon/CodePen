@@ -116,7 +116,7 @@ var CodeRenderer = Class.extend({
     
     getPrefixFree: function() {
         if(Data.css_prefix_free) {
-            return '/box-libs/prefixfree.min.js';
+            return '/js/libs/prefixfree.min.js';
         }
         else {
             return '';

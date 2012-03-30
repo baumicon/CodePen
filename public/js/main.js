@@ -220,6 +220,10 @@
                 return false;
             });
             
+            $('#share-gist').on('click', function() {
+                CodeRenderer.createGist();
+            });
+            
             $("#keyboard-commands-button").on("click", function() {
                 $("#keycommands").toggle();
             });
@@ -238,13 +242,30 @@
                 
                 $('#sharing-result').val(full);
                 
+                this.updateTweetLink();
                 this.updateEmbedCode();
+                this.updateExportZip();
             }
             
             $(btn).toggleClass("active");
             $(".sharing-panel").toggle();
         },
         
+        updateTweetLink: function() {
+            var href = 'http://twitter.com/home?status=';
+            href += 'Check out my Code Pen! ' + document.location.href;
+            
+            $('#share-tweet').attr('href', href);
+        },
+        
+        updateExportZip: function() {
+            var href = document.location.href + '/zip';
+            console.log(href);
+            $('#share-zip').attr('href', href);
+        },
+        
+        // alextodo really start breaking this file up
+        // way too much going on here, break this out into a share file
         // Update the embeddable code. Give user useable code to copy paste
         // into a blog that doesn't allow JS either. Degrades nicely.
         updateEmbedCode: function() {
@@ -253,8 +274,15 @@
             var editorCode = (attr == 'result') ? 
                 '<!-- see result in iframe -->' : this.htmlEntities(Data[attr]);
             
-            var code = '<pre class="codepen" data-id="' + Data.slug + '"><code>';
-            code += editorCode + "</code></pre>\n";
+            var dataHost = '';
+            
+            if( document.location.origin.indexOf('localhost') > -1 || 
+                document.location.origin.indexOf('127.0.0.1')) {
+                dataHost = ' data-host="' + document.location.origin + '" ';
+            }
+            
+            var code = '<pre class="codepen" data-href="' + document.location.pathname;
+            code += '"' + dataHost + '><code>' + editorCode + "</code></pre>\n";
             code += '<script async src="' + document.location.origin + '/js/ei.js"></script>';
             
             $('#embed-code').val(code);
@@ -378,15 +406,6 @@
                  Main.compileContent(JSEditor, '', true);
              });
              
-             // Theme related
-
-             // [Chris]: Turned this off because settings moving
-             // $('#theme').on('change', function(index, select) {
-             //     Data.setTheme(this.value);
-             //     // Update current theme
-             //     Main.body.attr("data-theme", this.value);
-             // });
-             
              // Save this code pen
              $("#save, #update").on('click', function() {
                 // validate save
@@ -396,8 +415,7 @@
              });
 
              $("#new").on('click', function() {
-                Data.new();
-                window.location = '/';
+                Main.newPen();
                 
                 return false;
              });
@@ -413,6 +431,11 @@
              
              // Bind keys
              KeyBindings.init();
+        },
+        
+        newPen: function() {
+            Data.new();
+            window.location = '/';
         },
         
         updatePrefixFreeBox: function(css_pre_processor) {

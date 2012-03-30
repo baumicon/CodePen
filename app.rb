@@ -6,6 +6,7 @@ require 'omniauth-twitter'
 require 'mongo_mapper'
 require './services/gist_service'
 require './services/preprocessor_service'
+require './services/zip_service'
 require './services/login_service'
 require './lib/sessionator'
 require './services/renderer'
@@ -13,6 +14,7 @@ require './lib/minify'
 require 'awesome_print'
 require './models/content'
 require 'redis'
+require 'zippy'
 
 class App < Sinatra::Base
   # MongoMapper setup
@@ -90,9 +92,7 @@ class App < Sinatra::Base
       content = Content.new_from_json(params[:content], @user.uid, @user.anon?)
       content = content.json_save
     else
-      #TODO: log these
-      ap 'illigal access'
-      
+      #TODO: log these to a file
       '{"success":false, "error":"illegal access."}'
     end
   end
@@ -102,20 +102,24 @@ class App < Sinatra::Base
   # #####
   post '/fork/:slug/?' do |slug|
     set_session
-    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
+    
+    fork_content(slug)
   end
-
+  
+  # alextodo, i think fork should give u something different
+  # its really just a save, with tracking of where it started
   post '/fork/:slug/:version/?' do |slug, version|
     set_session
-    fork_redirect(Content.first(:order => :version.desc, :slug => "#{slug}"))
+    
+    fork_content(slug)
   end
-
-  def fork_redirect(content)
-    if content
-      new_content = content.fork(@user)
-      redirect "/#{new_content.slug}"
-    end
-    redirect request.referrer
+  
+  def fork_content(slug)
+    content = Content.first(:order => :version.desc, :slug => "#{slug}")
+    forked_content = content.fork(@user)
+    
+    forked_content['success'] = 'true'
+    forked_content.to_json
   end
 
   get '/list/?' do
@@ -152,13 +156,29 @@ class App < Sinatra::Base
     rend = Renderer.new
     rend.render_full_page(content)
   end
-
+  
+  #############
+  # Zip file
+  #############
+  
+  get %r{/([\d]+)/([\d]+)/zip} do |slug, version|
+    content_type 'application/octet-stream', :charset => "utf-8"
+    attachment 'codepen_' + slug.to_s + '_' + version.to_s + '.zip'
+    
+    content = Content.version(slug, version)
+    
+    zs = ZipService.new
+    zs.zip(content)
+  end
+  
   #############
   # Anon User
   # ##########
   get %r{/embed/([\d]+)} do |slug|
     @c_data = Content.latest(slug)
     @iframe_src = get_iframe_url(request) + '/embed_secure/' + slug
+    
+    response.headers['X-Frame-Options'] = 'GOFORIT'
     
     erb :embed
   end
@@ -188,7 +208,7 @@ class App < Sinatra::Base
     @c_data = content
     @c_data['auth_token'] = set_auth_token
   end
-
+  
   #############
   # Gist
   ###########

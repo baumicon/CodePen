@@ -18,6 +18,8 @@ gem "foreman"
 gem "thin"
 gem "sinatra-flash"
 gem "redis"
+gem "rubyzip"
+gem "zippy"
 
 group :test do
   gem "sinatra-sessionography"
