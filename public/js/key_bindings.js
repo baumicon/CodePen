@@ -7,7 +7,6 @@ var KeyBindings = {
     bindKeys: function() {
         $(document).on('keydown', function(event) {
             var stop = false;
-            
             // Process all the altKey pressed events
             if(event.altKey) {
                 if(event.keyCode == 49) {
@@ -50,7 +49,7 @@ var KeyBindings = {
                     stop = true;
                     Data.save();
                 }
-                else if(event.keyCode == 91) {
+                else if(event.keyCode == 78) {
                     // n
                     stop = true;
                     Main.newPen();

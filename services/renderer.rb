@@ -48,6 +48,8 @@ class Renderer
     result.gsub(/[\n]{2,}/, "\n\n")
   end
   
+  # alextodo, will probably need a prefix specifically for downloads
+  # every one of these will need to consider it
   def get_css_starter(css_starter)
     link = ''
 

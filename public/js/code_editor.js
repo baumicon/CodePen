@@ -16,7 +16,7 @@ var CPEditor = Class.extend({
         // Only load the snippets that pertain to the current pre processor
         // for the specific editor
         setTimeout(function() {
-            TabSnippets.loadSnippet(type);
+            if(typeof(TabSnippets) != 'undefined') TabSnippets.loadSnippet(type);
         }, 500);
     },
     
@@ -41,7 +41,7 @@ var CPEditor = Class.extend({
                 // Initially have code mirror not ignore the key
                 // if we decide to handle it then set this to true
                 var cmIgnoreKey = false;
-
+                
                 if(key.keyCode == 9 && key.type == 'keydown') {
                     if(!editor.somethingSelected()) {
                         var snippet = TabSnippets.findSnippet(editor);
@@ -124,6 +124,17 @@ var CPEditor = Class.extend({
                         });
 
                         $('#tcolor').click();
+                    }
+                }
+                else if(key.keyCode == 191 && key.type == 'keydown' && key.metaKey) {
+                    if(editor.somethingSelected()) {
+                        console.log(key);
+                        // get selection
+                        // add a prefix and a suffix
+                        // figure out the type of prefix and suffix necesary
+                        
+                        // need to figure out if they are inverting it too
+                        // that way we'll know if the user is trying to remove it
                     }
                 }
 

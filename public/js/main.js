@@ -267,8 +267,15 @@
             var editorCode = (attr == 'result') ? 
                 '<!-- see result in iframe -->' : this.htmlEntities(Data[attr]);
             
-            var code = '<pre class="codepen" data-id="' + Data.slug + '"><code>';
-            code += editorCode + "</code></pre>\n";
+            var dataHost = '';
+            
+            if( document.location.origin.indexOf('localhost') > -1 || 
+                document.location.origin.indexOf('127.0.0.1')) {
+                dataHost = ' data-host="' + document.location.origin + '" ';
+            }
+            
+            var code = '<pre class="codepen" data-href="' + document.location.pathname;
+            code += '"' + dataHost + '><code>' + editorCode + "</code></pre>\n";
             code += '<script async src="' + document.location.origin + '/js/ei.js"></script>';
             
             $('#embed-code').val(code);
