@@ -244,6 +244,7 @@
                 
                 this.updateTweetLink();
                 this.updateEmbedCode();
+                this.updateExportZip();
             }
             
             $(btn).toggleClass("active");
@@ -255,6 +256,12 @@
             href += 'Check out my Code Pen! ' + document.location.href;
             
             $('#share-tweet').attr('href', href);
+        },
+        
+        updateExportZip: function() {
+            var href = document.location.href + '/zip';
+            console.log(href);
+            $('#share-zip').attr('href', href);
         },
         
         // alextodo really start breaking this file up

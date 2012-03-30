@@ -78,7 +78,7 @@ var __renderIFrame = function(event) {
         if(contentObj['PREFIX']) {
             __jsprefix_loaded = false;
             
-            $j.getScript('/box-libs/prefixfree.min.js', function() {
+            $j.getScript('/js/libs/prefixfree.min.js', function() {
                 __jsprefix_loaded = true;
                 // alextodo, this looks like it's erroring out, why
                 PrefixFree.prefixCSS()
