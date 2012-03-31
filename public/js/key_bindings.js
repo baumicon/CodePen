@@ -67,7 +67,8 @@ var KeyBindings = {
                     // mode. Otherwise this fails silently.
                     if(document.location.pathname.match(/\/[\d]+(\/[\d]+)?/)) {
                         stop = true;
-                        window.open(document.location.pathname + '/full')
+                        var url = document.location.origin + '/full' + document.location.pathname;
+                        window.open(url);
                     }
                 }
             }

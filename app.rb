@@ -106,8 +106,6 @@ class App < Sinatra::Base
     fork_content(slug)
   end
   
-  # alextodo, i think fork should give u something different
-  # its really just a save, with tracking of where it started
   post '/fork/:slug/:version/?' do |slug, version|
     set_session
     
@@ -143,11 +141,12 @@ class App < Sinatra::Base
   ############
   # Full Page
   # ##########
-  get %r{/([\d]+)/([\d]+)/full} do |slug, version|
+  
+  get %r{/full/([\d]+)/([\d]+)} do |slug, version|
     render_full_page Content.version(slug, version)
   end
 
-  get %r{/([\d]+)/full} do |slug|
+  get %r{/full/([\d]+)} do |slug|
     render_full_page Content.latest(slug)
   end
 
@@ -161,7 +160,7 @@ class App < Sinatra::Base
   # Zip file
   #############
   
-  get %r{/([\d]+)/([\d]+)/zip} do |slug, version|
+  get %r{/zip/([\d]+)/([\d]+)} do |slug, version|
     content_type 'application/octet-stream', :charset => "utf-8"
     attachment 'codepen_' + slug.to_s + '_' + version.to_s + '.zip'
     
@@ -171,9 +170,20 @@ class App < Sinatra::Base
     zs.zip(content)
   end
   
+  get %r{/zip/([\d]+)} do |slug|
+    content_type 'application/octet-stream', :charset => "utf-8"
+    attachment 'codepen_' + slug.to_s + '.zip'
+    
+    content = Content.latest(slug)
+    
+    zs = ZipService.new
+    zs.zip(content)
+  end
+  
   #############
-  # Anon User
-  # ##########
+  # Embed
+  ############
+  
   get %r{/embed/([\d]+)} do |slug|
     response.headers['X-Frame-Options'] = 'GOFORIT'
     
@@ -201,6 +211,37 @@ class App < Sinatra::Base
     render_full_page Content.latest(slug)
   end
   
+  #############
+  # Gist
+  ###########
+  
+  post '/gist/?' do
+    data = JSON.parse(params[:data])
+
+    rend = Renderer.new()
+    result = rend.render_full_page(data)
+
+    gs = GistService.new
+    url_to_gist = gs.create_gist(data, result)
+
+    encode({ 'url' => url_to_gist })
+  end
+
+  ###############
+  # Load the snippet by type
+  ###############
+  
+  get %r{/load_snippets/([\d\w]+)} do |type|
+    snip = 'tab_snippets/' + type + '_snippets'
+    snip = snip.to_sym
+    
+    erb snip
+  end
+  
+  #############
+  # Anon User
+  ############
+  
   get %r{/([\d]+)/([\d]+)} do |slug, version|
     set_content Content.version(slug, version)
     erb :index
@@ -222,35 +263,6 @@ class App < Sinatra::Base
     @c_data['auth_token'] = set_auth_token
   end
   
-  #############
-  # Gist
-  ###########
-  post '/gist/?' do
-    data = JSON.parse(params[:data])
-
-    rend = Renderer.new()
-    result = rend.render_full_page(data)
-
-    gs = GistService.new
-    url_to_gist = gs.create_gist(data, result)
-
-    encode({ 'url' => url_to_gist })
-  end
-
-  ###############
-  # Load the snippet by type
-  ###############
-  get %r{/load_snippets/([\d\w]+)} do |type|
-    snip = 'tab_snippets/' + type + '_snippets'
-    snip = snip.to_sym
-    
-    erb snip
-  end
-  
-  get '/test/coderenderer/?' do
-    erb :test_code_renderer
-  end
-
   def encode(obj)
     obj.to_json.gsub('/', '\/')
   end
@@ -299,10 +311,6 @@ class App < Sinatra::Base
   get '/logout/?' do
     session[:uid] = false
     redirect '/'
-  end
-
-  get '/test/coderenderer/?' do
-    erb :test_code_renderer
   end
 
 end

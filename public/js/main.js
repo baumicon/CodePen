@@ -201,23 +201,7 @@
             });
             
             // Sharing related
-            $("#sharing-button").on("click", function() {
-                Main.showShare(this);
-                
-                return false;
-            });
-            
-            $('#embed-panels a').on('click', function() {
-                $('#embed-panels a').removeClass('selected');
-                $(this).addClass('selected');
-                Main.updateEmbedCode();
-                
-                return false;
-            });
-            
-            $('#share-gist').on('click', function() {
-                CodeRenderer.createGist();
-            });
+            Share.init();
             
             $("#keyboard-commands-button").on("click", function() {
                 $("#keycommands").toggle();
@@ -226,68 +210,6 @@
             this.hideSettingModalsOnblur();
         },
         
-        showShare: function(btn) {
-            if(!$(btn).hasClass('active')) {
-                var href = document.location.href;
-                
-                $('#sharing-url').val(href);
-                
-                var full = href + '/full';
-                full = full.replace(/\/\//g, "/");
-                
-                $('#sharing-result').val(full);
-                
-                this.updateTweetLink();
-                this.updateEmbedCode();
-                this.updateExportZip();
-            }
-            
-            $(btn).toggleClass("active");
-            $(".sharing-panel").toggle();
-        },
-        
-        updateTweetLink: function() {
-            var href = 'http://twitter.com/home?status=';
-            href += 'Check out my Code Pen! ' + document.location.href;
-            
-            $('#share-tweet').attr('href', href);
-        },
-        
-        updateExportZip: function() {
-            var href = document.location.href + '/zip';
-            $('#share-zip').attr('href', href);
-        },
-        
-        // alextodo really start breaking this file up
-        // way too much going on here, break this out into a share file
-        // Update the embeddable code. Give user useable code to copy paste
-        // into a blog that doesn't allow JS either. Degrades nicely.
-        updateEmbedCode: function() {
-            var link = $('#embed-panels a.selected')[0];
-            var dataType = $(link).attr('data-type');
-            var editorCode = (dataType == 'result') ? 
-                '<!-- see result in iframe -->' : this.htmlEntities(Data[dataType]);
-            
-            var dataHost = '';
-            
-            if( document.location.origin.indexOf('localhost') > -1 || 
-                document.location.origin.indexOf('127.0.0.1')) {
-                dataHost = 'data-host="' + document.location.origin + '" ';
-            }
-            
-            var code = '<pre class="codepen" data-type="' + dataType + '" ';
-            code += 'data-href="' + document.location.pathname + '" ';
-            code += dataHost + '><code>' + editorCode + "</code></pre>\n";
-            code += '<script async src="' + document.location.origin + '/js/embed/ei.js"></script>';
-            
-            $('#embed-code').val(code);
-        },
-        
-        htmlEntities: function(str) {
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        },
-        
-        // alextodo breakup the readonly as well, that does not work
         updateReadOnly: function() {
             var s = '#box-html.view-compiled,';
             s += '#box-css.view-compiled,';
