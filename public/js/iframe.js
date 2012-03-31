@@ -2,12 +2,18 @@
 var $j = jQuery.noConflict();
 
 $j.getCSS = function(url) {
-    $j(document.createElement('link')).attr({
-        href: url,
-        media: 'screen',
-        type: 'text/css',
-        rel: 'stylesheet'
-    }).appendTo('head');
+    if (document.createStyleSheet) {
+        url = document.location.protocol + '//' + document.location.host + url;
+        document.createStyleSheet(url);
+    }
+    else {
+        $j(document.createElement('link')).attr({
+            href: url,
+            media: 'screen',
+            type: 'text/css',
+            rel: 'stylesheet'
+        }).appendTo('head');
+    }
 };
 
 $j.addCSS = function(css) {
@@ -34,15 +40,15 @@ var __renderIFrame = function(event) {
     if(contentObj['error']) {
         // errors exist. show those
         var html = $j('html')[0];
-        html.innerHTML = contentObj['error'];
+        $j(html).html(contentObj['error']);
         $j.getCSS('/stylesheets/css/errors.css');
     }
     else {
         // HTML related
         var html = $j('html')[0];
-        html.innerHTML = contentObj['HTML'];
-        html.className = contentObj['HTML_CLASSES'];
-
+        $j(html).html(contentObj['HTML']);
+        $j(html).addClass(contentObj['HTML_CLASSES']);
+        
         // CSS related
         if(contentObj['CSS_STARTER']) {
             $j.getCSS(contentObj['CSS_STARTER']);

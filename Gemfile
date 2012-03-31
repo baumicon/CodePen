@@ -18,6 +18,7 @@ gem "foreman"
 gem "thin"
 gem "sinatra-flash"
 gem "redis"
+gem "mock_redis"
 gem "rubyzip"
 gem "zippy"
 

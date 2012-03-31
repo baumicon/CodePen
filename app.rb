@@ -29,14 +29,25 @@ class App < Sinatra::Base
   register Sinatra::Flash
 
   @@minify = false
-
-  # redis connection for now
-  # $redis = Redis.new
-  # $redis.set(:cached, "")
+  
+  configure :development do
+    begin
+      $redis = Redis.new
+      $redis.set(:cached, "")
+    rescue
+      # Use mock redis so we don't have to start redis during development
+      require 'mock_redis'
+      $redis = MockRedis.new
+    end
+  end
   
   configure :production do
     @@minify = true
     disable :run, :reload, :show_exceptions
+    
+    # Production must be able to connect to redis
+    $redis = Redis.new
+    $redis.set(:cached, "")
   end
 
   use OmniAuth::Builder do
@@ -285,10 +296,12 @@ class App < Sinatra::Base
   end
 
   not_found do
+    @error = true
     erb :'404'
   end
 
   error do
+    @error = true
     erb :'500'
   end
 

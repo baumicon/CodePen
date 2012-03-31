@@ -46,9 +46,11 @@ class Content
 
   def self.latest(slug)
     begin
-      # content = load_from_cache(slug)
-      # content = Content.first(:order => :version.desc, :slug => "#{slug}") if content.nil?
-      content = Content.first(:order => :version.desc, :slug => "#{slug}")
+      content = load_from_cache(slug)
+      content = Content.first(:order => :version.desc, :slug => "#{slug}") if content.nil?
+      
+      #content = Content.first(:order => :version.desc, :slug => "#{slug}")
+      
       return hash_success(content.attributes) if content
       return hash_errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
     rescue Exception => ex
@@ -59,9 +61,10 @@ class Content
   def self.version(slug, version)
     begin
       return json_errors({:version_must_be_int => "Version must be an int"}) if not /^\d+$/.match("#{version}")
-      # content = load_from_cache(slug, version)
-      # content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version)) if content.nil?
-      content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version))
+      
+      content = load_from_cache(slug, version)
+      content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version)) if content.nil?
+      #content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version))
       
       return self.hash_success(content.attributes) if content
       return self.hash_errors({:no_conent_for_slug => "Can't find content. Slug:#{slug} Version:#{version}"})
@@ -70,6 +73,7 @@ class Content
     end
   end
 
+  # alextodo, figure out where this is called
   def fork(user)
     begin
       content = Content.new(self.attributes)
@@ -107,7 +111,7 @@ class Content
   def json_save
     if self.valid?
       self.save
-      self.class.cache self
+      Content.cache self
       
       #TODO: whitelist output
       return json_success(self.attributes)
@@ -119,16 +123,8 @@ class Content
   private
   
   def self.load_from_cache(slug, version=0)
-    key = 'slug:' + slug.to_s
-    
-    if version.to_i > 0
-      key += ':version:' + version.to_s
-    end
-    
-    content = $redis.get(key)
-    content = JSON.parse(content) if !content.nil?
-    
-    content
+    content = $redis.get(cache_key(slug, version))
+    (content.nil?) ? nil : JSON.parse(content)
   end
   
   # Cache the content with the $redis global value
@@ -137,11 +133,18 @@ class Content
   # latest (because we don't do any overwrites). We can always look up
   # the latest by slug only as well as by slug and version.
   def self.cache(content)
-    # key = 'slug:' + content.slug.to_s + ':version:' + content.version.to_s
-    # $redis.set(key, content.to_json)
-    # 
-    # key = 'slug:' + content.slug.to_s
-    # $redis.set(key, content.to_json)
+    $redis.set(cache_key(content.slug), content.to_json)
+    $redis.set(cache_key(content.slug, content.version), content.to_json)
+  end
+  
+  def self.cache_key(slug, version=0)
+    key = 'slug:' + slug.to_s
+    
+    if version.to_i > 0
+      key += ':version:' + version.to_s
+    end
+    
+    key
   end
 
   def before_validation_on_create
