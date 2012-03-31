@@ -32,6 +32,7 @@
             // Sync UI with data values
             this.selectPreProcessors();
             
+            // Update the correct css starter radio button
             $('input[value="' + Data.css_starter + '"]').prop('checked', true);
             
             Main.updatePrefixFreeBox(Data.css_pre_processor);
@@ -40,28 +41,15 @@
             this.addClassBoxHTML(Data.html_pre_processor);
             this.addClassBoxCSS(Data.css_pre_processor);
             this.addClassBoxJS(Data.js_pre_processor);
+            this.renderJSLibraryDropdown();
             
-            // Sync library with correct data as well
-            $('#js-select').val(Data.js_library);
-
-            // select current theme
-            $('#theme').val(Data.theme);
-
-            // Better select box for chosing JS library
-            // Chosen selection has to happen after the value's been selected
-            $("#js-select, #theme").chosen();
-
             if(Data.css_prefix_free) $('#prefix-free').prop('checked', true);
             if(Data.js_modernizr) $('#modernizr').prop('checked', true);
             
             // externals
-            if(Data.html_classes) $('#html-classes').val(Data.html_classes);
-            if(Data.css_external) $('#external-css').val(Data.css_external);
-            if(Data.js_external) $('#external-js').val(Data.js_external);
-            
-            // show a specific theme
-            // [Chris]: turned this off since settings moving
-            // this.body.attr("data-theme", Data.theme);
+            $('#html-classes').val(Data.html_classes);
+            $('#external-css').val(Data.css_external);
+            $('#external-js').val(Data.js_external);
         },
         
         selectPreProcessors: function() {
@@ -90,6 +78,14 @@
             this.boxJS.removeClass("coffeescript").addClass(clazz);
         },
         
+        renderJSLibraryDropdown: function() {
+            // Sync library with correct data as well
+            $('#js-select').val(Data.js_library);
+            // Better select box for chosing JS library
+            // Chosen selection has to happen after the value's been selected
+            $("#js-select").chosen();
+        },
+        
         /* End of syncUIWithData functions */
         
         bindUIActions: function() {
@@ -99,7 +95,6 @@
                 
                 // Window is in default state
                 if (!dontTreadOnMe) {
-
                     var space = Main.body.height();
                     Main.topBoxesCon.height(space / 2 - 28);
                     Main.boxResult.height(space / 2 - 102);
@@ -260,7 +255,6 @@
         
         updateExportZip: function() {
             var href = document.location.href + '/zip';
-            console.log(href);
             $('#share-zip').attr('href', href);
         },
         
@@ -283,7 +277,7 @@
             
             var code = '<pre class="codepen" data-href="' + document.location.pathname;
             code += '"' + dataHost + '><code>' + editorCode + "</code></pre>\n";
-            code += '<script async src="' + document.location.origin + '/js/ei.js"></script>';
+            code += '<script async src="' + document.location.origin + '/js/embed/ei.js"></script>';
             
             $('#embed-code').val(code);
         },
@@ -292,6 +286,7 @@
             return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         },
         
+        // alextodo breakup the readonly as well, that does not work
         updateReadOnly: function() {
             var s = '#box-html.view-compiled,';
             s += '#box-css.view-compiled,';
@@ -450,6 +445,7 @@
                }
         },
         
+        // Build code editors
         buildEditors: function() {
             window.HTMLEditor = new HTMLEditor('html', Data.html);
             window.CSSEditor = new CSSEditor('css', Data.css);

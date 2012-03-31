@@ -175,16 +175,29 @@ class App < Sinatra::Base
   # Anon User
   # ##########
   get %r{/embed/([\d]+)} do |slug|
-    @c_data = Content.latest(slug)
-    @iframe_src = get_iframe_url(request) + '/embed_secure/' + slug
-    
     response.headers['X-Frame-Options'] = 'GOFORIT'
+    
+    @data = clean_content(Content.latest(slug))
+    @iframe_src = get_iframe_url(request) + '/embed_secure/' + slug
     
     erb :embed
   end
   
+  def clean_content(data)
+    data['html'] = (data['html'].nil?) ? 
+      nil : (data['html'].strip() == '') ? nil : data['html']
+    data['css'] = (data['css'].nil?) ? 
+      nil : (data['css'].strip() == '') ? nil : data['css']
+    data['js'] = (data['js'].nil?) ? 
+      nil : (data['js'].strip() == '') ? nil : data['js']
+    
+    data
+  end
+  
   # load the result only for the slug
   get %r{/embed_secure/([\d]+)} do |slug|
+    response.headers['X-Frame-Options'] = 'GOFORIT'
+    
     render_full_page Content.latest(slug)
   end
   

@@ -16,7 +16,7 @@ var CPEditor = Class.extend({
         // Only load the snippets that pertain to the current pre processor
         // for the specific editor
         setTimeout(function() {
-            if(typeof(TabSnippets) != 'undefined') TabSnippets.loadSnippet(type);
+            TabSnippets.loadSnippet(type);
         }, 500);
     },
     
@@ -371,4 +371,3 @@ var ColorUtil = {
         }
     }
 }
-

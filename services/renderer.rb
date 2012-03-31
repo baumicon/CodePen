@@ -6,6 +6,9 @@ require './services/preprocessor_service'
 class Renderer
   
   @pps
+  # path type is either web_page_relative or download
+  # depending on the relative path the files should use
+  @path_type = 'web_page_relative'
   
   def initialize
     @pps = PreProcessorService.new
@@ -13,23 +16,9 @@ class Renderer
   
   # Render the user's full page for them to download in a zip file
   def render_download_page(data)
-    @TITLE       = data['slug']
-
-    # html related
-    @HTML         = @pps.process_html(data['html_pre_processor'], data['html'])
-    @HTML_CLASSES = data['html_classes']
-    # CSS related
-    @CSS          = @pps.process_css(data['css_pre_processor'], data['css'])
-    @CSS_STARTER  = get_css_starter(data['css_starter'], 'css')
-    @PREFIX       = get_prefix(data['css_prefix_free'], 'js')
-    @CSS_EXTERNAL = get_css_external(data['css_external'])
-    # js related
-    @JS           = get_js(data)
-    @JSLIBRARY    = get_js_library(data['js_library'], 'http:')
-    @JS_MODERNIZR = get_js_modernizr(data['js_modernizr'], 'js')
-    @JS_EXTERNAL  = get_js_external(data['js_external'])
+    @path_type = 'download'
     
-    render_tpl()
+    render_full_page(data)
   end
   
   # Render the user's full page to display on codepen.io
@@ -47,7 +36,7 @@ class Renderer
     # js related
     @JS           = get_js(data)
     @JSLIBRARY    = get_js_library(data['js_library'])
-    @JS_MODERNIZR = get_js_modernizr(data['js_modernizr'], 'js')
+    @JS_MODERNIZR = get_js_modernizr(data['js_modernizr'])
     @JS_EXTERNAL  = get_js_external(data['js_external'])
     
     render_tpl()
@@ -66,8 +55,9 @@ class Renderer
     result.gsub(/[\n]{2,}/, "\n\n")
   end
   
-  def get_css_starter(css_starter, path='/stylesheets/css')
+  def get_css_starter(css_starter)
     stylesheet = ''
+    path = (@path_type == 'download') ? 'css' : '/stylesheets/css'
 
     if css_starter == 'normalize'
       href = path + '/normalize.css';
@@ -80,7 +70,9 @@ class Renderer
     stylesheet
   end
   
-  def get_prefix(prefix, path='/js/libs')
+  def get_prefix(prefix)
+    path = (@path_type == 'download') ? 'js' : '/js/libs'
+    
     (prefix == '' or prefix.nil?) ? '' : '<script src="' + path + '/prefixfree.min.js"></script>'
   end
   
@@ -112,8 +104,9 @@ class Renderer
     script
   end
   
-  def get_js_library(js_library, path='')
+  def get_js_library(js_library)
     href = ''
+    path = (@path_type == 'download') ? 'http:' : ''
     
     if js_library == 'jquery'
       href = '//code.jquery.com/jquery-latest.js'
@@ -135,6 +128,8 @@ class Renderer
   end
   
   def get_js_modernizr(js_modernizr, path='/js/libs')
+    path = (@path_type == 'download') ? 'js' : '/js/libs'
+    
     (js_modernizr == '' or js_modernizr.nil?) ? 
       '' : '<script src="' + path + '/modernizr.js"></script>'
   end
