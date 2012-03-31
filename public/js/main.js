@@ -264,19 +264,20 @@
         // into a blog that doesn't allow JS either. Degrades nicely.
         updateEmbedCode: function() {
             var link = $('#embed-panels a.selected')[0];
-            var attr = $(link).attr('data-type');
-            var editorCode = (attr == 'result') ? 
-                '<!-- see result in iframe -->' : this.htmlEntities(Data[attr]);
+            var dataType = $(link).attr('data-type');
+            var editorCode = (dataType == 'result') ? 
+                '<!-- see result in iframe -->' : this.htmlEntities(Data[dataType]);
             
             var dataHost = '';
             
             if( document.location.origin.indexOf('localhost') > -1 || 
                 document.location.origin.indexOf('127.0.0.1')) {
-                dataHost = ' data-host="' + document.location.origin + '" ';
+                dataHost = 'data-host="' + document.location.origin + '" ';
             }
             
-            var code = '<pre class="codepen" data-href="' + document.location.pathname;
-            code += '"' + dataHost + '><code>' + editorCode + "</code></pre>\n";
+            var code = '<pre class="codepen" data-type="' + dataType + '" ';
+            code += 'data-href="' + document.location.pathname + '" ';
+            code += dataHost + '><code>' + editorCode + "</code></pre>\n";
             code += '<script async src="' + document.location.origin + '/js/embed/ei.js"></script>';
             
             $('#embed-code').val(code);

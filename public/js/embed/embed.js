@@ -4,14 +4,26 @@
         init: function() {
             this.buildEditors();
             this.bindUIActions();
+            this.syncUIWithData();
         },
         
-        /* End of syncUIWithData functions */
+        syncUIWithData: function() {
+            // Select the user defined selected tab
+            var hashLinks = {
+                '#html'   :'#html-link', 
+                '#css'    :'#css-link',
+                '#js'     :'#js-link',
+                '#result' : '#result-link'
+            }
+            
+            var link = hashLinks[document.location.hash] || '#result-link';
+            
+            // Attempt to preselect the user's preference, but if it does not exist
+            // because that tab has no value, show the result
+            if($(link).length > 0) $(link).click();
+            else $('#result-link').click();
+        },
         
-        // alextodo, if the user doesn't have js or css or html, hide that tab
-        // make it smart
-        // alextodo, need to also respect what the user wants to show first
-        // which tab should show first and what not
         bindUIActions: function() {
             $('nav a').on('click', function() {
                 $('nav a').removeClass('active');
@@ -22,16 +34,16 @@
             });
         },
         
-        /* End of bindUIActions functions */
-        
         buildEditors: function() {
             if($('#html-box').length > 0) {
                 window.HTMLEditor = new HTMLEditor('html', Data.html);
             }
-            else if($('#css-box').length > 0) {
+            
+            if($('#css-box').length > 0) {
                 window.CSSEditor = new CSSEditor('css', Data.css);
             }
-            else if($('#js-box').length > 0) {
+            
+            if($('#js-box').length > 0) {
                 window.JSEditor = new JSEditor('js', Data.js);
             }
         }

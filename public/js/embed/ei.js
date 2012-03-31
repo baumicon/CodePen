@@ -12,18 +12,18 @@ function __CP() {
 	       var host = cp.getAttribute('data-host');
 	       if(host) this.host = host;
 	       
-	       var url = this.buildURL(cp.getAttribute('data-href'));
+	       var url = this.buildURL(cp.getAttribute('data-href'), cp.getAttribute('data-type'));
 	       cp.innerHTML = this.buildIFrame(url);
 	    }
 	},
 	
-	this.buildURL = function(href) {
-		return this.host + '/embed' + href;
+	this.buildURL = function(href, type) {
+	    type = type || 'result';
+	    var url = this.host + '/embed' + href + '/#' + type;
+	    return url.replace(/\/\//g, '/');
 	},
 	
 	this.buildIFrame = function(url) {
-		// if(this.autoResize == false) scroll = 'auto';
-		
 		var src = '<iframe height="'+this.height+'" allowTransparency="true"';
 		src += ' frameborder="0" scrolling="no" style="width:'+this.width+';border:none"';
 		src += 'src="' + url + '"></iframe>';
