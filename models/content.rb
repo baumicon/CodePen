@@ -120,9 +120,14 @@ class Content
   private
   
   def self.load_from_cache(slug, version=0)
-    content = $redis.get(cache_key(slug, version))
-    # talk to tim, is this sufficient, will saving the id's harm anything?
-    (content.nil?) ? nil : Content.new(JSON.parse(content))
+    begin
+      content = $redis.get(cache_key(slug, version))
+      # talk to tim, is this sufficient, will saving the id's harm anything?
+      (content.nil?) ? nil : Content.new(JSON.parse(content))
+    rescue
+      # you would only get here if the redis server dies
+      return nil
+    end
   end
   
   # Cache the content with the $redis global value
@@ -131,8 +136,13 @@ class Content
   # latest (because we don't do any overwrites). We can always look up
   # the latest by slug only as well as by slug and version.
   def self.cache(content)
-    $redis.set(cache_key(content.slug), content.to_json)
-    $redis.set(cache_key(content.slug, content.version), content.to_json)
+    begin
+      $redis.set(cache_key(content.slug), content.to_json)
+      $redis.set(cache_key(content.slug, content.version), content.to_json)
+    rescue
+      # move on, no caching
+      # you would only get here if the redis server died
+    end
   end
   
   def self.cache_key(slug, version=0)

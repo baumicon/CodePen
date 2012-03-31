@@ -57,7 +57,21 @@ var __renderIFrame = function(event) {
             $j.getCSS(contentObj['CSS_EXTERNAL']);
         }
         
-        $j.addCSS(contentObj['CSS']);
+        if(contentObj['PREFIX']) {
+            // If we have prefix free lib to load, we should load that js
+            // then prefix our css, then finally add the css to the head so that
+            // the browser can render it
+            __jsprefix_loaded = false;
+            
+            $j.getScript('/js/libs/prefixfree.min.js', function() {
+                __jsprefix_loaded = true;
+                var prefixedCSS = PrefixFree.prefixCSS(contentObj['CSS']);
+                $j.addCSS(prefixedCSS);
+            });
+        }
+        else {
+            $j.addCSS(contentObj['CSS']);
+        }
         
         // JS related
         __user_js = '';
@@ -79,18 +93,6 @@ var __renderIFrame = function(event) {
                     __jslib_loaded = true;
                 });
             }
-        }
-        
-        if(contentObj['PREFIX']) {
-            __jsprefix_loaded = false;
-            
-            $j.getScript('/js/libs/prefixfree.min.js', function() {
-                __jsprefix_loaded = true;
-                // alextodo, this looks like it's erroring out, why
-                // PrefixFree.prefixCSS();
-
-                StyleFix.process();
-            });
         }
         
         if(contentObj['JS_MODERNIZR']) {
