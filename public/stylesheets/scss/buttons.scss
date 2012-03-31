@@ -126,6 +126,7 @@ header button, header .button {
   padding-left: 43px;
   background: #444 url(/images/octocat.png) 5px 5px no-repeat;
   color: white;
+  margin-left: 10px;
   &:before {
     top: 1px;
     left: -2px;
@@ -139,5 +140,5 @@ header button, header .button {
   }
 }
 #sharing-button {
-  margin-right: 10px;
+  
 }

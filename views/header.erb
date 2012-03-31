@@ -21,7 +21,7 @@
       <% end %>
 
 				<button id="new">
-			 		<strong>⌘N</strong> Brand New Pen
+			 		<strong>⌘P</strong> Brand New Pen
 			 	</button>	
 
 			<% else %>
@@ -43,7 +43,9 @@
 			</a>
 
 		<% end %>
-        <% if @slug %>
+    
+    <% if @slug %>
+
 		<a id="sharing-button" class="button" href="#sharing-panel">
 			Share
 		</a>
@@ -79,21 +81,20 @@
 			</div>
 
 		</section>
-        <% end %>
+   	<% end # slug %>
+		
 		<% if logged_in %>
 
 			<div class="user-stuff">
         <img src="/images/avatars/000001-chriscoyier.jpg">
         <a href="/user/">chriscoyier</a>
-        <a class="logout-link">log out</a>  
+        <a class="logout-link" href="/logout" id="logout">log out</a>  
       </div>
-
-			<a id="logout" href="/logout" class="button">
-				Logout
-			</a>
 
     <% end %>
 
 	</div><!-- div.app-actions -->
+
+	<%= partial :social %>
 
 </header>
