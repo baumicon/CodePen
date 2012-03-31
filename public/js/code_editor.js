@@ -50,28 +50,6 @@ var CPEditor = Class.extend({
                         if(snippet) {
                             editor.setLine(from.line, snippet);
                         }
-                        else {
-                            var line = editor.getLine(from.line);
-                            var to = {'line': from.line, 'ch': line.length};
-                            var range = editor.getRange(from, to);
-                            var tab = '';
-
-                            for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
-                                tab += ' ';
-                            }
-
-                            editor.replaceRange(tab + range, from, to);
-
-                            var endCursor = from.ch + tab.length;
-                            editor.setCursor({'line': from.line, 'ch': endCursor});
-                        }
-
-                        // Stop the keydown and keypress both
-                        key = $.Event(key);
-                        key.stopPropagation();
-                        key.preventDefault();
-
-                        cmIgnoreKey = true;
                     }
                 }
                 // If the User selects the alt key and text is selected
