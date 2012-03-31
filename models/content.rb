@@ -49,8 +49,6 @@ class Content
       content = load_from_cache(slug)
       content = Content.first(:order => :version.desc, :slug => "#{slug}") if content.nil?
       
-      #content = Content.first(:order => :version.desc, :slug => "#{slug}")
-      
       return hash_success(content.attributes) if content
       return hash_errors({:no_conent_for_slug => "Can't find content for slug name '#{slug}'"})
     rescue Exception => ex
@@ -64,12 +62,11 @@ class Content
       
       content = load_from_cache(slug, version)
       content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version)) if content.nil?
-      #content = Content.last(:order => :version.desc, :slug => "#{slug}", :version => Integer(version))
       
       return self.hash_success(content.attributes) if content
       return self.hash_errors({:no_conent_for_slug => "Can't find content. Slug:#{slug} Version:#{version}"})
     rescue Exception => ex
-      return self.hash_errors({:get_latest => "Error getting most recent content. Slug:#{slug} Version:#{version}"})
+      return self.hash_errors({:get_latest => "Error getting content. Slug:#{slug} Version:#{version}"})
     end
   end
 
@@ -124,7 +121,8 @@ class Content
   
   def self.load_from_cache(slug, version=0)
     content = $redis.get(cache_key(slug, version))
-    (content.nil?) ? nil : JSON.parse(content)
+    # talk to tim, is this sufficient, will saving the id's harm anything?
+    (content.nil?) ? nil : Content.new(JSON.parse(content))
   end
   
   # Cache the content with the $redis global value
