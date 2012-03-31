@@ -155,12 +155,11 @@ var Data = Class.extend({
                           
                           // If current URL is blank, send to new location
                           // If it's brand new, refresh to the new
-                          if(document.location.pathname == '/' || !window.history.pushState) {
+                          if(document.location.pathname == '/') {
                               window.location = href;
                           }
                           else {
-                              var desc = "New Code Pen " + obj.slug;
-                              window.history.pushState('', desc, href);
+                              Data.updateURL(href);
                           }
                       }
                       else {
@@ -195,9 +194,7 @@ var Data = Class.extend({
                       
                       if(obj.success) {
                           Data.updateThisValues(obj);
-                          
-                          var href = '/' + obj.slug + '/' + obj.version;
-                          Data.updateURL(href);
+                          window.location = '/' + obj.slug + '/' + obj.version;
                       }
                       else {
                             alert(result);
@@ -221,12 +218,12 @@ var Data = Class.extend({
         }
     },
     
-    // Attempts to update the pushState so we don't have to reload
+    // Attempts to update the replaceState so we don't have to reload
     // otherwise, update the window.location
     updateURL: function(href) {
-        if(window.history.pushState) {
-            var desc = "moving to " + href;
-            window.history.pushState('', desc, href);
+        if(window.history.replaceState) {
+            var desc = "Moving to URL " + href;
+            window.history.replaceState('', desc, href);
         }
         else {
             window.location = href;

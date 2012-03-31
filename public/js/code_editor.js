@@ -106,13 +106,7 @@ var CPEditor = Class.extend({
                 }
                 else if(key.keyCode == 191 && key.type == 'keydown' && key.metaKey) {
                     if(editor.somethingSelected()) {
-                        console.log(key);
-                        // get selection
-                        // add a prefix and a suffix
-                        // figure out the type of prefix and suffix necesary
-                        
-                        // need to figure out if they are inverting it too
-                        // that way we'll know if the user is trying to remove it
+                        CommentUtil.comment(editor, type);
                     }
                 }
 
@@ -265,6 +259,91 @@ var JSEditor = CPEditor.extend({
         $("#box-js").toggleClass("view-compiled");
     }
 });
+
+var CommentUtil = {
+    
+    comment: function(editor, type) {
+        if(type == 'html') this.commentHTML(editor);
+        else if(type == 'css') this.commentCSS(editor);
+        else if(type == 'js') this.commentJS(editor);
+    },
+    
+    commentHTML: function(editor) {
+        if(Data.html_pre_processor == 'jade') {
+            this.prefixComments(editor, '//');
+        }
+        else if(Data.html_pre_processor == 'slim') {
+            this.prefixComments(editor, '/!');
+        }
+        else if(Data.html_pre_processor == 'haml') {
+            this.prefixComments(editor, '/');
+        }
+        else {
+            // regular html comment
+            this.wrapComments(editor, '<!--', '-->');
+        }
+    },
+    
+    commentCSS: function(editor) {
+        this.wrapComments(editor, '/*', '*/');
+    },
+    
+    commentJS: function(editor) {
+        if(Data.js_pre_processor == 'coffeescript') {
+            this.wrapComments(editor, '###', '###');
+        }
+        else {
+            this.wrapComments(editor, '/*', '*/');
+        }
+    },
+    
+    // Prefix every line of the selection
+    prefixComments: function(editor, prefix) {
+        var lines = editor.getSelection().split("\n");
+        var newSelection = '';
+        var invertedSelection = '';
+        var selectionHasComments = true;
+        
+        for (var i=0; i < lines.length; i++) {
+            newSelection += prefix + lines[i];
+            if(i + 1 < lines.length) newSelection += "\n";
+            
+            // If every line ended up having comments, then use the
+            // invertedSelection because we want to uncomment it
+            if(lines[i].substring(0, prefix.length) == prefix) {
+                if(selectionHasComments) {
+                    invertedSelection += lines[i].substring(prefix.length, lines[i].length);
+                    if(i + 1 < lines.length) invertedSelection += "\n";
+                }
+            }
+            else {
+                selectionHasComments = false;
+            }
+        }
+        
+        if(selectionHasComments) editor.replaceSelection(invertedSelection);
+        else editor.replaceSelection(newSelection);
+    },
+    
+    // Wrap the selection in a comment block
+    wrapComments: function(editor, prefix, suffix) {
+        // replaceSelection(string)
+        var selection = editor.getSelection();
+        var newSelection = '';
+        
+        if( selection.substr(0, prefix.length) == prefix && 
+            selection.substr(suffix.length * -1, suffix.length) == suffix) {
+            // If it's already wrapped, we need to unwrap it
+            newSelection = selection.substring(prefix.length, selection.length - suffix.length);
+        }
+        else {
+            // wrap the selection in comments
+            newSelection = prefix + selection + suffix;
+        }
+        
+        editor.replaceSelection(newSelection);
+    }
+}
 
 var ColorUtil = {
     editor: '',

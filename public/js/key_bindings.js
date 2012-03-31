@@ -7,6 +7,7 @@ var KeyBindings = {
     bindKeys: function() {
         $(document).on('keydown', function(event) {
             var stop = false;
+            
             // Process all the altKey pressed events
             if(event.altKey) {
                 if(event.keyCode == 49) {
@@ -49,8 +50,9 @@ var KeyBindings = {
                     stop = true;
                     Data.save();
                 }
-                else if(event.keyCode == 78) {
-                    // n
+                else if(event.keyCode == 74) {
+                    // n, chrome doesn't pick up on n
+                    // using J, for now
                     stop = true;
                     Main.newPen();
                 }
