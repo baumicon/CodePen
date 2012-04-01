@@ -150,17 +150,8 @@ var CodeRenderer = Class.extend({
     // Get JS Options
     
     getJS: function() {
-        if(this.postProcessedJS) {
-            var js = '(function() {';
-            js += " try { " + this.postProcessedJS + " }";
-            js += "catch(err) { if(console) { console.log('Error: ' + err.message); }}";
-            js += "})();";
-
-            return js;
-        }
-        else {
-            return '';
-        }
+        return (this.postProcessedJS) ? 
+            '(function() { ' + this.postProcessedJS + '})();' : '';
     },
     
     getJSLibrary: function() {
