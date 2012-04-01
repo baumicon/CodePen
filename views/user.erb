@@ -113,23 +113,15 @@
 
     <div class="owned-pens module">
         <h2>Recent CodePens</h2>
-
+        
         <ul>
+          <% for @content in @latest_contents %>
           <li>
-            <iframe></iframe>
+            <iframe src="http://localhost.com:9292/full/<% @content['slug'] %>/<% @content['version']%>" allowTransparency="true" 
+            frameborder="0" scrolling="no" height="100px;" style="width:100%;border:none">
+            Check out my awesome CodePen!</iframe>
           </li>
-          <li>
-            <iframe></iframe>
-          </li>
-          <li>
-            <iframe></iframe>
-          </li>
-          <li>
-            <iframe></iframe>
-          </li>
-          <li>
-            <iframe></iframe>
-          </li>
+          <% end %>
         </ul>
 
         <a href="#" class="button">View All</a>

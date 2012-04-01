@@ -94,6 +94,7 @@ class App < Sinatra::Base
   end
 
   get '/user/?' do
+    @latest_contents = Content.get_latest_slugs(5)
     erb :user
   end
 
@@ -148,7 +149,7 @@ class App < Sinatra::Base
 
     encode(results)
   end
-
+  
   ############
   # Full Page
   # ##########

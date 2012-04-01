@@ -43,7 +43,11 @@ class Content
     content['slug'] = nil if content['slug'] == ''
     Content.new(content)
   end
-
+  
+  def self.get_latest_slugs(limit)
+    Content.where(:anon => true).sort(:slug).limit(limit)
+  end
+  
   def self.latest(slug)
     begin
       content = load_from_cache(slug)
@@ -70,7 +74,6 @@ class Content
     end
   end
 
-  # alextodo, figure out where this is called
   def fork(user)
     begin
       content = Content.new(self.attributes)
@@ -87,9 +90,7 @@ class Content
       
       content.version = 1
       content.save
-      # alextodo, see if we can cache
-      # see why this doesn't work
-      # self.class.cache content
+      Content.cache content
       
       content
     end
