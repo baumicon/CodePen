@@ -29,3 +29,4 @@ end
 
 gem "slim"
 gem "capistrano"
+gem 'rake'
