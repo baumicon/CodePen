@@ -36,6 +36,7 @@ var Data = Class.extend({
         // make sure a localStorage object exist
         if(typeof(localStorage) == 'undefined') {
             window.localStorage = {
+                setItem: function() { },
                 removeItem: function() { },
                 clear: function() { }
             };
@@ -134,8 +135,13 @@ var Data = Class.extend({
         this[mode] = value;
     },
     
-    new: function() {
-        localStorage['new'] = 'true';
+    newPen: function() {
+        try {
+            localStorage.setItem('new', 'true');
+        }
+        catch(err) {
+            alert(err.message);
+        }
     },
 
     save: function() {

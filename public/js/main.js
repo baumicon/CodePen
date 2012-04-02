@@ -352,7 +352,7 @@
         },
         
         newPen: function() {
-            Data.new();
+            Data.newPen();
             window.location = '/';
         },
         
