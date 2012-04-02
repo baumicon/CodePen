@@ -9,24 +9,24 @@
 			<% if @slug %>
 
 				<button id="fork">
-					<strong>⌥K</strong> Fork
+					<strong>⌘K</strong> Fork
 				</button>
 
       <% if @owned %>
 
         <button id="update">
-            <strong>⌥U</strong> Update
+            <strong>⌘U</strong> Update
         </button>
 
       <% end %>
 
 				<button id="new">
-			 		<strong>⌥N</strong> Brand New Pen
+			 		<strong>⌘P</strong> Brand New Pen
 			 	</button>	
 
 			<% else %>
 				<button id="save">
-					<strong>⌥S</strong> Save
+					<strong>⌘S</strong> Save
 				</button>
 			<% end %>
 
@@ -44,6 +44,8 @@
 
 		<% end %>
     
+    <% if @slug %>
+
 		<a id="sharing-button" class="button" href="#sharing-panel">
 			Share
 		</a>
@@ -52,44 +54,47 @@
 			
 			<div>
 				<label>URL</label>
-				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/">
+				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="">
 			</div>
 
 			<div>
 				<label>Result</label>
-				<input type="url" onclick="this.focus();this.select()" id="sharing-url" readonly="readonly" value="http://codepen.io/abc/full/">
+				<input type="url" onclick="this.focus();this.select()" id="sharing-result" readonly="readonly" value="">
 			</div>
 
 			<div>
 				<label>Embed</label>
-				<textarea onclick="this.focus();this.select()" readonly="readonly" id="embed-code">&lt;pre id="cp-embed>&lt;code>
-code here
-&lt;/code>&lt;/pre>
-&lt;script src="//codepen.io/share.js?id=abc">&lt;/script></textarea>
+				<textarea onclick="this.focus();this.select()" readonly="readonly" id="embed-code"></textarea>
+				<label>&nbsp;</label>
+				<p id="embed-panels">Default panel: 
+					<a data-type="html" href="#" class="selected">HTML</a>
+					<a data-type="css" href="#" >CSS</a>
+					<a data-type="js" href="#" >JS</a>
+					<a data-type="result" href="#" >Result</a>
+				</p>
 			</div>
 
 			<div class="buttons">
-				<a class="button">Save as Gist</a>
-				<a class="button">Tweet</a>
-				<a class="button">Export .zip</a>
+				<a id="share-gist" class="button">Save as Gist</a>
+				<a id="share-tweet" target="_blank" href="http://twitter.com/home?status=Check out my Code Pen!" class="button">Tweet</a>
+				<a id="share-zip" href="#" class="button">Export .zip</a>
 			</div>
 
 		</section>
-
+   	<% end # slug %>
+		
 		<% if logged_in %>
 
 			<div class="user-stuff">
         <img src="/images/avatars/000001-chriscoyier.jpg">
         <a href="/user/">chriscoyier</a>
-        <a class="logout-link">log out</a>  
+        <a class="logout-link" href="/logout" id="logout">log out</a>  
       </div>
-
-			<a id="logout" href="/logout" class="button">
-				Logout
-			</a>
 
     <% end %>
 
 	</div><!-- div.app-actions -->
+
+	<%= partial :social %>
 
 </header>

@@ -11,7 +11,13 @@ var CPEditor = Class.extend({
         this.type     = type;
         this.value    = value || '';
         
-        this.buildEditor(type, this.value);
+        this.buildEditor(this.type, this.value);
+        
+        // Only load the snippets that pertain to the current pre processor
+        // for the specific editor
+        setTimeout(function() {
+            TabSnippets.loadSnippet(type);
+        }, 500);
     },
     
     getOption: function(option) {
@@ -35,7 +41,7 @@ var CPEditor = Class.extend({
                 // Initially have code mirror not ignore the key
                 // if we decide to handle it then set this to true
                 var cmIgnoreKey = false;
-
+                
                 if(key.keyCode == 9 && key.type == 'keydown') {
                     if(!editor.somethingSelected()) {
                         var snippet = TabSnippets.findSnippet(editor);
@@ -44,28 +50,6 @@ var CPEditor = Class.extend({
                         if(snippet) {
                             editor.setLine(from.line, snippet);
                         }
-                        else {
-                            var line = editor.getLine(from.line);
-                            var to = {'line': from.line, 'ch': line.length};
-                            var range = editor.getRange(from, to);
-                            var tab = '';
-
-                            for(var i = editor.getOption('tabSize'); i > 0 ; i--) {
-                                tab += ' ';
-                            }
-
-                            editor.replaceRange(tab + range, from, to);
-
-                            var endCursor = from.ch + tab.length;
-                            editor.setCursor({'line': from.line, 'ch': endCursor});
-                        }
-
-                        // Stop the keydown and keypress both
-                        key = $.Event(key);
-                        key.stopPropagation();
-                        key.preventDefault();
-
-                        cmIgnoreKey = true;
                     }
                 }
                 // If the User selects the alt key and text is selected
@@ -118,6 +102,11 @@ var CPEditor = Class.extend({
                         });
 
                         $('#tcolor').click();
+                    }
+                }
+                else if(key.keyCode == 191 && key.type == 'keydown' && key.metaKey) {
+                    if(editor.somethingSelected()) {
+                        CommentUtil.comment(editor, type);
                     }
                 }
 
@@ -175,7 +164,14 @@ var CPEditor = Class.extend({
          }
      },
 
-     updateCompiledCode: function() {
+     preProcessorChanged: function() {
+         this.turnOffReadOnlyView();
+         TabSnippets.loadSnippet(this.type);
+     },
+     
+     // If the user is viewing the compiled result and changes
+     // the selected pre processor, go back to standard editor view
+     turnOffReadOnlyView: function() {
          if(this.readOnly) {
              this.toggleReadOnly();
          }
@@ -264,6 +260,91 @@ var JSEditor = CPEditor.extend({
     }
 });
 
+var CommentUtil = {
+    
+    comment: function(editor, type) {
+        if(type == 'html') this.commentHTML(editor);
+        else if(type == 'css') this.commentCSS(editor);
+        else if(type == 'js') this.commentJS(editor);
+    },
+    
+    commentHTML: function(editor) {
+        if(Data.html_pre_processor == 'jade') {
+            this.prefixComments(editor, '//');
+        }
+        else if(Data.html_pre_processor == 'slim') {
+            this.prefixComments(editor, '/!');
+        }
+        else if(Data.html_pre_processor == 'haml') {
+            this.prefixComments(editor, '/');
+        }
+        else {
+            // regular html comment
+            this.wrapComments(editor, '<!--', '-->');
+        }
+    },
+    
+    commentCSS: function(editor) {
+        this.wrapComments(editor, '/*', '*/');
+    },
+    
+    commentJS: function(editor) {
+        if(Data.js_pre_processor == 'coffeescript') {
+            this.wrapComments(editor, '###', '###');
+        }
+        else {
+            this.wrapComments(editor, '/*', '*/');
+        }
+    },
+    
+    // Prefix every line of the selection
+    prefixComments: function(editor, prefix) {
+        var lines = editor.getSelection().split("\n");
+        var newSelection = '';
+        var invertedSelection = '';
+        var selectionHasComments = true;
+        
+        for (var i=0; i < lines.length; i++) {
+            newSelection += prefix + lines[i];
+            if(i + 1 < lines.length) newSelection += "\n";
+            
+            // If every line ended up having comments, then use the
+            // invertedSelection because we want to uncomment it
+            if(lines[i].substring(0, prefix.length) == prefix) {
+                if(selectionHasComments) {
+                    invertedSelection += lines[i].substring(prefix.length, lines[i].length);
+                    if(i + 1 < lines.length) invertedSelection += "\n";
+                }
+            }
+            else {
+                selectionHasComments = false;
+            }
+        }
+        
+        if(selectionHasComments) editor.replaceSelection(invertedSelection);
+        else editor.replaceSelection(newSelection);
+    },
+    
+    // Wrap the selection in a comment block
+    wrapComments: function(editor, prefix, suffix) {
+        // replaceSelection(string)
+        var selection = editor.getSelection();
+        var newSelection = '';
+        
+        if( selection.substr(0, prefix.length) == prefix && 
+            selection.substr(suffix.length * -1, suffix.length) == suffix) {
+            // If it's already wrapped, we need to unwrap it
+            newSelection = selection.substring(prefix.length, selection.length - suffix.length);
+        }
+        else {
+            // wrap the selection in comments
+            newSelection = prefix + selection + suffix;
+        }
+        
+        editor.replaceSelection(newSelection);
+    }
+}
+
 var ColorUtil = {
     editor: '',
     from: '',
@@ -276,6 +357,8 @@ var ColorUtil = {
     coordinates: '',
     
     showColorPicker: function(editor) {
+        if(editor.getOption('mode') != 'css') return false;
+        
         var showColorPicker = false;
 
         // Context for showing the color picker is right if
@@ -345,4 +428,3 @@ var ColorUtil = {
         }
     }
 }
-

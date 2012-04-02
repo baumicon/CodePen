@@ -77,7 +77,7 @@ class PreProcessorService
       end
     end
     
-    html.strip()
+    html = (html) ? html.strip() : ''
   end
 
   # Public: Process CSS with preprocessors
@@ -98,8 +98,9 @@ class PreProcessorService
       css = node_req('/stylus/', 'css', css, 'Stylus')
     elsif type == 'scss'
       begin
-        # simple scss
-        engine = get_scss_engine(css)
+        # scss with compass
+        imports_and_css = '@import "compass";' + "\n" + css
+        engine = get_sass_scss_engine(imports_and_css, :scss)
         css = engine.render
       rescue Sass::SyntaxError => e
         @errors['SCSS'] = e.message
@@ -107,8 +108,8 @@ class PreProcessorService
     elsif type == 'sass'
       begin
         # sass with compass
-        imports_and_css = get_compass_imports() + "\n" + css
-        engine = get_sass_compass_engine(imports_and_css)
+        imports_and_css = "@import \"compass\"\n" + css
+        engine = get_sass_scss_engine(imports_and_css, :sass)
         css = engine.render
       rescue Sass::SyntaxError => e
         @errors['SASS with Compass'] = e.message
@@ -118,32 +119,13 @@ class PreProcessorService
     css
   end
   
-  def get_scss_engine(content)
-    opts = { }
-    opts[:style]  = :expanded
-    opts[:syntax] = :scss
-    opts[:line_numbers] = false
-    opts[:line_comments] = false
-    # set the full exception to false so that Sass engine throws
-    # a ruby exception instead of adding error to CSS
-    opts[:full_exception] = false
-    
-    Sass::Engine.new(content, opts)
-  end
-  
-  # A sass engine for compiling sass content with compass
-  # Read this file 
+  # A sass engine for compiling sass/scss content with compass
+  # Read this file for options we can change
   # http://sass-lang.com/docs/yardoc/file.SASS_REFERENCE.html#syntax
-  # alextodo, would be really cool to detect the mixins like
-  # @include border-radius, and tell the user they need to
-  # add this import, @import "compass/css3/border-radius"
-  # otherwise, you get this error
-  #   (sass):4:in `border-radius': Undefined mixin 'border-radius'.
-  # we can tell them that we added it for them, or tell them how to fix it
-  def get_sass_compass_engine(content)
+  def get_sass_scss_engine(content, syntax)
     opts = Compass.sass_engine_options
     opts[:style]  = :expanded
-    opts[:syntax] = :sass
+    opts[:syntax] = syntax
     opts[:line_numbers] = false
     opts[:line_comments] = false
     # set the full exception to false so that Sass engine throws
@@ -153,65 +135,6 @@ class PreProcessorService
     opts[:load_paths] = Compass.configuration.sass_load_paths
     
     Sass::Engine.new(content, opts)
-  end
-
-  def get_compass_imports()
-    imports = <<HERE
-@import "compass"
-@import "lemonade"
-@import "compass/css3"
-@import "compass/layout"
-@import "compass/support"
-@import "compass/typography"
-@import "compass/utilities"
-@import "compass/css3/appearance"
-@import "compass/css3/background-clip"
-@import "compass/css3/background-origin"
-@import "compass/css3/background-size"
-@import "compass/css3/border-radius"
-@import "compass/css3/box-shadow"
-@import "compass/css3/box-sizing"
-@import "compass/css3/box"
-@import "compass/css3/columns"
-@import "compass/css3/font-face"
-@import "compass/css3/gradient"
-@import "compass/css3/images"
-@import "compass/css3/inline-block"
-@import "compass/css3/opacity"
-@import "compass/css3/pie"
-@import "compass/css3/shared"
-@import "compass/css3/text-shadow"
-@import "compass/css3/transform"
-@import "compass/css3/transition"
-@import "compass/css3/user-interface"
-@import "compass/layout/grid-background"
-@import "compass/layout/sticky-footer"
-@import "compass/layout/stretching"
-@import "compass/typography/vertical_rhythm"
-@import "compass/typography/text/ellipsis"
-@import "compass/typography/text/force-wrap"
-@import "compass/typography/text/nowrap"
-@import "compass/typography/text/replacement"
-@import "compass/utilities/color"
-@import "compass/utilities/general"
-@import "compass/utilities/print"
-@import "compass/utilities/sprites"
-@import "compass/utilities/tables"
-@import "compass/utilities/color/contrast"
-@import "compass/utilities/general/clearfix"
-@import "compass/utilities/general/float"
-@import "compass/utilities/general/hacks"
-@import "compass/utilities/general/min"
-@import "compass/utilities/general/tabs"
-@import "compass/utilities/general/tag-cloud"
-@import "compass/utilities/sprites/base"
-@import "compass/utilities/sprites/sprite-img"
-@import "compass/utilities/tables/alternating-rows-and-columns"
-@import "compass/utilities/tables/borders"
-@import "compass/utilities/tables/scaffolding"
-HERE
-
-    imports
   end
   
   def process_js(type, js)

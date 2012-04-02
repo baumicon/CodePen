@@ -2,8 +2,20 @@
 	margin-right: 0 !important;
 }
 
+.center {
+  text-align: center;
+}
+
 textarea:focus, textarea:active {
 	outline: 0;
+}
+
+.clear {
+  clear: both;
+}
+
+.hide {
+  display: none;
 }
 
 // Clearfix
@@ -14,7 +26,4 @@ textarea:focus, textarea:active {
 }
 .group:after {
     clear: both;
-}
-.group {
-    zoom: 1; // For IE 6/7 (trigger hasLayout)
 }

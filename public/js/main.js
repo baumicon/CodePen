@@ -32,6 +32,7 @@
             // Sync UI with data values
             this.selectPreProcessors();
             
+            // Update the correct css starter radio button
             $('input[value="' + Data.css_starter + '"]').prop('checked', true);
             
             Main.updatePrefixFreeBox(Data.css_pre_processor);
@@ -40,28 +41,15 @@
             this.addClassBoxHTML(Data.html_pre_processor);
             this.addClassBoxCSS(Data.css_pre_processor);
             this.addClassBoxJS(Data.js_pre_processor);
+            this.renderJSLibraryDropdown();
             
-            // Sync library with correct data as well
-            $('#js-select').val(Data.js_library);
-
-            // select current theme
-            $('#theme').val(Data.theme);
-
-            // Better select box for chosing JS library
-            // Chosen selection has to happen after the value's been selected
-            $("#js-select, #theme").chosen();
-
             if(Data.css_prefix_free) $('#prefix-free').prop('checked', true);
             if(Data.js_modernizr) $('#modernizr').prop('checked', true);
             
             // externals
-            if(Data.html_classes) $('#html-classes').val(Data.html_classes);
-            if(Data.css_external) $('#external-css').val(Data.css_external);
-            if(Data.js_external) $('#external-js').val(Data.js_external);
-            
-            // show a specific theme
-            // [Chris]: turned this off since settings moving
-            // this.body.attr("data-theme", Data.theme);
+            $('#html-classes').val(Data.html_classes);
+            $('#external-css').val(Data.css_external);
+            $('#external-js').val(Data.js_external);
         },
         
         selectPreProcessors: function() {
@@ -90,6 +78,14 @@
             this.boxJS.removeClass("coffeescript").addClass(clazz);
         },
         
+        renderJSLibraryDropdown: function() {
+            // Sync library with correct data as well
+            $('#js-select').val(Data.js_library);
+            // Better select box for chosing JS library
+            // Chosen selection has to happen after the value's been selected
+            $("#js-select").chosen();
+        },
+        
         /* End of syncUIWithData functions */
         
         bindUIActions: function() {
@@ -99,7 +95,6 @@
                 
                 // Window is in default state
                 if (!dontTreadOnMe) {
-
                     var space = Main.body.height();
                     Main.topBoxesCon.height(space / 2 - 28);
                     Main.boxResult.height(space / 2 - 102);
@@ -204,12 +199,10 @@
                 
                 return false;
             });
-
-            $("#sharing-button").on("click", function() {
-                $(this).toggleClass("active");
-                $(".sharing-panel").toggle();
-            });
-
+            
+            // Sharing related
+            Share.init();
+            
             $("#keyboard-commands-button").on("click", function() {
                 $("#keycommands").toggle();
             });
@@ -264,20 +257,20 @@
              // HTML related
              $('input[name="html-preprocessor"]').on('click', function() {
                  Data.setHTMLOption('preprocessor', this.value);
-                 HTMLEditor.updateCompiledCode();
+                 HTMLEditor.preProcessorChanged();
                  
-                 Main.compileContent(HTMLEditor, '', true);
                  Main.addClassBoxHTML(this.value);
+                 Main.compileContent(HTMLEditor, '', true);
              });
 
              // CSS related
              $('input[name="css-preprocessor"]').on('click', function() {
                    Data.setCSSOption('css_pre_processor', this.value);
-                   CSSEditor.updateCompiledCode();
+                   CSSEditor.preProcessorChanged();
                    
-                   Main.compileContent(CSSEditor, '', true);
                    Main.addClassBoxCSS(this.value);
                    Main.updatePrefixFreeBox(this.value);
+                   Main.compileContent(CSSEditor, '', true);
              });
 
              // prefix free checkbox
@@ -299,14 +292,13 @@
              // JS related
              $('input[name="js-preprocessor"]').on('click', function() {
                  Data.setJSOption('js_pre_processor', this.value);
-                 JSEditor.updateCompiledCode();
+                 JSEditor.preProcessorChanged();
                  
-                 Main.compileContent(JSEditor, '', true);
                  Main.addClassBoxJS(this.value);
+                 Main.compileContent(JSEditor, '', true);
              });
 
              $('#js-select').on('change', function(index, select) {
-                 // alextodo, may need to move to an observe model, backbone? too complicated right now
                  Data.setJSOption('js_library', this.value);
                  
                  Main.compileContent(JSEditor, '', true);
@@ -332,15 +324,6 @@
                  Main.compileContent(JSEditor, '', true);
              });
              
-             // Theme related
-
-             // [Chris]: Turned this off because settings moving
-             // $('#theme').on('change', function(index, select) {
-             //     Data.setTheme(this.value);
-             //     // Update current theme
-             //     Main.body.attr("data-theme", this.value);
-             // });
-             
              // Save this code pen
              $("#save, #update").on('click', function() {
                 // validate save
@@ -350,8 +333,7 @@
              });
 
              $("#new").on('click', function() {
-                Data.new();
-                window.location = '/';
+                Main.newPen();
                 
                 return false;
              });
@@ -369,6 +351,11 @@
              KeyBindings.init();
         },
         
+        newPen: function() {
+            Data.newPen();
+            window.location = '/';
+        },
+        
         updatePrefixFreeBox: function(css_pre_processor) {
             if(css_pre_processor == 'sass') {
                    // turn off prefix free
@@ -381,6 +368,7 @@
                }
         },
         
+        // Build code editors
         buildEditors: function() {
             window.HTMLEditor = new HTMLEditor('html', Data.html);
             window.CSSEditor = new CSSEditor('css', Data.css);

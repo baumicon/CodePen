@@ -2,8 +2,8 @@
 @import "colors";
 @import "typography";
 @import "toolbox";
-/* I don't know if this works or if we'll need a custom one for the embed look. */
-/* @import "codemirror"; */
+/* this does not seem to work correctly. just copied over the scss from codemirror */
+@import "embed_codemirror";
 
 * {
   margin: 0;
@@ -33,6 +33,7 @@ nav {
         position: absolute;
         top: 100%;
         left: 50%;
+        z-index: 1000;
         border-top: 8px solid black;
         border-left: 8px solid transparent;
         border-right: 8px solid transparent;

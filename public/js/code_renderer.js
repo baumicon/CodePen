@@ -116,7 +116,7 @@ var CodeRenderer = Class.extend({
     
     getPrefixFree: function() {
         if(Data.css_prefix_free) {
-            return '/box-libs/prefixfree.min.js';
+            return '/js/libs/prefixfree.min.js';
         }
         else {
             return '';
@@ -150,17 +150,8 @@ var CodeRenderer = Class.extend({
     // Get JS Options
     
     getJS: function() {
-        if(this.postProcessedJS) {
-            var js = '(function() {';
-            js += " try { " + this.postProcessedJS + " }";
-            js += "catch(err) { if(console) { console.log('Error: ' + err.message); }}";
-            js += "})();";
-
-            return js;
-        }
-        else {
-            return '';
-        }
+        return (this.postProcessedJS) ? 
+            '(function() { ' + this.postProcessedJS + '})();' : '';
     },
     
     getJSLibrary: function() {

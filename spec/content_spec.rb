@@ -2,9 +2,14 @@ require './models/content'
 require './models/slug'
 require './models/user_twitter'
 require 'spec_helper'
+require 'awesome_print'
 
 describe Content do
-
+  before(:each) do
+    require 'mock_redis'
+    $redis = MockRedis.new
+  end
+  
   it "should save from json" do
     c = Content.new_from_json('{"slug":"2", "version":"5"}', '555', true)
     c.valid?.should be_true

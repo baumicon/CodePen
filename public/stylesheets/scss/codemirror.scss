@@ -23,6 +23,7 @@
   overflow: auto;
   &::-webkit-scrollbar {
     width: 8px;
+    background: transparent;
   }
   &::-webkit-scrollbar-track {
     position: relative;

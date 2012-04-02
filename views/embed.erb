@@ -11,25 +11,36 @@
 
   <nav class="group">
     <!-- These should say preprocessor if there is one -->
+    <% if @data['html'] %>
     <a id="html-link" class="active">HTML</a>
+    <% end %>
+    <% if @data['css'] %>
     <a id="css-link" >CSS</a>
+    <% end %>
+    <% if @data['js'] %>
     <a id="js-link" >JS</a>
+    <% end %>
     <a id="result-link" >Result</a>
   </nav>
 
   <div id="output">
-
+    <% if @data['html'] %>
     <div id="html-box" class="active">
-        <textarea id="html" class="code-box"><%= @c_data['html'] %></textarea>
+        <textarea id="html" class="code-box" cols="50" rows="25"><%= @data['html'] %></textarea>
     </div>
+    <% end %>
     
+    <% if @data['css'] %>
     <div id="css-box">
-        <textarea id="css" class="code-box"><%= @c_data['css'] %></textarea>
+        <textarea id="css" class="code-box" cols="50" rows="25"><%= @data['css'] %></textarea>
     </div>
-
+    <% end %>
+    
+    <% if @data['js'] %>
     <div id="js-box">
-        <textarea id="js" class="code-box"><%= @c_data['js'] %></textarea>
+        <textarea id="js" class="code-box" cols="50" rows="25"><%= @data['js'] %></textarea>
     </div>
+    <% end %>
     
     <div id="result-box">
         <iframe allowTransparency="true" frameborder="0" scrolling="no" style="width:100%;border:none"  src="<%= @iframe_src %>" id="result"></iframe>
@@ -38,7 +49,7 @@
   </div>
 
   <script>
-    Data = <%= stringify(@c_data) %>;
+    Data = <%= stringify(@data) %>;
   </script>
   
   <%= js_scripts([
@@ -48,8 +59,8 @@
       '/js/mode/css/css.js',
       '/js/mode/xml/xml.js',
       '/js/util.js',
-      '/js/code_editor.js',
-      '/js/embed.js'
+      '/js/embed/embed_code_editor.js',
+      '/js/embed/embed.js'
       ], 'embed')
   %>
 

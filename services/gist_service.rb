@@ -2,6 +2,7 @@ require 'json'
 require 'net/https'
 require 'net/http'
 require 'uri'
+require './services/preprocessor_service'
 
 GIST_URL = 'https://api.github.com/gists'
 
@@ -45,7 +46,7 @@ class GistService
           'content' => data['html']
           },
         'style.' + css_ext => {
-          'content' => data['css']
+          'content' => get_css(data)
           },
         'index.' + js_ext => {
           'content' => data['js']
@@ -59,8 +60,19 @@ class GistService
     gist.to_json.gsub('/', '\/')
   end
   
+  def get_css(data)
+    css = data['css']
+    
+    if data['css_pre_processor'] == 'sass'
+      pps = PreProcessorService.new
+      css = "@import \"compass\"\n" + css
+    end
+    
+    css
+  end
+  
   def get_ext(type, default)
-    if type == 'none' or type == ''
+    if type == 'none' or type == '' or type.nil?
       return default
     else
       return type
