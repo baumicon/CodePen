@@ -1,4 +1,4 @@
-# thanks: http://duckpunching.com/rspec-2-0-rake-tasks
+# thanks! http://duckpunching.com/rspec-2-0-rake-tasks
 require 'rspec/core/rake_task'
 
 desc 'Default: run specs.'
